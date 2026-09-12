@@ -1,0 +1,102 @@
+{
+  "summary": "本文提出了 Transformer，一种完全基于注意力机制、摒弃循环和卷积的序列转导模型。它在 WMT 2014 英德和英法翻译任务上取得了当时最优的 BLEU 分数，同时训练并行度更高、耗时显著更少。论文还通过消融实验和英语成分句法分析任务验证了模型的通用性，并分析了自注意力相对于循环和卷积层的优势。",
+  "research_question": {
+    "text": "现有序列转导模型主要依赖循环或卷积网络，其固有的顺序计算特性限制了训练样本内部的并行化，在长序列上尤为严重。本文旨在提出一种完全基于注意力机制、无需循环和卷积的新架构，以突破这一计算瓶颈并提升翻译质量。",
+    "evidence": [
+      {
+        "id": "S1.p2",
+        "quote": "This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths"
+      },
+      {
+        "id": "S1.p4",
+        "quote": "we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism"
+      }
+    ]
+  },
+  "method": {
+    "text": "Transformer 采用编码器-解码器结构，每部分由 6 层相同的层堆叠而成。核心是缩放点积注意力和多头注意力机制，配合位置前馈网络、残差连接、层归一化以及正弦位置编码。编码器自注意力可关注所有位置，解码器自注意力通过掩码防止左侧信息泄露。",
+    "evidence": [
+      {
+        "id": "S3.SS1.SSS0.Px1.p1",
+        "quote": "The encoder is composed of a stack of $N=6$ identical layers."
+      },
+      {
+        "id": "S3.SS2.SSS1.p1",
+        "quote": "We call our particular attention \"Scaled Dot-Product Attention\""
+      },
+      {
+        "id": "S3.SS2.SSS2.p1",
+        "quote": "we found it beneficial to linearly project the queries, keys and values $h$ times with different, learned linear projections"
+      },
+      {
+        "id": "S3.SS5.p1",
+        "quote": "we add \"positional encodings\" to the input embeddings at the bottoms of the encoder and decoder stacks"
+      }
+    ]
+  },
+  "experiments": {
+    "text": "在 WMT 2014 英德（约 450 万句对）和英法（3600 万句对）翻译任务上训练和评估，使用 8 块 NVIDIA P100 GPU。此外，在 Penn Treebank 的 WSJ 部分（约 4 万句）及半监督设置（约 1700 万句）上进行英语成分句法分析实验。还通过消融实验（表 3）分析了注意力头数、键维度、模型大小、dropout 和位置编码方式的影响。",
+    "evidence": [
+      {
+        "id": "S5.SS1.p1",
+        "quote": "We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs."
+      },
+      {
+        "id": "S5.SS2.p1",
+        "quote": "We trained our models on one machine with 8 NVIDIA P100 GPUs."
+      },
+      {
+        "id": "S6.SS3.p2",
+        "quote": "We trained a 4-layer transformer with $d_{model}=1024$ on the Wall Street Journal (WSJ) portion of the Penn Treebank, about 40K training sentences."
+      },
+      {
+        "id": "S6.SS2.p1",
+        "quote": "we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set"
+      }
+    ]
+  },
+  "findings": {
+    "text": "Transformer 在英德翻译上达到 28.4 BLEU，超越此前最佳模型（含集成）超过 2 BLEU；在英法翻译上达到 41.8 BLEU（单模型），训练成本仅为先前最优模型的一小部分。消融实验表明多头注意力优于单头，键维度减小会损害质量，dropout 有助于防止过拟合，正弦与学习式位置编码效果相近。在英语成分句法分析上，Transformer 也优于 BerkeleyParser 等模型。",
+    "evidence": [
+      {
+        "id": "S6.SS1.p1",
+        "quote": "establishing a new state-of-the-art BLEU score of $28.4$"
+      },
+      {
+        "id": "S6.SS1.p2",
+        "quote": "our big model achieves a BLEU score of $41.0$, outperforming all of the previously published single models"
+      },
+      {
+        "id": "S6.SS2.p2",
+        "quote": "While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads."
+      },
+      {
+        "id": "S6.SS3.p5",
+        "quote": "the Transformer outperforms the BerkeleyParser even when training only on the WSJ training set of 40K sentences."
+      }
+    ]
+  },
+  "limitations": {
+    "text": "论文指出，自注意力在序列长度小于表示维度时比循环层更快，但对于非常长的序列，计算复杂度可能成为问题，未来可考虑限制注意力到局部邻域。此外，自注意力因对注意力加权位置取平均而降低了有效分辨率，需通过多头注意力来抵消。论文还提到将模型扩展到文本以外的模态（如图像、音频、视频）以及研究局部受限注意力是未来工作。",
+    "evidence": [
+      {
+        "id": "S4.p4",
+        "quote": "To improve computational performance for tasks involving very long sequences, self-attention could be restricted to considering only a neighborhood of size $r$"
+      },
+      {
+        "id": "S2.p1",
+        "quote": "albeit at the cost of reduced effective resolution due to averaging attention-weighted positions"
+      },
+      {
+        "id": "S7.p3",
+        "quote": "We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms"
+      }
+    ]
+  },
+  "_meta": {
+    "model": "deepseek-chat",
+    "prompt_tokens": 6993,
+    "completion_tokens": 1320,
+    "elapsed_s": 6.38
+  }
+}
