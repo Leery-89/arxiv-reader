@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>arXiv Reader</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+
+  <header class="bar">
+    <span class="brand">arXiv Reader</span>
+    <span class="status" id="status">等待论文</span>
+  </header>
+
+  <!-- 没在论文页时显示 -->
+  <div class="empty" id="empty">
+    <p>打开任意一篇 arXiv 论文页面即可开始。</p>
+    <p class="hint">支持 /abs/、/html/、/pdf/ 三种地址。</p>
+  </div>
+
+  <!-- 检测到论文后显示 -->
+  <main class="panel" id="panel" hidden>
+    <div class="paper">
+      <div class="paper-id" id="paperId"></div>
+      <h1 class="paper-title" id="paperTitle"></h1>
+    </div>
+
+    <button class="go" id="analyzeBtn">开始分析</button>
+
+    <!-- D5–D7 结构化结果渲染到这里 -->
+    <section class="result" id="result" hidden></section>
+  </main>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
