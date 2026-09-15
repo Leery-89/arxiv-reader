@@ -27,6 +27,7 @@ from pydantic import BaseModel
 from fetcher import fetch_paper
 from serialize import paper_to_text
 from llm import analyze, analyze_stream
+from verify import check
 
 app = FastAPI(title="arXiv Reader backend", version="0.1.0")
 
@@ -61,6 +62,9 @@ def analyze_paper(req: AnalyzeRequest):
         result = analyze(text)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"模型调用失败：{e}")
+
+    # 校验证据，结果挂进 meta
+    result["_meta"]["verify"] = check(paper, result)
 
     # 把前端需要的论文元信息一起带回去
     return {
@@ -110,15 +114,24 @@ def analyze_paper_stream(req: AnalyzeRequest):
 
         yield sse("status", {"stage": "thinking"})
         text = paper_to_text(paper)
+        buf = []                              # 后端也攒一份，结束时校验用
         try:
             for piece in analyze_stream(text):
                 if isinstance(piece, dict):
                     yield sse("meta", piece)
                 else:
+                    buf.append(piece)
                     yield sse("delta", {"t": piece})
         except Exception as e:
             yield sse("error", {"detail": f"模型调用失败：{e}"})
             return
+
+        # 流结束了，拼起来校验一遍，结果单独推一个事件
+        try:
+            result = json.loads("".join(buf))
+            yield sse("verify", check(paper, result))
+        except json.JSONDecodeError:
+            yield sse("verify", {"error": "最终 JSON 无法解析"})
 
         yield sse("done", {})
 
