@@ -61,3 +61,42 @@ def analyze(paper_text: str) -> dict:
         "elapsed_s": round(elapsed, 2),
     }
     return result
+
+
+def analyze_stream(paper_text: str):
+    """流式版本。
+
+    和 analyze() 发一模一样的请求，只多两个参数：
+      stream=True                             → 模型生成一个 token 就推一个
+      stream_options={"include_usage": True}  → 最后一片带上 token 用量
+
+    这是一个生成器：一路 yield 字符串片段（模型输出的原文），
+    最后 yield 一个 dict 作为 meta。调用方按类型区分。
+
+    注意：中途拿到的片段拼起来是半截 JSON，这里不解析，
+    解析交给前端的增量提取器（见 sidepanel.js）。
+    """
+    t0 = time.time()
+
+    stream = _client.chat.completions.create(
+        model=MODEL,
+        messages=build_messages(paper_text),
+        response_format={"type": "json_object"},
+        temperature=0,
+        stream=True,
+        stream_options={"include_usage": True},
+    )
+
+    usage = None
+    for chunk in stream:
+        if chunk.usage:                       # 只有最后一片有 usage
+            usage = chunk.usage
+        if chunk.choices and chunk.choices[0].delta.content:
+            yield chunk.choices[0].delta.content
+
+    yield {
+        "model": MODEL,
+        "prompt_tokens": usage.prompt_tokens if usage else None,
+        "completion_tokens": usage.completion_tokens if usage else None,
+        "elapsed_s": round(time.time() - t0, 2),
+    }

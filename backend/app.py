@@ -16,14 +16,17 @@
      上线前收紧到具体的扩展 id。
 """
 
+import json
+
 import requests
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from fetcher import fetch_paper
 from serialize import paper_to_text
-from llm import analyze
+from llm import analyze, analyze_stream
 
 app = FastAPI(title="arXiv Reader backend", version="0.1.0")
 
@@ -67,3 +70,60 @@ def analyze_paper(req: AnalyzeRequest):
         "truncated_sections": paper.truncated_sections,
         "result": result,
     }
+
+
+# ───────────────────────── 流式接口（D8） ─────────────────────────
+
+def sse(event: str, data) -> str:
+    """拼一条 SSE 消息。格式是固定的：event 行、data 行、空行。"""
+    return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+
+
+@app.post("/analyze/stream")
+def analyze_paper_stream(req: AnalyzeRequest):
+    """同 /analyze，但用 SSE 一路推进度和模型输出片段。
+
+    事件序列：
+        status {stage: fetching}     开始取论文
+        paper  {...元信息}           论文取到了，前端可以先显示来源提示
+        status {stage: thinking}     开始调模型
+        delta  {t: "片段"}  × N      模型输出，一片一片来
+        meta   {token 用量、耗时}
+        done   {}
+    任何一步出错：
+        error  {detail: "..."}
+    """
+    def gen():
+        yield sse("status", {"stage": "fetching"})
+        try:
+            paper = fetch_paper(req.arxiv_id)
+        except requests.RequestException as e:
+            yield sse("error", {"detail": f"arXiv 请求失败：{e}"})
+            return
+
+        yield sse("paper", {
+            "arxiv_id": paper.arxiv_id,
+            "title": paper.title,
+            "source": paper.source,
+            "truncated_sections": paper.truncated_sections,
+        })
+
+        yield sse("status", {"stage": "thinking"})
+        text = paper_to_text(paper)
+        try:
+            for piece in analyze_stream(text):
+                if isinstance(piece, dict):
+                    yield sse("meta", piece)
+                else:
+                    yield sse("delta", {"t": piece})
+        except Exception as e:
+            yield sse("error", {"detail": f"模型调用失败：{e}"})
+            return
+
+        yield sse("done", {})
+
+    return StreamingResponse(
+        gen(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
