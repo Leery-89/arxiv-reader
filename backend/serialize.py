@@ -26,7 +26,7 @@ def paper_to_text(paper: Paper) -> str:
     lines.append(f"# {paper.title}")
     lines.append("")
     lines.append("## Abstract")
-    lines.append(paper.abstract)
+    lines.append(f"[abstract] {paper.abstract}")   # 摘要也要有 ID，否则模型会自己编一个
 
     for sec in paper.sections:
         lines.append("")

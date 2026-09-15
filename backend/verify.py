@@ -23,6 +23,7 @@ def _norm(s: str) -> str:
 
 def check(paper: Paper, result: dict) -> dict:
     para_by_id = {p.id: p.text for s in paper.sections for p in s.paragraphs}
+    para_by_id["abstract"] = paper.abstract        # 和 serialize.py 里的 [abstract] 对应
 
     quote_hits = quote_total = 0
     inline_hits = inline_total = 0
