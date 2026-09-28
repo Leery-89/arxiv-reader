@@ -20,14 +20,16 @@
 """
 
 import json
+import os
 import time
 
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+import ratelimit
 from cache import cache_get, cache_key, cache_set, prompt_version
 from fetcher import fetch_paper
 from llm import analyze, analyze_stream
@@ -37,9 +39,12 @@ from verify import check
 
 app = FastAPI(title="arXiv Reader backend", version="0.1.0")
 
+# 允许的来源。上线后设成 chrome-extension://<扩展id>，多个用逗号分隔。
+# 没设就全开——开发期方便，但公网上限流才是真正的保护。
+_origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "*").split(",")]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # TODO(D12)：收紧到 chrome-extension://<扩展id>
+    allow_origins=_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -51,7 +56,7 @@ class AnalyzeRequest(BaseModel):
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    return {"ok": True, "rate": ratelimit.snapshot()}
 
 
 def _paper_meta(paper) -> dict:
@@ -82,7 +87,7 @@ def _log(paper_meta: dict, meta: dict, verify: dict, cache_hit: bool) -> None:
 # ───────────────────────── 一次返回 ─────────────────────────
 
 @app.post("/analyze")
-def analyze_paper(req: AnalyzeRequest):
+def analyze_paper(req: AnalyzeRequest, request: Request):
     key = cache_key(req.arxiv_id)
     cached = cache_get(key)
     if cached:
@@ -90,6 +95,7 @@ def analyze_paper(req: AnalyzeRequest):
         cached["result"]["_meta"]["cache_hit"] = True
         return {**cached["paper"], "result": cached["result"]}
 
+    ratelimit.check(request)          # 只对真正要调模型的请求计数
     try:
         paper = fetch_paper(req.arxiv_id)
     except requests.RequestException as e:
@@ -119,7 +125,7 @@ def sse(event: str, data) -> str:
 
 
 @app.post("/analyze/stream")
-def analyze_paper_stream(req: AnalyzeRequest):
+def analyze_paper_stream(req: AnalyzeRequest, request: Request):
     """事件序列：
         status {stage}        fetching → thinking
         paper  {...}          论文元信息，前端可以先显示来源提示
@@ -150,7 +156,13 @@ def analyze_paper_stream(req: AnalyzeRequest):
             _log(cached["paper"], meta, verify, cache_hit=True)
             return
 
-        # ── 未命中：正常走一遍 ──
+        # ── 未命中：先过限流，再正常走一遍 ──
+        try:
+            ratelimit.check(request)
+        except HTTPException as e:
+            yield sse("error", {"detail": e.detail})
+            return
+
         yield sse("status", {"stage": "fetching"})
         try:
             paper = fetch_paper(req.arxiv_id)
