@@ -1,0 +1,159 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21783",
+    "title": "The Llama 3 Herd of Models",
+    "source": "html",
+    "truncated_sections": [
+      "Contributors and Acknowledgements",
+      "Acknowledgements",
+      "9 Related Work"
+    ],
+    "char_count": 239042,
+    "n_sections": 99,
+    "n_paragraphs": 388
+  },
+  "result": {
+    "summary": "本文介绍了 Llama 3 系列基础模型，包括 8B、70B 和 405B 三个参数规模的多语言语言模型，原生支持多语言、编程、推理和工具使用 [S1.p3]。最大的模型是 405B 参数的稠密 Transformer，上下文窗口最高 128K tokens [S1.p3]。论文详细描述了预训练（约 15T 多语言 tokens）和后训练（SFT、拒绝采样、DPO）流程，并进行了广泛的基准评测和人类评估 [S1.p5][S1.p6]。实验表明旗舰模型在多种任务上与 GPT-4 等领先模型质量相当，较小模型在同类中表现最佳 [S1.p6]。论文还通过组合式方法将图像、视频和语音能力集成到 Llama 3 中，这些多模态模型仍在开发中，尚未广泛发布 [abstract][S2.p6]。",
+    "research_question": {
+      "text": "论文旨在开发一套新的基础语言模型 Llama 3，原生支持多语言、编程、推理和工具使用，并探索通过组合式方法集成图像、视频和语音等多模态能力 [S1.p3][S2.p4]。研究动机是相信数据、规模和复杂度管理是开发高质量基础模型的三个关键杠杆 [S1.p4]。作者希望公开释放旗舰模型以推动研究社区创新，并加速负责任地迈向通用人工智能（AGI）[S1.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we present a new set of foundation models for language, called Llama 3."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "We believe there are three key levers in the development of high-quality foundation models: data, scale, and managing complexity."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "We hope that the open release of a flagship model will spur a wave of innovation in the research community, and accelerate a responsible path towards the development of artificial general intelligence (AGI)."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We also perform experiments in which we add image, video, and speech capabilities to Llama 3 using a compositional approach."
+        }
+      ]
+    },
+    "method": {
+      "text": "Llama 3 采用标准的稠密 Transformer 架构，相比 Llama 2 仅有少量修改，如分组查询注意力（GQA）、128K 词表、提高 RoPE 基频等 [S3.SS2.p1][S3.SS2.p2]。预训练分为三个阶段：初始预训练、长上下文预训练和退火，使用约 15T 多语言 tokens，旗舰模型 405B 参数在 15.6T tokens 上训练 [S1.p5][S3.SS4.p1]。后训练采用监督微调（SFT）、拒绝采样（RS）和直接偏好优化（DPO）的多轮迭代流程 [S1.p5][S4.p1]。多模态能力通过组合式方法集成，包括多模态编码器预训练、视觉适配器训练和语音适配器训练等阶段 [S2.p5]。",
+      "evidence": [
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Llama 3 uses a standard, dense Transformer architecture."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "We make a few small modifications compared to Llama 2"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We pre-train Llama 3 on a corpus of about 15T multilingual tokens, compared to 1.8T tokens for Llama 2."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "The recipe used to pre-train Llama 3 405B consists of three main stages: (1) initial pre-training, (2) long-context pre-training, and (3) annealing."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "Each round of post-training involves supervised finetuning (SFT) followed by Direct Preference Optimization on examples collected either via human annotations or generated synthetically."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "The approach we study comprises the three additional stages illustrated in Figure 28"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在大量标准基准上评估了预训练和后训练模型，涵盖常识推理、知识、阅读理解、数学推理、长上下文、代码、对抗评估等八大类别 [S5.SS1.SSS1.p1]。还进行了广泛的人类评估，收集约 7000 个提示，覆盖六种单项能力和三种多轮能力 [S5.SS3.p2]。多模态实验在图像识别（如 MMMU、VQAv2、ChartQA、DocVQA）和视频识别（如 PerceptionTest、NExT-QA、TVQA、ActivityNet-QA）以及语音识别和翻译任务上进行了评估 [S7.SS6.p1][S7.SS7.p1][S8.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.SSS1.p1",
+          "quote": "These evaluations cover eight top-level categories: (1) commonsense reasoning; (2) knowledge; (3) reading comprehension; (4) math, reasoning, and problem solving; (5) long context; (6) code; (7) adversarial evaluations; and (8) aggregate evaluations."
+        },
+        {
+          "id": "S5.SS3.p2",
+          "quote": "We used this taxonomy to collect about $7,000$ prompts spanning six individual capabilities (English, reasoning, coding, Hindi, Spanish, and Portuguese), and three multiturn capabilities"
+        },
+        {
+          "id": "S7.SS6.p1",
+          "quote": "We evaluate the performance of the image understanding capabilities of Llama 3 on a range of tasks spanning natural image understanding, text understanding, charts understanding and multimodal reasoning"
+        },
+        {
+          "id": "S7.SS7.p1",
+          "quote": "We evaluate our video adapter for Llama 3 on three benchmarks"
+        },
+        {
+          "id": "S8.SS4.p1",
+          "quote": "We evaluate the speech understanding capabilities of our speech interface for Llama 3 on three tasks: (1) automatic speech recognition, (2) speech translation, and (3) spoken question answering."
+        }
+      ]
+    },
+    "findings": {
+      "text": "实验评估表明旗舰模型在多种任务上与 GPT-4 等领先模型表现相当，接近最先进水平；较小模型在同类中最佳 [S1.p6]。Llama 3 在有用性和无害性之间取得了比前代更好的平衡 [S1.p6]。多模态组合式方法在图像、视频和语音识别任务上表现与最先进水平具有竞争力 [abstract]。人类评估显示 Llama 3 405B 与 GPT-4 0125 版本大致相当，与 GPT-4o 和 Claude 3.5 Sonnet 相比互有胜负 [S5.SS3.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "Our experimental evaluation suggests that our flagship model performs on par with leading language models such as GPT-4 across a variety of tasks, and is close to matching the state-of-the-art."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Llama 3 also delivers a much better balance between helpfulness and harmlessness than its predecessor."
+        },
+        {
+          "id": "abstract",
+          "quote": "We observe this approach performs competitively with the state-of-the-art on image, video, and speech recognition tasks."
+        },
+        {
+          "id": "S5.SS3.p4",
+          "quote": "We observe that Llama 3 405B performs approximately on par with the 0125 API version of GPT-4, while achieving mixed results (some wins and some losses) compared to GPT-4o and Claude 3.5 Sonnet."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "多模态模型仍在积极开发中，尚未准备好发布 [S1.p8][S2.p6]。人类评估可能受标注者个人偏见、背景和偏好影响，导致结果不一致或不可靠 [S5.SS3.p5]。安全测试无法保证穷尽所有风险，Llama 3 仍可能生成有害内容，尤其对非英语语言和熟练对抗性红队人员 [S5.SS4.SSS8.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p8",
+          "quote": "These models are still under active development and not yet ready for release."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "These models are still under development and not yet ready for release."
+        },
+        {
+          "id": "S5.SS3.p5",
+          "quote": "human evaluations can still be influenced by personal biases, backgrounds, and preferences of human annotators, which may lead to inconsistent or unreliable results."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "no testing can be guaranteed to be exhaustive in identifying every possible risk. Llama 3 may still generate harmful content due to training on various datasets, particularly for languages beyond English and when prompt engineered by skilled adversarial red teamers."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 54523,
+      "completion_tokens": 2038,
+      "elapsed_s": 8.41
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 23,
+    "quote_rate": 0.957,
+    "inline_hits": 24,
+    "inline_total": 24,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S2.p5",
+        "reason": "quote 不在该段落里",
+        "quote": "The approach we study comprises the three additional stages illustrated in Figur"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "long"
+}

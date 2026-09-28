@@ -1,0 +1,148 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文提出残差学习框架以缓解深层神经网络难以训练的问题，将堆叠层改为学习相对于输入的残差函数 [S1.p5]。作者在 ImageNet 上评估了最深达 152 层的残差网络，其复杂度仍低于 VGG 网络 [abstract]。实验表明残差网络更易优化，并能从显著增加的深度中获得精度提升 [abstract]，在 ImageNet 测试集上集成模型取得 3.57% 错误率并赢得 ILSVRC 2015 分类任务第一名 [abstract]。作者还在 CIFAR-10 上分析了 100 层和 1000 层的网络 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：当网络能够开始收敛后，随着深度增加会出现精度饱和并迅速退化的退化问题，且这种退化并非由过拟合引起 [S1.p3]。作者指出，按构造深层模型应不差于其浅层对应模型，但现有求解器无法找到可比或更好的解 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "When deeper networks are able to start converging, a degradation problem has been exposed: with the network depth increasing, accuracy gets saturated"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "such degradation is not caused by overfitting, and adding more layers to a suitably deep model leads to higher training error"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "But experiments show that our current solvers on hand are unable to find solutions that are comparably good or better than the constructed solution"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出深度残差学习框架，让堆叠的非线性层拟合残差映射 F(x):=H(x)-x，而非直接拟合目标映射，原始映射被改写为 F(x)+x [S1.p5]。该形式通过恒等映射的捷径连接实现，捷径连接不引入额外参数或计算复杂度，整个网络仍可用 SGD 端到端训练 [S1.p6]。当输入输出维度不一致时，可用线性投影 Ws 匹配维度，但实验表明恒等映射已足以解决退化问题且更经济 [S3.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "we explicitly let these layers fit a residual mapping"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "The original mapping is recast into $\\mathcal{F}(\\mathbf{x})+\\mathbf{x}$"
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Identity shortcut connections add neither extra parameter nor computational complexity"
+        },
+        {
+          "id": "S3.SS2.p3",
+          "quote": "we will show by experiments that the identity mapping is sufficient for addressing the degradation problem and is economical"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 ImageNet 2012 分类数据集上评估方法，该数据集包含 1000 类，模型在 128 万训练图像上训练，在 5 万验证图像上评估，并在 10 万测试图像上获得最终结果 [S4.SS1.p1]。作者还使用 CIFAR-10 数据集（5 万训练图像、1 万测试图像、10 类）进行更多研究，重点关注极深网络的行为 [S4.SS2.p1]。此外，作者在 PASCAL VOC 2007/2012 和 MS COCO 上采用 Faster R-CNN 进行目标检测验证 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We evaluate our method on the ImageNet 2012 classification dataset that consists of 1000 classes"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The models are trained on the 1.28 million training images, and evaluated on the 50k validation images"
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We conducted more studies on the CIFAR-10 dataset, which consists of 50k training images and 10k testing images in 10 classes"
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We adopt Faster R-CNN as the detection method"
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 ImageNet 上，34 层普通网络比 18 层普通网络验证误差更高，且在整个训练过程中训练误差都更高，出现退化问题 [S4.SS1.p3]。残差学习逆转了这一情况：34 层 ResNet 优于 18 层 ResNet（提升 2.8%），且 34 层 ResNet 相比其普通对应网络将 top-1 误差降低 3.5% [S4.SS1.p6][S4.SS1.p7]。50/101/152 层 ResNet 比 34 层更准确，未观察到退化问题，并从深度增加中获得显著精度提升 [S4.SS1.p15]。152 层 ResNet 单模型 top-5 验证误差为 4.49%，六模型集成在测试集上取得 3.57% top-5 误差，赢得 ILSVRC 2015 第一名 [S4.SS1.p16]。在 CIFAR-10 上，ResNet 同样克服优化困难并在深度增加时获得精度提升，110 层网络达到 6.43% 误差 [S4.SS2.p5][S4.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p3",
+          "quote": "the deeper 34-layer plain net has higher validation error than the shallower 18-layer plain net"
+        },
+        {
+          "id": "S4.SS1.p6",
+          "quote": "the 34-layer ResNet is better than the 18-layer ResNet (by 2.8%)"
+        },
+        {
+          "id": "S4.SS1.p7",
+          "quote": "the 34-layer ResNet reduces the top-1 error by 3.5%"
+        },
+        {
+          "id": "S4.SS1.p15",
+          "quote": "The 50/101/152-layer ResNets are more accurate than the 34-layer ones by considerable margins"
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "Our 152-layer ResNet has a single-model top-5 validation error of 4.49%"
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This leads to 3.57% top-5 error on the test set"
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases"
+        },
+        {
+          "id": "S4.SS2.p6",
+          "quote": "yet is among the state-of-the-art results (6.43%, Table 6)"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，1202 层网络虽然训练误差低于 0.1%，但测试结果差于 110 层网络，作者认为这是由于过拟合，该网络对此小数据集可能不必要地大 [S4.SS2.p9]。作者在本文中未使用 maxout/dropout，仅通过深而窄的架构施加正则化，并指出结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。此外，作者对普通网络优化困难的原因表示将在未来研究 [S4.SS1.p4]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The 1202-layer network may be unnecessarily large (19.4M) for this small dataset"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "we use no maxout/dropout and just simply impose regularization via deep and thin architectures by design"
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "The reason for such optimization difficulties will be studied in the future"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 11845,
+      "completion_tokens": 1825,
+      "elapsed_s": 7.5
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard"
+}

@@ -1,0 +1,160 @@
+{
+  "paper": {
+    "arxiv_id": "2501.19393",
+    "title": "s1 : Simple test-time scaling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44775,
+    "n_sections": 55,
+    "n_paragraphs": 75
+  },
+  "result": {
+    "summary": "本文研究如何以最简单的方法实现测试时扩展（test-time scaling）并取得强推理性能 [S1.p1]。作者构建了仅含 1,000 个问题及推理轨迹的数据集 s1K，并提出 budget forcing 在解码时控制思考 token 数量 [S1.p2]。在 Qwen2.5-32B-Instruct 上微调后，s1-32B 在竞赛数学题上超过 o1-preview 最高 27%，并可将 AIME24 成绩从 50% 外推到 57% [abstract]。作者开源了模型、数据和代码 [S1.p4]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在 OpenAI o1 未公开方法、众多复现尝试均未公开复现出清晰测试时扩展行为的情况下，找到同时实现测试时扩展和强推理性能的最简单方法 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "despite the large number of o1 replication attempts, none have openly replicated a clear test-time scaling behavior."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了 s1K 数据集，包含 1,000 个经过质量、难度、多样性筛选的问题及从 Gemini Thinking Experimental 蒸馏的推理轨迹 [S1.p2][S2.SS2.p1]。在 Qwen2.5-32B-Instruct 上进行监督微调，仅用 16 张 H100 训练 26 分钟 [S1.p2][S4.SS1.SSS0.Px1.p1]。提出 budget forcing：通过强制插入思考结束符提前终止思考，或抑制结束符并追加“Wait”来延长思考，从而控制测试时计算量 [S1.p2][S3.SS1.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "we construct s1K, which consists of 1,000 carefully curated questions paired with reasoning traces and answers distilled from Gemini Thinking Experimental."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We perform supervised fine-tuning (SFT) of an off-the-shelf pretrained model on our small dataset requiring just 26 minutes of training on 16 H100 GPUs."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "We propose a simple decoding-time intervention by forcing a maximum and/or minimum number of thinking tokens."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "we suppress the generation of the end-of-thinking token delimiter and optionally append the string “Wait” to the model’s current reasoning trace"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "在三个推理基准上评估：AIME24（30 题）、MATH500（500 题）和 GPQA Diamond（198 题），使用 lm-evaluation-harness，温度设为 0 [S4.SS1.SSS0.Px2.p1]。与 OpenAI o1 系列、DeepSeek r1 系列、QwQ-32B-preview、Sky-T1-32B-Preview、Bespoke-32B 和 Gemini 2.0 Flash Thinking Experimental 等模型比较 [S4.SS1.SSS0.Px3.p1]。还进行了数据消融（随机、仅多样性、仅最长、全量 59K）和测试时扩展方法消融（token/step/class 条件控制、拒绝采样）[S5.SS1.p1][S5.SS2.SSS0.Px1.p1][S5.SS2.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "We select three representative reasoning benchmarks widely used in the field: AIME24 has 30 problems"
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "MATH500 is a benchmark of competition math problems of varying difficulty."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "GPQA Diamond consists of 198 PhD-level science questions from Biology, Chemistry and Physics."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px3.p1",
+          "quote": "We benchmark s1-32B against: OpenAI o1 series, closed-source models that popularized test-time scaling; DeepSeek r1 series"
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "Only Quality (1K-random): After obtaining our high-quality reasoning chains from Gemini, we select 1,000 samples at random"
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "In Table 3 we compare the test-time scaling methods we have introduced in §3."
+        }
+      ]
+    },
+    "findings": {
+      "text": "s1-32B 在竞赛数学题上超过 o1-preview 最高 27%，并通过 budget forcing 将 AIME24 成绩从 50% 外推到 57% [abstract]。budget forcing 提供完美控制、良好扩展斜率，并取得最佳 AIME24 分数 [S5.SS2.SSS0.Px1.p1]。数据消融表明，联合使用质量、难度、多样性三个标准至关重要，随机选择、仅选最长或仅选最多样均导致显著更差性能（AIME24 平均约 -30%），而训练全量 59K 样本相比 1K 选择没有实质提升 [S1.p3]。s1-32B 是最样本高效的开放数据推理模型 [S4.SS2.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)."
+        },
+        {
+          "id": "abstract",
+          "quote": "scaling s1-32B with budget forcing allows extrapolating beyond its performance without test-time intervention: from 50% to 57% on AIME24."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "we find that budget forcing provides perfect control, good scaling, and leads to our best AIME24 score."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "We find that s1-32B is the most sample-efficient open data reasoning model."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "budget forcing 在进一步扩展时有两个关键限制：最终会趋于平坦，且受底层语言模型上下文窗口约束 [S6.SS2.SSS0.Px2.p1]。抑制思考结束符过于频繁可能导致模型陷入重复循环而非继续推理 [S4.SS2.SSS0.Px1.p1]。拒绝采样出现逆扩展趋势，作者假设较短生成往往是模型一开始就走上正确路径的，而较长生成往往是模型犯错并回溯的 [S5.SS2.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "However, it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Suppressing the end-of-thinking token delimiter too often can lead the model into repetitive loops instead of continued reasoning."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px2.p1",
+          "quote": "Surprisingly, we find that simply sampling until the generation fits a specific length leads to an inverse scaling trend as depicted in Figure 6."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px2.p1",
+          "quote": "We hypothesize that there is a correlation such that shorter generations tend to be the ones where the model was on the right track from the start, whereas longer ones tend to be ones where the model made mistakes and thus backtracks or questions itself."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 11663,
+      "completion_tokens": 1976,
+      "elapsed_s": 7.83
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 22,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 19,
+    "inline_rate": 0.842,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S2.SS2.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "method",
+        "id": "S4.SS1.SSS0.Px1.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "S5.SS2.SSS0.Px2.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard"
+}

@@ -15,10 +15,8 @@
 每写完一个函数就单独测一下，别攒到最后一起调。
 """
 
-from pydoc import TextDoc
 import re
 import requests
-import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh) arxiv-reader/0.1",
@@ -78,27 +76,33 @@ def fetch_html(arxiv_id: str) -> str | None:
 
 
 def fetch_abstract_only(arxiv_id: str) -> Paper:
-    """降级路径：没有 HTML 版时，从 arXiv API 只取标题和摘要。
+    """降级路径：没有 HTML 版时，从 abs 页面只取标题和摘要。
 
-    接口：http://export.arxiv.org/api/query?id_list=<id>
-    返回的是 Atom XML，用 feedparser 或 xml.etree 解析都行。
+    最早走的是 export.arxiv.org 的 API（Atom XML），D14 评测时发现它
+    对浏览器 UA 返回 406、连发也 406（要求间隔 3 秒）。换成直接抓
+    arxiv.org/abs/<id>：和 HTML 版同一个域名、没有间隔限制，页面的
+    <meta name="citation_*"> 标签里标题摘要都有，顺带还有 DOI（v2 用）。
 
     记得把 source 设成 "abstract_only" —— 前端要据此提示用户。
     """
-    url = f"http://export.arxiv.org/api/query?id_list={arxiv_id}"
+    url = f"https://arxiv.org/abs/{arxiv_id}"
     resp = requests.get(url, headers=HEADERS, timeout=30)
     resp.raise_for_status()
 
-    ns = {"a": "http://www.w3.org/2005/Atom"}
-    root = ET.fromstring(resp.text)
-    entry = root.find("a:entry", ns)
+    soup = BeautifulSoup(resp.text, "html.parser")
 
-    title = entry.find("a:title", ns).text.strip()
-    summary = entry.find("a:summary", ns).text.strip()
+    def meta(name: str) -> str:
+        tag = soup.find("meta", attrs={"name": name})
+        return (tag.get("content") or "").strip() if tag else ""
 
-    return Paper(arxiv_id=arxiv_id, title=title, abstract=summary, source="abstract_only")
+    title = meta("citation_title")
+    abstract = meta("citation_abstract")
+    if not abstract:                                    # 兜底：页面正文里的摘要块
+        bq = soup.select_one("blockquote.abstract")
+        abstract = bq.get_text(" ", strip=True).removeprefix("Abstract:").strip() if bq else ""
+    abstract = re.sub(r"\s+", " ", abstract)
 
-
+    return Paper(arxiv_id=arxiv_id, title=title, abstract=abstract, source="abstract_only")
 
 def para_text(div) -> str:
     """把一个段落元素转成干净文本：公式换成 LaTeX，引用标记删掉。"""
@@ -139,6 +143,9 @@ def parse_html(html: str, arxiv_id: str) -> Paper:
     soup = BeautifulSoup(html, "html.parser")
 
     title_el = soup.select_one("h1.ltx_title_document")
+    if title_el:
+        for note in title_el.select(".ltx_note"):   # 标题里的脚注（作者贡献说明之类）
+            note.decompose()
     title = title_el.get_text(" ", strip=True) if title_el else ""
 
     abstract_el = soup.select_one("div.ltx_abstract p.ltx_p")

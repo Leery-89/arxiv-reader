@@ -1,0 +1,130 @@
+{
+  "paper": {
+    "arxiv_id": "1207.0580",
+    "title": "Improving neural networks by preventing co-adaptation of feature detectors",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 41183,
+    "n_sections": 21,
+    "n_paragraphs": 55
+  },
+  "result": {
+    "summary": "这篇论文提出了一种名为 dropout 的方法，在每次训练样本呈现时以 0.5 的概率随机省略一半的隐藏单元，以防止特征检测器之间复杂的共适应 [p1][p3]。作者在 MNIST、TIMIT、CIFAR-10、ImageNet 和 Reuters 等多个基准任务上验证了该方法，发现 dropout 能显著降低测试误差并刷新语音和物体识别的记录 [p1][p6][p9][p10][p11][p13]。论文还讨论了 dropout 与模型平均、bagging 以及贝叶斯模型平均的关系 [p3][p15][p16]。",
+    "research_question": {
+      "text": "论文要解决的问题是：当大型前馈神经网络在小训练集上训练时，容易在测试数据上表现很差，即过拟合 [p1][p2]。原文指出，过拟合的原因是特征检测器被调整成在训练数据上协同工作良好，但在测试数据上并非如此 [p2]。",
+      "evidence": [
+        {
+          "id": "p1",
+          "quote": "When a large feedforward neural network is trained on a small training set, it typically performs poorly on held-out test data."
+        },
+        {
+          "id": "p2",
+          "quote": "the feature detectors have been tuned to work well together on the training data but not on the test data."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出 dropout：在每次呈现每个训练样本时，以 0.5 的概率随机从网络中省略每个隐藏单元，使隐藏单元不能依赖其他隐藏单元的存在 [p3]。训练使用标准随机梯度下降，但将通常的权重惩罚改为对每个隐藏单元输入权重向量的 L2 范数设置上界，若权重更新违反该约束则重新归一化 [p4]。测试时使用包含所有隐藏单元但输出权重减半的“平均网络” [p5]。",
+      "evidence": [
+        {
+          "id": "p3",
+          "quote": "On each presentation of each training case, each hidden unit is randomly omitted from the network with a probability of 0.5, so a hidden unit cannot rely on other hidden units being present."
+        },
+        {
+          "id": "p4",
+          "quote": "we set an upper bound on the L2 norm of the incoming weight vector for each individual hidden unit."
+        },
+        {
+          "id": "p5",
+          "quote": "At test time, we use the “mean network” that contains all of the hidden units but with their outgoing weights halved"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在多个基准数据集上评估 dropout：MNIST 手写数字识别（60,000 训练图像、10,000 测试图像）[p6][A1.SS1.p1]、TIMIT 语音识别 [p8][p9]、CIFAR-10 物体识别（50,000 训练图像、10,000 测试图像）[p10]、ImageNet 物体识别 [p11] 以及 Reuters 文档分类（201,369 训练和测试文档，50 个互斥类别）[p13]。对于语音和两个物体识别数据集，作者使用单独的验证集来选择网络架构，再用选出的架构在真实测试集上评估 dropout [p12]。",
+      "evidence": [
+        {
+          "id": "p6",
+          "quote": "It contains 60,000 28x28 training images of individual hand written digits and 10,000 test images."
+        },
+        {
+          "id": "p9",
+          "quote": "Figure 2 shows the frame classification error rate on the core test set of the TIMIT benchmark"
+        },
+        {
+          "id": "p10",
+          "quote": "These images were labeled by hand to produce 50,000 training images and 10,000 test images"
+        },
+        {
+          "id": "p11",
+          "quote": "ImageNet is an extremely challenging object recognition dataset consisting of thousands of high-resolution images of thousands of classes of object."
+        },
+        {
+          "id": "p13",
+          "quote": "We created training and test sets each containing 201,369 documents from 50 mutually exclusive classes."
+        },
+        {
+          "id": "p12",
+          "quote": "We made these decisions by holding out a separate validation set that was used to evaluate the performance of a large number of different architectures"
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 MNIST 上，使用 50% dropout 和每个隐藏单元输入权重的独立 L2 约束可将标准前馈神经网络的最佳已发表结果从 160 个错误降至约 130 个错误，再对随机 20% 像素做 dropout 可进一步降至约 110 个错误 [p6]。在 TIMIT 上，无 dropout 的识别率为 22.7%，使用 dropout 后提升至 19.7%，这是不使用说话人身份信息的方法中的记录 [p9]。在 CIFAR-10 上，dropout 将错误率从 16.6% 降至 15.6% [p10]；在 ImageNet 上，dropout 将错误率从 48.6% 降至 42.4% 的记录 [p11]。在 Reuters 上，dropout 将测试错误率从 31.05% 降至 29.62% [p13]。",
+      "evidence": [
+        {
+          "id": "p6",
+          "quote": "This can be reduced to about 130 errors by using 50% dropout with separate L2 constraints on the incoming weights of each hidden unit and further reduced to about 110 errors by also dropping out a random 20% of the pixels"
+        },
+        {
+          "id": "p9",
+          "quote": "Without dropout, the recognition rate is $22.7$ % and with dropout this improves to $19.7$ %, which is a record for methods that do not use any information about speaker identity."
+        },
+        {
+          "id": "p10",
+          "quote": "Using dropout in the last hidden layer gives an error rate of 15.6%."
+        },
+        {
+          "id": "p11",
+          "quote": "Using 50% dropout in the sixth hidden layer reduces this to a record 42.4%"
+        },
+        {
+          "id": "p13",
+          "quote": "This is reduced to 29.62% by using 50% dropout"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 9994,
+      "completion_tokens": 1391,
+      "elapsed_s": 5.62
+    }
+  },
+  "verify": {
+    "quote_hits": 16,
+    "quote_total": 16,
+    "quote_rate": 1.0,
+    "inline_hits": 17,
+    "inline_total": 19,
+    "inline_rate": 0.895,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "A1.SS1.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "p8",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 1,
+  "category": "odd"
+}

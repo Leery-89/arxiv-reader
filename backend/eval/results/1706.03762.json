@@ -1,0 +1,150 @@
+{
+  "paper": {
+    "arxiv_id": "1706.03762",
+    "title": "Attention Is All You Need",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 27350,
+    "n_sections": 28,
+    "n_paragraphs": 74
+  },
+  "result": {
+    "summary": "本文提出了 Transformer，一种完全基于注意力机制、摒弃循环和卷积的序列转换网络架构 [S1.p4]。作者在 WMT 2014 英德和英法机器翻译任务上验证该模型，英德任务上 big 模型取得 28.4 BLEU，超过此前最佳结果（包括集成模型）2 BLEU 以上 [S6.SS1.p1]；英法任务上 big 模型取得 41.0 BLEU，超过所有此前发表的单模型 [S6.SS1.p2]。作者还将 Transformer 应用于英语成分句法分析，表明其能泛化到其他任务 [S6.SS3.p1]。",
+    "research_question": {
+      "text": "循环模型沿输入输出序列的符号位置分解计算，这种固有的顺序性阻碍了训练样本内的并行化，在序列较长时尤为关键 [S1.p2]。注意力机制已成为序列建模和转换模型的重要组成部分，但在大多数情况下仍与循环网络结合使用 [S1.p3]。本文旨在提出一种完全依赖注意力机制、摒弃循环的模型架构 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In all but a few cases, however, such attention mechanisms are used in conjunction with a recurrent network."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism"
+        }
+      ]
+    },
+    "method": {
+      "text": "Transformer 采用编码器-解码器结构，编码器和解码器各由 N=6 个相同层堆叠而成，每层包含多头自注意力子层和逐位置全连接前馈网络，并采用残差连接加层归一化 [S3.SS1.SSS0.Px1.p1][S3.SS1.SSS0.Px2.p1]。注意力采用缩放点积注意力，即对 query 与所有 key 的点积除以 sqrt(d_k) 后经 softmax 得到权重，再对 value 加权求和 [S3.SS2.SSS1.p1][S3.SS2.SSS1.p3]。模型使用 h=8 个并行注意力头，每个头维度为 d_k=d_v=d_model/h=64 [S3.SS2.SSS2.p5]。由于模型不含循环和卷积，作者在输入嵌入中加入正弦余弦位置编码以利用序列顺序信息 [S3.SS5.p1][S3.SS5.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "The encoder is composed of a stack of $N=6$ identical layers. Each layer has two sub-layers."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px2.p1",
+          "quote": "The decoder is also composed of a stack of $N=6$ identical layers."
+        },
+        {
+          "id": "S3.SS2.SSS1.p1",
+          "quote": "We compute the dot products of the query with all keys, divide each by $\\sqrt{d_{k}}$, and apply a softmax function"
+        },
+        {
+          "id": "S3.SS2.SSS2.p5",
+          "quote": "In this work we employ $h=8$ parallel attention layers, or heads."
+        },
+        {
+          "id": "S3.SS5.p1",
+          "quote": "we must inject some information about the relative or absolute position of the tokens in the sequence"
+        },
+        {
+          "id": "S3.SS5.p2",
+          "quote": "In this work, we use sine and cosine functions of different frequencies:"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在 WMT 2014 英德数据集（约 450 万句对，共享 BPE 词表约 37000 词）和 WMT 2014 英法数据集（3600 万句，32000 word-piece 词表）上训练模型 [S5.SS1.p1]。训练使用 8 块 NVIDIA P100 GPU，base 模型训练 100,000 步约 12 小时，big 模型训练 300,000 步约 3.5 天 [S5.SS2.p1]。此外，作者在 Penn Treebank 的 WSJ 部分（约 40K 训练句）以及半监督设置（约 17M 句）上进行了英语成分句法分析实验 [S6.SS3.p2]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "For English-French, we used the significantly larger WMT 2014 English-French dataset consisting of 36M sentences"
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "We trained our models on one machine with 8 NVIDIA P100 GPUs."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "We trained the base models for a total of 100,000 steps or 12 hours."
+        },
+        {
+          "id": "S6.SS3.p2",
+          "quote": "We trained a 4-layer transformer with $d_{model}=1024$ on the Wall Street Journal (WSJ) portion of the Penn Treebank, about 40K training sentences."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 WMT 2014 英德翻译任务上，big 模型超过此前最佳模型（包括集成模型）2.0 BLEU 以上，取得 28.4 BLEU 的新最优成绩 [S6.SS1.p1]。在 WMT 2014 英法任务上，big 模型取得 41.0 BLEU，超过所有此前发表的单模型，训练成本不到此前最优模型的 1/4 [S6.SS1.p2]。模型变体实验表明，单头注意力比最佳设置差 0.9 BLEU，头数过多也会导致质量下降 [S6.SS2.p2]；减小注意力 key 维度 d_k 会损害模型质量 [S6.SS2.p3]；用学习式位置嵌入替换正弦位置编码得到几乎相同的结果 [S6.SS2.p3]。在英语成分句法分析上，Transformer 在仅使用 WSJ 40K 句训练时也超过 BerkeleyParser [S6.SS3.p5]。",
+      "evidence": [
+        {
+          "id": "S6.SS1.p1",
+          "quote": "outperforms the best previously reported models (including ensembles) by more than $2.0$ BLEU, establishing a new state-of-the-art BLEU score of $28.4$"
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "our big model achieves a BLEU score of $41.0$, outperforming all of the previously published single models"
+        },
+        {
+          "id": "S6.SS2.p2",
+          "quote": "While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads."
+        },
+        {
+          "id": "S6.SS2.p3",
+          "quote": "we observe that reducing the attention key size $d_{k}$ hurts model quality"
+        },
+        {
+          "id": "S6.SS2.p3",
+          "quote": "we replace our sinusoidal positional encoding with learned positional embeddings, and observe nearly identical results"
+        },
+        {
+          "id": "S6.SS3.p5",
+          "quote": "the Transformer outperforms the BerkeleyParser even when training only on the WSJ training set of 40K sentences."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，将自注意力限制在输入序列中以相应输出位置为中心的邻域大小 r，可将最大路径长度增至 O(n/r)，并计划在未来工作中进一步研究该方法 [S4.p4]。作者还计划将 Transformer 扩展到文本以外的输入输出模态，并研究局部受限注意力机制以高效处理图像、音频和视频等大规模输入输出 [S7.p3]。",
+      "evidence": [
+        {
+          "id": "S4.p4",
+          "quote": "We plan to investigate this approach further in future work."
+        },
+        {
+          "id": "S7.p3",
+          "quote": "We plan to extend the Transformer to problems involving input and output modalities other than text"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 7472,
+      "completion_tokens": 1908,
+      "elapsed_s": 7.32
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 22,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 21,
+    "inline_rate": 0.952,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S3.SS2.SSS1.p3",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard"
+}

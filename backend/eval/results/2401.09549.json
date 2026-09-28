@@ -1,0 +1,167 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结中实现了对纳米线与量子点构成的干涉环中费米宇称的单次干涉测量 [abstract][S1.p3]。作者通过色散栅极探测三量子点干涉仪（TQDI）的量子电容，观察到 h/2e 周期的双模分布和随机电报信号，并提取出约 2 ms 的驻留时间 [S3.p3]。作者将该信号解释为两端相距约 3 µm 的 Majorana 零能模所编码的费米宇称的切换，且非平衡准粒子中毒率较低 [abstract][S3.p9]。作者指出，该测量本身不能唯一区分拓扑相中的 MZM 与精细调节的平庸 Andreev 束缚态，但为基于测量操作的拓扑量子比特提供了关键进展 [S1.p3][S5.p2]。",
+    "research_question": {
+      "text": "论文旨在实现拓扑量子计算中测量-only 方案所需的费米宇称单次测量，即确定一对 Majorana 零能模共享的费米宇称 [S1.p1][S1.p2]。作者指出，此前已有 Aharonov-Bohm 干涉仪中的相干输运报道，但其工作区间不允许量子比特读出 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Protocols for measurement-only topological quantum computation simplify these operations, reducing them to fusion alone."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The fermion parity shared by a pair of MZMs can be determined through an interferometric measurement."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Progress in this direction was made in Ref., which reported coherent transport through a gate-defined nanowire island in an Aharonov-Bohm interferometer, albeit in a regime that does not allow qubit readout."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者设计了一种由门定义的 InAs-Al 纳米线与三个量子点组成的干涉环（TQDI），其中中间量子点（dot 2）与读出谐振器耦合，两侧小量子点作为可调耦合器 [S2.p3]。通过色散栅极探测 dot 2 的量子电容，并利用 JTWPA 和 HEMT 放大、滤波与屏蔽来降低噪声和非平衡准粒子 [S2.p3]。作者还建立了包含 MZM、量子点和环境噪声的有效模型，用量子动力学模拟复现实验结果 [S3.p4][S3.p6]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "Our readout circuit is based on dispersive gate sensing of a triple quantum dot interferometer (TQDI): three electrostatically defined quantum dots that together with the 1DTS form a loop threaded by a flux, $\\Phi$"
+        },
+        {
+          "id": "S2.p3",
+          "quote": "The quantum capacitance, $C_{\\mathrm{\\scriptscriptstyle Q}}$, of dot 2 is read out through dispersive gate sensing using an off-chip resonator circuit in a reflectometry setup."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "We support this interpretation by reproducing our results with quantum dynamics simulations that incorporate rf drive power, charge noise, and temperature."
+        },
+        {
+          "id": "S3.p6",
+          "quote": "For detailed comparison with experiments, we simulate a more complete model of our interferometer, expanded to include the full triple-dot system, incoherent coupling to the environment, and backaction from the measurement."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在器件 A 和器件 B 上进行，通过扫描面外磁场 B⊥ 和 dot 2 的栅压 V_QD2 来测量量子电容的时间轨迹，并用峰度 K(C_Q) 检测双模性 [S3.p1][S3.p2]。作者在 B∥≈1.8 T、V_WP1≈-1.832 V 附近观察到周期为 1.7 mT 的峰度振荡，对应 h/2e 通量周期 [S3.p2]。此外，作者还进行了准粒子注入、断开量子点与纳米线连接、以及低场（0.8 T）对照实验 [S3.p12][S3.p13][S3.p14]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "To measure a time record of the fermion parity, we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "For device A, the relevant regime is in the neighborhood of $B_{\\parallel}=$1.8\\text{\\,}\\mathrm{T}$$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}=$-1.832\\text{\\,}\\mathrm{V}$$."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "we observe oscillations in the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ time trace with a period of $1.7(\\pm 0.2)\\text{\\,}\\mathrm{mT}$"
+        },
+        {
+          "id": "S3.p12",
+          "quote": "First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a"
+        },
+        {
+          "id": "S3.p13",
+          "quote": "Our second control experiment is to completely disconnect the dots from the wire."
+        },
+        {
+          "id": "S3.p14",
+          "quote": "Finally, we repeat the interferometry measurement at a low field ( $0.8\\text{\\,}\\mathrm{T}$), where the device is well within the trivial phase, and the induced gap in the nanowire has not closed yet."
+        }
+      ]
+    },
+    "findings": {
+      "text": "作者观察到 h/2e 周期的双模量子电容分布和随机电报信号，在 90 µs 内信噪比为 4.9，等效于 3.7 µs 内信噪比为 1 [S3.p3]。驻留时间呈指数分布，特征时间 τ_RTS≈2 ms，对应非平衡准粒子密度约 1 µm⁻³，与 Cooper 对盒独立测量的 0.6 µm⁻³ 在数量级内一致 [S3.p3][S3.p9][S3.p10]。准粒子注入使 τ_RTS 减半，而断开量子点与纳米线连接后 RTS 消失，低场下未观察到 h/e 周期性 [S3.p12][S3.p13][S3.p14]。作者估计在最优测量时间 32.5 µs 下宇称测量错误概率约为 1% [S4.p2]。",
+      "evidence": [
+        {
+          "id": "S3.p3",
+          "quote": "From the histograms, we extract an achieved SNR of $4.9$ in $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ ( Fig. 3 g,h) or, equivalently, an SNR of $1$ in $3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$"
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the intervals between switches follow an exponential distribution with a characteristic time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}\\approx$2\\text{\\,}\\mathrm{ms}$$"
+        },
+        {
+          "id": "S3.p9",
+          "quote": "Within this model, poisoning time scales of $\\tau_{\\mathrm{qpp}}\\sim$2\\text{\\,}\\mathrm{ms}$$ arise from a non-equilibrium quasiparticle density $n_{\\mathrm{qp}}\\sim$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$^{-3}$."
+        },
+        {
+          "id": "S3.p10",
+          "quote": "yielding $n_{\\mathrm{qp}}^{\\mathrm{\\scriptscriptstyle CPB}}\\approx$0.6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$^{-3}$ at $B_{\\parallel}=0$."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "$\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ decreases to half of its value as the bias voltage is increased from $0$ to $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$"
+        },
+        {
+          "id": "S3.p13",
+          "quote": "In devices A and B, we do not observe any RTS"
+        },
+        {
+          "id": "S3.p14",
+          "quote": "we do not observe any $h/e$ flux periodicity as expected for a gapped wire"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "we find an optimal measurement time of $32.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ and a corresponding $p_{\\mathrm{err}}\\approx 1\\%$"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，该测量本身不能唯一区分拓扑相中的 MZM 与平庸相中精细调节的低能 Andreev 束缚态 [S1.p3][S5.p1]。作者还指出，要完全解决这一问题，需要在另一篇论文中讨论器件的相图和所观察到的通量依赖 RTS 的稳定性 [S5.p1]。此外，作者提到在当前器件中，由于有限尺寸效应，预期 E_M 会有显著变化，且拓扑能隙和相干长度并非远小于器件长度 [S4.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase"
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "To fully resolve this issue, we will discuss the device’s phase diagram and the stability of the observed flux-dependent RTS in a separate publication."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Within the topological phase, we expect a substantial variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ in our current devices, attributable to mesoscopic fluctuations due to finite-size effects."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 37307,
+      "completion_tokens": 2411,
+      "elapsed_s": 9.83
+    }
+  },
+  "verify": {
+    "quote_hits": 25,
+    "quote_total": 26,
+    "quote_rate": 0.962,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S4.p2",
+        "reason": "quote 不在该段落里",
+        "quote": "we find an optimal measurement time of $32.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro "
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics"
+}

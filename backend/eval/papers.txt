@@ -1,0 +1,60 @@
+# 评测集论文清单。格式：类别: arXiv ID   # 备注
+# 空行和 # 开头的行会被跳过。类别用来分组统计，名字随意但要一致。
+#
+# 设计原则：有意为难。均匀的样本测不出边界，边界才是数字有意义的地方。
+# 六类 36 篇：标准 10、超长 5、无 HTML 5、结构怪 5、AI+科学 5、物理 6。
+#
+# 跑完看 summary.csv：
+#   title 列  —— 和备注对不上的就是错 ID，删掉换一篇
+#   source 列 —— 如果某篇实际走了 abstract_only 但放在别的类别里，
+#                挪到 abstract_only 或换一篇，类别要反映实际走的路径
+
+# ── 标准（结构规整的 ML 论文，有经典有新的）──
+standard: 1706.03762    # Transformer
+standard: 2010.11929    # ViT
+standard: 2005.11401    # RAG
+standard: 1512.03385    # ResNet
+standard: 2501.12948    # DeepSeek-R1
+standard: 2501.19393    # s1: Simple test-time scaling
+standard: 2502.03387    # LIMO
+standard: 2405.15793    # SWE-agent
+standard: 2403.09629    # Quiet-STaR
+standard: 2407.21787    # Large Language Monkeys
+
+# ── 超长（会触发附录截断）──
+long: 2005.14165        # GPT-3，附录 A–H
+long: 2407.21783        # Llama 3，92 页
+long: 2502.13923        # Qwen2.5-VL 技术报告
+long: 2410.13720        # Movie Gen，100 页以上
+long: 2412.19437        # DeepSeek-V3
+
+# ── 无 HTML 版（走降级）── 从 survey_results.csv 里 status=404 的行取
+abstract_only: 1301.0001
+abstract_only: 1401.0002
+abstract_only: 1701.00001
+abstract_only: 1901.00001
+abstract_only: 2107.00002
+
+# ── 结构怪（无编号正文、纯理论、公式密集、非标准章节）──
+odd: 1207.0580          # dropout，正文无编号
+odd: 2405.21060         # Mamba-2 / SSD，理论为主
+odd: 2405.07987         # Platonic Representation Hypothesis，论证型
+odd: 2411.04330         # Scaling Laws for Precision，公式密集
+odd: 2309.14316         # Physics of LMs 3.1，合成实验、章节非标准
+
+# ── AI+科学（生物 / 化学 / 材料，术语分布外）──
+science: 2405.03370     # AntiFold
+science: 2406.03686     # BindGPT
+science: 2405.04967     # MatterSim
+science: 2410.22570     # Orb
+
+# ── 物理（完全分布外，标注时找朋友）──
+physics: 2408.13687     # 量子纠错，低于 surface code 阈值
+physics: 2404.03002     # DESI 2024 VI，宇宙学
+physics: 2407.10760     # Little Red Dots，JWST 黑洞
+physics: 2311.07288     # ATLAS 顶夸克纠缠，超长作者列表
+physics: 2401.09549     # InAs-Al Majorana 器件
+physics: 2410.23679     # MACE-MP-0 熔盐粘度，材料物理
+physics: 2407.06858     # 恒星自转周期，天体物理（原以为是 ESM3，ESM3 在 bioRxiv 不在 arXiv）
+
+# 没收进来的：2405.15015（写的是 AlphaFold 3，但 AF3 发在 Nature，这个 ID 存疑）

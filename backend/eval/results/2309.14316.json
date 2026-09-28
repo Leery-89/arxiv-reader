@@ -1,0 +1,154 @@
+{
+  "paper": {
+    "arxiv_id": "2309.14316",
+    "title": "Physics of Language Models: Part 3.1, Knowledge Storage and Extraction Thanks: Project page: https://physics.allen-zhu.com/part-3-knowledge/part-3-1 . An extended video of this paper is available at https://youtu.be/YSHzKmEianc .\nV1 was circulated internally at Meta on Sep 18, 2023, and appeared on arXiv on Sep 25, 2023.\nV2 is nearly identical to V1, with minor corrections to author names and writing.\nV3 includes additional Llama experiments and further writing improvements. We would like to thank Lin Xiao, Chunting Zhou, Tianyi Peng, Xiaodong Liu, and Zhijie Zhou for many helpful conversations. We would like to extend special thanks to Nabib Ahmed, Giri Anantharaman, Lucca Bertoncini, Henry Estela, Liao Hu, Caleb Ho, Wil Johnson, Apostolos Kokolis, and Shubho Sengupta from Meta FAIR, as well as Ian Clark, Gourab De, Anmol Mann, and Max Pfeifer from W&B ; without their invaluable support, the experiments in this paper would not have been possible.",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75682,
+    "n_sections": 29,
+    "n_paragraphs": 134
+  },
+  "result": {
+    "summary": "本文研究语言模型在预训练中记忆知识后，能否在指令微调阶段提取这些知识来回答新问题 [S1.p4][S1.p7]。作者构建了合成传记数据集 bioS 和 Llama 生成的近真实数据集 bioR，并采用预训练+QA 微调以及混合训练两种设置进行验证 [S2.p2][S2.p4][S2.SS1.p3][S2.SS1.p4]。主要发现是：仅预训练传记再微调 QA 时，模型无法对未见过 QA 的个体进行知识提取，而知识增强（如多版本、句子打乱、重复全名）能显著提升提取能力 [S4.SS1.p2][S4.SS2.p3]。作者进一步用线性探测技术表明，知识增强使属性几乎线性地编码在人物姓名 token 的隐藏状态中，从而支持知识提取 [S5.SS2.p4]。",
+    "research_question": {
+      "text": "论文要解决的问题是：语言模型回答事实性问题时，是基于训练中见过类似问题（数据污染/传统记忆），还是真正从训练语料（如传记）中学习并提取知识 [S1.p5]。作者指出，仅记忆训练数据中的句子并不保证模型能在推理时提取或操作其中的事实知识 [S1.p3]。因此，核心问题是语言模型在训练中如何记忆知识，并在推理时提取以回答问题 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "leaving it unclear whether the model answers questions like “Which city was Abraham Lincoln born in?” by extracting knowledge from Lincoln’s biography ( our focus) or if it encountered a similar (or same!) question during training and memorized the answer"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "memorizing all sentences in the training data does not ensure that the model can extract or manipulate the factual knowledge from the sentences during inference"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "a key question is: How do language models memorize knowledge during training, and extract it later to answer questions or perform logical reasoning during inference?"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了合成传记数据集 bioS（10 万个体，每人六句传记，每句从约 50 个模板中随机选择）和用 Llama 生成的近真实数据集 bioR [S2.p2][S2.p3][S2.p4]。采用两种训练方式：预训练+指令微调（先在全部传记上预训练，再用一半个体的 QA 微调，测试另一半）和混合训练（同时用全部传记和一半 QA 训练） [S2.SS1.p3][S2.SS1.p4]。此外，作者提出基于位置的探测（P-probing）和基于查询的探测（Q-probing）两种近乎线性的探测方法，以分析知识在隐藏状态中的编码方式 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S2.p2",
+          "quote": "The synthetic dataset, bioS, generates profiles for $N=100,000$ individuals."
+        },
+        {
+          "id": "S2.p3",
+          "quote": "We generate a six-sentence biographical text entry for each individual, highlighting six distinct aspects. For diversity, each sentence is randomly chosen from approximately 50 distinct templates."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We examine a “close-to-real” dataset produced by Llama."
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "Here, we pre-train the language model from scratch on the BIO data... The model is then fine-tuned using half of the QA data and evaluated on the remaining half"
+        },
+        {
+          "id": "S2.SS1.p4",
+          "quote": "In mixed training, we train the model from scratch on all BIO data and half of the QA data."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We propose two probing methods: position-based (P-probing) and query-based (Q-probing). Both methods employ simple, nearly-linear probes to extract personal attributes from the model’s hidden states."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 bioS 和 bioR 数据集上进行，使用 GPT2/Llama 架构（bioS 用 124M，bioR 用 302M），并额外测试了 682M 模型和 GBERT 双向模型 [S2.SS1.p1][A2.p2][A2.p4]。评估指标为 QA 生成准确率，即模型生成答案与正确答案完全匹配的比例 [S2.p6]。训练设置包括预训练+QA 微调（全量微调或 LoRA）和混合训练（QA 比例 QA_r=0.8） [S2.SS1.p3][S2.SS1.p4][S2.SS1.p5]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We use a 12-layer, 12-head, 768-dim GPT2 (124M) or Llama architecture for pre-training on the bioS data, but a larger 12-layer, 20-head, 1280-dim GPT2 (302M) or Llama for the bioR data"
+        },
+        {
+          "id": "A2.p2",
+          "quote": "Only when presenting our negative result in Figure 2, we also tried a 12-layer, 32-head (each 64-dimensional) GPT2 model (682M)."
+        },
+        {
+          "id": "A2.p4",
+          "quote": "we modify our GPT2 architecture to swap its triangular attention matrix for a full matrix, while keeping the GPT2 tokenizer and rotary embedding (removing positional embedding). We label this revised model GBERT."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "QA accuracy is measured by the proportion of answers that exactly match the correct response."
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "The model is then fine-tuned using half of the QA data and evaluated on the remaining half"
+        },
+        {
+          "id": "S2.SS1.p4",
+          "quote": "primarily setting ${\\mathsf{QA}_{r}}=0.8$ (a $2:8$ BIO to QA entry ratio)"
+        },
+        {
+          "id": "S2.SS1.p5",
+          "quote": "In full finetuning a pretrained model is tuned for a downstream task such as QAs. LoRA finetuning improves upon this by freezing all pretrained model parameters and adding low-rank updates"
+        }
+      ]
+    },
+    "findings": {
+      "text": "混合训练能使模型有效提取知识，在 bioS single 上 OOD 准确率达 86.6%，bioR single 上达 77.7% [S3.p2]。但仅预训练传记再微调 QA 时，模型对未见个体的 QA 准确率为零，即使模型规模远大于个体数、个体被暴露上千次、尝试多种微调参数也无法提取知识 [S4.SS1.p2]。知识增强（多版本、句子打乱、重复全名）能大幅提升提取能力，例如每人 5 个不同传记条目将准确率从 9.7% 提升到 96.6% [S4.SS2.p3]。探测实验表明，知识增强使属性几乎线性地编码在人物姓名 token 的隐藏状态中，Q-probing 准确率与 QA 微调准确率高度相关 [S5.SS2.p4]。此外，加入“名人”数据能提升“少数群体”的知识提取准确率（bioS 从 4.4% 到 86.8%，bioR 从 10.0% 到 76.3%） [S6.p4][S6.p5]。双向模型（GBERT）在 MLM 预训练后，除非知识是独立单词，否则难以提取知识 [S7.p8]。",
+      "evidence": [
+        {
+          "id": "S3.p2",
+          "quote": "the OOD generalization accuracies are $86.6\\%$ when mixed-trained on bioS single and $77.7\\%$ for bioR single."
+        },
+        {
+          "id": "S4.SS1.p2",
+          "quote": "the model exhibits zero-zero QA accuracy on ${\\mathcal{P}_{\\mathsf{test}}}$ for all finetuning parameters"
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "Pretraining on a dataset where each person has 5 diverse biography entries (i.e., different wording, sentence shuffling) boosts the QA fine-tune accuracy (on ${\\mathcal{P}_{\\mathsf{test}}}$) from 9.7% to 96.6%."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "The QA finetune accuracy correlates closely with Q-probing accuracy, indicating that the “degree to which the attribute is directly linked to the person’s name” is a crucial factor for effective knowledge extraction."
+        },
+        {
+          "id": "S6.p4",
+          "quote": "Introducing celebrity data boosts the minority group’s QA accuracy (e.g., from 4.4% to 86.8% for the bioS data)."
+        },
+        {
+          "id": "S6.p5",
+          "quote": "in the more realistic bioR case, introducing celebrity data increases the minority’s accuracy from 10.0% to 76.3%."
+        },
+        {
+          "id": "S7.p8",
+          "quote": "Unless the knowledge is a standalone word or of independent words (like month, day, year), extracting knowledge after MLM pretraining might prove challenging, if not totally impossible."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及。",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 18677,
+      "completion_tokens": 2163,
+      "elapsed_s": 8.58
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 23,
+    "quote_rate": 0.957,
+    "inline_hits": 23,
+    "inline_total": 23,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S2.SS1.p3",
+        "reason": "quote 不在该段落里",
+        "quote": "Here, we pre-train the language model from scratch on the BIO data... The model "
+      }
+    ]
+  },
+  "not_mentioned_fields": 1,
+  "category": "odd"
+}
