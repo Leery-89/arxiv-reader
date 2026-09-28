@@ -6,7 +6,7 @@
 // 中途手里永远是半截的。提取器的工作是"像人一样看"——summary 的开引号
 // 一出现就逐字显示；某个字段的 {} 配平那一刻就单独解析它。
 
-const BACKEND = 'http://localhost:8000';   // D12 上线时换成服务器地址
+const BACKEND = 'https://arxiv-reader-production.up.railway.app';
 
 const FIELDS = [
   ['research_question', '研究问题'],
