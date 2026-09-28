@@ -28,3 +28,4 @@ backend/logs/
 try_*.py
 sample_*.html
 survey_results.csv
+arxiv-reader-ext.zip

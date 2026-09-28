@@ -2,10 +2,9 @@
   "manifest_version": 3,
   "name": "arXiv Reader",
   "version": "0.2.0",
-  "description": "Structured breakdown and Chinese reading guide for arXiv papers.",
+  "description": "Turns arXiv papers into a structured reading guide. Every claim is traced to a paragraph and verified against the source.",
   "permissions": [
     "sidePanel",
-    "storage",
     "tabs"
   ],
   "host_permissions": [
