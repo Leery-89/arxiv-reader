@@ -239,6 +239,24 @@
 
 ---
 
+## D12 · 论文识别由侧栏直接读标签页 URL，不靠 content script 报告、不经 background 中转
+
+**决策**：`sidepanel.js` 用 `chrome.tabs.query` 读活动标签页的 URL 和标题认出论文；监听 `tabs.onActivated` / `onUpdated` 重新认。跳转高亮也由侧栏直接 `tabs.sendMessage` / `tabs.update`。`background.js` 只剩"点图标开侧栏"一行；`content.js` 只剩高亮。
+
+**理由**：原设计让 content script 在页面加载时报告论文 ID，background 存起来。两种情况会坏——页面在装插件前就开着（content script 从没跑过，用户得刷新）；两个论文标签来回切（存的永远是最后加载的那篇）。**第一个真实用户反馈的第一个 bug 就是这个。**
+
+第一版修复把识别挪到 background，但 service worker 冷启动加一次消息往返仍有不确定性。侧栏本身是扩展页面，有完整 tabs 权限，开着就不会被回收——直接在那里查，无状态、零往返。
+
+**代价**：标题从 `tab.title` 取，依赖 arXiv 的 "[id] Title" 惯例；页面 `h1.title` 更可靠，但为了无状态放弃了。
+
+**备选**：
+- content script 报告 + `onActivated` 时问它——页面没注入脚本时仍失败。
+- background 中转——多一层 service worker 生命周期问题，第一次修复就是这个，测试时仍偶发"等待论文"。
+
+**教训**：MV3 里能在扩展页面（侧栏/弹窗）做的事，就别经过 service worker。
+
+---
+
 ## 未来方向（不在 v1 范围）
 
 按性价比排序，每条都有前置条件：

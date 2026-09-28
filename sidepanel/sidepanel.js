@@ -30,8 +30,32 @@ let currentPaper = null;
 let controller = null;      // 用来中断进行中的请求（用户换论文时）
 
 // ───────────────────────────── 论文识别 ─────────────────────────────
+//
+// 侧栏自己读活动标签页的 URL，不经过 background。
+// 侧栏是扩展页面，有完整的 tabs 权限；只要它开着就不会被回收——
+// 比"问 background、background 查、再答回来"少一次往返、少一层能出错的东西。
+
+const ARXIV_RE = /arxiv\.org\/(abs|html|pdf)\/((?:\d{4}\.\d{4,5})|(?:[a-z-]+(?:\.[A-Z]{2})?\/\d{7}))/;
+
+/** 从 tab 对象认出论文；不是 arXiv 页面返回 null */
+function paperFromTab(tab) {
+  const m = tab?.url?.match(ARXIV_RE);
+  if (!m) return null;
+  // arXiv 标题形如 "[1706.03762] Attention Is All You Need"，去掉前缀
+  const title = (tab.title || '').replace(/^\[[^\]]+\]\s*/, '').trim();
+  return { arxivId: m[2], title: title || m[2], url: tab.url, isHtmlPage: m[1] === 'html', tabId: tab.id };
+}
 
 function showPaper(paper) {
+  // 同一篇论文不重画（标题更新等会重复触发）
+  if (paper?.arxivId === currentPaper?.arxivId && paper?.tabId === currentPaper?.tabId) {
+    if (paper && paper.title !== currentPaper.title) {
+      currentPaper.title = paper.title;
+      els.paperTitle.textContent = paper.title;
+    }
+    return;
+  }
+
   currentPaper = paper;
   controller?.abort();       // 换论文了，上一篇还在分析就掐掉
 
@@ -52,13 +76,21 @@ function showPaper(paper) {
   setBusy(false);
 }
 
-chrome.runtime.sendMessage({ type: 'GET_CURRENT_PAPER' }, (paper) => {
-  if (chrome.runtime.lastError) return;
-  showPaper(paper);
-});
+async function syncActiveTab() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    showPaper(paperFromTab(tab));
+  } catch (e) {
+    console.error('[panel] 读标签页失败：', e);
+    showPaper(null);
+  }
+}
 
-chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === 'PAPER_CHANGED') showPaper(msg.paper);
+// 打开时查一次；切标签、当前标签导航或标题变化时再查
+syncActiveTab();
+chrome.tabs.onActivated.addListener(syncActiveTab);
+chrome.tabs.onUpdated.addListener((_tabId, info, tab) => {
+  if (tab.active && (info.status === 'complete' || info.url || info.title)) syncActiveTab();
 });
 
 // ───────────────────────────── 调后端（流式） ─────────────────────────────
@@ -243,6 +275,9 @@ function renderProgress(state) {
   const frag = document.createDocumentFragment();
   const p = state.progress || { summary: null, summaryDone: false, fields: {} };
 
+  // ── 徽章：第一眼就该看到的东西。流式进行中显示"校验中"，结束后显示数字 ──
+  frag.appendChild(verifyBadge(state));
+
   if (state.paper?.source === 'abstract_only') {
     frag.appendChild(hint('本文没有 HTML 版，以下分析仅基于摘要。'));
   }
@@ -260,13 +295,6 @@ function renderProgress(state) {
     else if (state.streaming) frag.appendChild(pendingBlock(label));
   }
 
-  if (state.verify && !state.verify.error) {
-    const v = state.verify;
-    const parts = [];
-    if (v.quote_total) parts.push(`引文命中 ${v.quote_hits}/${v.quote_total}`);
-    if (v.inline_total) parts.push(`内嵌 ID 合规 ${v.inline_hits}/${v.inline_total}`);
-    frag.appendChild(hint(parts.join(' · ')));
-  }
   if (state.meta) {
     const m = state.meta;
     const src = m.cache_hit ? '缓存' : `${m.prompt_tokens ?? '?'} 入 / ${m.completion_tokens ?? '?'} 出`;
@@ -277,15 +305,68 @@ function renderProgress(state) {
   els.result.hidden = false;
 }
 
+/**
+ * 顶部徽章。这是产品定位的一句话——"每个论断都可点击跳原文，并已自动校验"。
+ * 朋友说"跟翻译差不多"，就是因为这句话之前藏在底部小字里。
+ */
+function verifyBadge(state) {
+  const v = state.verify;
+  const badge = el('div', 'badge');
+
+  if (!v || v.error) {
+    badge.classList.add('badge-pending');
+    badge.appendChild(el('span', 'badge-icon', '◌'));
+    badge.appendChild(el('span', 'badge-main', state.streaming ? '正在校验每条论断的出处…' : '校验未完成'));
+    return badge;
+  }
+
+  const total = v.quote_total || 0;
+  const hits = v.quote_hits || 0;
+  const allGood = total > 0 && hits === total;
+
+  badge.classList.add(allGood ? 'badge-ok' : 'badge-warn');
+  badge.appendChild(el('span', 'badge-icon', allGood ? '✓' : '△'));
+
+  const main = el('span', 'badge-main');
+  main.textContent = total === 0
+    ? '本次分析没有引用原文'
+    : allGood
+      ? `${total} 条引文全部在原文中找到出处`
+      : `${hits}/${total} 条引文在原文中找到出处`;
+  badge.appendChild(main);
+
+  const sub = el('span', 'badge-sub', '点击任意段落 ID 可跳转到原文并高亮');
+  badge.appendChild(sub);
+  return badge;
+}
+
 /** 去掉 LaTeX 的 $ 包裹，先让公式可读；真正渲染公式是以后的事 */
 function display(text) {
   return (text || '').replace(/\$([^$]+)\$/g, '$1');
 }
 
-/** 点一个段落 ID → 让 background 把标签页带到原文那一段 */
-function jumpTo(pid) {
+/**
+ * 点一个段落 ID → 跳到原文并高亮。
+ *   - 当前标签已经是这篇论文的合适页面 → 直接发 HIGHLIGHT 给 content script
+ *   - 否则导航过去，URL 带 #<pid>，content script 加载时看到 hash 自己高亮
+ * 摘要在 /abs/ 和 /html/ 都有；其他段落只在 /html/ 有。
+ */
+async function jumpTo(pid) {
   if (!currentPaper) return;
-  chrome.runtime.sendMessage({ type: 'JUMP_TO', arxivId: currentPaper.arxivId, pid });
+  const { arxivId, tabId, isHtmlPage } = currentPaper;
+  const canHighlightHere = pid === 'abstract' || isHtmlPage;
+
+  if (canHighlightHere) {
+    try {
+      const r = await chrome.tabs.sendMessage(tabId, { type: 'HIGHLIGHT', pid });
+      if (r?.ok) return;
+    } catch {
+      // content script 可能没注入（页面在装插件前就开着），退回导航
+    }
+  }
+
+  const base = pid === 'abstract' ? 'abs' : 'html';
+  await chrome.tabs.update(tabId, { url: `https://arxiv.org/${base}/${arxivId}#${encodeURIComponent(pid)}` });
 }
 
 /** 段落 ID 的小标签，可点 */
@@ -316,11 +397,28 @@ function block(label, text, evidence) {
   const div = el('div', 'block');
   div.appendChild(el('h2', null, label));
   div.appendChild(textWithChips(text));
-  for (const ev of evidence) {
-    const q = el('div', 'quote');
-    q.appendChild(idChip(ev.id));
-    q.appendChild(document.createTextNode(' ' + display(ev.quote)));
-    div.appendChild(q);
+
+  if (evidence.length) {
+    // 默认收起。让用户主动点开发现"每句话都有依据"，比全铺开更有冲击力
+    const toggle = el('button', 'ev-toggle', `查看出处 (${evidence.length})`);
+    toggle.type = 'button';
+    const list = el('div', 'ev-list');
+    list.hidden = true;
+
+    for (const ev of evidence) {
+      const q = el('div', 'quote');
+      q.appendChild(idChip(ev.id));
+      q.appendChild(document.createTextNode(' ' + display(ev.quote)));
+      list.appendChild(q);
+    }
+
+    toggle.addEventListener('click', () => {
+      list.hidden = !list.hidden;
+      toggle.textContent = list.hidden ? `查看出处 (${evidence.length})` : '收起出处';
+    });
+
+    div.appendChild(toggle);
+    div.appendChild(list);
   }
   return div;
 }
