@@ -110,20 +110,11 @@ body {
   line-height: 1.5;
 }
 
-.id-chip {
+.quote-id {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--accent);
-  background: var(--accent-soft);
-  border: none;
-  border-radius: 3px;
-  padding: 1px 5px;
-  margin: 0 2px;
-  cursor: pointer;
-  vertical-align: baseline;
 }
-.id-chip:hover { filter: brightness(0.93); }
-.id-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .hint-line {
   font-size: 12px;
@@ -133,9 +124,6 @@ body {
   border-radius: 3px;
   margin-bottom: 12px;
 }
-
-.block.pending h2 { opacity: 0.45; }
-.pending-text { color: var(--muted); opacity: 0.5; }
 
 .error {
   padding: 12px;

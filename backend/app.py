@@ -2,21 +2,25 @@
 
     uvicorn app:app --reload --port 8000
 
-两个接口：
-    GET  /health            活着没
-    POST /analyze           {"arxiv_id": "1706.03762"} → 结构化结果
+接口：
+    GET  /health              活着没
+    POST /analyze             {"arxiv_id": "1706.03762"} → 结构化结果（一次返回）
+    POST /analyze/stream      同上，SSE 流式
 
-设计上三个决定：
+设计上四个决定：
   1. 接口是同步的。fetch_paper 和 analyze 都是阻塞调用，FastAPI 会把同步
-     接口丢进线程池跑，v1 够用。D8 改流式时再动。
+     接口丢进线程池跑，v1 够用。
   2. 错误分两类：arXiv 那边的网络问题、模型那边的问题，都返回 502 并说明
      是哪一边——前端据此给不同提示。404（没 HTML）不是错误，fetch_paper
      内部已经降级了。
   3. CORS 先全开。插件的请求来源是 chrome-extension://<id>，开发期不确定 id，
      上线前收紧到具体的扩展 id。
+  4. 缓存（D11）：命中时跳过取文和模型调用，直接回放。流式接口回放时把整个
+     结果当一个 delta 推——前端的增量提取器一次就能解析完，不用改前端。
 """
 
 import json
+import time
 
 import requests
 from fastapi import FastAPI, HTTPException
@@ -24,9 +28,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+from cache import cache_get, cache_key, cache_set, prompt_version
 from fetcher import fetch_paper
-from serialize import paper_to_text
 from llm import analyze, analyze_stream
+from serialize import paper_to_text
+from telemetry import log_request
 from verify import check
 
 app = FastAPI(title="arXiv Reader backend", version="0.1.0")
@@ -48,35 +54,64 @@ def health():
     return {"ok": True}
 
 
+def _paper_meta(paper) -> dict:
+    return {
+        "arxiv_id": paper.arxiv_id,
+        "title": paper.title,
+        "source": paper.source,                       # "html" | "abstract_only"
+        "truncated_sections": paper.truncated_sections,
+    }
+
+
+def _log(paper_meta: dict, meta: dict, verify: dict, cache_hit: bool) -> None:
+    """埋点一行。字段对应 stats.py 里统计的那些。"""
+    log_request(
+        arxiv_id=paper_meta["arxiv_id"],
+        source=paper_meta["source"],
+        truncated=bool(paper_meta.get("truncated_sections")),
+        cache_hit=cache_hit,
+        prompt_version=prompt_version(),
+        prompt_tokens=meta.get("prompt_tokens"),
+        completion_tokens=meta.get("completion_tokens"),
+        elapsed_s=meta.get("elapsed_s"),
+        quote_rate=verify.get("quote_rate"),
+        inline_rate=verify.get("inline_rate"),
+    )
+
+
+# ───────────────────────── 一次返回 ─────────────────────────
+
 @app.post("/analyze")
 def analyze_paper(req: AnalyzeRequest):
-    # 第一段：取论文
+    key = cache_key(req.arxiv_id)
+    cached = cache_get(key)
+    if cached:
+        _log(cached["paper"], cached["result"]["_meta"], cached["result"]["_meta"]["verify"], cache_hit=True)
+        cached["result"]["_meta"]["cache_hit"] = True
+        return {**cached["paper"], "result": cached["result"]}
+
     try:
         paper = fetch_paper(req.arxiv_id)
     except requests.RequestException as e:
         raise HTTPException(status_code=502, detail=f"arXiv 请求失败：{e}")
 
-    # 第二段：调模型
     text = paper_to_text(paper)
     try:
         result = analyze(text)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"模型调用失败：{e}")
 
-    # 校验证据，结果挂进 meta
     result["_meta"]["verify"] = check(paper, result)
+    result["_meta"]["cache_hit"] = False
 
-    # 把前端需要的论文元信息一起带回去
-    return {
-        "arxiv_id": paper.arxiv_id,
-        "title": paper.title,
-        "source": paper.source,                       # "html" | "abstract_only"
-        "truncated_sections": paper.truncated_sections,
-        "result": result,
-    }
+    paper_meta = _paper_meta(paper)
+    cache_set(key, {"paper": paper_meta, "result": result})
+    _log(paper_meta, result["_meta"], result["_meta"]["verify"], cache_hit=False)
+
+    return {**paper_meta, "result": result}
 
 
-# ───────────────────────── 流式接口（D8） ─────────────────────────
+# ───────────────────────── 流式 ─────────────────────────
 
 def sse(event: str, data) -> str:
     """拼一条 SSE 消息。格式是固定的：event 行、data 行、空行。"""
@@ -85,19 +120,37 @@ def sse(event: str, data) -> str:
 
 @app.post("/analyze/stream")
 def analyze_paper_stream(req: AnalyzeRequest):
-    """同 /analyze，但用 SSE 一路推进度和模型输出片段。
-
-    事件序列：
-        status {stage: fetching}     开始取论文
-        paper  {...元信息}           论文取到了，前端可以先显示来源提示
-        status {stage: thinking}     开始调模型
-        delta  {t: "片段"}  × N      模型输出，一片一片来
-        meta   {token 用量、耗时}
+    """事件序列：
+        status {stage}        fetching → thinking
+        paper  {...}          论文元信息，前端可以先显示来源提示
+        delta  {t}  × N       模型输出片段（缓存命中时只有一片，是整个结果）
+        meta   {...}          token 用量、耗时、cache_hit
+        verify {...}          校验结果
         done   {}
-    任何一步出错：
-        error  {detail: "..."}
+    出错：error {detail}
     """
     def gen():
+        key = cache_key(req.arxiv_id)
+        cached = cache_get(key)
+
+        # ── 命中：回放 ──
+        if cached:
+            t0 = time.time()
+            result = cached["result"]
+            meta = {**result["_meta"], "cache_hit": True, "elapsed_s": 0.0}
+            verify = result["_meta"].get("verify", {})
+            body = {k: v for k, v in result.items() if k != "_meta"}
+
+            yield sse("paper", cached["paper"])
+            yield sse("delta", {"t": json.dumps(body, ensure_ascii=False)})
+            meta["elapsed_s"] = round(time.time() - t0, 3)
+            yield sse("meta", meta)
+            yield sse("verify", verify)
+            yield sse("done", {})
+            _log(cached["paper"], meta, verify, cache_hit=True)
+            return
+
+        # ── 未命中：正常走一遍 ──
         yield sse("status", {"stage": "fetching"})
         try:
             paper = fetch_paper(req.arxiv_id)
@@ -105,20 +158,18 @@ def analyze_paper_stream(req: AnalyzeRequest):
             yield sse("error", {"detail": f"arXiv 请求失败：{e}"})
             return
 
-        yield sse("paper", {
-            "arxiv_id": paper.arxiv_id,
-            "title": paper.title,
-            "source": paper.source,
-            "truncated_sections": paper.truncated_sections,
-        })
+        paper_meta = _paper_meta(paper)
+        yield sse("paper", paper_meta)
 
         yield sse("status", {"stage": "thinking"})
         text = paper_to_text(paper)
-        buf = []                              # 后端也攒一份，结束时校验用
+        buf: list[str] = []
+        meta: dict = {}
         try:
             for piece in analyze_stream(text):
                 if isinstance(piece, dict):
-                    yield sse("meta", piece)
+                    meta = {**piece, "cache_hit": False}
+                    yield sse("meta", meta)
                 else:
                     buf.append(piece)
                     yield sse("delta", {"t": piece})
@@ -126,14 +177,21 @@ def analyze_paper_stream(req: AnalyzeRequest):
             yield sse("error", {"detail": f"模型调用失败：{e}"})
             return
 
-        # 流结束了，拼起来校验一遍，结果单独推一个事件
         try:
             result = json.loads("".join(buf))
-            yield sse("verify", check(paper, result))
         except json.JSONDecodeError:
             yield sse("verify", {"error": "最终 JSON 无法解析"})
+            yield sse("done", {})
+            return
 
+        verify = check(paper, result)
+        yield sse("verify", verify)
         yield sse("done", {})
+
+        # 流结束后再写缓存和日志，不拖慢响应
+        result["_meta"] = {**meta, "verify": verify}
+        cache_set(key, {"paper": paper_meta, "result": result})
+        _log(paper_meta, meta, verify, cache_hit=False)
 
     return StreamingResponse(
         gen(),
