@@ -149,6 +149,8 @@ def main():
             ("category", "类别", s), ("sampled", "抽样", s), ("labeled", "已标", s),
             ("support_rate", "支撑率(Y)", _pct), ("support_rate_loose", "宽松(Y+P)", _pct),
         ], md=args.md)
+        print("  注：abstract_only 不做人工标注——只有一段可引，quote 必然是摘要的截句，"
+              "支撑率反映的是压缩比例而不是引用能力。这一类看机器指标里的「未提及」列：输入不够时模型会不会编。\n")
 
     errs = [r for r in rows if r["status"] == "error"]
     if errs:

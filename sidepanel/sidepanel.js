@@ -23,6 +23,9 @@ const els = {
   paperId: document.getElementById('paperId'),
   paperTitle: document.getElementById('paperTitle'),
   analyzeBtn: document.getElementById('analyzeBtn'),
+  manualForm: document.getElementById('manualForm'),
+  manualInput: document.getElementById('manualInput'),
+  manualError: document.getElementById('manualError'),
   result: document.getElementById('result'),
 };
 
@@ -47,9 +50,11 @@ function paperFromTab(tab) {
 }
 
 function showPaper(paper) {
-  // 同一篇论文不重画（标题更新等会重复触发）
-  if (paper?.arxivId === currentPaper?.arxivId && paper?.tabId === currentPaper?.tabId) {
-    if (paper && paper.title !== currentPaper.title) {
+  // 同一篇论文不重画（标题更新、换到同一篇的另一个标签页都会触发）。
+  // 结果属于论文，不属于标签页——只更新 tab 相关字段，结果留着。
+  if (paper && paper.arxivId === currentPaper?.arxivId) {
+    Object.assign(currentPaper, { tabId: paper.tabId, url: paper.url, isHtmlPage: paper.isHtmlPage, manual: false });
+    if (paper.title && paper.title !== paper.arxivId && paper.title !== currentPaper.title) {
       currentPaper.title = paper.title;
       els.paperTitle.textContent = paper.title;
     }
@@ -79,7 +84,10 @@ function showPaper(paper) {
 async function syncActiveTab() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    showPaper(paperFromTab(tab));
+    const paper = paperFromTab(tab);
+    // 手动粘进来的论文不因为切到别的标签页就丢掉；切到另一篇 arXiv 才换
+    if (!paper && currentPaper?.manual) return;
+    showPaper(paper);
   } catch (e) {
     console.error('[panel] 读标签页失败：', e);
     showPaper(null);
@@ -91,6 +99,39 @@ syncActiveTab();
 chrome.tabs.onActivated.addListener(syncActiveTab);
 chrome.tabs.onUpdated.addListener((_tabId, info, tab) => {
   if (tab.active && (info.status === 'complete' || info.url || info.title)) syncActiveTab();
+});
+
+// ───────────────────────────── 手动输入 ─────────────────────────────
+//
+// 试用反馈（DECISIONS D14b）：不在 arXiv 页面读论文的人，侧栏碰不到。
+// 给一个不依赖当前标签页的入口：粘链接、裸 ID 或 arXiv 的 DOI 都认。
+
+const BARE_ID_RE = /(?:^|[^\d])((?:\d{4}\.\d{4,5})|(?:[a-z-]+(?:\.[A-Z]{2})?\/\d{7}))(?:v\d+)?(?:$|[^\d])/;
+
+/** 从用户粘的任意文本里认出 arXiv ID；认不出返回 null */
+function parseManual(text) {
+  const t = text.trim();
+  if (!t) return null;
+  const m = t.match(ARXIV_RE) || t.replace(/^doi:\s*/i, '').replace(/^10\.48550\/arXiv\./i, '').match(BARE_ID_RE);
+  if (!m) return null;
+  return m[m.length - 1];
+}
+
+els.manualForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const id = parseManual(els.manualInput.value);
+  if (!id) {
+    els.manualError.textContent = /^10\.\d{4,}\//.test(els.manualInput.value.trim())
+      ? '暂时只认 arXiv 的 DOI（10.48550/arXiv.…），其他期刊的 DOI 还没接'
+      : '没认出 arXiv ID。试试 2408.13687 这样的格式，或者整条链接';
+    els.manualError.hidden = false;
+    return;
+  }
+  els.manualError.hidden = true;
+  els.manualInput.value = '';
+  currentPaper = null;                                   // 强制重画
+  showPaper({ arxivId: id, title: id, url: null, isHtmlPage: false, tabId: null, manual: true });
+  analyze();                                             // 粘完直接开始，少点一次
 });
 
 // ───────────────────────────── 调后端（流式） ─────────────────────────────
@@ -163,6 +204,10 @@ function handleEvent({ event, data }, state) {
       break;
     case 'paper':
       state.paper = data;
+      if (data.title && currentPaper && currentPaper.title === currentPaper.arxivId) {
+        currentPaper.title = data.title;
+        els.paperTitle.textContent = data.title;
+      }
       renderProgress(state);
       break;
     case 'delta':
@@ -366,7 +411,15 @@ async function jumpTo(pid) {
   }
 
   const base = pid === 'abstract' ? 'abs' : 'html';
-  await chrome.tabs.update(tabId, { url: `https://arxiv.org/${base}/${arxivId}#${encodeURIComponent(pid)}` });
+  const url = `https://arxiv.org/${base}/${arxivId}#${encodeURIComponent(pid)}`;
+  if (tabId == null) {
+    // 手动粘进来的论文没有对应标签页：新开一个，之后的跳转都复用它
+    const tab = await chrome.tabs.create({ url });
+    currentPaper.tabId = tab.id;
+    currentPaper.isHtmlPage = base === 'html';
+    return;
+  }
+  await chrome.tabs.update(tabId, { url });
 }
 
 /** 段落 ID 的小标签，可点 */

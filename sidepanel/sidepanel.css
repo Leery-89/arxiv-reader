@@ -197,3 +197,13 @@ body {
 .error p { margin: 0; color: var(--muted); }
 
 [hidden] { display: none !important; }
+
+/* 手动输入入口（空状态里） */
+.manual { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); }
+.manual-input {
+  width: 100%; box-sizing: border-box; padding: 8px 10px; margin: 6px 0 8px;
+  font: inherit; font-size: 13px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--bg); color: inherit;
+}
+.manual-input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.go-small { padding: 6px 14px; font-size: 13px; }

@@ -16,6 +16,14 @@
   <div class="empty" id="empty">
     <p>打开任意一篇 arXiv 论文页面即可开始。</p>
     <p class="hint">支持 /abs/、/html/、/pdf/ 三种地址。</p>
+
+    <form class="manual" id="manualForm">
+      <p class="hint">或者直接粘贴：</p>
+      <input class="manual-input" id="manualInput" type="text" autocomplete="off"
+             placeholder="arXiv 链接、ID（2408.13687）或 arXiv DOI">
+      <button class="go go-small" type="submit">分析</button>
+      <p class="hint error" id="manualError" hidden></p>
+    </form>
   </div>
 
   <!-- 检测到论文后显示 -->
