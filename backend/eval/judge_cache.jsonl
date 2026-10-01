@@ -1,0 +1,465 @@
+{"key": "72276127ced24fea", "label": "P", "reason": "Quote 只支撑了预训练数据规模实验（ImageNet/ImageNet-21k/JFT-300M），未提及 JFT-300M 上的受控规模研究或自监督掩码 patch 预测实验。", "tokens": 750}
+{"key": "7ffb48cc1f0967ad", "label": "P", "reason": "quote 只支撑了编码器 N=6 层堆叠这一项，解码器结构、子层类型、残差连接与层归一化均未在 quote 中出现。", "tokens": 766}
+{"key": "f10668228509a0f7", "label": "P", "reason": "Quote 只给出了使用不同频率正弦余弦函数这一事实，未提及模型不含循环卷积、加入位置编码或利用序列顺序信息等 claim 中的其他实质内容。", "tokens": 703}
+{"key": "2669355707c63591", "label": "N", "reason": "quote 只提到未来将进一步研究该方法，完全没有涉及自注意力邻域大小 r 或最大路径长度 O(n/r) 等实质内容。", "tokens": 696}
+{"key": "b04e6445e1976b93", "label": "Y", "reason": "quote 明确说明分辨率调整和切 patch 是唯一手动注入二维结构归纳偏置的环节，直接支撑 claim 中关于二维结构仅在切 patch 和微调时注入的实质内容。", "tokens": 751}
+{"key": "a3e5edad00a51ff9", "label": "Y", "reason": "quote 明确包含顺序性阻碍训练样本内并行化、序列较长时尤为关键这两项实质内容，claim 的其余部分是对同一句的合理转述。", "tokens": 705}
+{"key": "48d1adc308a30ce4", "label": "P", "reason": "quote 只说明需要注入位置信息，未提及正弦余弦位置编码或模型不含循环卷积，claim 的具体方法细节不在 quote 中。", "tokens": 701}
+{"key": "f3e0b6b760cad76b", "label": "N", "reason": "quote 只是说模型设计尽量遵循原始 Transformer，没有提到 ViT 保持简单、最少归纳偏置或二维结构注入等 claim 的实质内容。", "tokens": 723}
+{"key": "127bd4ec442641a5", "label": "Y", "reason": "quote 直接支撑了 claim 中关于难以访问和精确操作知识、在知识密集型任务上落后于任务专用架构的实质内容，其余部分为框架性补充。", "tokens": 726}
+{"key": "f2dd24f39e152835", "label": "P", "reason": "quote 只支撑了 Transformer 缺少平移等变性和局部性等归纳偏置这一项，未提及 ViT 在 ImageNet 上精度低几个百分点及数据不足时泛化不佳等实质内容。", "tokens": 739}
+{"key": "5dd5132f0c5310ee", "label": "Y", "reason": "quote 明确指出 REALM 和 ORQA 结合了掩码语言模型与可微检索器，且仅探索了开放域抽取式问答，与 claim 中该部分内容完全对应。", "tokens": 737}
+{"key": "b4e8b66d0b91d5e9", "label": "P", "reason": "Quote 只支撑了 claim 中'难以提供决策来源和更新世界知识'这一项，claim 其余实质内容（存储事实知识、难以访问操作、落后于任务专用架构）不在 quote 中。", "tokens": 722}
+{"key": "8224fbb609d5c509", "label": "P", "reason": "quote 只支持了 claim 中“沿用 BERT 式可学习 [class] token 作为图像表示”这一部分，未提及“预训练和微调时在其输出上接分类头”这一实质内容。", "tokens": 726}
+{"key": "fb68b3ad29401ec1", "label": "P", "reason": "quote 只支撑了检索器基于 DPR 这一部分，生成器 BART-large 等其余实质内容不在 quote 中。", "tokens": 724}
+{"key": "4ae2f92e505fc5da", "label": "P", "reason": "quote 只支撑了六模型集成测试集 3.57% top-5 误差这一项，claim 中 152 层 ResNet 单模型 4.49% 误差和赢得 ILSVRC 2015 第一名均不在 quote 中。", "tokens": 746}
+{"key": "a35c73363d9fb250", "label": "P", "reason": "quote 只支撑生成器是 BART-large 这一项，检索器 p_η(z|x) 及 DPR 双编码器不在 quote 中。", "tokens": 732}
+{"key": "ebe23d446479091c", "label": "P", "reason": "quote 撑住了退化问题及精度饱和，但 claim 中'并非由过拟合引起'这一实质内容不在 quote 里。", "tokens": 707}
+{"key": "937a689916fa6e1c", "label": "P", "reason": "quote 撑住了 1202 层测试结果差于 110 层网络这一实质内容，但未提及训练误差低于 0.1%、过拟合归因或网络对此小数据集不必要地大等其余实质内容。", "tokens": 746}
+{"key": "5e470fdf33e4e4b4", "label": "P", "reason": "quote 撑住了 ResNet 克服优化困难并随深度增加获得精度提升，但未提及 CIFAR-10 数据集和 110 层 6.43% 误差这两个实质内容。", "tokens": 730}
+{"key": "3f611b40793daba4", "label": "Y", "reason": "quote 明确说明模型针对中英文优化，处理其他语言时可能出现语言混杂，与 claim 完全一致。", "tokens": 682}
+{"key": "49b41d0295815e8a", "label": "P", "reason": "quote 支撑了恒等映射足以解决退化问题且经济，但 claim 中'可用线性投影 Ws 匹配维度'这一实质内容不在 quote 里。", "tokens": 709}
+{"key": "e9d3fddad4458e6d", "label": "P", "reason": "quote 撑住了 15.6% 到 77.9% 的提升，但未提及自一致性解码可达 86.7% 这一实质内容。", "tokens": 739}
+{"key": "12b8bd8ddc9303ce", "label": "P", "reason": "quote 只支撑了数学任务与 OpenAI-o1-1217 相当这一项，编程算法表现及 AlpacaEval/ArenaHard 的提升数字均不在 quote 中。", "tokens": 763}
+{"key": "1fc4d27a2f843539", "label": "Y", "reason": "quote 直接说明 DeepSeek-R1 无法利用搜索引擎和计算器等工具，与 claim 中该部分内容完全一致。", "tokens": 694}
+{"key": "383c399a243fa806", "label": "Y", "reason": "quote 原文直接包含 claim 的全部实质内容：perfect control、good scaling、best AIME24 score。", "tokens": 701}
+{"key": "8e333ddcc40a486b", "label": "P", "reason": "quote 只支撑了'不使用神经奖励模型'这一部分，claim 中'奖励由规则化的准确性奖励和格式奖励组成'这一实质内容不在 quote 里。", "tokens": 703}
+{"key": "e412045fc170b487", "label": "Y", "reason": "quote 明确列出两个关键限制：最终趋于平坦（并引用图4）以及受底层语言模型上下文窗口约束，与 claim 完全对应。", "tokens": 728}
+{"key": "adb1296c016721a8", "label": "N", "reason": "quote 只描述了 GPQA Diamond 的构成，未提及 AIME24、MATH500、lm-evaluation-harness 或温度设置，claim 的实质内容几乎都不在 quote 里。", "tokens": 742}
+{"key": "3e943789268094be", "label": "Y", "reason": "quote 直接给出了论文要解决的核心问题，即找到同时实现测试时扩展和强推理性能的最简单方法，与 claim 的实质内容一致。", "tokens": 718}
+{"key": "a0bd42d678d11b90", "label": "P", "reason": "Quote 只支撑了 AMC23 96.3% 这一项数字，AIME24 63.3%、MATH500 95.6% 以及超过 OpenAI-o1-preview 均不在 quote 中。", "tokens": 786}
+{"key": "9a35352b47610b95", "label": "Y", "reason": "quote 明确列出 AIME24、MATH500 和 AMC23 作为评估套件，与 claim 的域内评估内容完全一致。", "tokens": 723}
+{"key": "81441b1fcb28a0e3", "label": "P", "reason": "quote 只支撑了延长思考（抑制结束符并追加 Wait）这一部分，claim 中提前终止思考（强制插入结束符）的实质内容不在 quote 里。", "tokens": 739}
+{"key": "3ee2bf1f15f32ff1", "label": "P", "reason": "quote 只支撑了多学科基准 Minerva 和 GPQA 这一部分，claim 中列出的 OlympiadBench、CHMath、Gaokao、Kaoyan、GradeSchool 等分布外评估基准均未在 quote 中出现。", "tokens": 745}
+{"key": "26e788f7038f2596", "label": "N", "reason": "quote 只提到用该 curated dataset 做 SFT，完全没有涉及多层筛选流程、难度过滤、知识点多样化、推理链筛选或 800 条样本等 claim 的实质内容。", "tokens": 738}
+{"key": "b9db609e1fc48bc5", "label": "P", "reason": "quote 只支撑了失败原因中约一半属于不正确/过度具体实现这一项，claim 却写成'大多数失败源于不正确的实现'，且'成功运行通常较早提交且成本更低'完全不在 quote 中。", "tokens": 726}
+{"key": "2288c2d815e0d8f8", "label": "P", "reason": "quote 列出了 ACI 的四个主要组件，撑住了 claim 前半部分，但 claim 中'每一步 agent 生成一个 thought 和一个 command，然后接收执行反馈'这一实质内容不在 quote 里。", "tokens": 720}
+{"key": "b7a287e192263528", "label": "P", "reason": "quote 只支撑了零样本提示词这一项，claim 中的 128 个 GSM8K 测试样本这一数字不在 quote 里。", "tokens": 712}
+{"key": "8fc672f9b2c3fb68", "label": "N", "reason": "quote 只是提出 LM agent 是新型终端用户的论点，没有涉及接口设计或提升复杂数字任务表现等 claim 的实质内容。", "tokens": 700}
+{"key": "dd563258fe0645b2", "label": "P", "reason": "Quote 撑住了 LIMO 假说的核心内容（预训练已编码知识、少量精心设计的认知过程示范可涌现复杂推理），但 claim 中'激发阈值取决于预训练知识库完整性和后训练样本作为认知模板的有效性'这一实质内容不在 quote 里。", "tokens": 760}
+{"key": "81dc0eb337de6ee8", "label": "N", "reason": "quote 只是笼统地说这些缺陷妨碍性能并引出 ACI 需求，没有提到 Linux shell、人类用户设计、编辑小段文件或无效编辑无反馈等 claim 的任何实质内容。", "tokens": 719}
+{"key": "d39219e5f4e511cd", "label": "Y", "reason": "quote 明确说明在每对观测 token 之间引入辅助 rationale 变量，与 claim 的核心内容一致。", "tokens": 690}
+{"key": "c1b7061cbd0dca8e", "label": "Y", "reason": "quote 明确给出 cot-maj@8 从 40.6% 提升到 47.7%，与 claim 的数字和结论完全一致。", "tokens": 717}
+{"key": "75d8146d073a98ef", "label": "P", "reason": "quote 撑住了 SWE-bench 的 2294 个实例和 12 个 Python 包，但 claim 中 SWE-bench Lite（300 个实例）的消融分析不在 quote 里。", "tokens": 745}
+{"key": "3076e9f87fe757e9", "label": "Y", "reason": "quote 明确给出 C4 评估使用 16 个 thought token、4 个 true token ahead 且其余设置相同，与 claim 完全一致。", "tokens": 711}
+{"key": "3d36864b5c64e673", "label": "N", "reason": "quote 只是呼吁改进样本验证方法，没有提到'约100个样本后饱和'这一具体数字或饱和现象，claim 的核心实质内容不在 quote 中。", "tokens": 712}
+{"key": "0232d74158375bcc", "label": "Y", "reason": "quote 明确给出单样本 15.9%、250 样本 56% 以及超过 SOTA 13%（对应 43%+13%=56%），claim 的实质数字与结论均被撑住。", "tokens": 788}
+{"key": "f922e1f5e3429b41", "label": "Y", "reason": "quote 明确说明所有实验以 Mistral 7B 基础版本开始，直接支撑 claim。", "tokens": 667}
+{"key": "9ded4689dc9a6462", "label": "Y", "reason": "quote 直接支撑了 claim 中'用户和开发者通常只让模型对一个问题尝试一次'这一实质内容，claim 的动机框架部分不影响判断。", "tokens": 705}
+{"key": "6e706c6289f7855a", "label": "P", "reason": "quote 只支撑了人类不需要大数据集这一项，claim 中'自然语言指令或极少示例'及'希望 NLP 系统具备这种灵活性'均未在 quote 中出现。", "tokens": 702}
+{"key": "e2cc24aac9ebf6b0", "label": "N", "reason": "quote 只是说第 3.9 节发明了一些额外任务来探测上下文学习能力，没有列出 claim 中任何具体任务名称或评估覆盖范围。", "tokens": 721}
+{"key": "2caea5007adcf6d5", "label": "P", "reason": "Quote 只支撑了 CodeContests 假阴性测试用例这一项，未提及 SWE-bench Lite 的 11.3% 不稳定测试或对重复采样的影响。", "tokens": 745}
+{"key": "c84f419e195d6423", "label": "N", "reason": "quote 只提到在 MATH 和 CodeContests 上评估，完全没有提及 Gemma-2B/7B 或 Pythia-70M 至 12B 等模型，claim 中该 quote 负责的模型扩展部分无任何支撑。", "tokens": 750}
+{"key": "1eed32b0f2709734", "label": "N", "reason": "quote 只泛泛提到模型表达力越强越可能利用伪相关，并未涉及去除限制可取、难以收集大规模监督数据或分布外泛化差等 claim 的实质内容。", "tokens": 723}
+{"key": "8230e73f160c3c8b", "label": "Y", "reason": "quote 完整包含 claim 的因果链：标注者偏见/背景/偏好影响人类评估，可能导致不一致或不可靠结果。", "tokens": 700}
+{"key": "d2ad888e517dc43c", "label": "P", "reason": "quote 支撑了约 15T 多语言 tokens 这一项，但三阶段划分和 405B 参数在 15.6T tokens 上训练均不在 quote 中。", "tokens": 745}
+{"key": "53941a5d34e01b38", "label": "P", "reason": "Quote 只支撑了图像理解任务（自然图像、文本、图表、多模态推理）的评估，未提及视频识别、语音识别和翻译任务，这些是 claim 中其他实质内容。", "tokens": 770}
+{"key": "138185d55368ff83", "label": "Y", "reason": "quote 直接陈述模型仍在开发中且尚未准备好发布，与 claim 的实质内容完全一致。", "tokens": 669}
+{"key": "6a10846f43c5ba4b", "label": "P", "reason": "Quote 支撑了'超过两打 NLP 数据集'和'若干新任务'，但 claim 中'每个任务都在零样本、单样本和少样本三种条件下评估'这一实质内容不在 quote 里。", "tokens": 726}
+{"key": "aafbc1dcd9dde5f5", "label": "Y", "reason": "quote 直接陈述了模型仍在积极开发中且尚未准备好发布，与 claim 完全一致。", "tokens": 669}
+{"key": "a84266c0f7d209a3", "label": "P", "reason": "Quote 只笼统承认在文本合成和若干 NLP 任务上有弱点，未提及长段落连贯性、自相矛盾或比较类任务略好于随机等具体内容。", "tokens": 717}
+{"key": "4c3aefaa4efbe033", "label": "Y", "reason": "quote 完整包含 claim 中的细粒度感知、LVLM 坚实基础、真实应用智能体放大器三项实质内容。", "tokens": 706}
+{"key": "4298842a1b69f78e", "label": "N", "reason": "quote 只给出架构由三部分组成，未列出具体是哪三部分，claim 中的大语言模型、视觉编码器、MLP 融合模块均不在 quote 里。", "tokens": 709}
+{"key": "d3c62b91aebf8946", "label": "P", "reason": "Quote 只支撑了'个性化通过后训练'，未提及编辑的多阶段训练或无监督视频编辑数据。", "tokens": 687}
+{"key": "a07b6651e562b999", "label": "P", "reason": "quote 只支撑了 Movie Gen Video 的 30B 参数及联合文本到图像/视频生成，未提及 13B 的 Movie Gen Audio 模型。", "tokens": 730}
+{"key": "d16285563bdba00b", "label": "P", "reason": "quote 只支撑了'最优模态对齐仍是持续挑战、需进一步改进'这一项，claim 中关于视觉语言模型依赖两种模态、中间推理步骤可能忽略或误解视觉线索等实质内容不在 quote 里。", "tokens": 753}
+{"key": "5ce1cd5255a70854", "label": "P", "reason": "quote 只支撑了文档理解与 OCR 这一项任务，claim 中的通用视觉问答、空间理解、视频理解与定位、GUI 智能体等其余任务均不在 quote 里。", "tokens": 759}
+{"key": "b20f041731a46295", "label": "P", "reason": "Quote 撑住了对 Runway Gen3 和 LumaLabs 的显著优势，但未提及对 OpenAI Sora 的中等净胜或与 Kling1.5 持平，这些实质内容不在 quote 中。", "tokens": 753}
+{"key": "847b901bf5f224ab", "label": "P", "reason": "quote 撑住了与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 及不同规模 Qwen2-VL 比较这一实质内容，但未提及'在多种基准上评估 Qwen2.5-VL'这一部分。", "tokens": 789}
+{"key": "cb57e9feca0b329d", "label": "N", "reason": "quote 只是一句笼统的'仍有提升空间'，没有提到部署单元大小或小型团队负担等任何实质内容。", "tokens": 682}
+{"key": "2c24b3f3537c0120", "label": "P", "reason": "quote 只支撑了困惑度评估方式及 HellaSwag/PIQA/WinoGrande 三个数据集，claim 中多学科选择题、语言理解与推理、闭卷问答、阅读理解、数学、代码等基准及生成式/语言建模评估方式均未在 quote 中出现。", "tokens": 762}
+{"key": "aba5e1d0c17e735c", "label": "P", "reason": "quote 只支撑了预训练数据规模（1亿视频-文本对、10亿图像-文本对），claim 中的多阶段训练和监督微调不在 quote 里。", "tokens": 745}
+{"key": "bcb50709d929f80a", "label": "Y", "reason": "quote 明确说在身份保持、视频质量和文本对齐三个维度上大幅优于基线，claim 将基线具体化为 ID-Animator 属于指代解指，未添加新事实。", "tokens": 707}
+{"key": "ece41c771c47dba8", "label": "P", "reason": "quote 只支撑了 DualPipe 算法实现高效流水线并行这一项，claim 中的 FP8 混合精度训练和计算-通信重叠均未在 quote 中出现。", "tokens": 692}
+{"key": "a1cc4a2c33f41af9", "label": "N", "reason": "quote 只泛泛说局限会随硬件发展解决，没有提到部署单元大或小型团队负担等 claim 的实质内容。", "tokens": 692}
+{"key": "a1f427a7e7be4a61", "label": "P", "reason": "quote 只支撑了 FP8 混合精度训练框架，DualPipe 算法及流水线并行/计算-通信重叠在 quote 中未提及。", "tokens": 687}
+{"key": "8950bf425e93c097", "label": "Y", "reason": "quote 明确给出 CIFAR-10 的 50,000 训练图像和 10,000 测试图像，与 claim 中该数据集对应的数字完全一致。", "tokens": 787}
+{"key": "ebe90bc12d0875e9", "label": "Y", "reason": "quote 明确提到 TIMIT 基准，支撑了 claim 中 TIMIT 语音识别这一项实质内容。", "tokens": 771}
+{"key": "49e5981f1316ea12", "label": "P", "reason": "Quote 只给出 dropout 后的 29.62%，未提及 Reuters 数据集，也未给出 31.05% 的基线错误率。", "tokens": 685}
+{"key": "5a2286eb51ba0bb9", "label": "P", "reason": "quote 只支撑了'引入多头注意力中头的类比'这一项，claim 中'设计了 Mamba-2 架构''核心层是 Mamba 选择性 SSM 的改进''分组值注意力'等实质内容均不在 quote 中。", "tokens": 759}
+{"key": "24b6c0462a892d73", "label": "P", "reason": "quote 只支撑了 ImageNet 上降至 42.4% 这一项，未提及 48.6% 的起始错误率，claim 中该数字不在 quote 里。", "tokens": 736}
+{"key": "574056974df6daef", "label": "Y", "reason": "quote 直接说明作者不确定架构的哪个方面是主要因素，并称这是未来工作要探索的问题，与 claim 完全对应。", "tokens": 700}
+{"key": "0de26629fc6a66ca", "label": "P", "reason": "quote 只提到消融了块设计（block），未涵盖 claim 中的头结构和注意力核近似，仅撑住部分实质内容。", "tokens": 719}
+{"key": "87c30e57b0a1b569", "label": "Y", "reason": "quote 直接支撑 claim 中'其论证只适用于被优化以完成许多任务的智能'这一实质内容，专用智能可能不趋同是合理推论。", "tokens": 739}
+{"key": "e4613fed99677a59", "label": "P", "reason": "quote 只支撑了研究者偏见这一项，claim 中的“硬件彩票”不在 quote 里。", "tokens": 728}
+{"key": "4214cd02649f8d6f", "label": "P", "reason": "Quote 只支撑了非对角块通过半可分矩阵的秩结构分解并归约为较小循环这一部分，未提及对角块使用二次注意力模式计算，也未提及结合线性 SSM 循环与二次对偶形式优势。", "tokens": 745}
+{"key": "99e08ec1e5b690d0", "label": "P", "reason": "quote 只支撑了用单独验证集选架构这一项，未提及语音和两个物体识别数据集，也未提及在真实测试集上评估 dropout。", "tokens": 700}
+{"key": "ab329f347faddab2", "label": "Y", "reason": "quote 明确说明将 SSD 算法的速度与 Mamba 的扫描实现和 FlashAttention-2 进行基准对比，与 claim 完全一致。", "tokens": 702}
+{"key": "a9f66775a04be7ab", "label": "N", "reason": "quote 只列出了语言模型家族，没有提及与 ViT 视觉模型的比较、WIT 数据集、1024 个样本或 k=10 等任何实质内容。", "tokens": 745}
+{"key": "d2c656b69c066871", "label": "Y", "reason": "quote 明确给出对齐分数 0.16、理论上限 1，并指出使用互最近邻度量，与 claim 中该部分内容一致。", "tokens": 761}
+{"key": "43fe334292e924c6", "label": "Y", "reason": "quote明确说明随着对齐改善，Hellaswag和GSM8K性能提升，与claim中'对齐更好则表现更好'的实质内容一致。", "tokens": 722}
+{"key": "4ac3e10f8471c10b", "label": "N", "reason": "quote 只提到未做下游模型评估这一条局限，与 claim 所说的固定架构、低精度训练涉及架构调整等内容完全无关。", "tokens": 696}
+{"key": "0c0a2ed51f839f0e", "label": "Y", "reason": "quote 完整包含 claim 中的数据集（Dolma V1.7）、模型系列（OLMo-style）和实现（standard Transformer++），实质内容全部对应。", "tokens": 714}
+{"key": "887e0e702604d505", "label": "Y", "reason": "quote 明确说明权重、激活和 KV 缓存的量化效应可建模为独立且可乘，与 claim 的实质内容一致。", "tokens": 705}
+{"key": "31372cc54fdd6ea2", "label": "Y", "reason": "quote 给出的公式正是将退化建模为 D/N 的幂律形式并含随量化精度指数衰减的 e^{-P_post/γ_post} 因子，与 claim 完全对应。", "tokens": 758}
+{"key": "4acc10e5001d23f3", "label": "P", "reason": "quote 只支撑了联合优化时最优精度与计算量无关这一部分，未提及约为 7-8 比特，也未提及 N 固定时精度随计算量对数增长。", "tokens": 734}
+{"key": "fc2891754e4ae038", "label": "P", "reason": "quote 只支撑了'未见个体 QA 准确率为零'这一项，claim 中'模型规模远大于个体数、个体被暴露上千次、尝试多种微调参数'等实质内容不在 quote 里。", "tokens": 740}
+{"key": "fd042b9e916dd861", "label": "Y", "reason": "quote 直接给出了混合训练在 bioS single 上 86.6%、bioR single 上 77.7% 的 OOD 准确率，与 claim 的数字和对象完全一致。", "tokens": 729}
+{"key": "1b46f014337249c7", "label": "Y", "reason": "quote 直接以问句形式给出了 claim 的核心问题，即语言模型如何在训练中记忆知识并在推理时提取以回答问题，实质内容完全对应。", "tokens": 700}
+{"key": "198aa2c78933431e", "label": "Y", "reason": "quote 与 claim 内容完全一致，直接支撑了该论断。", "tokens": 683}
+{"key": "e107d0d5035ca4af", "label": "Y", "reason": "Quote明确说明AntiFold基于ESM-IF1在超过1200万结构上的预训练，并在抗体结构上进一步微调，与claim的架构、预训练规模和继续训练内容完全对应。", "tokens": 736}
+{"key": "468a613ff5bf61b2", "label": "P", "reason": "quote 只支撑了 bioS 的 10 万个体这一项，claim 中每人六句、约 50 个模板以及 bioR 数据集均不在 quote 中。", "tokens": 731}
+{"key": "1f211bedb9ac60d4", "label": "Y", "reason": "quote 逐项列出了 claim 中所有策略（span masking、随机残基掩码、3:1 CDR 权重、逐层学习率衰减、纳入 OAS 预测结构），实质内容全部对应。", "tokens": 786}
+{"key": "caa246109b1e193e", "label": "P", "reason": "Quote 完整支撑了 AntiFold 优于 AbMPNN 的各区域数字，但 claim 中'显著优于原始 ESM-IF1（60% vs 43%）'这一实质内容不在 quote 里。", "tokens": 802}
+{"key": "df08a4caefdb364d", "label": "N", "reason": "quote 只提到构象生成任务的 RMSD-coverage 指标，claim 中列出的有效性、类药性、分布度量、RMSD、时间等其余指标均未在 quote 中出现。", "tokens": 761}
+{"key": "c303de25ff161915", "label": "P", "reason": "quote 撑住了逆折叠模型可在不改变抗体骨架结构下设计新序列这一实质内容，但 claim 中关于抗体优化需选择维持结构和结构介导性质（稳定性与抗原结合模式）突变的动机部分不在 quote 里。", "tokens": 740}
+{"key": "1ad7309d2588d372", "label": "P", "reason": "Quote 只支撑了 AntiFold 相对原始 ESM-IF1 的 CDRH3 AAR（60% vs 43%），claim 中关于 AbMPNN 的 CDRH3、其余 CDR 区域和多数 FR 区域的比较均不在 quote 里。", "tokens": 812}
+{"key": "ce281f6b008888b1", "label": "P", "reason": "quote 支撑了 300M 前扩展良好且该规模困惑度过拟合，但未提及后续实验采用 100M 模型这一实质内容。", "tokens": 715}
+{"key": "cea4ccaba8e62100", "label": "Y", "reason": "quote 完整包含了 claim 的核心内容：准确高效预测任意材料在实际合成与工作条件下的性质。", "tokens": 693}
+{"key": "5ec46b670af84a68", "label": "N", "reason": "quote 只提到 BindGPT 在 Druglikeness 上不如 MolDiff，与 claim 中关于优于 XYZ-TF 基线及首个显式建模氢原子的论断完全无关。", "tokens": 713}
+{"key": "173741d44a05da37", "label": "N", "reason": "quote 说的是使用 CrossDocked 数据集，与 claim 中 Uni-Mol 的 208M 构象、12M 分子、3.2M 口袋等具体内容完全无关。", "tokens": 719}
+{"key": "eaed47205c2a445b", "label": "P", "reason": "Quote 撑住了“匹配或超越基线”这一实质内容，但“多个 3D 分子生成任务”和“不依赖生成域的归纳偏置”这两项实质内容不在 quote 中。", "tokens": 711}
+{"key": "239601d2a189f075", "label": "N", "reason": "quote 说的是训练数据只含均匀体相、缺少表面/界面数据，而 claim 说的是半局域相互作用描述在长程相互作用场景表现不佳，两者是完全不同的局限，quote 未支撑 claim 的任何实质内容。", "tokens": 726}
+{"key": "5e19fa5299fdd8e7", "label": "N", "reason": "quote 只说 MatterSim 在所有材料类别成功率超 90%，未提及 claim 中的 118 个系统这一数字，且 quote 未给出该数字的任何支撑。", "tokens": 706}
+{"key": "ba9b26b22faddeee", "label": "Y", "reason": "quote 完整列出了 claim 中的主动学习方法及四个组件，与 claim 实质内容一一对应。", "tokens": 712}
+{"key": "15536a62dff8883c", "label": "Y", "reason": "quote 直接说明需要进一步微调数据才能获得定量正确的吸附热，与 claim 完全一致。", "tokens": 691}
+{"key": "67359a077a8f5660", "label": "Y", "reason": "quote 明确说明预训练使用作者整理的基态最低能量构型数据集，且不区分交换关联泛函、DFT 软件实现或校正，与 claim 完全一致。", "tokens": 726}
+{"key": "f714a66ff83f004b", "label": "Y", "reason": "quote 完整包含 claim 的全部实质内容：骨干是 GNS、加入平滑图注意力、消息基于注意力权重和距离截断函数更新。", "tokens": 722}
+{"key": "a6091ba06a8986d4", "label": "P", "reason": "quote 只支撑了声子最大频率 MAE 0.87 THz，未提及 0 K 体模量 MAE 2.47 GPa。", "tokens": 727}
+{"key": "0c116bf48bea653e", "label": "P", "reason": "quote 只支撑了 Orb 在 MOF-5 上产生稳定 MD 轨迹这一项，未提及 800 K 的具体温度上限，也未提及复现苯撑环不能完全旋转的实验动力学行为。", "tokens": 741}
+{"key": "09856d02f33d3714", "label": "P", "reason": "Quote 只支撑了 Matbench-Discovery 基准的弛豫细节（FIRE、500步、0.05 eV/Å），但 claim 中该基准的名称及另外三个基准（MD17-10k、MOF-5、Mg-MOF-74）均不在 quote 中。", "tokens": 825}
+{"key": "58cfefbfdc180ef5", "label": "P", "reason": "quote 支撑了距离-29、1000周期、2×10^7次采样，但未提及72量子比特处理器、2×10^10总周期和5.5小时执行时间。", "tokens": 733}
+{"key": "0277c76615f7cf0d", "label": "Y", "reason": "quote 直接给出了 claim 中的两个数值：Λ=2.14±0.02 和 ε₇=(1.43±0.03)×10⁻³，与 claim 完全一致。", "tokens": 734}
+{"key": "cafb8867414169b4", "label": "P", "reason": "quote 只支撑了微调神经网络和强化学习优化匹配图权重，claim 中'使用神经网络解码器和集成匹配合成解码器'这一实质内容不在 quote 里。", "tokens": 706}
+{"key": "a3fdb53541ce2af4", "label": "Y", "reason": "quote 完整包含 claim 中的全部数字、比较对象和倍数，逐项对应。", "tokens": 746}
+{"key": "a9ed89d0c895c57b", "label": "Y", "reason": "quote 明确包含谨慎解读、部分偏好模型可映射到精质模型且不违反零能量条件，与 claim 的实质内容完全对应。", "tokens": 766}
+{"key": "7cc1755e6fac1585", "label": "P", "reason": "quote 只支撑了'原因尚不明确'这一项，claim 中 0.6<z<0.8 区间、约3σ差异、可能是样本方差等实质内容均不在 quote 中。", "tokens": 729}
+{"key": "d86722bacf1b8181", "label": "P", "reason": "Quote 只支撑了'低于阈值性能尚未被明确展示'这一缺口，claim 中'实现并验证表面码运行、获得随码距指数抑制的逻辑错误率'等具体目标不在 quote 里。", "tokens": 720}
+{"key": "5c970362331c28b1", "label": "N", "reason": "quote 只提到在 cobaya 中加入 SN Ia 和 BAO 似然，未提及 Metropolis-Hastings MCMC、CAMB 或 BBN/CMB 数据集，未撑住 claim 的任何实质内容。", "tokens": 758}
+{"key": "f3c4b36634b79110", "label": "P", "reason": "quote 给出了 H0 数值和 BBN+θ* 组合，但完全没有提到与 SH0ES 的 3.7σ 张力这一实质结论。", "tokens": 768}
+{"key": "e7e6927066559278", "label": "P", "reason": "quote 只支撑了'原因可能是样本方差波动'这一部分，未提及 DESI BAO 数据、0.6<z<0.8 红移区间、与 SDSS 结果约 3σ 差异等实质内容。", "tokens": 739}
+{"key": "0d43d3ac81e48cef", "label": "N", "reason": "quote 只笼统说结果引发反对尘埃遮蔽 AGN 情景的论点，未包含 MIRI 观测、多数 LRD 未被探测、SED 平坦或与热尘埃环预期矛盾等任何实质内容。", "tokens": 748}
+{"key": "8bd3e00c993a991f", "label": "N", "reason": "quote 只说明生成了排除宿主星系和尘埃贡献的 z≈5 SED 模板，未提及低红移类星体复合模板、灰化消光曲线、A_V=3 mag 或红光学/平坦紫外连续谱等 claim 的实质内容。", "tokens": 798}
+{"key": "c8e3625b33046c1d", "label": "Y", "reason": "quote直接承认没有明确答案并给出推测，与claim的'尚无明确答案，只能给出推测'完全对应。", "tokens": 693}
+{"key": "5f82b44b39a60fce", "label": "Y", "reason": "quote 完整包含 claim 的实质内容：MC 事件产生器结合矩阵元与部分子簇射的程序，在未来 LHC 更高精度量子信息研究中需特别关注。", "tokens": 728}
+{"key": "87349971f0293aec", "label": "P", "reason": "quote 只支撑了与 z~5.5 和 z=7.5 的 LRD 堆叠测光数据对比这一项，未提及 COSMOS-Web、CEERS、JADES 等 JWST 巡天的 5σ 点源成像深度。", "tokens": 775}
+{"key": "6ab49b1f89d7b958", "label": "N", "reason": "quote 只说明 n0=10 和 100 cm^-3 时从光学到 2-3 μm 的 SED 形状与观测一致，未涉及 claim 中近红外过亮、与 MIRI 不符、能量峰移向中远红外或与 ALMA 约束一致等实质内容。", "tokens": 817}
+{"key": "566b518ffc2e6d1a", "label": "Y", "reason": "quote 明确说明在两个验证区测量结果与不同 MC 设置的预言在不确定度内一致，与 claim 的实质内容完全对应。", "tokens": 708}
+{"key": "f9a8b6e8bede7ee1", "label": "N", "reason": "quote 只给出纠缠判据 D<-1/3，未提及自旋关联、带电轻子夹角或观测量 D=−3·⟨cos φ⟩ 的定义，撑不住 claim 的实质内容。", "tokens": 747}
+{"key": "378d136cc1733936", "label": "P", "reason": "quote 只支撑信号区 340–380 GeV 这一项，验证区划分和纯度超过 90% 均未在 quote 中出现。", "tokens": 737}
+{"key": "28b20d106e5ac160", "label": "P", "reason": "quote 只支撑了'利用顶夸克-反顶夸克对的自旋关联探测量子纠缠'这一部分，claim 中具体的观测量 D = −3·⟨cos φ⟩ 及带电轻子夹角等实质内容不在 quote 里。", "tokens": 749}
+{"key": "0b87db0ed413bc71", "label": "P", "reason": "quote 支持了拓扑能隙和相干长度并非远小于器件长度这一点，但 claim 中关于有限尺寸效应导致 E_M 显著变化的内容在 quote 中完全没有提及。", "tokens": 725}
+{"key": "b69beefc87a25c15", "label": "P", "reason": "quote 只支撑了 Cooper 对盒密度 0.6 µm⁻³ 这一项，claim 中的指数分布、τ_RTS≈2 ms、约 1 µm⁻³ 及数量级一致均不在 quote 中。", "tokens": 773}
+{"key": "db3a308614d29ea9", "label": "N", "reason": "quote 只讲偏压增大使 τ_RTS 减半，未涉及准粒子注入、断开连接后 RTS 消失或 h/e 周期性，撑不住 claim 的任何实质内容。", "tokens": 746}
+{"key": "67e46fba6dac878c", "label": "P", "reason": "quote 撑住了用量子动力学模拟复现结果，并提到电荷噪声和温度，但 claim 中的 MZM、量子点、rf 驱动功率等具体模型成分未在 quote 中出现。", "tokens": 711}
+{"key": "d092bbc80c9a5590", "label": "P", "reason": "Quote 撑住了'更可靠方法可用于测试 MACE 熔点性能'和'这是未来工作'，但 claim 中'简单加热晶体结构可能不普遍准确，因为周期性边界条件、小系统尺寸等因素会影响熔点'这一实质内容不在 quote 里。", "tokens": 782}
+{"key": "9af185cedb687549", "label": "P", "reason": "quote 只支撑了训练于 MPtrj 数据集这一项，MACE 基于消息传递神经网络架构和使用高阶多体 ACE 展开这两项实质内容不在 quote 中。", "tokens": 705}
+{"key": "029cd8efdf807cb5", "label": "N", "reason": "quote 只笼统提到测量-only 方案把操作简化为融合，没有涉及费米宇称单次测量或 Majorana 零能模共享费米宇称等 claim 的实质内容。", "tokens": 722}
+{"key": "be404d86d3988059", "label": "P", "reason": "quote 只支撑了 MACE 中极小值更深、类固态成分更显著这一结论，未提及 Li 和 F 原子速度自相关函数形状相似这一实质内容。", "tokens": 714}
+{"key": "2eaaea5956fbcdc9", "label": "P", "reason": "quote 只支撑了 50000 个模拟样本这一项数字，未提及 Butterpy、Kepler 噪声或 81%/9%/10% 划分。", "tokens": 741}
+{"key": "b56fb00037562d40", "label": "Y", "reason": "quote 明确支撑了 claim 中理论理解不足和经典原子模型难以生成可靠热物理数据这两项实质内容，应用领域虽未在 quote 中列举但属于框架性背景。", "tokens": 766}
+{"key": "3290eb2f03ea0e00", "label": "Y", "reason": "quote 直接支持了 claim 中关于长周期样本相关性不同且可能与较老恒星活动性下降有关的实质内容。", "tokens": 703}
+{"key": "f05bd9abee2edddc", "label": "Y", "reason": "quote 明确包含模型给出“average”预测以及哪种结果更好尚不明确这两项实质内容，与 claim 完全对应。", "tokens": 710}
+{"key": "3724db843f7c4ce8", "label": "N", "reason": "quote 只是引出 MLIPs 的动机句，没有提到 MACE-MP-0、粘度计算或与 Buckingham/BHM 势的对比，未撑住 claim 的任何实质内容。", "tokens": 734}
+{"key": "887873f3126334f3", "label": "P", "reason": "quote 撑住了“模型依赖先验分布、spot 分布对结果影响很大”，但未提及“倾角与 spot 位置之间的内在简并”这一实质内容。", "tokens": 723}
+{"key": "030428d9105ecd75", "label": "P", "reason": "Quote 只支撑了用 Butterpy 模拟光变曲线做监督训练这一项，注入真实 Kepler 噪声、50000 样本及 81%/9%/10% 划分均不在 quote 中。", "tokens": 748}
+{"key": "7b0454dda00d65bd", "model": "deepseek-reasoner", "label": "Y", "reason": "该引文直接说明在规模递增的 ImageNet、ImageNet-21k、JFT-300M 上预训练 ViT，撑住了预训练数据规模实验这一部分。", "tokens": 983}
+{"key": "8b7f49f201d55b64", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 只支持未来将进一步研究该方法，未包含邻域大小 r 或最大路径长度 O(n/r) 的具体内容。", "tokens": 1027}
+{"key": "4e35e7128632a035", "model": "deepseek-reasoner", "label": "P", "reason": "quote 撑住了顺序性阻碍并行化且在长序列更关键，但未说明是循环模型沿输入输出符号位置分解计算。", "tokens": 1016}
+{"key": "e0074b224bbc2630", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确指出切 patch 与分辨率调整是唯一手动注入二维结构归纳偏置的环节，与 claim 中该 ID 负责的片段一致。", "tokens": 1289}
+{"key": "70347919977136e5", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 仅支持 claim 中“难以提供决策来源和更新世界知识”这一部分，未涉及“参数中存储事实知识但难以访问操作”或“在知识密集型任务上落后于任务专用架构”。", "tokens": 939}
+{"key": "8dbf9d59038d3cb5", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了「Transformer 缺少平移等变性和局部性等归纳偏置」这一因果理由，未提及 ImageNet 中等规模数据、无强正则时精度低几个百分点等数字性论断。", "tokens": 881}
+{"key": "c4939e4c79011580", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支持编码器由 N=6 个相同层堆叠且每层有两个子层，未说明子层是多头自注意力与逐位置前馈网络、残差连接和层归一化，也未涉及解码器。", "tokens": 1432}
+{"key": "50e91f7bbae13c90", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持了可学习 [class] token 的 prepend，但未提及在其输出上接分类头以及在预训练和微调时使用，这部分是额外实质内容。", "tokens": 1218}
+{"key": "8362840d9b2d145c", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只说明需要注入 token 位置信息，支撑了 claim 中“利用序列顺序信息”的动机，但未提及“模型不含循环和卷积”的原因或“正弦余弦位置编码”的具体方法。", "tokens": 1503}
+{"key": "a1c80042402f17dc", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只覆盖了'难以访问和精确操作知识'及'在知识密集型任务上落后于任务专用架构'，claim 中'在参数中存储事实知识'和'难以提供决策来源和更新世界知识'这两项实质内容未在 quote 中出现。", "tokens": 1069}
+{"key": "6f3af311679f2ee4", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只说明使用不同频率的正弦余弦函数，未提及加入输入嵌入或利用序列顺序信息，只撑住部分实质内容。", "tokens": 1874}
+{"key": "0d173b349ad3488a", "model": "deepseek-reasoner", "label": "P", "reason": "quote 撑住了前半句（REALM、ORQA 结合可微检索器且仅探索开放域抽取式问答），但本文要将其引入序列到序列模型这一论断目标不在 quote 中。", "tokens": 915}
+{"key": "25bc879ffadb158a", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 仅支持“集成在测试集上取得 3.57% top-5 误差”这一项，未提及 152 层单模型 4.49% 验证误差、六模型集成或赢得 ILSVRC 2015 第一名。", "tokens": 1016}
+{"key": "5476e0de7b4f7f8d", "model": "deepseek-reasoner", "label": "P", "reason": "quote 仅支持“1202 层测试结果差于 110 层且训练误差相近”，但未提及训练误差低于 0.1%、过拟合原因及网络对此小数据集不必要地大。", "tokens": 1024}
+{"key": "a692abc25c3d5cae", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports depth-related accuracy saturation/degradation, but does not mention rapid degradation or that it is not caused by overfitting.", "tokens": 918}
+{"key": "bdb9acf4276b673b", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 完整对应 claim：模型针对中英文优化，处理其他语言时可能出现语言混杂。", "tokens": 774}
+{"key": "2d98c2503cb310f5", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了“无法利用搜索引擎、计算器等工具”这一项，claim 中“结构化输出方面仍不理想”并未在 quote 中出现。", "tokens": 827}
+{"key": "a7eff399af471826", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports overcoming optimization difficulty and accuracy gains with depth, but does not mention CIFAR-10 or the 110-layer/6.43% result.", "tokens": 1144}
+{"key": "f79e0732e0305e00", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了恒等映射足以解决退化问题且经济，但'输入输出维度不一致时可用线性投影 Ws 匹配维度'这一实质内容不在 quote 里，属多出的独立事实。", "tokens": 1145}
+{"key": "38e742e8e1a09091", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 逐项对应 claim：perfect control、good scaling、best AIME24 score 三项实质内容均在原文中。", "tokens": 806}
+{"key": "cb1aad8261d57ef2", "model": "deepseek-reasoner", "label": "Y", "reason": "该 quote 直接说明不在推理任务中使用神经奖励模型，支撑了claim中‘不使用神经奖励模型’这一由 S2.SS2.p4 负责的部分。", "tokens": 994}
+{"key": "042e4e6e680e7d3e", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 原文明确列出两个关键限制——最终趋于平坦（Figure 4）以及受底层语言模型上下文窗口约束，与 claim 完全对应。", "tokens": 782}
+{"key": "69962d6a000b122a", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确说明 DeepSeek-R1 在数学任务上与 OpenAI-o1-1217 表现相当，正好支撑 claim 中对应的数学任务部分。", "tokens": 1332}
+{"key": "d87126b4c022cf6f", "model": "deepseek-reasoner", "label": "P", "reason": "quote 仅支持 AIME 2024 平均 pass@1 从 15.6% 提升到 77.9%，未提及自一致性解码可达 86.7%，该额外实质内容不在 quote 中。", "tokens": 1159}
+{"key": "56a6c134da6c661c", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports that p_η(z|x) is based on DPR, but not that it is a dual encoder, which is an added architectural detail.", "tokens": 2050}
+{"key": "af2d691cba540406", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 只支持 GPQA Diamond 含 198 题这一项实质内容，未提及 AIME24、MATH500、lm-evaluation-harness 或温度设为 0。", "tokens": 999}
+{"key": "501cfd9da53ae640", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports AMC23 96.3% and surpassing QwQ-32B-Preview, but not the AIME24/MATH500 numbers or comparison with OpenAI-o1-preview.", "tokens": 1010}
+{"key": "4e30acc96a840c40", "model": "deepseek-reasoner", "label": "P", "reason": "Quote confirms Minerva and GPQA as multidisciplinary benchmarks, but does not mention OlympiadBench, CHMath, Gaokao, Kaoyan, or GradeSchool.", "tokens": 913}
+{"key": "45b5783d435a5166", "model": "deepseek-reasoner", "label": "P", "reason": "quote 直接支撑了论文要寻找同时实现测试时扩展和强推理性能的最简方法这一研究问题，但未包含 claim 中关于 OpenAI o1 未公开方法及复现尝试未出现清晰测试时扩展行为的背景事实。", "tokens": 1076}
+{"key": "f7f333dd27e90eec", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确列出 AIME24、MATH500、AMC23 三个基准，与 claim 指向的同一评估集，名称等实质内容全部在 quote 中。", "tokens": 956}
+{"key": "9c381152e30f08f3", "model": "deepseek-reasoner", "label": "N", "reason": "quote 只提到用 curated dataset 做 SFT，未涉及多层筛选流程的任何步骤、筛选标准或 800 条样本这一数字，claim 的实质内容全不在 quote 中。", "tokens": 973}
+{"key": "0109b17428d58f38", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持 ViT 遵循原始 Transformer 从而设计简单，但未提及“只保留最少的图像特有归纳偏置”及二维结构的手动注入等实质内容。", "tokens": 3204}
+{"key": "b0d8a27d37446a2d", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了 SWE-bench 含 2294 个实例、来自 12 个热门 Python 包仓库这部分，但关于 SWE-bench Lite（300 个实例）做消融分析的实质内容不在 quote 中。", "tokens": 858}
+{"key": "4ebb0dec2e9b478f", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支撑了预训练编码知识基础上复杂推理可通过少量精心设计示范涌现这一实质内容，但未提及 LIMO 假说名称，也未支撑激发阈值取决于知识库完整性和认知模板有效性的额外论断。", "tokens": 1163}
+{"key": "513b92188bbf4997", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持了失败源于实现不当这一实质内容，但把 quote 的\"约一半（52%）\"说成\"大多数\"，属于把 quote 说强了。", "tokens": 988}
+{"key": "2ac718e6e59e9168", "model": "deepseek-reasoner", "label": "Y", "reason": "该 quote 明确说明使用 BART-large 这一 seq2seq transformer，直接支撑 claim 中生成器为 BART-large 的部分。", "tokens": 2954}
+{"key": "6b9a7fdd8f848872", "model": "deepseek-reasoner", "label": "P", "reason": "Quote支持零样本提示“Let’s think step by step”这一部分，但未提及在128个GSM8K测试样本上评估，缺少数据集和样本量这一实质内容。", "tokens": 1041}
+{"key": "8e2a7fd1c0af2ea6", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote directly states the C4 evaluation uses 16 thought tokens and 4 true tokens ahead with otherwise the same setup, matching the claim.", "tokens": 873}
+{"key": "32039d1edbfc787a", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了「在每对观测 token 之间引入辅助 rationale 变量」，但未提及「目标是生成有助于预测后续文本的中间思考」这一实质目的。", "tokens": 859}
+{"key": "2e8b8ea622200fe5", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了“LM agent 是需要专门接口的新型终端用户”这一前提，但未提及软件工程等复杂数字任务或提升表现。", "tokens": 1239}
+{"key": "5bf3afbcf5bf5515", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确给出 cot-maj@8 从 40.6% 提升到 47.7%，与 claim 的数字和结论完全一致。", "tokens": 886}
+{"key": "891bf3daf8cbd1d4", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote明确说明所有实验都以Mistral 7B基础版本开始，完全支撑claim。", "tokens": 733}
+{"key": "d33dc9cce08cf9ff", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确说明抑制思考结束符并可选追加“Wait”以继续当前推理轨迹，支撑了 claim 中对应的延长思考机制。", "tokens": 2108}
+{"key": "0912ed014a731661", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支持“在无自动验证工具时需改进样本验证方法”，未提及“约100个样本后饱和”或“将重复采样扩展到更多任务”等具体内容。", "tokens": 944}
+{"key": "5c9c59a0ae3620e1", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了用户和开发者通常只让模型尝试一次这一部分，而 claim 中“训练计算扩展持续提升模型能力”这一实质前提不在 quote 里。", "tokens": 933}
+{"key": "715fcf5e8a4733e1", "model": "deepseek-reasoner", "label": "N", "reason": "Quote 只是一句框架句（我们额外设计了探测 in-context learning 的任务），没有提到 claim 列举的任何具体任务类别（语言建模、翻译、SuperGLUE、算术等），未撑住任何实质内容。", "tokens": 954}
+{"key": "2294e2ad57874d01", "model": "deepseek-reasoner", "label": "P", "reason": "Quote only supports the general statement that GPT-3 has notable weaknesses in text synthesis and several NLP tasks, but does not mention the specific examples (long-passage coherence loss, self-contradiction, comparison tasks barely above random).", "tokens": 964}
+{"key": "9c15bda22e55ddcf", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了人类不需要大量监督数据即可学习语言任务这一实质内容，但未提及自然语言指令或极少示例，也未涉及作者希望 NLP 系统具备灵活性和通用性，这些是额外的新内容。", "tokens": 1209}
+{"key": "a1ad59511a8f61a0", "model": "deepseek-reasoner", "label": "P", "reason": "Quote支持15.9%到56%的样本数提升及超过SOTA 13%，但未提SWE-bench Lite、单样本SOTA为43%或自动验证器任务，属于部分支撑。", "tokens": 1431}
+{"key": "1e6a96b6cc462eb9", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 原文直接包含个人偏见、背景和偏好以及导致不一致或不可靠结果的全部实质内容。", "tokens": 729}
+{"key": "32751ce9b7d1006b", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持了'超过两打 NLP 数据集'和'为测试快速适应设计的新任务'，但'每个任务在零样本/单样本/少样本三种条件下评估'这一实质内容不在 quote 中。", "tokens": 887}
+{"key": "783ca5227ffa367e", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote directly states the models are still under development and not ready for release, matching the claim's core content.", "tokens": 980}
+{"key": "bd23b2bbd7fc42f1", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 直接对应 claim，称这些模型仍在积极开发中且尚未准备好发布。", "tokens": 800}
+{"key": "fb290b6aa7963e19", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了“利用伪相关”这一实质内容，但未提及微调、狭窄任务分布或泛化到分布外较差等其他实质内容。", "tokens": 1519}
+{"key": "bbc5d1d6956e2427", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 完整对应 claim 的三项内容：探索细粒度感知、为 LVLM 建立坚实基础、打造面向真实应用的智能体放大器。", "tokens": 832}
+{"key": "c58e7a9be1128a47", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 明确支持 claim 中“使用约 15T 多语言 tokens”这一实质内容。", "tokens": 1193}
+{"key": "659e3202e06dd520", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 完整列出了 claim 中的对比模型（Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5、不同规模 Qwen2-VL），\"多种基准上评估\"属框架性表述，未引入新事实。", "tokens": 1040}
+{"key": "33abe7a0dc6961b1", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确说评估限制在 MATH 和 CodeContests 数据集，直接支持 claim 中对应 S2.SS2.p3 的数据集评估部分。", "tokens": 2277}
+{"key": "7516537bc2d5edc2", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只说明 Qwen2.5-VL 架构由三部分组成，未提及具体是哪三部分（LLM、视觉编码器、MLP 融合模块）。", "tokens": 941}
+{"key": "4de2969b5c6d274f", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 确认了 Llama 3 在图像理解任务上做了评估（对应 claim 的图像识别部分），但未提及 MMMU、VQAv2、ChartQA、DocVQA 等具体基准，这些是 quote 之外的新事实。", "tokens": 1409}
+{"key": "c7bf6be92652d794", "model": "deepseek-reasoner", "label": "Y", "reason": "该引用明确说明评估了OCR、图表和文档理解基准，支撑claim中对应的文档理解与OCR部分。", "tokens": 1057}
+{"key": "c74736b40bc7ca1d", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote directly states CodeContests test suites lead to false-negative solutions, supporting the claim's CodeContests false-negative test-case part.", "tokens": 2707}
+{"key": "10ac9cc330c553aa", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了 Movie Gen Video 优于 Runway Gen3 和 LumaLabs 这一部分，对 Sora 中等净胜、与 Kling1.5 持平这两项实质内容不在 quote 中。", "tokens": 943}
+{"key": "381f2f79df07c244", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确给出预训练数据集包含约 1 亿视频-文本对和约 10 亿图像-文本对，支撑 claim 中对应的预训练规模信息。", "tokens": 1021}
+{"key": "e6cc9947a773460b", "model": "deepseek-reasoner", "label": "P", "reason": "quote 仅支持“个性化与编辑均通过后训练加入”这一笼统说法，claim 中“参考图像条件”“多阶段训练”“无监督视频编辑数据”等具体细节均未出现在 quote 里。", "tokens": 967}
+{"key": "2b0ce6ec1e4a7cd8", "model": "deepseek-reasoner", "label": "P", "reason": "quote支持了Movie Gen Video为30B参数及联合文本到图像/视频生成的实质内容，但未提及13B参数的Movie Gen Audio及其音频生成部分。", "tokens": 1029}
+{"key": "8687da738baef221", "model": "deepseek-reasoner", "label": "N", "reason": "quote 只说仍有进一步提升空间，未提及 DeepSeek-V3 的部署单元较大或小型团队负担等部署局限。", "tokens": 808}
+{"key": "93a6a0368eeca3d6", "model": "deepseek-reasoner", "label": "P", "reason": "quote 仅支持“最优模态对齐仍是持续挑战、需进一步改进”这一结论，claim 中关于视觉语言模型依赖两种模态、中间推理步骤忽略或误解视觉线索、以及过滤策略等实质内容均未在 quote 中出现。", "tokens": 1358}
+{"key": "c1d553be3a4e5164", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支持“设计 DualPipe 算法实现高效流水线并行”，但未提及 FP8 混合精度训练或计算-通信重叠。", "tokens": 922}
+{"key": "ca34e61858cd41b0", "model": "deepseek-reasoner", "label": "N", "reason": "quote 只说这些局限有望随硬件发展解决，未提及部署单元较大或小型团队负担等 claim 的具体内容。", "tokens": 878}
+{"key": "6be72a6c4169d58a", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只撑住了 FP8 混合精度训练框架这一项，未提及 DualPipe 算法或计算-通信重叠。", "tokens": 1010}
+{"key": "30a5f2f9c9019f7e", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports perplexity-based evaluation on HellaSwag/PIQA/WinoGrande, but does not cover the other evaluation methods or benchmark categories in the claim.", "tokens": 1226}
+{"key": "b7cceb7fe120a10a", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确指出在 TIMIT benchmark 的 core test set 上报告帧分类错误率，直接支撑 claim 中对该评估数据集的引用，dropout 为全文语境下的指代。", "tokens": 1184}
+{"key": "1b6e803c0c4bc65d", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了使用单独验证集评估多种架构这一实质内容，但未提及语音/两个物体识别数据集，也未提到在真实测试集上评估 dropout。", "tokens": 1001}
+{"key": "45847087de0c5b44", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote states the method significantly outperforms the baseline by a large margin on identity preservation, video quality, and text alignment, matching the claim's substantive content; baseline/method names are anaphoric.", "tokens": 1653}
+{"key": "672ebc77a85e7d62", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持 dropout 将错误率降至 42.4% 这一纪录，但未提及 ImageNet 数据集和原先 48.6% 的错误率。", "tokens": 1046}
+{"key": "ce77c1fec0d5cdce", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持了 dropout 把错误率降至 29.62% 这一半，但起始的 31.05% 这一具体数字不在 quote 中，属新增可验证事实。", "tokens": 1280}
+{"key": "baa156e9e971f1d5", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确说对 SSD 算法的速度与 Mamba 扫描实现和 FlashAttention-2 进行基准对比，与 claim 内容完全对应。", "tokens": 758}
+{"key": "c1fa75a51c942eee", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持“不确定架构哪个方面是主要因素且留待未来工作”，但未提及 MQAR 任务，claim 多出了任务限定这一实质信息。", "tokens": 1169}
+{"key": "d5be37a3704300dd", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支撑了非对角块按半可分矩阵秩结构分解并归约为较小循环这一项，未提及 SSD 算法名称、对角块二次注意力计算及结合线性 SSM 与二次对偶优势等实质内容。", "tokens": 1109}
+{"key": "8c0595b0b7c2711b", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 直接对应 claim 中“引入了多头注意力中头的类比”这一部分，实质内容完全一致。", "tokens": 1627}
+{"key": "3a4233f65f13881b", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了研究者偏见影响模型发展轨迹，但未提及“硬件彩票”可能促成趋同这一实质内容。", "tokens": 1201}
+{"key": "46e95cd975a03aab", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支持对齐分数 0.16 与理论上限 1 这两项数字，但未提及“该差距是噪声还是重大差异仍未解决”这一实质结论。", "tokens": 1009}
+{"key": "e81cd534368086a2", "model": "deepseek-reasoner", "label": "N", "reason": "Quote只承认未做下游评估、仅考虑loss scaling，未提及固定架构、低精度训练需架构调整或可缩小与全精度差距等claim内容。", "tokens": 902}
+{"key": "aa1f9ec13236be1d", "model": "deepseek-reasoner", "label": "Y", "reason": "该 quote 明确说 Table 4 消融了块（block）相关的架构改动，支撑了 claim 中由本条引文负责的“块设计”消融这一实质内容。", "tokens": 2220}
+{"key": "5634f6e56939fae8", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 直接说明论证仅适用于被优化完成多项任务的智能，与 claim 核心限制一致，专用智能不趋同为该范围限定语的合理反述。", "tokens": 1729}
+{"key": "497cc438a9254cf4", "model": "deepseek-reasoner", "label": "P", "reason": "quote 仅支持“联合优化时计算最优精度与计算量无关”，未提及“约 7-8 比特”，也未支持“N 固定时随计算量对数增长”这一部分。", "tokens": 1051}
+{"key": "9e8532190c51f7cc", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 逐字包含 claim 的实质内容：在 Dolma V1.7 上训练评估 OLMo 风格模型、标准 Transformer++ 实现。", "tokens": 747}
+{"key": "a383b1f556edea40", "model": "deepseek-reasoner", "label": "Y", "reason": "该quote直接列出了BLOOM、OpenLLaMA、LLaMA这三个被考虑的语言模型族，撑住了claim中由A3.SS2.p1负责的语言模型部分；其余ViT、数据集与k值等内容属于其他引用片段。", "tokens": 1872}
+{"key": "41924d7856d621b1", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持权重、激活和 KV 缓存量化效应独立且可乘，但未提及“共同决定有效参数量”这一额外结论。", "tokens": 925}
+{"key": "c361a0b873f246dc", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports the general idea that interface deficits hamper performance, but it does not mention Linux shell, human-designed interfaces, LM agents, or the specific examples of unreliable small-file edits and lack of feedback.", "tokens": 5322}
+{"key": "d084ae84a3250b3f", "model": "deepseek-reasoner", "label": "Y", "reason": "claim 的实质内容（记忆训练数据中的句子不保证模型推理时能提取或操作事实知识）与 quote 表述完全一致。", "tokens": 758}
+{"key": "d9f62fea1ba1f179", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 直接给出了 claim 所描述的核心研究问题，内容基本逐字对应。", "tokens": 803}
+{"key": "86c7cd459f0b44ca", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 直接给出混合训练下 bioS single 86.6%、bioR single 77.7% 的 OOD 准确率，数字与对应数据集均一致，claim 的实质内容全被撑住。", "tokens": 972}
+{"key": "7f4cde41c550ba9a", "model": "deepseek-reasoner", "label": "P", "reason": "Quote支持“所有微调参数下QA准确率为零”，但未提及“预训练传记再微调QA”“未见个体”以及“模型规模远大于个体数、个体被暴露上千次”等实质内容。", "tokens": 1066}
+{"key": "5b4017b32ca70e7d", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 给出的公式正是将 PTQ 退化建模为 D 与 N 的幂律项乘以随 P_post 指数衰减的项，与 claim 描述一致。", "tokens": 1243}
+{"key": "9cfb10aeac807bcd", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote明确说明 AntiFold 利用 ESM-IF1 在超过 1200 万个结构上的预训练，并在抗体结构上进一步微调，与 claim 的实质内容一致。", "tokens": 982}
+{"key": "5411323a265ef586", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 列举的 span masking、随机残基掩码、3:1 CDR 加权掩码、逐层学习率衰减、OAS 预测结构五项策略与 claim 完全对应，claim 未添加新事实。", "tokens": 1106}
+{"key": "5ca61b4bf4391901", "model": "deepseek-reasoner", "label": "P", "reason": "Quote fully supports the AbMPNN comparisons but does not mention the ESM-IF1 comparison (60% vs 43%) or the experimental-structure test set context.", "tokens": 1148}
+{"key": "2ffc332c6f9478ea", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 仅支持 AntiFold 相对原始 ESM-IF1 在 CDRH3 上的提升（60 vs 43%, p<0.005），而 claim 中与 AbMPNN 的对比（CDRH3、其余 CDR、FR 区域）均未出现在 quote 中。", "tokens": 1063}
+{"key": "e6f233f593b45c8b", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports that inverse folding models can design novel sequences without altering the antibody backbone structure, but it does not support the claim's added motivation about antibody optimization needing mutations that maintain structure-mediated properties like stability and antigen binding mode.", "tokens": 1125}
+{"key": "6ef0a9cb4d7b83e5", "model": "deepseek-reasoner", "label": "N", "reason": "Quote 说的是 BindGPT 在 Druglikeness 上不如 MolDiff，既未提及 XYZ-TF 基线，也未支持“持续优于基线”或“首个大规模显式建模氢原子”的论断。", "tokens": 931}
+{"key": "d9d3581f42b93450", "model": "deepseek-reasoner", "label": "P", "reason": "Quote only supports the RMSD-coverage metric for 3D conformation generation; the other listed metrics in the S4.SS1.p1 claim are not mentioned.", "tokens": 1119}
+{"key": "bf189ebbe7f7011b", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports matching/surpassing baselines across tasks, but does not mention the claim's additional substantive point about not relying on domain-specific inductive bias.", "tokens": 1013}
+{"key": "2f356b7675d966ab", "model": "deepseek-reasoner", "label": "N", "reason": "引文说的是使用 CrossDocked 数据集，而 claim 说的是 Uni-Mol 的大规模 3D 分子数据集及其 208M/12M/3.2M 等具体数字，引文未支持这些实质内容。", "tokens": 1001}
+{"key": "10efd6ef75beffff", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支持模型在 300M 前扩展良好、到该规模困惑度过拟合，但未提及后续采用 100M 模型这一新事实。", "tokens": 1032}
+{"key": "5a97cd1e6da48054", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 完整列出主动学习、深度图神经网络、材料探索器、第一性原理监督器与集成不确定性监测器，claim 的实质内容全部对应。", "tokens": 760}
+{"key": "729e45140d569ab9", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了「所有材料类别成功率超 90%」这一实质内容，但 claim 中「118 个系统的分子动力学模拟」这一具体数字在 quote 中完全没有，属于新增可独立验证的事实。", "tokens": 979}
+{"key": "94241a457c9895d3", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 完整包含 claim 的核心内容：准确高效地预测任意材料在实际合成与工作条件下的性质，claim 仅将 'practical synthesis and working conditions' 具体化为有限温度和压力，属注解性细化而非新增可验证事实。", "tokens": 1202}
+{"key": "9e528df196cbf129", "model": "deepseek-reasoner", "label": "N", "reason": "Quote 说的是模型仅在均匀体相上训练、缺少表面/界面和催化相关数据，并未提及半局域相互作用、长程相互作用主导或多相/聚合物体系。", "tokens": 943}
+{"key": "630aecefddeb16e9", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 直接包含 claim 的核心内容：进一步微调数据可能需要才能获得定量正确的吸附热。", "tokens": 778}
+{"key": "63805a3c1f9ac338", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote明确说明预训练使用作者整理的minimum energy configurations of materials数据集，并不区分交换关联泛函、DFT软件实现或校正，与claim实质内容一致。", "tokens": 907}
+{"key": "022b4470ac2fcd21", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支持 Orb 在 MOF-5 上不同温度下产生稳定 MD 轨迹，未支持“高达 800 K”和“复现苯撑环不能完全旋转”这两个实质内容。", "tokens": 927}
+{"key": "6fa813ac37abc436", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 与 claim 逐点对应：GNS 骨干、平滑图注意力机制、基于注意力权重与距离截断函数更新节点消息，实质内容全部在 quote 中。", "tokens": 792}
+{"key": "35226412d472bee6", "model": "deepseek-reasoner", "label": "P", "reason": "quote 直接支持 MAE 为 0.87 THz，但没有说明该 MAE 对应“声子最大频率预测”，这一实质内容不在 quote 中。", "tokens": 1264}
+{"key": "fca4cbe686838c35", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 提供了 FIRE 优化器 500 步或最大力低于 0.05 eV/Å 的弛豫条件，但未提及 Matbench-Discovery 基准这一实质内容。", "tokens": 1169}
+{"key": "bcc9c629e6f90335", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 完整给出了距离-7逻辑量子比特寿命 291±6 µs、物理量子比特中位数 85±7 µs 与最佳 119±13 µs，以及 2.4±0.3 倍的关系，claim 的实质内容全部被撑住。", "tokens": 832}
+{"key": "83786c8e2f17b848", "model": "deepseek-reasoner", "label": "P", "reason": "Quote confirms improved Hellaswag and GSM8K performance as alignment improves, but does not mention DINOv2 alignment specifically.", "tokens": 3719}
+{"key": "a0f774880b188e9d", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持了距离-29重复码、1000个纠错周期和2×10^7次采样，但未提及72量子比特处理器、2×10^10总周期和5.5小时执行时间。", "tokens": 1022}
+{"key": "273510988323c2f7", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了“用处理器数据微调神经网络、用强化学习优化匹配图权重”，但未提及“使用神经网络解码器和集成匹配合成解码器”这一解码器架构内容。", "tokens": 1051}
+{"key": "88139058f1aaa936", "model": "deepseek-reasoner", "label": "Y", "reason": "引用直接说明合成数据集 bioS 包含 N=100,000 个体，支撑该引用片段中的 bioS 和 10 万个体这一实质内容。", "tokens": 2977}
+{"key": "9bb278b7c72cd598", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 明确包含谨慎解读 w0waCDM 结果的告诫，以及部分偏好模型可映射到不违反零能量条件的精质模型，与 claim 实质内容完全一致。", "tokens": 909}
+{"key": "836a5431f4b1747f", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只撑住了“尚无量子处理器明确展示低于阈值性能”这一缺口，未提及表面码或逻辑错误率随码距指数抑制。", "tokens": 1000}
+{"key": "ff8fbf1e3ec1002a", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确给出结合 BBN 和 θ* 后的 H0=(68.52±0.62) km/s/Mpc，支撑了 claim 中该引用对应的数值部分。", "tokens": 1098}
+{"key": "4207bf78037c265d", "model": "deepseek-reasoner", "label": "P", "reason": "Quote confirms cobaya as the cosmological inference code and the SN Ia likelihoods, but says nothing about Metropolis-Hastings MCMC, CAMB, BBN or CMB.", "tokens": 1451}
+{"key": "e0098bf7704518fb", "model": "deepseek-reasoner", "label": "P", "reason": "quote仅支持低密度n0=10–100 cm^-3时SED在光学到2–3μm与LRD观测谱一致，未涉及γ<1、能量峰移向中远红外或与MIRI/ALMA约束一致。", "tokens": 1240}
+{"key": "0c38a9296c8f2d0c", "model": "deepseek-reasoner", "label": "Y", "reason": "quote直接支撑了claim中对应部分“可能是样本方差波动”，且未添加强于quote的新事实。", "tokens": 1584}
+{"key": "0c1a272ee5ee3a6f", "model": "deepseek-reasoner", "label": "P", "reason": "quote 只支持了‘反对尘埃遮蔽AGN情景’这一结论，但未提及多数LRD在F1800W未被探测、SED平坦及与热尘埃环预期矛盾等具体观测证据。", "tokens": 1474}
+{"key": "16e443d373d60189", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 只支持“原因尚不明确”，未提及“可能是样本方差波动”这一新事实。", "tokens": 2164}
+{"key": "9bb41cbdba5ed1c2", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 完整对应 claim：蒙卡事件产生器结合矩阵元与部分子簇射的程序在未来 LHC 更高精度量子信息研究中需特别关注。", "tokens": 858}
+{"key": "43b448ce071c4ccc", "model": "deepseek-reasoner", "label": "Y", "reason": "quote直接给出了claim中的两个数值Λ=2.14±0.02和ε_7=(1.43±0.03)×10^-3，claim将ε_7解指代为距离-7每周期逻辑错误率、Λ解指代为错误抑制因子，未添加新数字或结论。", "tokens": 2599}
+{"key": "360fca1fe3fa20aa", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote直接说对该问题目前没有明确答案、只能给出推测，claim的实质内容（无定论、仅推测）完全被撑住，具体问题指向只是解指代。", "tokens": 1461}
+{"key": "b477113516b3a7e1", "model": "deepseek-reasoner", "label": "Y", "reason": "该 quote 明确说明顶夸克与反顶夸克间的自旋关联被用来探测量子纠缠，正好支撑 claim 中由本条引用负责的那部分内容。", "tokens": 924}
+{"key": "75f17fff5bac3efd", "model": "deepseek-reasoner", "label": "P", "reason": "Quote确定信号区为340<m_{t\\bar{t}}<380 GeV，但未提及两个验证区或顶夸克对纯度超过90%。", "tokens": 930}
+{"key": "bf7bb36da2376486", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支持了在 z~5.5 和 z=7.5 叠加 LRD 堆叠测光 SED 数据这一部分，但未提及与模型 SED 对比；JWST 巡天深度部分对应另一条引用 S2.p9。", "tokens": 2252}
+{"key": "d2e1c3e14dabc301", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports the statement that the topological gap is modest and the coherence length is not much smaller than device length, but it does not mention finite-size effects or that E_M is expected to vary significantly.", "tokens": 1134}
+{"key": "a26a4ff5aa6eb6cb", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支撑了 50,000 训练图像和 10,000 测试图像这两个数字，但没有提及 CIFAR-10 或物体识别。", "tokens": 7702}
+{"key": "bff2d321c7c07137", "model": "deepseek-reasoner", "label": "P", "reason": "Quote supports that τ_RTS decreases to half with increasing bias voltage, but does not mention the claimed cause 'quasiparticle injection'.", "tokens": 1306}
+{"key": "52ef0cdad5400f4f", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote directly states both validation regions and agreement with different MC setups within uncertainties; the consistency-check framing follows from the validation context without adding new facts.", "tokens": 1901}
+{"key": "746ce9ad0206fb47", "model": "deepseek-reasoner", "label": "N", "reason": "Quote只说明measurement-only拓扑量子计算方案将操作简化为fusion，未提及费米宇称单次测量或Majorana零能模，未支撑claim的核心实质内容。", "tokens": 1244}
+{"key": "e2e79feee6c8ba91", "model": "deepseek-reasoner", "label": "P", "reason": "quote 仅支撑“MACE势熔点性能可用这些方法测试但属未来工作”，未提及claim中“简单加热不准确、周期性边界条件/小系统尺寸影响、固液相自由能/相共存”等实质内容。", "tokens": 1303}
+{"key": "9707afa2e367398f", "model": "deepseek-reasoner", "label": "P", "reason": "Quote支持训练于MPtrj数据集，但未提及MACE的消息传递神经网络架构或高阶多体ACE展开。", "tokens": 1033}
+{"key": "61f3104332eace1d", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 只说明了 D < -1/3 可证明纠缠，但未提及 claim 中 D = −3·⟨cos φ⟩ 的具体定义及由带电轻子夹角推断的测量方式，因此仅部分支撑。", "tokens": 2455}
+{"key": "8498054d868e2910", "model": "deepseek-reasoner", "label": "P", "reason": "引用支持 MACE 体系中更深的极小值意味着更显著的类固态运动成分，但未提及 Li 和 F 原子或两者速度自相关函数形状相似这两项实质内容。", "tokens": 1014}
+{"key": "90ab2cd6561932a3", "model": "deepseek-reasoner", "label": "N", "reason": "Quote only给出转向 MLIPs 研究熔融 LiF 的动机框架，未提及 MACE-MP-0、粘度计算准确性或与 Buckingham/BHM 势的对比等 claim 的实质内容。", "tokens": 1038}
+{"key": "89a24db68c5aa76b", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确给出 CPB（Cooper 对盒）准粒子密度约 0.6 µm⁻³，与 claim 中该数值及对象一致。", "tokens": 2062}
+{"key": "f3f7af01ba674782", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支撑了模型依赖先验且 spot 分布影响结果，但未提及倾角与 spot 位置之间的内在简并。", "tokens": 928}
+{"key": "8bebe6f1da79fe3f", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确指出 Molten salts 的 thermodynamic/transport 性质理解受限于液态理论不足，且经典原子模型难以生成 faithful thermophysical data，正好对应 claim 中 S1.p2 负责的实质内容。", "tokens": 1221}
+{"key": "a93dcd2958d37d65", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 支持模型通常给出“平均”预测且哪种更好不明确，但没有提及“周期发生剧烈变化的光变曲线”这一限定条件。", "tokens": 1241}
+{"key": "4d19846ddb8d6711", "model": "deepseek-reasoner", "label": "P", "reason": "quote 支持\"更长周期下相关性不同、可能与较老恒星活动性下降有关\"，但 claim 中的具体阈值\"周期大于25天\"是 quote 未出现的新数字事实。", "tokens": 1268}
+{"key": "b5a031b5bad3ab21", "model": "deepseek-reasoner", "label": "Y", "reason": "Quote 直接支持 claim 中该引用负责的部分：使用 Butterpy 模拟光变曲线构建监督训练数据集。", "tokens": 1023}
+{"key": "3c34b4d14c369adc", "model": "deepseek-reasoner", "label": "Y", "reason": "quote 明确生成 SED 模板并排除宿主星系和尘埃贡献，支撑了 claim 中对应 S2.p4 的实质内容。", "tokens": 4733}
+{"key": "4071943a0e53a763", "model": "deepseek-reasoner", "label": "Y", "reason": "该 quote 明确说明用量子动力学模拟并考虑电荷噪声与温度来复现结果，支撑 claim 中对应的模拟复现部分。", "tokens": 5155}
+{"key": "c9ddcdd1bd253b2a", "model": "deepseek-reasoner", "label": "P", "reason": "Quote confirms a dataset of 50000 simulated samples, but not that these 50000 constitute the training set or the 81%/9%/10% split.", "tokens": 7001}
+{"key": "83cfb9f997febe35", "model": "deepseek-reasoner", "label": "P", "reason": "Quote 只支撑 ACI 的主要组件列表，未提及 agent 每步生成 thought 和 command 并接收执行反馈这一实质内容。", "tokens": 936}
+{"key": "841880e5af5c09f3", "model": "deepseek-chat", "label": "P", "reason": "quote 只说明需要注入位置信息，未提及正弦余弦位置编码或模型不含循环卷积，claim 中这些实质内容不在 quote 里。", "tokens": 762}
+{"key": "e0eafdb82e16166e", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了预训练数据规模实验（ImageNet/ImageNet-21k/JFT-300M），未提及 JFT-300M 上的受控规模研究或自监督掩码 patch 预测实验。", "tokens": 810}
+{"key": "249bf799051568d8", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了编码器由 N=6 个相同层堆叠、每层有两个子层，未提及解码器、多头自注意力、前馈网络或残差连接加层归一化。", "tokens": 832}
+{"key": "a930fcf44ca77d9e", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确指出分辨率调整和 patch 提取是唯一手动注入二维结构归纳偏置的环节，直接支撑 claim 中关于二维结构仅在切 patch 等环节被手动注入的实质内容。", "tokens": 810}
+{"key": "bdd9bd296e2a98db", "model": "deepseek-chat", "label": "N", "reason": "quote 只是未来工作的框架句，没有包含关于将自注意力限制在邻域 r 或最大路径长度 O(n/r) 的任何实质内容。", "tokens": 758}
+{"key": "74b6c1f8887866aa", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确包含固有顺序性阻碍训练样本内并行化、且在长序列时尤为关键这两项实质内容，与 claim 完全对应。", "tokens": 760}
+{"key": "db390dc7d2957e66", "model": "deepseek-chat", "label": "P", "reason": "quote 只给出了使用不同频率正弦余弦函数这一事实，未提及模型不含循环卷积、加入位置编码以利用序列顺序等 claim 中的其他实质内容。", "tokens": 762}
+{"key": "84139509f28f25f0", "model": "deepseek-chat", "label": "P", "reason": "quote 只支持了 ViT 遵循原始 Transformer 设计这一笼统说法，claim 中'只保留最少图像特有归纳偏置'及'二维结构仅在切 patch 和微调时注入'等具体内容不在 quote 里。", "tokens": 802}
+{"key": "4dfda5aab1589fe9", "model": "deepseek-chat", "label": "P", "reason": "Quote 支持了可学习 [class] token 作为图像表示，但未提及预训练和微调时在其输出上接分类头这一实质内容。", "tokens": 772}
+{"key": "61f9cb2df44bcc33", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了检索器基于 DPR 这一项，未提及生成器 BART-large 或生成器公式。", "tokens": 782}
+{"key": "9db3610c729a6439", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来完整覆盖了 claim 的实质内容：中等规模数据集（ImageNet）、无强正则、比同规模 ResNet 低几个百分点，以及缺少平移等变性和局部性等归纳偏置。", "tokens": 851}
+{"key": "23b49b6ec2ececa6", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑生成器为 BART-large，未提及检索器 p_η(z|x) 或基于 DPR 的双编码器，claim 中这部分实质内容不在 quote 里。", "tokens": 799}
+{"key": "76140ff04551e395", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来明确支撑了 claim：REALM/ORQA 仅探索开放域抽取式问答，且本文把混合参数与非参数记忆引入 seq2seq 模型。", "tokens": 843}
+{"key": "d29d870bba150b18", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：知识访问与操作受限、知识密集型任务落后于任务专用架构、提供决策来源和更新世界知识仍是未解问题。", "tokens": 822}
+{"key": "aceb8f784c4e3e58", "model": "deepseek-chat", "label": "P", "reason": "两条 quote 合起来覆盖了'难以访问和精确操作知识''在知识密集型任务上落后于任务专用架构''难以提供决策来源和更新世界知识'，但'预训练语言模型虽在参数中存储事实知识'这一实质内容在 quote 中未出现。", "tokens": 842}
+{"key": "53a7d522837476f0", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：152 层 ResNet 单模型 top-5 验证误差 4.49%，以及集成模型测试集 3.57% top-5 误差。", "tokens": 834}
+{"key": "30b17e0a3f8ce279", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来完整覆盖了 claim 的实质内容：深度增加导致精度饱和的退化问题，且退化并非由过拟合引起。", "tokens": 809}
+{"key": "b457b06a4de51c44", "model": "deepseek-chat", "label": "P", "reason": "quote 撑住了 ResNet 克服优化困难并随深度增加获得精度提升，但未提及 CIFAR-10 数据集和 110 层 6.43% 误差这两个实质内容。", "tokens": 790}
+{"key": "740f25e8e8242531", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了恒等映射足以解决退化问题且经济这一实质内容，但 claim 中'可用线性投影 Ws 匹配维度'这一实质内容不在 quote 里。", "tokens": 772}
+{"key": "63411a08efefb271", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了测试结果差于110层网络，但未提及训练误差低于0.1%和过拟合归因，其他quote补充了网络过大但未提过拟合。", "tokens": 854}
+{"key": "82a2192ae2ec0855", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明模型针对中英文优化，处理其他语言时可能出现语言混杂，与 claim 完全一致。", "tokens": 742}
+{"key": "1bb31afd2c2924ec", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的两个实质内容：结构化输出能力欠佳（structural output capabilities remain suboptimal）和无法利用搜索引擎、计算器等工具（cannot leverage tools, such as search engines and calculators）。", "tokens": 806}
+{"key": "212809bc59e8dc42", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了数学任务上与 OpenAI-o1-1217 相当这一项，编程算法表现及 AlpacaEval/ArenaHard 的提升均不在 quote 中。", "tokens": 822}
+{"key": "2f605b92ad0bcbcd", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来完整覆盖了 claim 中的三个数字（15.6%、77.9%、86.7%）及自一致性解码提升的结论。", "tokens": 841}
+{"key": "4e94026a862e5608", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明不使用神经奖励模型（无论基于结果还是过程），直接支撑 claim 中'不使用神经奖励模型'这一实质内容。", "tokens": 756}
+{"key": "18d75f77c6987d74", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接包含 claim 的全部实质内容：perfect control、good scaling、best AIME24 score。", "tokens": 760}
+{"key": "fb398655553080fc", "model": "deepseek-chat", "label": "Y", "reason": "三条 quote 合起来完整列出了 claim 中所有基准（OlympiadBench、CHMath、Gaokao、Kaoyan、GradeSchool、Minerva、GPQA），实质内容全部在 quote 中。", "tokens": 889}
+{"key": "5cd0db0919ec0042", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的实质内容：抑制结束符并追加“Wait”以延长思考，以及通过强制最大/最小思考 token 数（即提前终止或延长）来控制测试时计算量。", "tokens": 845}
+{"key": "f576673bb7ac49cc", "model": "deepseek-chat", "label": "P", "reason": "三条 quote 合起来覆盖了三个基准及 AIME24 30题、GPQA 198题，但 MATH500 的 500 题、lm-evaluation-harness 和温度设为 0 均未在 quote 中出现。", "tokens": 861}
+{"key": "579eddca7fb3147a", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确列出两个关键限制：最终趋于平坦（Figure 4）和受底层语言模型上下文窗口约束，与 claim 完全对应。", "tokens": 787}
+{"key": "cace0c27e8ff6478", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确列出 AIME24、MATH500 和 AMC23 作为评估套件，与 claim 的域内评估内容完全一致。", "tokens": 783}
+{"key": "c23b15ebd3d7f455", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来完整覆盖了 claim 的实质内容：o1 复现尝试未公开复现出清晰测试时扩展行为，以及论文要问的最简单方法问题。", "tokens": 822}
+{"key": "2f935a00c9276d99", "model": "deepseek-chat", "label": "Y", "reason": "多条 quote 合起来完整覆盖了 claim 的实质内容：域内最佳、AIME24 63.3%、MATH500 95.6%、AMC23 96.3%，且均超过 QwQ-32B-Preview 和 OpenAI-o1-preview。", "tokens": 977}
+{"key": "fc2c7d7697b53840", "model": "deepseek-chat", "label": "P", "reason": "quote 覆盖了粗粒度难度过滤、细粒度难度评估、知识点多样化、800 条训练样本，但 claim 中'根据逻辑连贯性、步骤清晰度和解答准确性筛选推理链'这一实质内容在 quote 中未出现。", "tokens": 873}
+{"key": "cad1b9f975b15fd4", "model": "deepseek-chat", "label": "P", "reason": "quote 列出了 ACI 的四个主要组件，撑住了 claim 前半部分，但 claim 后半部分关于 agent 每步生成 thought 和 command 并接收反馈的内容不在 quote 中。", "tokens": 777}
+{"key": "811c901acdea46c8", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了 LIMO 假说中'预训练已编码知识时复杂推理可通过少量精心设计的认知过程示范涌现'这一实质内容，但 claim 中'激发阈值取决于预训练知识库完整性和后训练样本作为认知模板的有效性'这一实质内容不在 quote 里。", "tokens": 823}
+{"key": "b91c69d9763f2fe7", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了失败原因中约一半属于实现错误这一项，claim 中'大多数失败源于不正确的实现'被说强了，且'成功运行通常较早提交且成本更低'完全不在 quote 里。", "tokens": 786}
+{"key": "f86adf5b162f09bf", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明在每对观测 token 之间引入辅助 rationale 变量，与 claim 的核心内容一致。", "tokens": 750}
+{"key": "6d807a50cabfa335", "model": "deepseek-chat", "label": "N", "reason": "quote 只笼统说 LM agent 在该环境中难以可靠行动、这些缺陷妨碍表现，没有提到 claim 中'接口为人类设计'、'无法可靠编辑小段文件'、'无效编辑无反馈'等任何具体实质内容。", "tokens": 824}
+{"key": "3277e3cc0531b195", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了零样本提示语、128 个 GSM8K 测试样本，claim 的实质内容全部在 quote 中。", "tokens": 803}
+{"key": "2649e5e9366367d1", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了 SWE-bench 的 2294 实例和 12 个 Python 包，但 claim 中“消融和分析在 SWE-bench Lite（300 个实例）上进行”这一实质内容不在该 quote 中（其他 quote 只说明 Lite 是 300 实例子集，未说消融分析在其上进行）。", "tokens": 888}
+{"key": "3d06231a5bfd90b0", "model": "deepseek-chat", "label": "N", "reason": "quote 只是提出 LM agent 是新型终端用户的论点，没有涉及接口设计或提升复杂数字任务表现等 claim 的实质内容。", "tokens": 760}
+{"key": "58c32f97f4fcd93d", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明所有实验以 Mistral 7B 基础版本开始，直接支撑 claim。", "tokens": 727}
+{"key": "2a8a77bec4165f3d", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确给出 C4 评估使用 16 个 thought token 和 4 个 true token ahead，且其余设置相同，与 claim 完全一致。", "tokens": 773}
+{"key": "5343615189b69b7b", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 CodeContests 假阴性测试用例这一项，claim 中 SWE-bench Lite 11.3% 不稳定测试及影响重复采样均不在 quote 中。", "tokens": 807}
+{"key": "fa4649a6145b0bd0", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确给出 cot-maj@8 从 40.6% 提升到 47.7%，与 claim 的数字和结论完全一致。", "tokens": 777}
+{"key": "879144794d89eccd", "model": "deepseek-chat", "label": "N", "reason": "quote 只是呼吁改进样本验证方法，没有提到'约 100 个样本后饱和'这一具体数字或饱和现象，claim 的核心实质内容不在 quote 中。", "tokens": 774}
+{"key": "a325cd42664ae652", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接支撑 claim 中“用户和开发者通常只让模型对一个问题尝试一次”这一实质内容，claim 的动机框架不额外添加可验证事实。", "tokens": 767}
+{"key": "633802a2b1dbcf10", "model": "deepseek-chat", "label": "N", "reason": "quote 只提到在 MATH 和 CodeContests 上评估，完全没有提及 Gemma-2B/7B 或 Pythia-70M 至 12B 等模型，claim 中该部分实质内容未被支撑。", "tokens": 805}
+{"key": "a7a150391f9e343c", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确给出单样本 15.9%、250 样本 56%、超过 SOTA 13%（即 43%），与 claim 的数字和结论完全一致。", "tokens": 838}
+{"key": "9b7cab2cd0baa512", "model": "deepseek-chat", "label": "N", "reason": "quote 只是说第 3.9 节发明了一些探测上下文学习能力的任务，没有列出 claim 中任何具体任务名称或类别。", "tokens": 777}
+{"key": "95732df841b4f46c", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了人类不需要大数据集这一项，claim 中'自然语言指令或极少示例'及'希望 NLP 系统具备这种灵活性'均未在 quote 中出现。", "tokens": 762}
+{"key": "5b007440b2cc6cf5", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接说明这些模型仍在开发中且尚未准备好发布，完全支撑 claim 的实质内容。", "tokens": 729}
+{"key": "b450851f0b21aaf8", "model": "deepseek-chat", "label": "P", "reason": "Quote 支撑了'超过两打 NLP 数据集'和'若干为测试快速适应而设计的新任务'，但未提及'零样本、单样本和少样本三种条件'这一实质内容。", "tokens": 783}
+{"key": "b1537adf6a886e14", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整覆盖了 claim 的实质内容：标注者个人偏见、背景和偏好影响人类评估，并可能导致结果不一致或不可靠。", "tokens": 763}
+{"key": "9598b081bbcec7d7", "model": "deepseek-chat", "label": "N", "reason": "quote 只提到模型表达能力越强越可能利用伪相关，未涉及去除限制可取、任务难收集监督数据或分布外泛化差等 claim 内容。", "tokens": 778}
+{"key": "3acedd326c5bad0d", "model": "deepseek-chat", "label": "P", "reason": "quote 只笼统承认文本合成和若干 NLP 任务有弱点，未提及长段落失去连贯性、自相矛盾，也未给出“比较”类任务仅略好于随机的具体内容。", "tokens": 820}
+{"key": "846f0efb94fc91b2", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了图像理解任务（自然图像、文本、图表、多模态推理）的评估，未提及视频识别、语音识别和翻译任务，也未列出 MMMU、VQAv2 等具体数据集。", "tokens": 836}
+{"key": "9bc6e31c2cb6863d", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接陈述模型仍在积极开发中且尚未准备好发布，与 claim 完全一致。", "tokens": 728}
+{"key": "d573ddf9989d4fb4", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了约 15T 多语言 tokens 这一项，但三阶段划分和 405B 参数在 15.6T tokens 上训练均不在 quote 中。", "tokens": 805}
+{"key": "b560463f2a4fd12c", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整包含 claim 中的细粒度感知、为 LVLM 建立坚实基础、面向真实应用的智能体放大器三项实质内容。", "tokens": 769}
+{"key": "427080411b3f8510", "model": "deepseek-chat", "label": "P", "reason": "quote 撑住了与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 及不同规模 Qwen2-VL 比较这一实质内容，但 claim 中'在多种基准上评估'这一实质内容不在 quote 里。", "tokens": 848}
+{"key": "df3c338969305db0", "model": "deepseek-chat", "label": "N", "reason": "quote 只说了架构由三部分组成，没有列出具体是哪三部分，claim 中的大语言模型、视觉编码器和 MLP 融合模块均未在 quote 中出现。", "tokens": 769}
+{"key": "e220d51307a83c8d", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：中间推理步骤可能无法充分整合视觉信息（忽略或误解视觉线索），以及最优模态对齐仍是持续挑战、需进一步改进。", "tokens": 845}
+{"key": "7695c1c27521e6d0", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 Movie Gen Video（30B、联合文生图/文生视频）这一部分，claim 中 Movie Gen Audio（13B、视频/文本到音频）在 quote 里没有出现。", "tokens": 800}
+{"key": "95627151f6ba981e", "model": "deepseek-chat", "label": "P", "reason": "Quote 只支撑了“个性化通过后训练实现”，但 claim 中“编辑通过多阶段训练、无监督视频编辑数据”这部分在 quote 里完全没有出现。", "tokens": 760}
+{"key": "4dc63e2459c9c39d", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了文档理解与 OCR 这一项任务，claim 中其余任务（通用 VQA、空间理解、视频理解与定位、GUI 智能体）不在 quote 里。", "tokens": 819}
+{"key": "a3ae0be8a21f75d7", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 Movie Gen Video 优于 Runway Gen3 和 LumaLabs 这部分，未提及对 OpenAI Sora 的中等净胜或与 Kling1.5 持平。", "tokens": 807}
+{"key": "30429d67afe24a5a", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了预训练数据规模（约1亿视频-文本对、约10亿图像-文本对），但 claim 中的多阶段训练和高质量视频监督微调不在 quote 里。", "tokens": 811}
+{"key": "4a5f51b5a97ce94e", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确声称在身份保持、视频质量和文本对齐三个维度上大幅优于基线，与 claim 的实质内容完全一致。", "tokens": 754}
+{"key": "3bef9b2dfe3ee4e9", "model": "deepseek-chat", "label": "Y", "reason": "合并同 ID 的其他 quote 后，明确包含推荐部署单元较大、可能给小团队带来负担这一实质内容，与 claim 一致。", "tokens": 802}
+{"key": "95da47fe34005912", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了困惑度评估方式及部分数据集，claim 中多学科选择题、语言理解与推理、闭卷问答、阅读理解、数学、代码等基准及生成式/语言建模评估方式均未在 quote 中出现。", "tokens": 810}
+{"key": "2bf548775dd4a722", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的实质内容：FP8 混合精度训练框架和 DualPipe 高效流水线并行算法，claim 未添加新事实。", "tokens": 777}
+{"key": "b9a2e3e4d6aa7ecc", "model": "deepseek-chat", "label": "P", "reason": "quote 撑住了'推荐部署单元较大、可能给小型团队带来负担'这一实质内容，但'为保证高效推理'这一因果/目的说明不在 quote 中，且另一条 quote 只是泛泛的改进空间，未支撑该因果。", "tokens": 826}
+{"key": "c1de62cf9681fb2d", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：FP8 混合精度训练框架和 DualPipe 高效流水线并行算法。", "tokens": 770}
+{"key": "02904496c3942055", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确提到 TIMIT 基准，支撑了 claim 中 TIMIT 语音识别这一项实质内容。", "tokens": 831}
+{"key": "ed72469a2ac755ea", "model": "deepseek-chat", "label": "P", "reason": "Quote 只给出 dropout 后 29.62% 的结果，未提及 Reuters 数据集或 31.05% 的基线错误率，claim 中多项实质内容不在 quote 里。", "tokens": 757}
+{"key": "2628311d56498e95", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确给出 CIFAR-10 的 50,000 训练图像和 10,000 测试图像，与 claim 中该数据集部分完全一致。", "tokens": 846}
+{"key": "d96aae648b7cba88", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 ImageNet 上 dropout 降至 42.4% 这一项，未提及 48.6% 的起始错误率，claim 中该数字不在 quote 里。", "tokens": 798}
+{"key": "5ecebf1b202c54aa", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了用单独验证集选择架构这一部分，未提及语音和两个物体识别数据集，也未提及在真实测试集上评估 dropout。", "tokens": 760}
+{"key": "5cf71cdb043664af", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接说明作者不确定架构的哪个方面是主要因素，且这仍是未来工作的问题，与 claim 完全一致。", "tokens": 758}
+{"key": "43844b430898fd34", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了'引入多头注意力中头的类比'这一项，claim 中 Mamba-2 架构、选择性 SSM 改进、分组值注意力等其他实质内容均不在 quote 中。", "tokens": 809}
+{"key": "75f524e4a9262da1", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明将 SSD 算法的速度与 Mamba 的扫描实现和 FlashAttention-2 进行基准对比，与 claim 完全一致。", "tokens": 762}
+{"key": "58e456b1b47e2198", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的实质内容：分块分解、对角块用二次/对偶注意力、非对角块利用半可分矩阵低秩结构归约为较小循环，claim 未添加新事实。", "tokens": 840}
+{"key": "c6cd63964392044b", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了研究者偏见这一项，未提及'硬件彩票'，claim 中该实质内容不在 quote 里。", "tokens": 794}
+{"key": "98634a151ae78831", "model": "deepseek-chat", "label": "P", "reason": "quote 只提到消融块设计（block），未涵盖 claim 中的头结构和注意力核近似，仅撑住部分实质内容。", "tokens": 778}
+{"key": "e1da81c642f01387", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接支撑 claim 中对应部分：论证只适用于被优化以完成许多任务的智能，专用智能可能不趋同是这一限制的自然推论。", "tokens": 798}
+{"key": "28b5bac53fd46fba", "model": "deepseek-chat", "label": "P", "reason": "quote 只列出了语言模型家族（BLOOM、OpenLLaMA、LLaMA），撑住了 claim 中语言模型这一项，但 ViT 视觉模型、WIT 数据集 1024 样本、k=10 等实质内容均不在 quote 中。", "tokens": 828}
+{"key": "dc598f09f0d0cb1f", "model": "deepseek-chat", "label": "Y", "reason": "Quote给出对齐分数0.16、理论上限1，并附'留作开放问题'，完整支撑claim中该部分关于分数差距未解决的论断。", "tokens": 846}
+{"key": "cc06ebf898d6e910", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明随着对齐改善，Hellaswag 和 GSM8K 上的性能提升，直接支撑了 claim 中“对齐与下游性能相关、对齐更好的 LLM 在这两个任务上表现更好”的实质内容。", "tokens": 799}
+{"key": "eef5d665cb3212ec", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明权重、激活和 KV 缓存的量化效应可建模为独立且可乘，与 claim 的实质内容一致；'共同决定有效参数量'是框架性延伸，不构成新事实。", "tokens": 782}
+{"key": "f071ad7da79aa782", "model": "deepseek-chat", "label": "Y", "reason": "多条 quote 合起来明确支撑了固定架构、低精度训练常涉及架构调整可缩小差距等 claim 的全部实质内容。", "tokens": 882}
+{"key": "d65c415493722dc5", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的两个实质内容：联合优化时最优精度与计算量无关，以及 N 固定时最优精度随计算量对数增长；claim 中'约 7-8 比特'的具体数值虽未在 quote 中出现，但属于对'precision'的注解性具体化，不构成独立新事实。", "tokens": 879}
+{"key": "6c47c3f49e97645e", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接包含 claim 的全部实质内容：在 Dolma V1.7 上训练评估 OLMo 风格模型、使用标准 Transformer++ 实现，另一条 quote 补充了实验规模细节，均与 claim 一致。", "tokens": 858}
+{"key": "fa8c4c9c387f282c", "model": "deepseek-chat", "label": "Y", "reason": "quote 给出的公式正是将退化建模为 D/N 的幂律形式并随量化精度 P_post 指数衰减，与 claim 完全对应。", "tokens": 809}
+{"key": "9175adb0ac7c262b", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了'未见个体 QA 准确率为零'这一项，claim 中'模型规模远大于个体数、个体被暴露上千次、尝试多种微调参数'等实质内容不在 quote 里。", "tokens": 800}
+{"key": "e420547962604e6a", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接给出了混合训练在 bioS single 上 86.6%、bioR single 上 77.7% 的 OOD 准确率，与 claim 的数字和对象完全一致。", "tokens": 789}
+{"key": "0dff6582217e06ce", "model": "deepseek-chat", "label": "Y", "reason": "quote 与 claim 内容完全一致，直接支撑了该论断。", "tokens": 743}
+{"key": "611ad72ad5b06575", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接以问句形式给出了 claim 的核心问题，即语言模型如何在训练中记忆知识并在推理时提取以回答问题，实质内容完全对应。", "tokens": 760}
+{"key": "e88ae758b82aecb6", "model": "deepseek-chat", "label": "Y", "reason": "quote 逐项列出了 claim 中所有策略（span masking、随机残基掩码、3:1 CDR 权重、逐层学习率衰减、纳入 OAS 预测结构），实质内容全部对应。", "tokens": 846}
+{"key": "65bdba17b058e165", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 bioS 的 10 万个体这一项，claim 中每人六句、约 50 个模板以及 bioR 数据集均不在 quote 中。", "tokens": 791}
+{"key": "0ef0810b0cc6d0f8", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明 AntiFold 基于 ESM-IF1 在超过 1200 万结构上的预训练，并在抗体结构上继续微调，与 claim 的架构来源、预训练规模和继续训练完全对应。", "tokens": 802}
+{"key": "ff5cac1262ae366f", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来完整覆盖了 claim 中所有数字对比：ESM-IF1 的 60 vs 43%、AbMPNN 的 CDRH3 60 vs 56%、其余 CDR 75-84 vs 63-76%、多数 FR 87-94 vs 85-89%，均与 claim 一致。", "tokens": 951}
+{"key": "0eb58a9a18893e9b", "model": "deepseek-chat", "label": "Y", "reason": "多条 quote 合起来明确支撑了 claim 的两个实质内容：预训练 BindGPT 在有/无显式氢下均优于 XYZ-TF 基线，且是首个能在如此大规模下显式建模氢的模型。", "tokens": 908}
+{"key": "98a57f07048def49", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明逆折叠模型可在不改变抗体骨架结构的前提下设计新序列，且另一条 quote 补充了骨架约束设计可优化单一性质而不破坏其他性质，支撑了 claim 的动机与核心内容。", "tokens": 827}
+{"key": "8bc46a392c58c23f", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来完整覆盖了 claim 中所有数字对比（ESM-IF1 60 vs 43、AbMPNN 60 vs 56、其余 CDR 75-84 vs 63-76、多数 FR 87-94 vs 85-89），实质内容全部在 quote 中。", "tokens": 947}
+{"key": "b2eaaa130856d865", "model": "deepseek-chat", "label": "P", "reason": "quote 覆盖了有效性、类药性 SA/QED/Lipinski、生成 1K 有效 3D 分子时间、RMSD-coverage，但 claim 还列了分布度量和 RMSD 两项，quote 未提及。", "tokens": 908}
+{"key": "b42a7739bc129cf2", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的两个实质内容：匹配或超越基线（matching or surpassing the baselines）以及不依赖生成域归纳偏置（no inductive biases about the generative domain），claim 中的'多个 3D 分子生成任务'对应 quote 的'each of them'，未添加新事实。", "tokens": 835}
+{"key": "9d12378a21f4f626", "model": "deepseek-chat", "label": "P", "reason": "Quote 支撑了 300M 前扩展良好、该规模困惑度过拟合，但未提及后续实验采用 100M 模型（另一 quote 说的是 108M 模型最佳），该实质内容不在引用中。", "tokens": 843}
+{"key": "fc5ba164c653f60f", "model": "deepseek-chat", "label": "P", "reason": "Quote 确认了 208M 构象、12M 分子和 3.2M 蛋白质口袋结构的数据集，但未提及该数据集由 Uni-Mol 提出，也未说明用于预训练。", "tokens": 934}
+{"key": "6af16505f8ee8ab0", "model": "deepseek-chat", "label": "N", "reason": "quote 只提到 MatterSim 在所有材料类别成功率超 90%，未提及 118 个系统的分子动力学模拟这一数字，claim 中的关键数字不在 quote 里。", "tokens": 767}
+{"key": "1433e1864627e18c", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整列出了 claim 中的主动学习方法及四个组件（深度图神经网络、材料探索器、第一性原理监督器、集成不确定性监测器），另一条 quote 补充了监督器细节，实质内容全部被撑住。", "tokens": 867}
+{"key": "945ee00e4b334397", "model": "deepseek-chat", "label": "P", "reason": "多条 quote 合起来撑住了“长程相互作用主导场景（聚合物、多相体系）表现不佳”这一实质内容，但“半局域原子相互作用描述”这一机制性说法在 quote 中并未出现。", "tokens": 875}
+{"key": "9da858be4ce2d260", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整覆盖了 claim 的核心内容：准确高效预测任意材料在实际合成与工作条件下的性质。", "tokens": 754}
+{"key": "e0d882cab6b41667", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了声子最大频率 MAE 0.87 THz，未提及 0 K 体模量 MAE 2.47 GPa。", "tokens": 787}
+{"key": "2cdd4d310e910229", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接说明需要进一步微调数据才能获得定量正确的吸附热，与 claim 完全一致。", "tokens": 751}
+{"key": "6908620721beb9eb", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明预训练使用作者整理的基态材料最低能量构型数据集，且不区分交换关联泛函、DFT 软件实现或校正，与 claim 完全一致。", "tokens": 787}
+{"key": "61271fd6ae6bcb89", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 Orb 在 MOF-5 上产生稳定 MD 轨迹这一项，未提及 800 K 的具体温度，也未提及复现苯撑环不能完全旋转的实验动力学行为。", "tokens": 800}
+{"key": "1eb73d20fa7a2c8d", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整包含 claim 的全部实质内容：骨干是 GNS、加入平滑图注意力、消息基于注意力权重和距离截断函数更新。", "tokens": 782}
+{"key": "4bb4eaaf2109da60", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：神经网络解码器、集成匹配合成解码器、用处理器数据微调神经网络、用强化学习优化匹配图权重。", "tokens": 810}
+{"key": "8d1f2efcbb1a5a41", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接给出了 claim 中的两个数字：Λ=2.14±0.02 和 ε7=(1.43±0.03)×10^-3，与 claim 完全一致。", "tokens": 793}
+{"key": "edd77e632785fdff", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 Matbench-Discovery 基准的弛豫细节（FIRE、500 步、0.05 eV/Å），但未提及 Matbench-Discovery 这一基准名称，也未覆盖 claim 中其他基准（MD17-10k、MOF-5、Mg-MOF-74）的内容。", "tokens": 891}
+{"key": "579d8f0c88a5bc03", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：距离-29重复码、1000周期、2×10^7次采样、2×10^10总周期、5.5小时执行时间；72量子比特处理器虽未在 quote 中出现，但属于对实验平台的指代性补充，未添加可独立验证的新事实。", "tokens": 870}
+{"key": "e92cfd69a19b4917", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确包含谨慎解读的告诫，以及偏好模型可映射到不违反零能量条件的精质模型这一实质内容，与 claim 完全对应。", "tokens": 827}
+{"key": "bcc441c059e9e85a", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了'原因尚不明确'和'可能是样本方差波动'，但 claim 中'0.6<z<0.8红移区间与SDSS存在约3σ差异'这一具体数字与区间不在 quote 里。", "tokens": 826}
+{"key": "a3d3f7f3188033a6", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整包含 claim 中所有数字（291±6、85±7、119±13、2.4±0.3）及结论，逐字对应。", "tokens": 824}
+{"key": "42c4b029f2bd92c0", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了'低于阈值性能尚未被明确展示'这一动机，claim 中'实现并验证表面码运行、获得随码距指数抑制的逻辑错误率'等实质内容不在 quote 里。", "tokens": 780}
+{"key": "e0f31f0c23a49171", "model": "deepseek-chat", "label": "N", "reason": "quote 只提到在 cobaya 中加入 SN Ia 和 BAO 似然，未提及 Metropolis-Hastings MCMC、CAMB 或 BBN/CMB 联合，未支撑 claim 的任何实质内容。", "tokens": 817}
+{"key": "f5d681295a77b47d", "model": "deepseek-chat", "label": "P", "reason": "quote 撑住了 H0 数值和 BBN+θ* 组合，但 3.7σ 张力不在 quote 里。", "tokens": 822}
+{"key": "162ac58fae541ce0", "model": "deepseek-chat", "label": "N", "reason": "quote 只说明生成了排除宿主星系和尘埃贡献的 z≈5 SED 模板，未涉及灰化消光曲线、A_V=3 mag 或红光学/平坦紫外连续谱等 claim 的实质内容。", "tokens": 849}
+{"key": "3f80a59e0d550a79", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确给出差异原因不明（not clear）且可能是样本方差波动（unlucky sample variance fluctuation），与 claim 中该部分内容一致。", "tokens": 805}
+{"key": "67b787b2b705a176", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了低密度（n0=10、100 cm^-3）在光学到 2–3 μm 与观测一致这一项，未涉及近红外过亮、γ 取值、能量峰移向中远红外或 MIRI/ALMA 约束等其他实质内容。", "tokens": 871}
+{"key": "9a76824022d372e3", "model": "deepseek-chat", "label": "Y", "reason": "quote明确承认没有明确答案并只能给出推测，直接支撑claim中'尚无明确答案，只能给出推测'的实质内容。", "tokens": 756}
+{"key": "85a35000bcf825c2", "model": "deepseek-chat", "label": "P", "reason": "quote 撑住了'引发对尘埃遮蔽AGN情景的质疑'这一结论，但 claim 中'MIRI观测显示多数LRD在F1800W未被探测'这一具体观测事实不在 quote 中。", "tokens": 858}
+{"key": "704254321c399bad", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确说明在两个验证区测量结果与不同 MC 设置的预言在不确定度内一致，与 claim 的实质内容完全对应。", "tokens": 768}
+{"key": "90061eee7c36ee38", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了与 z~5.5 和 z=7.5 的 LRD 堆叠测光数据对比这一项，claim 中叠加 COSMOS-Web、CEERS、JADES 等 JWST 巡天 5σ 点源成像深度这一实质内容不在 quote 中。", "tokens": 844}
+{"key": "8908ef0aea29f505", "model": "deepseek-chat", "label": "Y", "reason": "quote 完整包含 claim 的实质内容：MC 事件产生器结合矩阵元与部分子簇射的程序，在未来 LHC 更高精度量子信息研究中需特别关注。", "tokens": 788}
+{"key": "1b8ee25c0ac96776", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了'利用顶夸克-反顶夸克对的自旋关联探测量子纠缠'这一部分，claim 中'通过测量带电轻子夹角推断的单一观测量 D = −3·⟨cos φ⟩'这一具体方法内容不在 quote 里。", "tokens": 814}
+{"key": "5a098d6755b958ed", "model": "deepseek-chat", "label": "P", "reason": "quote 给出了纠缠判据 D<-1/3 及 D 的定义，但 claim 中'通过带电轻子在各自母顶夸克静止系中夹角推断的单一观测量 D = −3·⟨cos φ⟩'这一具体测量方式在 quote 中未出现。", "tokens": 865}
+{"key": "a4eb278ba51ed712", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了用量子动力学模拟复现结果，并提到包含射频驱动功率、电荷噪声和温度，但 claim 中的 MZM 和量子点未在 quote 中出现。", "tokens": 768}
+{"key": "721669cb0e147c50", "model": "deepseek-chat", "label": "P", "reason": "quote 支撑了信号区定义和纯度>90%，但未提及两个验证区（380-500 GeV 和 >500 GeV）的具体划分。", "tokens": 833}
+{"key": "54b78ec1ebf426eb", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：有限尺寸效应导致 E_M 显著变化，以及拓扑能隙和相干长度并非远小于器件长度。", "tokens": 835}
+{"key": "23907d8f0577b5f5", "model": "deepseek-chat", "label": "N", "reason": "quote 只说明 τ_RTS 随偏压增大减半，未涉及准粒子注入、断开连接后 RTS 消失或 h/e 周期性，未支撑 claim 中该 ID 对应的任何实质内容。", "tokens": 811}
+{"key": "73a90af0c59dd8dc", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了 Cooper 对盒测量值 0.6 µm⁻³ 这一项，claim 中的指数分布、τ_RTS≈2 ms、约 1 µm⁻³ 及数量级一致等实质内容均不在 quote 中。", "tokens": 837}
+{"key": "5fcae7532d906250", "model": "deepseek-chat", "label": "N", "reason": "quote 只笼统提到测量-only 方案简化操作，未涉及费米宇称单次测量或 Majorana 零能模等 claim 的实质内容。", "tokens": 774}
+{"key": "3523334fe9b4cc5f", "model": "deepseek-chat", "label": "Y", "reason": "三条 quote 合起来覆盖了 claim 的全部实质内容：MPNN 架构、高阶多体 ACE 展开、训练于 MPtrj 数据集。", "tokens": 811}
+{"key": "5bf0058fd14a4b6e", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：Li 和 F 的 VAF 极小值更深且幅度相近，以及更深的极小值意味着液态中类固态振荡成分更显著。", "tokens": 818}
+{"key": "62fad9c378932309", "model": "deepseek-chat", "label": "P", "reason": "quote 提到转向机器学习势并报告 MACE 粘度计算精度，撑住了评估 MACE 势准确性这一实质内容，但未提及与 Buckingham 和 BHM 势的对比。", "tokens": 828}
+{"key": "34a48a8d0c30f996", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：简单加热晶体结构可能不普遍准确、更可靠方法（固液相自由能、相共存模拟）可用于测试 MACE 势熔点性能、且属未来工作。", "tokens": 894}
+{"key": "8e85ad2e6ec10a9e", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来明确给出了 50000 个模拟样本以及 81%/9%/10% 的训练、验证、测试集划分，撑住了 claim 中该 ID 负责的实质内容。", "tokens": 855}
+{"key": "c2c50bf5d5558f3c", "model": "deepseek-chat", "label": "Y", "reason": "quote 明确支撑了理论理解不足和经典原子模型难以生成可靠热物理数据这两项实质内容，应用领域虽未在 quote 中列举但属于框架性背景，不降档。", "tokens": 827}
+{"key": "fb4145b8fb09a706", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接包含模型给出“average”预测以及哪种结果更好尚不明确这两项实质内容，与 claim 完全对应。", "tokens": 770}
+{"key": "b066d20ab0311b84", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接说明较长周期下相关性不同且可能与较老恒星活动性下降有关，与 claim 的实质内容一致。", "tokens": 764}
+{"key": "daaa823e5036dfb3", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：倾角与 spot 位置的内在简并、模型依赖先验、spot 分布对结果影响很大。", "tokens": 811}
+{"key": "55fd72c083007b95", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了用 Butterpy 模拟光变曲线做监督训练这一项，注入真实 Kepler 噪声、50000 样本及 81%/9%/10% 划分均不在 quote 中。", "tokens": 808}
