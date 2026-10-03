@@ -66,8 +66,9 @@ class Paper:
     """参考文献单独存放，默认不进 prompt。
     用户追问「这篇引用了谁」时再按需拼进去 —— 见 DECISIONS.md。"""
 
-    source: Literal["html", "pdf", "abstract_only"] = "html"
+    source: Literal["html", "pdf", "page", "abstract_only"] = "html"
     """取文来源。pdf 表示没有 HTML 版、正文从 PDF 解析（段落 ID 是 pg3.b4 这种页-块编号）；
+    page 表示正文来自用户浏览器里打开的出版方全文页面（D27，用户自己有权限看的那份）；
     abstract_only 表示 HTML 和 PDF 都没拿到，降级只拿到了摘要。
     前端据此提示用户，埋点据此统计降级比例。一个字段三个用途。"""
 

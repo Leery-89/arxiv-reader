@@ -6,7 +6,9 @@
     GET  /health              活着没
     GET  /resolve?q=<DOI>     期刊 DOI → arXiv 版本 / 开放获取链接 / 标题摘要（doi.py）
     POST /analyze             {"arxiv_id": "1706.03762"} → 结构化结果（一次返回）
-    POST /analyze/stream      同上，SSE 流式
+    POST /analyze/stream      同上，SSE 流式；也收 {"doi": "..."}（D25）
+    POST /analyze/pdf/stream  请求体是用户上传的 PDF（D26），SSE 流式
+    POST /analyze/page/stream {"url", "html"}：用户浏览器里打开的出版方全文页（D27），SSE 流式
 
 设计上四个决定：
   1. 接口是同步的。fetch_paper 和 analyze 都是阻塞调用，FastAPI 会把同步
@@ -20,6 +22,7 @@
      结果当一个 delta 推——前端的增量提取器一次就能解析完，不用改前端。
 """
 
+import hashlib
 import json
 import os
 import time
@@ -34,7 +37,9 @@ import ratelimit
 from cache import cache_get, cache_key, cache_set, prompt_version
 from prompts import ACTIVE_PROMPT
 from doi import DoiNotFound, parse_doi, resolve_doi
-from fetcher import fetch_paper
+from fetcher import apply_budget, fetch_paper
+from pdf import parse_uploaded_pdf
+from publishers import parse_page
 from oa import fetch_doi_paper, paper_id
 from llm import analyze, analyze_stream
 from serialize import paper_to_text
@@ -101,7 +106,7 @@ def _paper_meta(paper) -> dict:
     return {
         "arxiv_id": paper.arxiv_id,
         "title": paper.title,
-        "source": paper.source,                       # "html" | "pdf" | "abstract_only"
+        "source": paper.source,                       # "html" | "pdf" | "page" | "abstract_only"
         "url": paper.url,                             # DOI 论文的开放获取 PDF（D25）；arXiv 论文为空
         "truncated_sections": paper.truncated_sections,
     }
@@ -177,81 +182,123 @@ def analyze_paper_stream(req: AnalyzeRequest, request: Request):
     try:
         key_id = req.key_id()
     except HTTPException as e:
-        detail = e.detail
-        return StreamingResponse(iter([sse("error", {"detail": detail})]), media_type="text/event-stream")
+        return _sse_response(iter([sse("error", {"detail": e.detail})]))
+    return _sse_response(_stream(key_id, lambda: _fetch(req), request))
 
-    def gen():
-        key = cache_key(key_id)
-        cached = cache_get(key)
 
-        # ── 命中：回放 ──
-        if cached:
-            t0 = time.time()
-            result = cached["result"]
-            meta = {**result["_meta"], "cache_hit": True, "elapsed_s": 0.0}
-            verify = result["_meta"].get("verify", {})
-            body = {k: v for k, v in result.items() if k != "_meta"}
+MAX_UPLOAD = 40 * 1024 * 1024
 
-            yield sse("paper", cached["paper"])
-            yield sse("delta", {"t": json.dumps(body, ensure_ascii=False)})
-            meta["elapsed_s"] = round(time.time() - t0, 3)
-            yield sse("meta", meta)
-            yield sse("verify", verify)
-            yield sse("done", {})
-            _log(cached["paper"], meta, verify, cache_hit=True)
-            return
 
-        # ── 未命中：先过限流，再正常走一遍 ──
-        try:
-            ratelimit.check(request)
-        except HTTPException as e:
-            yield sse("error", {"detail": e.detail})
-            return
+@app.post("/analyze/pdf/stream")
+async def analyze_upload_stream(request: Request, name: str = ""):
+    """用户上传的 PDF（D26）：请求体就是 PDF 原始字节（Content-Type: application/pdf），name 是文件名。
+    事件序列同 /analyze/stream。PDF 只在内存里解析，不落盘；缓存按内容哈希存分析结果。"""
+    if int(request.headers.get("content-length") or 0) > MAX_UPLOAD:
+        return _sse_response(iter([sse("error", {"detail": "PDF 超过 40 MB"})]))
+    data = await request.body()
+    if len(data) > MAX_UPLOAD or not data.startswith(b"%PDF"):
+        return _sse_response(iter([sse("error", {"detail": "不是 PDF 文件，或超过 40 MB"})]))
+    key_id = "pdf:" + hashlib.sha256(data).hexdigest()[:16]
+    return _sse_response(_stream(key_id, lambda: apply_budget(parse_uploaded_pdf(data, key_id, name)), request))
 
-        yield sse("status", {"stage": "fetching"})
-        try:
-            paper = _fetch(req)
-        except requests.RequestException as e:
-            yield sse("error", {"detail": f"取论文失败：{e}"})
-            return
 
-        paper_meta = _paper_meta(paper)
-        yield sse("paper", paper_meta)
+MAX_PAGE_HTML = 15 * 1024 * 1024
 
-        yield sse("status", {"stage": "thinking"})
-        text = paper_to_text(paper)
-        buf: list[str] = []
-        meta: dict = {}
-        try:
-            for piece in analyze_stream(text):
-                if isinstance(piece, dict):
-                    meta = {**piece, "cache_hit": False}
-                    yield sse("meta", meta)
-                else:
-                    buf.append(piece)
-                    yield sse("delta", {"t": piece})
-        except Exception as e:
-            yield sse("error", {"detail": f"模型调用失败：{e}"})
-            return
 
-        try:
-            result = json.loads("".join(buf))
-        except json.JSONDecodeError:
-            yield sse("verify", {"error": "最终 JSON 无法解析"})
-            yield sse("done", {})
-            return
+class PageRequest(BaseModel):
+    url: str
+    html: str
+    doi: str | None = None
 
-        verify = check(paper, result)
-        yield sse("verify", verify)
-        yield sse("done", {})
 
-        # 流结束后再写缓存和日志，不拖慢响应
-        result["_meta"] = {**meta, "verify": verify}
-        cache_set(key, {"paper": paper_meta, "result": result})
-        _log(paper_meta, meta, verify, cache_hit=False)
+@app.post("/analyze/page/stream")
+def analyze_page_stream(req: PageRequest, request: Request):
+    """用户在浏览器里打开的出版方全文页（D27）。HTML 只在内存里解析，不落盘、不进日志。
+    页面上只有摘要（没权限）时不写缓存——用户换了有权限的网络再点，应该拿到全文的结果。"""
+    if len(req.html) > MAX_PAGE_HTML:
+        return _sse_response(iter([sse("error", {"detail": "页面太大"})]))
+    doi = parse_doi(req.doi or "") if req.doi else None
+    paper = parse_page(req.url, req.html, doi)
+    return _sse_response(_stream(paper.arxiv_id, lambda: apply_budget(paper), request,
+                                 cache_ok=paper.source != "abstract_only"))
 
+
+def _sse_response(gen):
     return StreamingResponse(
-        gen(),
+        gen,
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+def _stream(key_id: str, fetch, request: Request, cache_ok: bool = True):
+    """流式分析的公共部分：查缓存 → 限流 → fetch() 取论文 → 调模型 → 校验 → 写缓存。"""
+    key = cache_key(key_id)
+    cached = cache_get(key) if cache_ok else None
+
+    # ── 命中：回放 ──
+    if cached:
+        t0 = time.time()
+        result = cached["result"]
+        meta = {**result["_meta"], "cache_hit": True, "elapsed_s": 0.0}
+        verify = result["_meta"].get("verify", {})
+        body = {k: v for k, v in result.items() if k != "_meta"}
+
+        yield sse("paper", cached["paper"])
+        yield sse("delta", {"t": json.dumps(body, ensure_ascii=False)})
+        meta["elapsed_s"] = round(time.time() - t0, 3)
+        yield sse("meta", meta)
+        yield sse("verify", verify)
+        yield sse("done", {})
+        _log(cached["paper"], meta, verify, cache_hit=True)
+        return
+
+    # ── 未命中：先过限流，再正常走一遍 ──
+    try:
+        ratelimit.check(request)
+    except HTTPException as e:
+        yield sse("error", {"detail": e.detail})
+        return
+
+    yield sse("status", {"stage": "fetching"})
+    try:
+        paper = fetch()
+    except requests.RequestException as e:
+        yield sse("error", {"detail": f"取论文失败：{e}"})
+        return
+
+    paper_meta = _paper_meta(paper)
+    yield sse("paper", paper_meta)
+
+    yield sse("status", {"stage": "thinking"})
+    text = paper_to_text(paper)
+    buf: list[str] = []
+    meta: dict = {}
+    try:
+        for piece in analyze_stream(text):
+            if isinstance(piece, dict):
+                meta = {**piece, "cache_hit": False}
+                yield sse("meta", meta)
+            else:
+                buf.append(piece)
+                yield sse("delta", {"t": piece})
+    except Exception as e:
+        yield sse("error", {"detail": f"模型调用失败：{e}"})
+        return
+
+    try:
+        result = json.loads("".join(buf))
+    except json.JSONDecodeError:
+        yield sse("verify", {"error": "最终 JSON 无法解析"})
+        yield sse("done", {})
+        return
+
+    verify = check(paper, result)
+    yield sse("verify", verify)
+    yield sse("done", {})
+
+    # 流结束后再写缓存和日志，不拖慢响应
+    result["_meta"] = {**meta, "verify": verify}
+    if cache_ok:
+        cache_set(key, {"paper": paper_meta, "result": result})
+    _log(paper_meta, meta, verify, cache_hit=False)

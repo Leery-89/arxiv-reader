@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "arXiv Reader",
-  "version": "0.3.5",
-  "description": "Turns arXiv papers into a structured reading guide. Every claim is traced to a paragraph and verified against the source.",
+  "version": "0.3.7",
+  "description": "Turns papers into a structured reading guide (arXiv, DOIs, your own PDFs, and publisher pages you can access). Every claim is traced to a paragraph and verified against the source.",
   "permissions": [
     "sidePanel",
-    "tabs"
+    "tabs",
+    "scripting"
   ],
   "host_permissions": [
     "https://arxiv.org/*",
@@ -42,5 +43,13 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "optional_host_permissions": [
+    "https://pubs.acs.org/*",
+    "https://www.sciencedirect.com/*",
+    "https://link.springer.com/*",
+    "https://www.nature.com/*",
+    "https://onlinelibrary.wiley.com/*",
+    "https://www.science.org/*"
+  ]
 }

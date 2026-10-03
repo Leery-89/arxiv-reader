@@ -16,7 +16,7 @@
   <!-- 没在论文页时显示 -->
   <div class="empty" id="empty">
     <p>打开任意一篇 arXiv 论文页面即可开始。</p>
-    <p class="hint">支持 /abs/、/html/、/pdf/ 三种地址。</p>
+    <p class="hint">支持 /abs/、/html/、/pdf/ 三种地址；也支持你能打开全文的 ACS、ScienceDirect、Springer、Nature、Wiley、Science 论文页。</p>
 
     <form class="manual" id="manualForm">
       <p class="hint">或者直接粘贴：</p>
@@ -24,6 +24,10 @@
              placeholder="arXiv 链接、ID（2408.13687）或任意论文 DOI">
       <button class="go go-small" type="submit">分析</button>
       <p class="hint error" id="manualError" hidden></p>
+      <label class="drop" id="pdfDrop">
+        也可以把 PDF 拖到这里，或<u>选择文件</u>（自己下载的付费墙论文也行，文件不保存）
+        <input type="file" id="pdfInput" accept="application/pdf,.pdf" hidden>
+      </label>
     </form>
   </div>
 

@@ -226,3 +226,8 @@ body {
 }
 .manual-input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
 .go-small { padding: 6px 14px; font-size: 13px; }
+.drop {
+  display: block; margin-top: 12px; padding: 14px 10px; font-size: 12px; text-align: center;
+  color: var(--muted); border: 1px dashed var(--line); border-radius: 6px; cursor: pointer;
+}
+.drop.over { border-color: var(--accent); color: inherit; }

@@ -9,8 +9,9 @@
   2. OpenAlex 按 DOI 查：一次拿到标题、摘要、所有收录位置（locations）。
      其中来源是 arXiv 的位置，landing_page_url 里就有 arXiv ID；best_oa_location 是开放获取副本
   3. OpenAlex 没收录 → Crossref 按 DOI 查标题摘要；relation.has-preprint 有时直接写着 arXiv DOI
-  4. 前两步都没 arXiv 位置 → 用标题在 OpenAlex 里搜 arXiv 来源的论文，标题相似度 ≥ 0.9 才认。
-     期刊版和预印本 OpenAlex 经常没合并成一条，这一步捞的是这种
+  4. 前两步都没 arXiv 位置 → 用标题在 OpenAlex 里搜开放获取的同名论文，标题相似度 ≥ 0.9 才认。
+     期刊版和预印本 OpenAlex 经常没合并成一条，这一步捞的是这种；ChemRxiv / bioRxiv / 机构库的
+     PDF 也一并收进 oa_pdfs（D26）
 
 为什么用 OpenAlex 打主力：免费、不要 key、一次请求给全 arXiv 位置 + 开放获取链接 + 摘要；
 Crossref 只有出版方填的元数据，has-preprint 填得很少。设了 CONTACT_EMAIL 就带上 mailto，
@@ -29,7 +30,6 @@ from fetcher import HEADERS
 
 OPENALEX = "https://api.openalex.org"
 CROSSREF = "https://api.crossref.org"
-ARXIV_SOURCE = "S4306400194"            # OpenAlex 里 arXiv 这个来源的 ID
 TITLE_MATCH = 0.9
 
 DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s\"<>]+)", re.I)
@@ -143,19 +143,26 @@ def _from_crossref(msg: dict, doi: str) -> DoiResult:
     return r
 
 
-def _search_arxiv_by_title(title: str) -> str | None:
+def _search_by_title(title: str) -> tuple[str | None, list[str]]:
+    """用标题在 OpenAlex 里搜开放获取的同名论文：(arXiv ID, 其他开放获取 PDF 直链)。
+
+    期刊版和预印本 OpenAlex 经常没合并成一条。arXiv 之外，化学 / 材料常发 ChemRxiv，
+    生物发 bioRxiv，还有机构库——同一个搜索都能捞到（D26），PDF 直链给 oa.py 下载。"""
     if len(_norm_title(title)) < 15:            # 太短的标题（"Editorial"）搜出来全是噪声
-        return None
+        return None, []
     q = re.sub(r"[,:|()]", " ", title)
-    data = _get(f"{OPENALEX}/works", search=q, filter=f"locations.source.id:{ARXIV_SOURCE}", per_page=5)
+    data = _get(f"{OPENALEX}/works", search=q, filter="is_oa:true", per_page=8)
+    arxiv_id, pdfs = None, []
     for work in (data or {}).get("results") or []:
         if title_similar(title, work.get("title") or "") < TITLE_MATCH:
             continue
-        for loc in work.get("locations") or []:
+        for loc in [work.get("best_oa_location") or {}, *(work.get("locations") or [])]:
             aid = _arxiv_id_from_url(loc.get("landing_page_url")) or _arxiv_id_from_url(loc.get("pdf_url"))
-            if aid:
-                return aid
-    return None
+            if aid and not arxiv_id:
+                arxiv_id = aid
+            elif loc.get("pdf_url") and loc["pdf_url"] not in pdfs:
+                pdfs.append(loc["pdf_url"])
+    return arxiv_id, pdfs
 
 
 @lru_cache(maxsize=512)
@@ -176,9 +183,14 @@ def resolve_doi(doi: str) -> DoiResult:
         r = _from_crossref(msg, doi)
 
     if not r.arxiv_id and r.title:
-        aid = _search_arxiv_by_title(r.title)
+        aid, pdfs = _search_by_title(r.title)
         if aid:
             r.arxiv_id, r.via = aid, "title-search"
+        for url in pdfs:
+            if url not in r.oa_pdfs:
+                r.oa_pdfs.append(url)
+        if pdfs and not r.oa_url:
+            r.oa_url = pdfs[0]
     return r
 
 

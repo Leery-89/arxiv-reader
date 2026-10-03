@@ -759,6 +759,32 @@ Jev（TypeSafe，System One 决策模型）：不生成文本，只在预定义�
 
 ---
 
+## D26 · 本地 PDF 入口；标题搜索扩到所有开放获取预印本
+
+**决策**：
+1. 侧栏加拖放 / 选择 PDF。请求体直接是 PDF 字节（`POST /analyze/pdf/stream?name=`，不引入 multipart 依赖），上限 40 MB，开头必须是 `%PDF`。后端 `pdf.parse_uploaded_pdf`：首页有 arXiv 水印就改走 arXiv 的 HTML 全文；前两页印着 DOI 就查 OpenAlex / Crossref 拿标题摘要；否则标题取 PDF 元数据或首页最大字号，摘要取 Abstract 标题后的第一块。ID 是 `pdf:<内容 sha256 前 16 位>`，同一个文件第二次上传直接命中缓存。点出处用本地文件的 blob 地址在 Chrome 的 PDF 阅读器里跳页。插件 0.3.6。
+2. DOI 解析第 4 步从"只搜 arXiv 来源"改成"搜所有开放获取的同名论文"：arXiv 位置照旧取 ID，其他位置（ChemRxiv、bioRxiv、机构库）的 PDF 直链收进 `oa_pdfs`，交给 D25 的下载解析。
+
+**理由**：付费墙论文（如 10.1021/acsnano.6c05081）合法拿全文的现实路径是"有权限的人自己下载"——作者本人、订了刊的单位。上传入口把这条路接上，服务端不保存文件，只缓存分析结果；版权上等同于用户自己读自己的副本。化学、材料、生物的论文发 arXiv 的少，发 ChemRxiv / bioRxiv 的多，只搜 arXiv 会漏掉。
+
+**不做**：影子图书馆（Sci-Hub 之类）不接，路线图 C 的约束不变。
+
+---
+
+## D27 · 出版方全文页：读用户浏览器里已打开的页面，不做服务器端抓取
+
+**问题**：付费墙论文能不能"直接抓取全文生成分析"？
+
+**决策**：服务器端抓取不做——后端没有订阅，出版方返回登录页，还有反爬；要绕过只能共享账号或影子图书馆，违反条款、可能侵权。改做浏览器侧：侧栏认出 ACS / ScienceDirect / Springer / Nature / Wiley / Science 的论文页，用户点"分析"时（第一次会申请该站点权限，`optional_host_permissions`）用 `chrome.scripting` 读一次当前页 HTML，发 `POST /analyze/page/stream`。后端 `publishers.py`：标题、DOI、摘要取 `citation_*` 元数据；正文按通用规则走文章容器（h2/h3/h4 开节、段落、图注，到 References / Acknowledgments 停），各家只补容器和段落选择器（ACS 段落是 `div.NLM_p`）。页面只有摘要（没权限）时 `source = abstract_only`、不写缓存，侧栏提示换有订阅的网络。点出处：元素有 id 就在页面里滚过去高亮。插件 0.3.7。
+
+**理由**：这是插件形态的天然优势——用户的浏览器本来就有访问权限，读的是用户自己有权看的那份，和拖 PDF（D26）同性质但少了下载这一步；HTML 有结构，比 PDF 解析干净。
+
+**风险**：一些机构订阅合同限制文本挖掘或禁止把全文发给第三方 AI。个人阅读一般没人追究，但隐私说明（PRIVACY.md）写明"全文会发给后端和模型处理"，且只在用户点击时读取一次。页面 HTML 不落盘、不进日志；页眉里的用户名之类在解析时随 header / nav 一起删掉。
+
+**待验证**：各家的选择器是照公开结构写的，没有真实全文页验证。先用一篇 ACS 全文页（用户"另存为 → 仅 HTML"）跑 `python publishers.py <文件>` 调规则。
+
+---
+
 ## 路线图与未来方向
 
 ### 主线（已排期，按顺序）
@@ -793,7 +819,7 @@ Jev（TypeSafe，System One 决策模型）：不生成文本，只在预定义�
    - **溯源退化**：PDF 没有段落 ID，要自编（页-段），跳转只能定位到页。
    - 估时：选型评测 1–2 天 + 接入 2 天。
    - **HTML / PDF 来源判断（2026-10-03 记下，待做）**：现在是"有 HTML 就用"。arXiv 的 HTML 转换有时坏掉（`ltx_ERROR`、整节缺失、正文明显比 PDF 短），这时该改用 PDF。先做规则版健康检查（错误标记数、HTML/PDF 正文字数比、缺失章节），把评测集里 HTML 有问题的论文找出来人工标"哪边好"（现有 pdf_bench 拿 HTML 当标准答案，测不出 PDF 更好的情况）。拿到 TypeSafe 的 Jev（System One 模型：只返回预定义选项 + 校准置信度，70–500ms，2026-09 发布，early access）权限后，做规则 vs Jev 对比，看 Jev 在边界样本上是否有增益。
-4. **DOI 与本地 PDF 入口**——侧栏已支持粘链接 / ID / arXiv DOI（v0.3.0）；✅ 期刊 DOI 查 arXiv 版本（D24，0.3.4）。✅ 找不到 arXiv 版本时分析开放获取副本（D25，0.3.5）。下一步：Chrome 里打开的本地 PDF 按文件名（arXiv 默认是 ID）自动识别。
+4. **DOI 与本地 PDF 入口**——侧栏已支持粘链接 / ID / arXiv DOI（v0.3.0）；✅ 期刊 DOI 查 arXiv 版本（D24，0.3.4）。✅ 找不到 arXiv 版本时分析开放获取副本（D25，0.3.5）；✅ 本地 PDF 拖放（D26，0.3.6）。下一步：Chrome 里打开的本地 PDF 按文件名（arXiv 默认是 ID）自动识别。
 
 **B. 阅读体验**
 

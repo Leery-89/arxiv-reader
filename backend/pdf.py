@@ -137,6 +137,7 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
     cur: Section | None = None
     state = "front"                       # front → body → refs → appendix
     seen_abstract = False
+    pdf_abstract = ""
     counter: Counter = Counter()
     run = 0                               # 连续像参考文献的块数
     for pno, text, size, bold, nlines, margin in blocks:
@@ -164,6 +165,9 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
             state = "appendix" if kind == "appendix" else "body"
             cur = Section(level=_level(text), title=text, kind=kind)
             sections.append(cur)
+            continue
+        if state == "front" and seen_abstract and not abstract and not pdf_abstract and not margin:
+            pdf_abstract = text           # 没有外部摘要（用户上传的 PDF）：取 Abstract 标题后的第一块
             continue
         if state == "front":
             # 正文没有章节标题的版式（Science / Nature 的预印本：Abstract 之后直接是正文，一路到 References）：
@@ -204,9 +208,63 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
             sec.paragraphs.append(Paragraph(id=f"pg{pno}.b{counter[pno]}", text=t))
         sections = [sec] if paras else []
     if not title or not abstract:
-        title = title or (doc.metadata or {}).get("title", "") or arxiv_id
+        title = title or (doc.metadata or {}).get("title", "") or _first_page_title(doc) or arxiv_id
+        abstract = abstract or pdf_abstract
     return Paper(arxiv_id=arxiv_id, title=title, abstract=abstract, sections=sections,
                  references=references, source="pdf")
+
+
+def _first_page_title(doc) -> str:
+    """第一页字号最大的那几行（标题常折成两行）。PDF 元数据的 title 常是空的或 "Microsoft Word - x.docx"。"""
+    if not len(doc):
+        return ""
+    lines = []
+    for b in doc[0].get_text("dict")["blocks"]:
+        if b.get("type") == 0:
+            text, size, _, _ = _block_text(b)
+            if text and not ARXIV_STAMP_RE.match(text):
+                lines.append((size, text))
+    if not lines:
+        return ""
+    top = max(sz for sz, _ in lines)
+    return " ".join(t for sz, t in lines if sz >= top - 0.5)[:300]
+
+
+ARXIV_IN_TEXT_RE = re.compile(r"arXiv:(\d{4}\.\d{4,5}|[a-z-]+(?:\.[A-Z]{2})?/\d{7})(?:v\d+)?")
+
+
+def parse_uploaded_pdf(data: bytes, paper_id: str, filename: str = "") -> Paper:
+    """用户自己上传的 PDF（付费墙论文由有权限的人下载后拖进侧栏，D26）。
+
+      1. 首页有 arXiv 水印（arXiv:2401.09549v1 [cond-mat]）→ 改走 arXiv 的 HTML 全文，比 PDF 解析好
+      2. 前两页印着 DOI → 查 OpenAlex / Crossref 拿标题和摘要（比从版面里猜可靠）
+      3. 否则标题取 PDF 元数据或首页最大字号，摘要取 Abstract 标题后的第一块
+    """
+    pymupdf.TOOLS.mupdf_display_errors(False)
+    doc = pymupdf.open(stream=data, filetype="pdf")
+    head = " ".join(doc[i].get_text() for i in range(min(2, len(doc))))
+    m = ARXIV_IN_TEXT_RE.search(head)
+    if m:
+        from fetcher import fetch_paper
+        try:
+            paper = fetch_paper(m.group(1))
+            if paper.source == "html":
+                return paper
+        except requests.RequestException:
+            pass
+    title = abstract = ""
+    from doi import DoiNotFound, parse_doi, resolve_doi
+    d = parse_doi(head)
+    if d:
+        try:
+            r = resolve_doi(d)
+            title, abstract = r.title, r.abstract
+        except (DoiNotFound, requests.RequestException):
+            pass
+    paper = parse_pdf(data, paper_id, title, abstract)
+    if paper.title == paper_id and filename:
+        paper.title = filename.removesuffix(".pdf")
+    return paper
 
 
 def fetch_pdf_paper(arxiv_id: str) -> Paper | None:

@@ -81,6 +81,20 @@ def test_title_search_when_not_merged():
     assert (r.arxiv_id, r.via) == ("2401.09549", "title-search")
 
 
+def test_title_search_collects_other_preprints():
+    """没有 arXiv 版本但 ChemRxiv 上有同名预印本：PDF 收进 oa_pdfs（D26）"""
+    fake({
+        "works/doi:": {"title": "Switchable Dual-Mode Photoresponse in ReS2/PdSe2 Heterojunctions",
+                       "locations": [], "best_oa_location": None},
+        "/works": {"results": [{"title": "Switchable dual-mode photoresponse in ReS2/PdSe2 heterojunctions",
+                                "best_oa_location": {"pdf_url": "https://chemrxiv.org/x.pdf"},
+                                "locations": [{"pdf_url": "https://chemrxiv.org/x.pdf"}]}]},
+    })
+    r = doi.resolve_doi("10.1021/acsnano.0c00000")
+    assert r.arxiv_id is None
+    assert r.oa_pdfs == ["https://chemrxiv.org/x.pdf"] and r.oa_url == "https://chemrxiv.org/x.pdf"
+
+
 def test_crossref_fallback_with_preprint_relation():
     fake({
         "works/doi:": None,

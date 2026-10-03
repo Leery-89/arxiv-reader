@@ -88,7 +88,9 @@ AI+科学类变化最大：Y 55% → 75%、N 15% → 0（每 ID 平均引 1.47 �
 - [x] **D23 · Docling 对比**：31 篇关公式正文召回 85.0%（PyMuPDF 83.6%）、数字 97.3%（98.0%），表格单元格结构 74.8%（0），每篇 12 秒；开公式 LaTeX 还原 41%、单篇 290 秒。线上不换，PyMuPDF 继续当后备
 - [x] **D24 · DOI 入口**：`/resolve` 用 OpenAlex（Crossref 兜底、标题搜索补漏）把期刊 DOI 映射到 arXiv 版本；插件 0.3.4。待本地用真实 DOI 测命中率
 - [x] **D25 · 开放获取副本分析**：没有 arXiv 版本的 DOI 下载开放获取 PDF（公网地址检查、40 MB 上限）走 D21 解析，没有就用摘要；插件 0.3.5
-- [ ] 本地 PDF 入口：付费墙论文让有权限的用户自己上传 PDF
+- [x] **D26 · 本地 PDF 入口**：侧栏拖放 PDF（`/analyze/pdf/stream`，40 MB，不落盘，按内容哈希缓存）；DOI 标题搜索扩到 ChemRxiv / bioRxiv 等所有开放获取来源；插件 0.3.6
+- [x] **D27 · 出版方全文页**：侧栏读用户已打开的 ACS / ScienceDirect / Springer / Nature / Wiley / Science 页面（点击时申请权限、读一次），`publishers.py` 解析；插件 0.3.7。待用真实 ACS 页面调选择器
+- [ ] 千问微调（主线 ④）
 - [ ] HTML / PDF 来源判断：规则健康检查，拿到 Jev 权限后做规则 vs Jev（路线图）
 - [ ] `eval_versions.py` 两个评审员时退化成第一个评审员，改成分开报或要求奇数个
 

@@ -26,6 +26,8 @@ const els = {
   manualForm: document.getElementById('manualForm'),
   manualInput: document.getElementById('manualInput'),
   manualError: document.getElementById('manualError'),
+  pdfDrop: document.getElementById('pdfDrop'),
+  pdfInput: document.getElementById('pdfInput'),
   result: document.getElementById('result'),
 };
 
@@ -40,10 +42,33 @@ let controller = null;      // 用来中断进行中的请求（用户换论文�
 
 const ARXIV_RE = /arxiv\.org\/(abs|html|pdf)\/((?:\d{4}\.\d{4,5})|(?:[a-z-]+(?:\.[A-Z]{2})?\/\d{7}))/;
 
-/** 从 tab 对象认出论文；不是 arXiv 页面返回 null */
+// 出版方全文页（D27）：用户自己有权限打开的付费论文，点"分析"时读当前页面交给后端。
+// 和 manifest 的 optional_host_permissions 保持一致；权限在第一次分析时才申请
+const PUBLISHER_HOSTS = ['pubs.acs.org', 'www.sciencedirect.com', 'link.springer.com',
+  'www.nature.com', 'onlinelibrary.wiley.com', 'www.science.org'];
+
+function publisherPaperFromTab(tab) {
+  let u;
+  try { u = new URL(tab.url); } catch { return null; }
+  if (!PUBLISHER_HOSTS.includes(u.hostname)) return null;
+  let doi = decodeURIComponent(u.pathname).match(/(10\.\d{4,9}\/[^?#\s]+)/)?.[1];
+  const nature = u.hostname === 'www.nature.com' && u.pathname.match(/^\/articles\/([\w.-]+)$/);
+  if (!doi && nature) doi = `10.1038/${nature[1]}`;
+  const pii = u.hostname === 'www.sciencedirect.com' && /\/pii\//.test(u.pathname);
+  if (!doi && !pii) return null;                     // 期刊首页、目录页之类
+  doi = doi?.toLowerCase().replace(/\/$/, '');
+  const title = (tab.title || '').replace(/\s*[|\-–]\s*(ACS Publications|ScienceDirect|SpringerLink|Nature|Wiley Online Library|Science).*$/i, '').trim();
+  return {
+    arxivId: doi ? `page:${doi}` : `page:${u.hostname}${u.pathname}`,
+    title: title || doi || u.hostname, url: tab.url, isHtmlPage: false, tabId: tab.id,
+    page: true, pageDoi: doi || null,
+  };
+}
+
+/** 从 tab 对象认出论文；不是 arXiv 页面也不是出版方全文页返回 null */
 function paperFromTab(tab) {
   const m = tab?.url?.match(ARXIV_RE);
-  if (!m) return null;
+  if (!m) return tab?.url ? publisherPaperFromTab(tab) : null;
   // arXiv 标题形如 "[1706.03762] Attention Is All You Need"，去掉前缀
   const title = (tab.title || '').replace(/^\[[^\]]+\]\s*/, '').trim();
   return { arxivId: m[2], title: title || m[2], url: tab.url, isHtmlPage: m[1] === 'html', tabId: tab.id };
@@ -171,6 +196,32 @@ async function resolveDoi(text) {
     r.oa_url ? { text: '开放获取页面', href: r.oa_url } : { text: '出版方页面', href: `https://doi.org/${r.doi}` });
 }
 
+// ── 本地 PDF（D26）：付费墙论文让有权限的人自己下载后拖进来。文件只发给后端解析，不保存 ──
+const MAX_PDF = 40 * 1024 * 1024;
+
+function startUpload(file) {
+  if (!file) return;
+  if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+    showManualError('只支持 PDF 文件');
+    return;
+  }
+  if (file.size > MAX_PDF) {
+    showManualError('PDF 超过 40 MB');
+    return;
+  }
+  const title = file.name.replace(/\.pdf$/i, '');
+  startManual(`pdf:${file.name}`, title, { file, pdfUrl: URL.createObjectURL(file) });
+}
+
+els.pdfInput.addEventListener('change', () => startUpload(els.pdfInput.files[0]));
+els.pdfDrop.addEventListener('dragover', (e) => { e.preventDefault(); els.pdfDrop.classList.add('over'); });
+els.pdfDrop.addEventListener('dragleave', () => els.pdfDrop.classList.remove('over'));
+els.pdfDrop.addEventListener('drop', (e) => {
+  e.preventDefault();
+  els.pdfDrop.classList.remove('over');
+  startUpload(e.dataTransfer.files[0]);
+});
+
 els.manualForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const text = els.manualInput.value.trim();
@@ -198,6 +249,28 @@ function setBusy(busy, label) {
 async function analyze() {
   if (!currentPaper) return;
 
+  // 出版方页面：权限申请必须在用户点击的同步阶段发出，所以放在第一个 await
+  let pageHtml = null;
+  if (currentPaper.page) {
+    const origin = `${new URL(currentPaper.url).origin}/*`;
+    let granted = false;
+    try { granted = await chrome.permissions.request({ origins: [origin] }); } catch { /* 拒绝或不在列表 */ }
+    if (!granted) {
+      renderError('需要读取这个页面的权限才能分析。正文只在你点"分析"时读取一次，发给后端解析，不保存。');
+      return;
+    }
+    try {
+      const [{ result }] = await chrome.scripting.executeScript({
+        target: { tabId: currentPaper.tabId },
+        func: () => document.documentElement.outerHTML,
+      });
+      pageHtml = result;
+    } catch (e) {
+      renderError(`读取页面失败：${e.message}`);
+      return;
+    }
+  }
+
   controller = new AbortController();
   const state = { paper: null, jsonBuf: '', progress: null, meta: null, streaming: true };
 
@@ -206,12 +279,27 @@ async function analyze() {
   els.result.innerHTML = '';
 
   try {
-    const resp = await fetch(`${BACKEND}/analyze/stream`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(currentPaper.doi ? { doi: currentPaper.doi } : { arxiv_id: currentPaper.arxivId }),
-      signal: controller.signal,
-    });
+    const { file } = currentPaper;
+    const resp = pageHtml != null
+      ? await fetch(`${BACKEND}/analyze/page/stream`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: currentPaper.url, html: pageHtml, doi: currentPaper.pageDoi }),
+          signal: controller.signal,
+        })
+      : file
+      ? await fetch(`${BACKEND}/analyze/pdf/stream?name=${encodeURIComponent(file.name)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/pdf' },
+          body: file,
+          signal: controller.signal,
+        })
+      : await fetch(`${BACKEND}/analyze/stream`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentPaper.doi ? { doi: currentPaper.doi } : { arxiv_id: currentPaper.arxivId }),
+          signal: controller.signal,
+        });
     if (!resp.ok) throw new Error(`后端返回 ${resp.status}`);
 
     // 逐块读响应体，按 SSE 的「空行分隔」切成事件
@@ -257,7 +345,17 @@ function handleEvent({ event, data }, state) {
       break;
     case 'paper':
       state.paper = data;
-      if (currentPaper && data.url) currentPaper.pdfUrl = data.url;     // DOI 论文的开放获取 PDF（D25）
+      if (currentPaper && data.url && !currentPaper.file) currentPaper.pdfUrl = data.url;   // DOI 论文的开放获取 PDF（D25）
+      if (currentPaper?.file && data.arxiv_id && !data.arxiv_id.startsWith('pdf:')) {
+        // 上传的 PDF 带 arXiv 水印，后端改用了 arXiv 的 HTML 全文：之后按 arXiv 论文处理（出处能高亮）
+        currentPaper.arxivId = data.arxiv_id;
+        delete currentPaper.file;
+        els.paperId.textContent = data.arxiv_id;
+      }
+      if (currentPaper?.file && data.title) {                          // 上传的 PDF：用解析出的标题替换文件名
+        currentPaper.title = data.title;
+        els.paperTitle.textContent = data.title;
+      }
       if (data.title && currentPaper && currentPaper.title === currentPaper.arxivId) {
         currentPaper.title = data.title;
         els.paperTitle.textContent = data.title;
@@ -377,12 +475,20 @@ function renderProgress(state) {
   // ── 徽章：第一眼就该看到的东西。流式进行中显示"校验中"，结束后显示数字 ──
   frag.appendChild(verifyBadge(state));
 
-  if (state.paper?.source === 'abstract_only') {
+  if (state.paper?.source === 'abstract_only' && !currentPaper?.page) {
     frag.appendChild(hint('本文没有 HTML 版，以下分析仅基于摘要。'));
   }
+  if (state.paper?.source === 'page') {
+    frag.appendChild(hint('正文读自你当前打开的出版方页面，只在点"分析"时读取一次，不保存。'));
+  }
+  if (state.paper?.source === 'abstract_only' && currentPaper?.page) {
+    frag.appendChild(hint('这个页面上只看到摘要，以下分析仅基于摘要。可能是当前网络没有订阅：换到学校网络或登录机构账号后再点分析。'));
+  }
   if (state.paper?.source === 'pdf') {
-    const from = state.paper.url ? `开放获取副本（${new URL(state.paper.url).hostname}）` : 'PDF';
-    frag.appendChild(hint(`本文没有 HTML 版，正文从${from}解析：公式可能不完整，点出处只能跳到所在页。`));
+    const from = state.paper.arxiv_id?.startsWith('pdf:') ? '你上传的 PDF'
+      : state.paper.url ? `开放获取副本（${new URL(state.paper.url).hostname}）` : 'PDF';
+    const lead = from === '你上传的 PDF' ? '' : '本文没有 HTML 版，';
+    frag.appendChild(hint(`${lead}正文从${from}解析：公式可能不完整，点出处只能跳到所在页。`));
   }
   if (state.paper?.truncated_sections?.length) {
     frag.appendChild(hint(`因篇幅未包含：${state.paper.truncated_sections.join('、')}`));
@@ -452,8 +558,35 @@ function verifyBadge(state) {
  */
 async function jumpTo(pid) {
   if (!currentPaper) return;
-  const { arxivId, tabId, isHtmlPage, doi, pdfUrl } = currentPaper;
+  const { arxivId, tabId, isHtmlPage, doi, pdfUrl, file } = currentPaper;
+  if (currentPaper.page) {                 // 出版方页面（D27）：元素有 id 就滚过去高亮；pp<n> 这种编的 ID 不跳
+    if (/^pp\d+$/.test(pid) || tabId == null) return;
+    await chrome.tabs.update(tabId, { active: true });
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      args: [pid],
+      func: (id) => {
+        const el = id === 'abstract'
+          ? document.querySelector('.article_abstract, #abstract, #Abs1, .abstract, [id^=abstract]')
+          : document.getElementById(id);
+        if (!el) return false;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const old = el.style.outline;
+        el.style.outline = '2px solid rgba(15, 110, 92, 0.55)';
+        setTimeout(() => { el.style.outline = old; }, 2500);
+        return true;
+      },
+    }).catch(() => {});
+    return;
+  }
   const page = /^pg(\d+)\.b\d+$/.exec(pid);
+  if (file && !page) return;              // 上传的 PDF 没有摘要页可跳
+  if (file && page && arxivId.startsWith('pdf:')) {
+    const url = `${pdfUrl}#page=${page[1]}`;   // 本地文件的 blob 地址，Chrome 自带的 PDF 阅读器打开
+    if (tabId == null) currentPaper.tabId = (await chrome.tabs.create({ url })).id;
+    else await chrome.tabs.update(tabId, { url });
+    return;
+  }
   if (doi && !page) {                     // DOI 论文没有 arXiv 页面：摘要等出处打开出版方页面
     const url = `https://doi.org/${doi}`;
     if (tabId == null) currentPaper.tabId = (await chrome.tabs.create({ url })).id;
