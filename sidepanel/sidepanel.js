@@ -54,12 +54,15 @@ function publisherPaperFromTab(tab) {
   let doi = decodeURIComponent(u.pathname).match(/(10\.\d{4,9}\/[^?#\s]+)/)?.[1];
   const nature = u.hostname === 'www.nature.com' && u.pathname.match(/^\/articles\/([\w.-]+)$/);
   if (!doi && nature) doi = `10.1038/${nature[1]}`;
-  const pii = u.hostname === 'www.sciencedirect.com' && /\/pii\//.test(u.pathname);
-  if (!doi && !pii) return null;                     // 期刊首页、目录页之类
+  // 地址里没有 DOI 的文章页：ScienceDirect 的 /pii/，ACS 2026 年改版后的
+  // /ancac3/article(-abstract)/20/37/25290/5427835/slug（DOI 由后端从页面 meta 取）
+  const articlePath = /\/pii\/|\/article(?:-abstract)?\/|\/articles?\//.test(u.pathname);
+  if (!doi && !articlePath) return null;             // 期刊首页、目录页之类
   doi = doi?.toLowerCase().replace(/\/$/, '');
-  const title = (tab.title || '').replace(/\s*[|\-–]\s*(ACS Publications|ScienceDirect|SpringerLink|Nature|Wiley Online Library|Science).*$/i, '').trim();
+  const path = u.pathname.replace('/article-abstract/', '/article/');   // 摘要页和全文页算同一篇
+  const title = (tab.title || '').replace(/\s*[|\-–]\s*(ACS Publications|ACS Nano|ScienceDirect|SpringerLink|Nature|Wiley Online Library|Science).*$/i, '').trim();
   return {
-    arxivId: doi ? `page:${doi}` : `page:${u.hostname}${u.pathname}`,
+    arxivId: doi ? `page:${doi}` : `page:${u.hostname}${path}`,
     title: title || doi || u.hostname, url: tab.url, isHtmlPage: false, tabId: tab.id,
     page: true, pageDoi: doi || null,
   };

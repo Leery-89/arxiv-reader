@@ -35,7 +35,10 @@ DEFAULT = {
 }
 PUBLISHER_RULES = {
     "pubs.acs.org": {
-        "container": [".article_content", "#pb-page-content article", "article", "main"],
+        # 2026 年改版后地址变成 /ancac3/article/20/37/25290/…，页面结构也换了，先把常见的正文容器都列上，
+        # 拿到真实全文页后再收紧
+        "container": [".article-body", "[data-widgetname=ArticleFulltext]", ".widget-ArticleFulltext",
+                      ".article_content", "#pb-page-content article", "article", "main"],
         "para": "div.NLM_p, p",
         "drop": [".NLM_back", ".article_references", "#references", ".article_supporting-info"],
     },
@@ -89,7 +92,7 @@ def page_id(url: str, doi: str | None) -> str:
     if doi:
         return f"page:{doi}"
     u = urlparse(url)
-    return f"page:{u.hostname}{u.path}"
+    return f"page:{u.hostname}{u.path.replace('/article-abstract/', '/article/')}"
 
 
 def parse_page(url: str, html: str, doi: str | None = None) -> Paper:
