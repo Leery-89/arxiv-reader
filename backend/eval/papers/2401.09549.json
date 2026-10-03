@@ -1,0 +1,937 @@
+{
+ "arxiv_id": "2401.09549",
+ "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+ "abstract": "The fusion of non-Abelian anyons or topological defects is a fundamental operation in measurement-only topological quantum computation.\nIn topological superconductors, this operation amounts to a determination of the shared fermion parity of Majorana zero modes.\nAs a step towards this, we implement a single-shot interferometric measurement of fermion parity in indium arsenide-aluminum heterostructures with a gate-defined nanowire.\nThe interferometer is formed by tunnel-coupling the proximitized nanowire to quantum dots.\nThe nanowire causes a state-dependent shift of these quantum dots’ quantum capacitance of up to 1 fF 1\\text{\\,}\\mathrm{fF} .\nOur quantum capacitance measurements show flux h / 2 ​ e h/2e -periodic bimodality with a signal-to-noise ratio of 1 1 in 3.7 µ ​ s 3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s} at optimal flux values.\nFrom the time traces of the quantum capacitance measurements, we extract a dwell time in the two associated states that is longer than 1 ms 1\\text{\\,}\\mathrm{ms} at in-plane magnetic fields of approximately 2 T 2\\text{\\,}\\mathrm{T} .\nThese results are consistent with a measurement of the fermion parity encoded in a pair of Majorana zero modes that are separated by approximately 3 µ ​ m 3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m} and subjected to a low rate of poisoning by non-equilibrium quasiparticles.\nThe large capacitance shift and long poisoning time enable a parity measurement error probability of 1 % 1\\% .",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "In order to leverage a topological phase for quantum computation, it is crucial to manipulate and measure the topological charge. This can be achieved through protected operations such as braiding and fusing non-Abelian anyons, which offer exponential suppression of errors induced by local noise sources and a native set of discrete operations. Protocols for measurement-only topological quantum computation simplify these operations, reducing them to fusion alone. This fundamental measurement is sufficient to enact all topologically protected operations. Novel error correction schemes have been developed to take advantage of the operations available in measurement-only topological quantum computation. The robustness against errors and simplicity of control offered by this approach make measurement-based topological qubits a promising path towards utility-scale quantum computation, where managing the interactions of millions of qubits is necessary.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "One-dimensional topological superconductors (1DTSs) are a promising platform for building topological qubits. Quantum information is stored in the fermion parity of Majorana zero modes (MZMs) localized at the ends of superconducting wires, and projective measurements of the fermion parity are used to process quantum information and perform qubit state readout. The fermion parity shared by a pair of MZMs can be determined through an interferometric measurement. A number of conceptual designs for topological qubits incorporate such interferometers. Progress in this direction was made in Ref., which reported coherent transport through a gate-defined nanowire island in an Aharonov-Bohm interferometer, albeit in a regime that does not allow qubit readout.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p3",
+     "text": "In this paper, we demonstrate an interferometric measurement of the parity of a near-zero-energy state in a 1D nanowire, thereby validating a necessary ingredient of topological quantum computation. The measurement technique is based on probing the quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$ of a quantum dot coupled to the nanowire and allows determination of the parity in a single shot ( Fig. 1), with a probability of assignment errors of $1\\%$ for optimal measurement time. By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase, but it does require the low-energy state to be supported at both ends of the wire and very weakly coupled to other low-energy states. Moreover, it provides a measurement of the state’s energy with single- $\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$ resolution. These features of the measurement strongly constrain the nature of the low-energy state. In a follow-up paper, we will discuss correlations between $C_{\\mathrm{\\scriptscriptstyle Q}}$ measurements and the topological gap protocol (TGP) phase diagram.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F1",
+     "text": "Figure 1: a: Minimal model of the system. A nanowire tuned into a 1DTS state hosts MZMs at its ends, depicted by $\\star$ symbols. A quantum dot is tunably coupled to the MZMs by tunnel couplings $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$ forming an interferometer (dashed lined) which is sensitive to the magnetic flux $\\Phi$ and the combined fermion parity $Z$ of the dot-MZMs system. Poisoning by a quasiparticle (purple circle) flips the parity. b: Example energy spectra of the interferometer with total parity $Z=-1$ (red) and $Z=+1$ (blue) in the vicinity of the avoided crossing between the states with $N$ and $N+1$ electrons on the dot, as a function of the plunger voltage on the quantum dot. A measurement of the quantum capacitance, which probes the curvature of the energy spectrum at resonance, allows for rf readout of the parity. c: Gate layout for the interference loop formed by the triple-quantum-dot and the gate-defined nanowire. The effective couplings $t_{L}$ and $t_{R}$ of panel a depend on the couplings $t_{\\mathrm{m}1}$, $t_{12}$ and $t_{\\mathrm{m}2}$, $t_{23}$ and detuning of quantum dot 1 and 3, respectively. Quantum dot 2 is capacitively coupled to an off-chip resonator chip for dispersive gate sensing and $C_{\\mathrm{\\scriptscriptstyle Q}}$ measurement, which also includes a bias tee for applying dc voltages. See Fig. S1 and Sec. S1.1 for a complete device schematic and gate naming convention; throughout the paper $V_{i}$ refers to the dc voltage applied to gate $i$.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Topological qubit device design and setup",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.F2",
+     "text": "Figure 2: a: Cross-section of the topological qubit device design. b: An SEM image with the aluminum strip (blue), first gate layer (yellow), and second gate layer (purple) indicated in false color.",
+     "kind": "caption"
+    },
+    {
+     "id": "S2.p1",
+     "text": "In this work, we introduce a topological qubit design that allows one to perform projective measurements of fermion parity encoded in MZMs. The device is composed of two primary components, as illustrated in Fig. 1. The first component is a nanowire, sections of which can be tuned into a 1DTS state, leading to topological degeneracy of the many-body ground state. The second component consists of quantum dots, which are designed to couple pairs of MZMs in an interferometric loop. This device’s 1DTS is based on a gated superconductor-semiconductor heterostructure. The active region of the semiconductor consists of a $9.1\\text{\\,}\\mathrm{nm}$ thick InAs quantum well with a $6\\text{\\,}\\mathrm{nm}$ thick In 0.88 Al 0.12 As top barrier and $25\\text{\\,}\\mathrm{nm}$ thick In 0.845 Al 0.155 As lower barrier, depicted schematically in Fig. 1 c. The superconductor is a $60\\text{\\,}\\mathrm{nm}$ wide Al strip (blue in Figs. 1 and 2) deposited with a thickness of $6.5\\text{\\,}\\mathrm{nm}$ on the semiconductor. The material combination and dimensions have been optimized for values of the induced gap, spin-orbit coupling, and localization length that are favorable for the topological phase. Device fabrication and the details of the heterostructure design are discussed in Secs. S1.2 and S1.3, respectively.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p2",
+     "text": "In the full device, the nanowire is divided into 5 segments; one of them is shown schematically in Fig. 1 c while all 5 are visible in Fig. 2 b. Each has a different “plunger” gate in the first gate layer (yellow in Figs. 1 and 2) that controls the density in the corresponding region of the InAs quantum well. To form a qubit, the second and fourth segments, each of length $L\\approx$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$$ long, need to be tuned into the topological phase while the other three need to be fully depleted underneath the Al nanowire (see Fig. S1 in Sec. S1 for details). In this configuration, these trivial regions separate the two topological sections from each other and from Ohmic contacts at the ends of the Al nanowire. A full qubit device therefore consists of two 1DTS, each containing a pair of MZMs, separated by a trivial section in the middle, and three interferometers that are used to couple neighboring pairs of MZMs. The complete gate layout, abbreviations for the different gates, and the voltage configuration for operation as a qubit are described in Sec. S1. Here, we focus on the left topological section of the device, shown in Fig. 1 c, and implement a parity measurement using its associated interferometer.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p3",
+     "text": "Our readout circuit is based on dispersive gate sensing of a triple quantum dot interferometer (TQDI): three electrostatically defined quantum dots that together with the 1DTS form a loop threaded by a flux, $\\Phi$ ( Fig. 1 a,c). We control $\\Phi$ by varying the out-of-plane magnetic field, $B_{\\perp}$. The TQDI has two smaller dots (dots 1 and 3) which serve as tunable couplers and provide control over the tunnel couplings $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$. The smaller dots are connected to the ends of the 1DTS through tunnel couplings $t_{\\mathrm{m}i}$, where $i=1,2$, and a long quantum dot (dot 2) that connects to dot 1 (dot 3) through tunnel couplings $t_{12}$ ( $t_{23}$). The quantum capacitance, $C_{\\mathrm{\\scriptscriptstyle Q}}$, of dot 2 is read out through dispersive gate sensing using an off-chip resonator circuit in a reflectometry setup. To improve the signal-to-noise ratio (SNR), a Josephson traveling wave parametric amplifier (JTWPA) is used in the first stage of amplification, followed by a low-noise high-electron-mobility transistor (HEMT) amplifier. Filtering is applied to dc lines as well as the rf readout lines to reduce the noise and radiation incident from higher temperature stages. Isolation on the rf lines is used to further reduce in-band back-action from the reflectometry setup. In addition to the line filtering and isolation, we employ multiple layers of shielding of the sample to suppress the generation of non-equilibrium quasiparticles (QPs) by stray infrared radiation. A detailed description of the reflectometry setup is given in Sec. S1.4.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p4",
+     "text": "Our TQDI device design addresses two crucial challenges. First, the device size is subject to conflicting requirements. To suppress the Majorana splitting $E_{\\mathrm{\\scriptscriptstyle M}}\\sim\\Delta_{\\mathrm{\\scriptscriptstyle T}}\\exp(-L/\\xi)$, we require $L\\gg\\xi$ (where $\\xi$ is the disordered coherence length and $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ is the topological gap). However, an increase in $L$ also suppresses (albeit algebraically) the level spacing and charging energy of the dot, which suppresses the interference signal, as we discuss in Secs. S2.3 and S2.5. Our triple dot design offers a solution to these issues. With a length of $2.4\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$, dot 2 retains a charging energy of $\\approx$60\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ deep in the Coulomb blockade regime, which is renormalized down to $\\approx$45\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ in the interferometer’s operating regime. The level spacing is $\\approx$20\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ (see also Sec. S5.2). To minimize the effect of disorder within dot 2, which may hinder elastic co-tunneling, we operate the dot with an occupation of $\\sim 1000$ electrons. Dot 2 has significant effective tunneling matrix elements to both ends of the wire via the small dots of effective length $400500\\text{\\,}\\mathrm{nm}$. The effective dot-to-wire couplings, $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$, can be fine-tuned by adjusting the microscopic parameters that determine them: $t_{12}$, $t_{23}$, $t_{\\mathrm{m}1}$, $t_{\\mathrm{m}2}$, $N_{\\mathrm{g}1}$, $N_{\\mathrm{g}3}$. The tunnel couplings, $t_{ij},t_{\\mathrm{m}i}$ are indicated in Fig. 2 b. The dimensionless gate offset charge $N_{\\mathrm{g}i}$ is controlled by the gate voltage $V_{{\\mathrm{\\scriptscriptstyle QD}i}}$ and is given (up to an offset) by $N_{\\mathrm{g}i}=\\alpha_{i}eV_{{\\mathrm{\\scriptscriptstyle QD}i}}/2E_{\\mathrm{\\scriptscriptstyle C}}$ where $\\alpha_{i}$ is the lever arm of the associated gate, and $E_{\\mathrm{\\scriptscriptstyle C}}$ is the charging energy of the dot. The relationship between the microscopic parameters and an effective model is further described in Sec. S2.2.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p5",
+     "text": "The second challenge that this design addresses is the need for a substantial lever arm for QD2, which is the gate that couples the dot to the readout resonator. The signal amplitude is determined by the quantum capacitance, $C_{\\mathrm{\\scriptscriptstyle Q}}^{(n)}=-e^{2}\\alpha^{2}\\,{\\partial^{2}{\\varepsilon_{n}}}/{\\partial E_{\\mathrm{\\scriptscriptstyle D}}^{2}}$, for a state $|n\\rangle$ in TQDI configuration with energy $\\varepsilon_{n}$ with $E_{\\mathrm{\\scriptscriptstyle D}}$ being the detuning of dot 2 from the charge degeneracy point. We have optimized the lever arm by using a dual-layer gate geometry which enables us to place the plunger directly over the dot. As detailed in Sec. S2, our measurements confirm that QD2 has a lever arm $\\alpha\\approx$0.40.5\\text{\\,}$$, and our simulations are consistent with this range of values. Combined with our high bandwidth dispersive gate sensing setup and low-noise parametric amplifier that operates close to the quantum limit, this lever arm ensures that we can detect $C_{\\mathrm{\\scriptscriptstyle Q}}$ with sufficient SNR. Readout can be activated by tuning all dots into resonance with the MZMs and by balancing the effective tunnel couplings between dot 2 and the MZMs, $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$, to values which are comparable to or larger than the temperature.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p6",
+     "text": "Our device permits both dc and rf measurements, enabling the development of an rf-based QD-MZM tuning protocol that we use to balance the arms of the interferometer. The protocol uses a measurement of $C_{\\mathrm{\\scriptscriptstyle Q}}$ in a configuration where one of the small dots is maximally detuned to effectively interrupt the loop. These measured quantities are fit to simulations to extract the couplings $t_{12}$, $t_{23}$, $t_{\\mathrm{m}1}$, and $t_{\\mathrm{m}2}$ (see Sec. S2.5). This measurement protocol expands upon the technique proposed in Refs. and demonstrated in Ref. which was based on dc transport measurements of the coupling between a quantum dot and a zero-energy state in a nanowire. However, our rf-based protocol offers a finer resolution for the extraction of the couplings (down to single- $\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$ level) and, thus, enables tuning the effective dot-to-wire couplings $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$. Once we have determined the appropriate voltages for QD1 and QD3, we proceed with interferometer measurements. We can move through the bulk phase diagram of the nanowire by varying the in-plane field $B_{\\parallel}$ and the voltage $V_{\\mathrm{\\scriptscriptstyle WP1}}$, indicated in, respectively, Fig. 1 a,c. Sec. S5 contains further details of the tuneup procedure. Complete details of tuning the nanowire into the topological phase will be discussed in Ref..",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F3",
+     "text": "Figure 3: a: Kurtosis in the measured quantum capacitance, $K(C_{\\mathrm{\\scriptscriptstyle Q}})$, of dot 2 in device A (measurement A1) as a function of $B_{\\perp}$ (which controls $\\Phi$) and $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ (which controls the dot 2 detuning) in the ${B_{\\parallel}},V_{\\mathrm{\\scriptscriptstyle WP1}}$ parameter regime identified through the tune-up procedure discussed in the main text and Sec. S5. b: A histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values as a function of flux for the $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ value in the middle of the dashed red rectangle in panel a, showing clear bimodality that is flux-dependent with period $h/2e$. c,f: Time traces at the two flux values marked by the vertical arrows in panel b, corresponding to minimal (panel c) and maximal (panel f) $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$. d,g: The raw rf signal converted to complex ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ by the method described in Sec. S4.1 for the time trace shown in panels c and f. e,h: Histograms of $\\mathrm{Re}\\,{\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ with Gaussian fits for an extraction of the $\\mathrm{SNR}=\\delta/(\\sigma_{1}+\\sigma_{2})=4.9$, the details of which are given in Sec. S4.3. i: A histogram of dwell times aggregated over all values of $B_{\\perp}$ where the signal shows bimodality. Fitting to an exponential shows that the up and down dwell times are both $2.0(\\pm 0.1)\\text{\\,}\\mathrm{ms}$.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Fermion parity measurement and interpretation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.p1",
+     "text": "To measure a time record of the fermion parity, we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$. To improve visibility and compare with theoretical predictions we downsample the time trace to a resolution of $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ and convert the resonator response into a $C_{\\mathrm{\\scriptscriptstyle Q}}$ record using the procedure discussed in Sec. S4.1. We sweep the out-of-plane magnetic field $B_{\\perp}$ in steps of $0.14\\text{\\,}\\mathrm{mT}$ to study the dependence on the external flux $\\Phi$ through the interferometer loop and sweep $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ to find charge transitions in dot 2. We use the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ in the distribution of $C_{\\mathrm{\\scriptscriptstyle Q}}$ values to detect bimodality. For a Gaussian distribution, the kurtosis satisfies $K=0$, while $K<0$ indicates a bimodal distribution of two well-separated Gaussians; see Sec. S4.2 for its definition. One minor subtlety is that we plot ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$, which includes an additive $B_{\\perp}$ -dependent contribution to the resonator response which is harmless because it cancels out of the quantites of interest $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ and $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ (see the discussion below Eq. S40 in Sec. S4.1 for details).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p2",
+     "text": "We tune dot 2 to charge degeneracy and use the TGP to select a magnetic field and a $V_{\\mathrm{\\scriptscriptstyle WP1}}$ range for our measurements. For device A, the relevant regime is in the neighborhood of $B_{\\parallel}=$1.8\\text{\\,}\\mathrm{T}$$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}=$-1.832\\text{\\,}\\mathrm{V}$$. When device A is in this regime, we observe oscillations in the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ time trace with a period of $1.7(\\pm 0.2)\\text{\\,}\\mathrm{mT}$ (shown for measurement A1 in Fig. 3 a). This period coincides with the $1.7\\text{\\,}\\mathrm{mT}$ expected to produce a flux of $h/2e$ through the interference loop in this device geometry. The visibility and phase of the oscillations vary between successive charge transitions in dot 2. This observed behavior is consistent with the random matrix theory prediction for a disordered quantum dot. Indeed, a similar difference in the visibility of flux-induced oscillations across different charge transitions was recently observed in a double quantum dot interferometer experiment. In Sec. 4, we discuss oscillations with different periods that are observed at other points in the device’s parameter space.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p3",
+     "text": "Histograms of the ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ time trace for one of the dot 2 transitions in device A confirm that the negative kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ originates from a bimodal distribution of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values, as shown in Fig. 3 b. The time evolution of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits a random telegraph signal (RTS) at flux values where there is negative kurtosis, as in Fig. 3 f, but no telegraph signal when the kurtosis is near zero, as in Fig. 3 c. As demonstrated in Fig. 3 i, the intervals between switches follow an exponential distribution with a characteristic time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}\\approx$2\\text{\\,}\\mathrm{ms}$$. From the histograms, we extract an achieved SNR of $4.9$ in $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ ( Fig. 3 g,h) or, equivalently, an SNR of $1$ in $3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ (see Sec. S4.3). We interpret these $h/2e$ -periodic bimodal oscillations and RTS in ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ as originating from switches of fermion parity. Such switches have been observed in mesoscopic superconducting devices, where they were triggered by non-equilibrium QPs infiltrating from the superconducting leads.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p4",
+     "text": "We support this interpretation by reproducing our results with quantum dynamics simulations that incorporate rf drive power, charge noise, and temperature. To build intuition for those simulations, we use an idealized model (see Sec. S2.2) subject to the follow assumptions: the wire is in the topological phase and there are no sub-gap states other than the MZMs; the charging energy and level spacing in the dots are much greater than the temperature; dot 1 and dot 3 are sufficiently detuned that their influence is fully encapsulated in the effective couplings $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$ to MZMs at the ends of the wire (see Fig. 1 a); and the drive frequency and power are both negligible. In this limit, the quantum capacitance as a function of the total fermion parity in the QD-wire system, $Z$, is given by $C_{\\mathrm{\\scriptscriptstyle Q}}(Z,\\phi)=\\frac{2e^{2}\\alpha^{2}|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}}{\\bigl[(E_{\\mathrm{\\scriptscriptstyle D}}+2ZE_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}\\bigr]^{3/2}}\\\\ \\times\\tanh\\biggl(\\frac{\\sqrt{(E_{\\mathrm{\\scriptscriptstyle D}}+2ZE_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}}}{2k_{\\mathrm{\\scriptscriptstyle B}}T}\\biggr),$ (1) where $E_{\\mathrm{\\scriptscriptstyle D}}$ is the detuning from the charge degeneracy point, $\\alpha$ is the lever arm of the plunger gate to the dot, $E_{\\mathrm{\\scriptscriptstyle M}}$ is the MZM energy splitting, and $T$ is the temperature. The net effective tunneling that results from the interference between different trajectories from the dot to the MZMs and back, $t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)$, is $|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}=|t_{\\mathrm{\\scriptscriptstyle L}}|^{2}+|t_{\\mathrm{\\scriptscriptstyle R}}|^{2}+2Z|t_{\\mathrm{\\scriptscriptstyle L}}||t_{\\mathrm{\\scriptscriptstyle R}}|\\sin\\phi.$ (2)",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p5",
+     "text": "Here, $\\phi$ is the phase difference between $t_{\\mathrm{\\scriptscriptstyle L}}$ and $t_{\\mathrm{\\scriptscriptstyle R}}$, which is controlled by the magnetic flux $\\Phi$ through the interference loop created by the dot, the wire, and the tunneling paths between them according to $\\phi=2\\pi\\Phi/\\Phi_{0}+\\phi_{0}$, where $\\Phi_{0}=h/e$ and $\\phi_{0}$ is a flux-independent offset. To capture the extent to which $C_{\\mathrm{\\scriptscriptstyle Q}}$ can be used to discriminate between $Z=\\pm 1$, it is convenient to introduce $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}(\\phi)=|C_{\\mathrm{\\scriptscriptstyle Q}}(Z=1,\\phi)-C_{\\mathrm{\\scriptscriptstyle Q}}(Z=-1,\\phi)|.$ (3) The interferometer must be well-balanced $t_{\\mathrm{\\scriptscriptstyle L}}\\sim t_{\\mathrm{\\scriptscriptstyle R}}$ in order for $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ to be large. When $E_{\\mathrm{\\scriptscriptstyle M}}=0$, $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits maxima along the $E_{\\mathrm{\\scriptscriptstyle D}}=0$ line, with flux periodicity $h/2e$. In the presence of finite splitting $E_{\\mathrm{\\scriptscriptstyle M}}\\neq 0$, the $Z=1$ maxima form an $h/e$ -periodic arrangement along the $E_{\\mathrm{\\scriptscriptstyle D}}=-2E_{\\mathrm{\\scriptscriptstyle M}}$ line while the $Z=-1$ maxima form a similar arrangement along the $E_{\\mathrm{\\scriptscriptstyle D}}=2E_{\\mathrm{\\scriptscriptstyle M}}$ line, but out of phase by a flux offset of $h/2e$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F4",
+     "text": "Figure 4: Simulated dynamical $C_{\\mathrm{\\scriptscriptstyle Q}}$ as a function of magnetic flux and dot 2 gate offset charge $N_{\\mathrm{g}2}$, including the effects of charge and readout noise, as well as non-zero temperature, drive power, and frequency, per the discussion in the text. a: Histogram of the two parity sectors for fixed $N_{\\mathrm{g}2}=0.49$. Here, we used $t_{\\mathrm{m}1}=t_{\\mathrm{m}2}=$6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{12}=t_{23}=$8\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{{\\rm\\scriptscriptstyle C}1}=$140\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{{\\rm\\scriptscriptstyle C}2}=$45\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{{\\rm\\scriptscriptstyle C}3}=$100\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $N_{\\mathrm{g}1}=N_{\\mathrm{g}3}=0.3$, $T=$50\\text{\\,}\\mathrm{mK}$$, and $E_{\\mathrm{\\scriptscriptstyle M}}=0$. b: Kurtosis of $C_{\\mathrm{\\scriptscriptstyle Q}}(t)$ as a function of $N_{\\mathrm{g}2}$ and flux through the loop. The middle of the dashed red rectangle indicates the $N_{\\mathrm{g}2}$ value used for the linecut in panel a.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p6",
+     "text": "For detailed comparison with experiments, we simulate a more complete model of our interferometer, expanded to include the full triple-dot system, incoherent coupling to the environment, and backaction from the measurement. As before, we neglect all states in the wire except the MZMs. Using the methods discussed in Secs. S2.4 and S2.5, we compute $C_{\\mathrm{\\scriptscriptstyle Q}}$ at temperature $T=$50\\text{\\,}\\mathrm{mK}$$; charge-noise-induced dephasing rate $\\gamma=$1\\text{\\,}\\mathrm{G}\\mathrm{H}\\mathrm{z}$$; drive frequency $\\omega=2\\pi\\times$500\\text{\\,}\\mathrm{M}\\mathrm{H}\\mathrm{z}$$; detuning drive amplitude $A_{\\mathrm{rf}}=$5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$; and lever arm $\\alpha=0.45$. These values for the temperature and charge noise are based on quantum dot measurements in our system, which we discuss in Secs. S7 and S8.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p7",
+     "text": "The simulated dynamical $C_{\\mathrm{\\scriptscriptstyle Q}}$, defined in Sec. S2.3, is shown in Fig. 4. The $C_{\\mathrm{\\scriptscriptstyle Q}}$ histograms in Fig. 4 a reveal two $h/e$ -periodic branches (one shown in red and the other in blue), associated with the two parities of the coupled system. For $t_{\\mathrm{m}1}=t_{\\mathrm{m}2}=$6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{12}=t_{23}=$8\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{{\\rm\\scriptscriptstyle C}1}=$140\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{{\\rm\\scriptscriptstyle C}2}=$45\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{{\\rm\\scriptscriptstyle C}3}=$100\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $N_{\\mathrm{g}1}=N_{\\mathrm{g}3}=0.3$, our simulations yield an estimated maximum value as a function of flux $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}\\approx$1\\text{\\,}\\mathrm{fF}$$, which is close to the measured value shown in Fig. 3 f-h.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p8",
+     "text": "If the fermion parity $Z$ were perfectly conserved, then the device would remain in one of the two parity eigenstates and the $\\Phi$ dependence would follow either the blue or the red trace in Fig. 4 a. However, $Z$ fluctuates on a time scale given by the quasiparticle poisoning time $\\tau_{\\mathrm{qpp}}$. Hence, in traces over times longer than $\\tau_{\\mathrm{qpp}}$, a bimodal distribution of $C_{\\mathrm{\\scriptscriptstyle Q}}$ values is expected, i.e. both the blue and red traces in Fig. 4 a. Consequently, the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ exhibits minima where $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ is peaked, as shown in Fig. 4 b, and time traces taken at these points will exhibit a telegraph signal composed of switches between the values $C_{\\mathrm{\\scriptscriptstyle Q}}(1,\\phi)$ and $C_{\\mathrm{\\scriptscriptstyle Q}}(-1,\\phi)$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p9",
+     "text": "We can check the consistency of the time scale $\\tau_{\\mathrm{qpp}}$ by estimating the non-equilibrium quasiparticle density $n_{\\mathrm{qp}}$ from the rate at which the combined QD-MZM system absorbs a non-equilibrium quasiparticle, setting $\\tau_{\\mathrm{qpp}}\\equiv\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$, and verifying consistency with an independent, more direct, measurement. The rate of such absorption of a non-equilibrium quasiparticle can be estimated via $\\tau_{\\mathrm{qpp}}^{-1}=\\gamma_{0}\\zeta n_{\\mathrm{qp}}\\mathcal{V}$, where $1/\\gamma_{0}\\sim$1\\text{\\,}\\mathrm{ns}$$ is a typical time scale for a quasiparticle to relax via electron-phonon coupling and become trapped in the topological wire segment, $\\zeta$ is the probability that an above-parent-gap quasiparticle is in the InAs forming the topological segment, $\\mathcal{V}$ is the volume of the superconductor in contact with the topological segment, and $n_{\\mathrm{qp}}$ is the density of quasiparticles in Al at $B_{\\parallel}\\sim$2\\text{\\,}\\mathrm{T}$$. The weight $\\zeta$ is suppressed by the ratio of the semiconductor to superconductor densities of states and is typically of the order of $\\zeta\\sim 10^{-3}$ in the single subband regime. Within this model, poisoning time scales of $\\tau_{\\mathrm{qpp}}\\sim$2\\text{\\,}\\mathrm{ms}$$ arise from a non-equilibrium quasiparticle density $n_{\\mathrm{qp}}\\sim$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$^{-3}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p10",
+     "text": "In a separate experiment detailed in Sec. S9, we study quasiparticle poisoning using a Cooper pair box device which is filtered and shielded from radiation in a manner similar to the device in Fig. 2 (see Sec. S1.4). Using dispersive gate sensing, we measure the quantum capacitance of a Cooper pair box and observe even-odd switching events in real time. This enables us to extract the density of non-equilibrium quasi-particles in the Al strip, yielding $n_{\\mathrm{qp}}^{\\mathrm{\\scriptscriptstyle CPB}}\\approx$0.6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$^{-3}$ at $B_{\\parallel}=0$. This estimate is within an order of magnitude of the inferred value from $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ and is comparable to the densities measured in prior studies.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F5",
+     "text": "Figure 5: a: Schematic of the device configuration for the quasiparticle injection measurement. The left interferometer loop is in the standard measurement configuration but now there is a trivial superconducting segment and a tunnel junction on the right half of the device to enable injection of current at an energy set by bias $V_{3}$. b: Extracted dwell times and $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ as a function of bias $V_{3}$. For biases larger than $\\approx$70\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$$, we observe a decrease in dwell time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$, while the observed $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ remains stable up to about $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p11",
+     "text": "The reproducibility of the observed phenomena is demonstrated in Sec. S6.1, where we discuss a second measurement (A2) on device A ( Fig. S8) and a measurement of device B ( Fig. S9). We see very similar flux-dependent bimodality and RTS in these two additional data sets.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p12",
+     "text": "We also perform three checks of our interpretation of the observed phenomena. First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a (similar to the approach used in Ref.). Here, we make use of one of the tunnel junctions on the fourth gate-defined wire segment, which is not part of the interferometry loop. A fraction of the injected quasiparticles eventually reaches the MZMs, resulting in an enhanced switching rate. As can be seen in Fig. 5 b (measured on device B), $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ decreases to half of its value as the bias voltage is increased from $0$ to $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$, while $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits weak dependence on bias voltage. This indicates that quasiparticle injection primarily increases the rate of fermion parity switches, with minimal impact on other TQDI properties. For bias value of $100\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$ or more, the switching time becomes comparable to the measurement time, making both $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ and $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ difficult to resolve.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p13",
+     "text": "Our second control experiment is to completely disconnect the dots from the wire. In devices A and B, we do not observe any RTS, as discussed in Sec. S6.2. This argues against the RTS being caused by two-level systems outside the wire (e.g. in the dielectric), an effect which has been observed in quantum dots and quantum point contacts.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p14",
+     "text": "Finally, we repeat the interferometry measurement at a low field ( $0.8\\text{\\,}\\mathrm{T}$), where the device is well within the trivial phase, and the induced gap in the nanowire has not closed yet. As shown in Sec. S6.3, we do not observe any $h/e$ flux periodicity as expected for a gapped wire, corroborating the expectation that the observed phenomena summarized in Fig. 3 is due to a low-energy state in the nanowire and that two-electron processes are negligible.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p15",
+     "text": "In Sec. S3, we extend the model introduced above to allow us to analyze the quasi-MZM scenario discussed in previous works. We introduce an additional pair of “hidden” Majorana modes that are weakly coupled to each other and to the MZMs, which themselves are coupled to QD1 and QD3. While this scenario can manifest in the trivial phase, it is generic for the couplings to be large and some amount of fine-tuning is required to make them small. We find that when these “hidden” Majorana modes are weakly coupled to each other and to other MZMs, the quantum capacitance signal is significantly suppressed, to a degree that is inconsistent with the measured values. Our analysis suggests that a rather substantial coupling (larger than the temperature) between these “hidden” Majorana modes is necessary to account for the experimental results. In such cases, the “hidden” Majorana modes effectively become gapped out, bringing us back to the low-energy model described by Fig. 1 [see Eq. S14 ], which we compare to our measurements in this section [as in Eq. 1 and Fig. 4 ] and the next.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Different observed interferometry regimes",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.F6",
+     "text": "Figure 6: a,b: The measured gate-gate scans used to extract the QD-MZM couplings and (c) the measured kurtosis in the TQDI configuration, taken at the same point in the $(B_{\\parallel},V_{\\mathrm{\\scriptscriptstyle WP1}})$ phase diagram. The dashed lines indicate the points in $N_{\\mathrm{g}1}$ and $N_{\\mathrm{g}3}$ where the data in panels c and d were taken. In panels a and b, for easier comparison to the simulated data, we have shifted ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ to vanish deep in Coulomb blockade. d: The kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ with $V_{\\mathrm{\\scriptscriptstyle WP1}}$ increased by $0.39\\text{\\,}\\mathrm{mV}$ relative to panel c. Note that the bimodality is not visible at small $B_{\\perp}$ here due to the movement of the resonator frequency with field. e,f: Simulated gate-gate scans which are fit to the experimental data in panels a and b in order to extract the QD-MZM couplings. g: The simulated kurtosis for the same couplings and with $E_{\\mathrm{\\scriptscriptstyle M}}=0$. h: The simulated kurtosis in the topological phase with only $E_{\\mathrm{\\scriptscriptstyle M}}$ modified to $E_{\\mathrm{\\scriptscriptstyle M}}=$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.p1",
+     "text": "The oscillations shown in Fig. 3 b are the easiest to interpret but they are not the only type of oscillations that we observe when we vary the voltage $V_{\\mathrm{\\scriptscriptstyle WP1}}$ by $12\\text{\\,}\\mathrm{mV}$ around the configuration where we observe $h/2e$ oscillations. In this section, we show how these other cases can be explained within the model discussed in the previous section (see Sec. S2 for more details of the model).",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p2",
+     "text": "To apply this model, we first extract the model parameters $t_{\\mathrm{m}1}$, $t_{\\mathrm{m}2}$, $t_{12}$, and $t_{23}$ (along with the charges $N_{\\mathrm{g}i}$ and charging energies). We fit the measured response consistently in three different configurations: (i) dot 3 is maximally detuned, (ii) dot 1 is maximally detuned, and (iii) all dots are optimally tuned to balance the interferometer. As an example, the scan shown in Fig. 6 a, which is taken with dot 3 detuned to cut off the right arm of the interferometer, can be quantitatively compared to the simulated data in Fig. 6 e to determine the couplings $t_{12}$ and $t_{\\mathrm{m}1}$. The extent of the dark blue region in the $N_{\\mathrm{g}1}$ direction in Fig. 6 a is correlated with $t_{\\mathrm{m}1}$ while the extent along the $N_{\\mathrm{g}1}-N_{\\mathrm{g}2}$ diagonal is correlated with $t_{12}$ (see Sec. S2.5 for details). Similarly, Fig. 6 b and Fig. 6 f (taken with the left arm of the interferometer cut) are used to determine the couplings $t_{23}$ and $t_{\\mathrm{m}2}$. This leaves us with one independent parameter $E_{\\mathrm{\\scriptscriptstyle M}}$, which can be fitted to $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ data when both arms of the interferometer are connected.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p3",
+     "text": "We now classify the various types of oscillations that we have observed according to the following scenarios: (a) The kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ is flux-dependent with a period of $h/2e$, as illustrated in Fig. 6 c. The histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values shows bimodality with this period, as shown in Fig. 3 b and Fig. 7 a. We interpret this scenario as resulting from a balanced interferometer with two parity branches, both of which exhibit clear $h/e$ periodicity. (b) The kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ exhibits a characteristic $h/e$ -periodic zig-zag pattern, as shown in Fig. 6 d. A fixed- $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ horizontal cut through the $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ plot has $h/e$ -periodicity, and the histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values shows bimodality with $h/e$ -periodic oscillations that are more pronounced in one branch, as in Fig. 7 b. We identify this scenario with a balanced interferometer with two parity branches, one of which has stronger flux dependence than the other at a fixed value of $N_{\\mathrm{g}2}$. (c) There is bimodality, but neither $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ nor the histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values shows visible periodicity in flux, as shown in Fig. 7 c. This scenario can be interpreted as a very unbalanced interferometer, resulting in an absence of distinct flux dependence in either of the parity branches.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p4",
+     "text": "We begin by explaining scenario (a) in terms of a balanced interferometer model with a small $E_{\\mathrm{\\scriptscriptstyle M}}$ value. Applying the procedure described above to the dataset discussed in Fig. 6 a-c, we obtain the following model parameters for the particular charge transition point in that figure: $t_{\\mathrm{m}1}\\approx$6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{\\mathrm{m}2}\\approx$4\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{12}\\approx t_{23}\\approx$12\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, and $E_{\\mathrm{\\scriptscriptstyle M}}\\approx 0$. These parameters lead us to Fig. 6 e-g and Fig. 7 d. A close examination reveals good agreement between the measured ( Fig. 7 a) and simulated ( Fig. 7 d) data. Hence, scenario (a) can be explained by $t_{\\mathrm{m}2}\\sim t_{\\mathrm{m}1}$ and small $E_{\\mathrm{\\scriptscriptstyle M}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.F7",
+     "text": "Figure 7: a-c: Evolution of the histogram of resonator response values with voltage $V_{\\mathrm{WP1}}=$-1.8312\\text{\\,}\\mathrm{V}$+\\Delta V_{\\mathrm{WP1}}$, which is a sampling of a dataset that has more closely-spaced $V_{\\mathrm{\\scriptscriptstyle WP1}}$ values. We use the same greyscale as in Fig. 3. Moving from left to right, panels a, b, and c exemplify scenarios a, b, and c described in the text. Each panel corresponds to a fixed charge transition of dot 2, typically the one with strongest signal. d-f: Simulated data illustrating how this evolution can be understood in terms of the splitting of the fermionic mode $E_{\\mathrm{\\scriptscriptstyle M}}$ and the balancing of the couplings $t_{\\mathrm{m}1}$, $t_{\\mathrm{m}2}$. Here, as in Fig. 6, blue and red indicate different total parities of the system. We have fixed $t_{12}=t_{23}=$12\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $N_{\\mathrm{g}1}=0.7$ and $N_{\\mathrm{g}3}=0.35$ throughout. Moving from left to right, the MZM splitting $E_{\\mathrm{\\scriptscriptstyle M}}$ increases from 0 to $3$ to $6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$. Meanwhile the asymmetry between the left and right arms of the interferometer, $t_{\\mathrm{m}2}/t_{\\mathrm{m}1}$, is $1.5$ in panels d and e and $40$ in panel f.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.p5",
+     "text": "In order to delve into scenario (b), we analyze the dataset displayed in Fig. 7 b (corresponding to a cut at $N_{\\mathrm{g}2}=0.5$ in Fig. 6 d) and Fig. 7 e. Oscillations with period $h/e$ are apparent in one of the parity branches in Fig. 7 b 1 1 1 Note that $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ in Fig. 6 d and the $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ oscillations in Fig. 7 b are suppressed for small $B_{\\perp}$ because the resonator frequency shifts with $B_{\\perp}$, which leads to a reduction in SNR. and e, thereby realizing scenario (b). This dataset is offset by $\\Delta V_{\\mathrm{\\scriptscriptstyle WP1}}=$0.39\\text{\\,}\\mathrm{mV}$$ from the data in Fig. 7 a. Our simple model reproduces similar data, as shown in Fig. 6 h and Fig. 7 e by taking $E_{\\mathrm{\\scriptscriptstyle M}}=$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ and keeping the other junction and dot parameters the same. This results in the characteristic zig-zag pattern in $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ with peaks offset from each other by $4E_{\\mathrm{\\scriptscriptstyle M}}$. In this regime, the observation of oscillations in both parity branches is unlikely, as can be seen in Fig. 7 e. The qualitative agreement apparent between Fig. 7 b and e suggests that scenario (b) is consistent with $t_{\\mathrm{m}2}\\sim t_{\\mathrm{m}1}$ and a moderate $E_{\\mathrm{\\scriptscriptstyle M}}$. It is worth noting that this method enables us to probe the Majorana splitting energy $E_{\\mathrm{\\scriptscriptstyle M}}$ with single- $\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$ resolution. This is a crucial parameter that characterizes the topological phase. Achieving a similar resolution for extracting $E_{\\mathrm{\\scriptscriptstyle M}}$ in transport measurements is quite challenging.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p6",
+     "text": "Lastly, scenario (c) is depicted in Fig. 7 c. Here, ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits bimodality but lacks flux-dependent oscillations. This observation is consistent with $t_{\\mathrm{m}2}\\gg t_{\\mathrm{m}1}$ and large $E_{\\mathrm{\\scriptscriptstyle M}}$, as demonstrated in Fig. 7 f. In this configuration, the interferometer loop is almost severed, leading to the absence of flux dependence in both parity branches. Despite this, the bimodality is still present due to non-zero $E_{\\mathrm{\\scriptscriptstyle M}}$, as may be seen in Fig. 7 f. If the loop were severed and $E_{\\mathrm{\\scriptscriptstyle M}}=0$, then the bimodality would disappear as well.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p7",
+     "text": "The changes we observe in the measured signal as a function of $V_{\\mathrm{\\scriptscriptstyle WP1}}$ can be attributed to changes in the properties of the low-energy state in the wire. We have fit our data to a model in which this state is assumed to be due to Majorana zero modes and find good agreement. Within the topological phase, we expect a substantial variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ in our current devices, attributable to mesoscopic fluctuations due to finite-size effects. Indeed, in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length. However, for devices with significantly higher $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$, such variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ is expected only at the boundaries of the topological phase where the system turns gapless. Conversely, deep within the topological phase, robust $h/2e$ -periodic oscillations of $K(C_{\\mathrm{\\scriptscriptstyle Q}})$, indicative of bimodality, should be observable.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Discussion and outlook",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "We have presented dispersive gate sensing measurements of the quantum capacitance in topological qubit devices designed for the readout of fermion parity shared between MZMs at the opposite ends of a nanowire. After tuning the nanowire density and in-plane magnetic field into the parameter regime where we expect the topological phase, and balancing the interferometer formed by the nanowire and the quantum dots, we observed a flux-dependent bimodal random telegraph signal (RTS) in the quantum capacitance. We interpret this RTS as switches of the parity of a fermionic state in the wire. The long switching time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}>$1\\text{\\,}\\mathrm{ms}$$ suggests a low quasiparticle poisoning rate, which we find to be within an order of magnitude of the quasiparticle density measured in a Cooper pair box device. This interpretation has been further validated by the decrease of $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ that occurs when we intentionally inject quasiparticles into the device and also by the disappearance of the RTS when we isolate the wire from the dots. We have fit these data to a model in which the fermion parity is associated with two MZMs localized at the opposite ends of a 1DTS, and we find good agreement. These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological. However, by fitting to a model of trivial Andreev states, we have tightly constrained the properties that such states would have to have in order to be consistent with our data. To fully resolve this issue, we will discuss the device’s phase diagram and the stability of the observed flux-dependent RTS in a separate publication.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.p2",
+     "text": "In conclusion, our findings represent significant progress towards the realization of a topological qubit based on measurement-only operations. Single-shot fermion parity measurements are a key requirement for a Majorana-based topological quantum computation architecture.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Supplementary information",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 1,
+   "title": "S1 Device design, fabrication, and system setup",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S1.1 Device layout details",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS1.p1",
+     "text": "The qubit device shown in Fig. S1 is a practical realization of the linear tetron of Refs.. The complete device has 7 quantum dots, three long ones and four small ones. For concreteness, we call the long dots dot 2, dot 4, and dot 6; the small dots are dot 1, dot 3, dot 5, and dot 7. Dots 2 and 6 run parallel to the two topological sections of the nanowire, and dot 4 runs parallel to the middle trivial section of the nanowire. Each quantum dot is covered by a plunger gate in the second gate layer, whose purpose is to set the electrical potential on the underlying dot. We refer to the dot plunger gates using the convention “QD i ”. There are also “cutter” gates in the second gate layer. They cover the junctions: nanowire-dot 1, dot 1-dot 2, dot 2-dot 3, dot 3-nanowire, etc. as shown in Fig. S1 a. Quantum dot cutter “QC i ” gates control inter-dot tunnel couplings; tunnel gates “TG i ” control coupling between the small dots and the nanowire; and source cutter “SC i ” gates control coupling between the small dots and the two-dimensional electron gas (2DEG) reservoirs. The 2DEG density in these reservoirs is set by the voltage on the helper gates “HG i ” which run from the dot region all the way to metallic Ohmic source contacts (denoted by purple boxes labeled “S i ” in Fig. S1 a). The gates QD1, QD3, QD5, and QD7 are used to de-tune dot states from the Fermi energy, thereby setting the effective tunneling amplitudes of the MZMs from the wire to dot 2, dot 4, and dot 6 via tunneling through the small dots. The lateral confinement of the dots is provided by the wire plunger “WP i ” gates and depletion gates “DG i ”.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.F1",
+     "text": "Figure S1: a: The gate layout of our device and voltage ranges necessary to form the interferometry loops needed for a functioning qubit device. Normal metal drain contacts (D1 and D2) are indicated in yellow. Normal metal source contacts S1-S4 are formed in 2DEG regions indicated by the purple boxes. The dark gray gates are normally set to very negative voltages $V<$-2.5\\text{\\,}\\mathrm{V}$$ so that the quantum well is fully depleted underneath the gate, even underneath the aluminum strip (strong depletion). The teal gates are normally set to moderately negative voltages (between $-2\\text{\\,}\\mathrm{V}$ and $-1.5\\text{\\,}\\mathrm{V}$) so that the quantum well is fully depleted underneath the gate, except underneath the aluminum strip (light blue), where the lowest sub-band is partially occupied (depletion). The white gates are set to voltages to form tunnel junctions and modulate the associated dot-nanowire or dot-dot tunnel coupling. The red gates are set to more positive voltages (accumulation). b: The corresponding gates can be seen in the SEM image, where we have also marked the locations of the quantum dots, the MZMs, the tunneling paths between them, and the interference loop that links them all. Note that in the measurements presented in the main text, helper gates HG1 and HG2 are set to depletion to reduce the required voltages on SC1 and SC2 to isolate the loop, though this voltage setting is not required. Additionally, in the main text where the focus is on the left loop, the dot gates corresponding to the middle loop (QC3 and QD4) are fully depleted and the remaining gates on the right loop are grounded.",
+     "kind": "caption"
+    },
+    {
+     "id": "A1.SS1.p2",
+     "text": "The two topological wire segments (segments under WP1 and WP3) are $2.96\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$ long, and the trivial segment (segment under WP2) between them is $2.96\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$ long. Simulations of this device indicate that, in the topological phase, the coherence length has minimum value $\\xi=$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$$, so $e^{-L/\\xi}\\approx 0.05$. The outer trivial segments (regions under side plungers SP1 and SP2) are $5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$ long; hence, the topological segments are far from the normal electrons at the Ohmic contacts at the ends of the Al strip (drain contacts D1 and D2). The Al strip and, therefore, the nanowire beneath it is $60\\text{\\,}\\mathrm{nm}$ wide, enabling full depletion of the InAs quantum well beneath the Al while providing sufficient screening of charged impurities in the dielectric.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS1.p3",
+     "text": "The small dots (dots 1, 3, 5, 7) have a T-junction shape with a width of $200\\text{\\,}\\mathrm{nm}$ where they meet the cutter gates and an effective length between the nanowire and dot 2 of $400500\\text{\\,}\\mathrm{nm}$. The long dots (dots 2, 4, 6) are $2.4\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$ long. The cutter gates are $100\\text{\\,}\\mathrm{nm}$ wide. These lengths were chosen so that dot 2 could couple via dot 1 and dot 3 to the left topological segment’s MZMs, which are $\\approx$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$$ apart; dots 1, 2, and 3 bridge this length. By breaking the length up in this way, we ensure that all dots have level spacings $\\gtrsim$10\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ and dots 2, 4, and 6 have charging energy $\\gtrsim$45\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$. Meanwhile, dots 1, 3, 5, and 7 have charging energy $\\gtrsim$100\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$. Since the long dot level spacing is greater than the temperature, thermal smearing of the interference signal is minimized.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.2 Device fabrication",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS2.p1",
+     "text": "The device presented here follows the same fabrication as dual-layer gate devices presented in the preceding work. The $6.5\\text{\\,}\\mathrm{nm}$ thick Al strip on top of the semiconductor substrate features larger Al pads at each end of length $1.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$ and width $3.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$, see Fig. S1 a. The Al pads are Argon milled to ensure low-resistance Ohmic contact to electron beam lithography defined structures of Ti( $10\\text{\\,}\\mathrm{nm}$)/Au( $140\\text{\\,}\\mathrm{nm}$)/Ti( $10\\text{\\,}\\mathrm{nm}$) by which the Al strip is grounded. Both types of contacts are normal in the typical operating regime.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS2.p2",
+     "text": "The Ti( $2\\text{\\,}\\mathrm{nm}$)/Au( $15\\text{\\,}\\mathrm{nm}$)/Ti( $2\\text{\\,}\\mathrm{nm}$)/Al( $10\\text{\\,}\\mathrm{nm}$) Gate layer 1 is separated from the semiconductor by Dielectric 1 which consists of $\\approx$2\\text{\\,}\\mathrm{nm}$$ AlO x and $10\\text{\\,}\\mathrm{nm}$ HfO x. The electron beam lithography-defined gates in the first gate layer define the nanowire by depleting the 2DEG around the Al strip and also the quantum dots. The Ti(10nm)/Au(60nm) Gate layer 2 is separated from Gate 1 by Dielectric 2 which is $15\\text{\\,}\\mathrm{nm}$ AlO x. Layer 2 gates, also patterned by electron beam lithography, enable independent control of the coupling between the nanowire and quantum dots as well as the chemical potential of the quantum dots.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.3 Superconductor-semiconductor hybrid heterostructure design",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS3.p1",
+     "text": "The heterostructure presented here is grown on commercially available semi-insulating InP wafers. A graded buffer is used to translate the lattice constant from that of InP, $0.587\\text{\\,}\\mathrm{nm}$, to one near InAs, $0.605\\text{\\,}\\mathrm{nm}$. The active region is constructed on the graded buffer and consists of a $25\\text{\\,}\\mathrm{nm}$ In 0.845 Al 0.155 As lower barrier, a $9.1\\text{\\,}\\mathrm{nm}$ thick InAs quantum well and a $6\\text{\\,}\\mathrm{nm}$ thick In 0.88 Al 0.12 As top barrier, as well as the Al superconductor. The top barrier layer plays a critical role in fine-tuning the coupling between the superconductor and the 2DEG residing in the quantum well. For an Al parent gap which is $\\Delta_{0}\\sim$290\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ in our device, we measure an induced gap $\\Delta_{\\mathrm{ind}}\\sim$110\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$. Another function of the top barrier layer is to separate the quantum well states from disorder on the dielectric-covered surface of the stack. From a Hall bar device simultaneously fabricated on the same chip as the nanowire device, we extract a peak mobility $\\mu\\sim$75\\,000\\text{\\,}\\mathrm{cm}$$ at a density $n_{\\mathrm{max}}\\sim$1.2\\text{\\times}{10}^{12}\\text{\\,}\\mathrm{cm}$$.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS3.p2",
+     "text": "Spin-orbit coupling strength in a hybrid superconductor-semiconductor structure is difficult to measure directly. Using weak anti-localization measurements in shallow InAs 2DEGs, see, for example, Ref., and typical values of the electric field (obtained from simulations assuming the band offset parameter measured in Ref.), we estimate that the Rashba spin-orbit coupling is in the range of $510\\text{\\,}\\mathrm{meV}\\text{\\,}\\mathrm{nm}$.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.4 Readout system",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS4.p1",
+     "text": "The microwave readout chain is shown in Fig. S2. To measure fermion parity, the readout chain is designed to minimize the system noise temperature while maximizing the quasiparticle poisoning time $\\tau_{\\mathrm{qpp}}$. To this end, we use a near-quantum limited amplifier, the JTWPA, as the first amplifier in the reflectometry setup. At the same time, low-pass and IR filters and several layers of shielding are applied to suppress stray radiation impinging on the sample. A table of key parameters characterizing the readout system is given in Table S1.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.T1",
+     "text": "Table S1: Measured parameters for devices A and B (run 1), which are used to estimate the expected SNR. Both devices use an inductor with $L_{\\mathrm{res}}$ = $115\\text{\\,}\\mathrm{n}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "appendix1.F2",
+     "text": "Figure S2: Schematic diagram of the reflectometry setup used for the measurement of fermion parity by dispersive gate sensing, and shielding applied to sample, and filtering of rf and dc lines. The resonator chip includes a bias tee for setting $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$, through $R_{\\mathrm{bias}}=16$\\text{\\,}\\mathrm{k}$$, and rf signal is routed to the capacitively coupled port, through $C_{\\mathrm{c}}\\sim$8\\text{\\,}\\mathrm{pF}$$, to the rest of the interferometry setup. Here, we have used the standard abbreviations for a digital-to-analog converter (DAC), low-pass filter (LPF), and high-pass filter (HPF).",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.5 Software",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS5.p1",
+     "text": "All measurements have been implemented using QCoDeS open-source python library for instrument control and data acquisition.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S2 Theoretical model",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S2.1 Basic features of the device design",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS1.p1",
+     "text": "In the topological superconducting phase of a nanowire, the low-energy physics is characterized by two real fermionic operators $\\gamma_{1}$ and $\\gamma_{2}$. These operators are localized at the left and right ends of the topological section, respectively, and satisfy the relationship $\\{{\\gamma_{i}},{\\gamma_{j}}\\}=2\\delta_{ij}$. The wire has two nearly-degenerate ground states with opposite fermion parities $i\\gamma_{1}\\gamma_{2}=\\pm 1$. The splitting energy between these states, $E_{\\mathrm{\\scriptscriptstyle M}}$, is approximately $E_{\\mathrm{\\scriptscriptstyle M}}\\sim\\Delta_{\\mathrm{\\scriptscriptstyle T}}\\exp(-L/\\xi)$ in the limit where $L\\gg\\xi$. Here, $\\xi$ represents the coherence length, and $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ is the topological gap. This behavior holds also in the presence of disorder, although the coherence length $\\xi$ is renormalized.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS1.p2",
+     "text": "To measure the parity of Majorana zero modes (MZMs), we designed a device with three quantum dots (QDs) and a readout resonator. The middle QD (dot 2) is coupled to the resonator, while the side QDs (dot 1 and dot 3) act as tunable barriers. We show that the tunneling rate between dot 2 and the nanowire depends on the detuning energies in dot 1 and dot 3. We then derive a low-energy model for this system and estimate the quantum capacitance signal.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S2.2 Effective Hamiltonian for MZM-dot 1-dot 2 system",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS2.p1",
+     "text": "We now develop an effective low-energy model for the MZM-dot 1-dot 2 system. This model facilitates the determination of the effective parameters in Eq. 1, and it elucidates the distinction between balanced and unbalanced interferometers. The Hamiltonian for the MZM-dot 1-dot 2 system is given by $\\displaystyle H$ $\\displaystyle\\!=\\!2E_{\\mathrm{\\scriptscriptstyle M}}\\left(c^{\\dagger}c\\!-\\!\\frac{1}{2}\\right)\\!+\\!\\Delta_{1}\\left(f^{\\dagger}f\\!-\\!\\frac{1}{2}\\right)\\!+\\!\\Delta_{2}\\left(d^{\\dagger}d\\!-\\!\\frac{1}{2}\\right)+H_{t},$ (S4) $\\displaystyle H_{t}$ $\\displaystyle\\!=\\!t_{\\mathrm{m}1}f^{\\dagger}(c+c^{\\dagger})+t_{\\mathrm{m}1}^{*}(c+c^{\\dagger})f+t_{12}f^{\\dagger}d+t_{12}^{*}d^{\\dagger}f.$ Here, we introduce non-local fermionic operators in the wire, denoted as $c=(\\gamma_{1}+i\\gamma_{2})/2$ and $c^{\\dagger}=(\\gamma_{1}-i\\gamma_{2})/2$. These operators encode the fermion occupation of a pair of Majorana zero modes, with Majorana splitting energy denoted by $E_{\\mathrm{\\scriptscriptstyle M}}$. The operators $f^{\\dagger}$, $f$ and $d^{\\dagger}$, $d$ are fermion creation and annihilation operators in the small (e.g., dot 1) and long (dot 2) quantum dots, respectively. The detuning of quantum dots $i$ from the degeneracy point is given by $\\Delta_{i}(N_{\\mathrm{g}i})=E_{{\\rm\\scriptscriptstyle C}i}(1-2N_{\\mathrm{g}i})+\\delta_{i}$. The parameters $E_{{\\rm\\scriptscriptstyle C}i}$, $N_{\\mathrm{g}i}$, and $\\delta_{i}$ denote the charging energy, dimensionless offset charge, and level spacing of the $i$ th dot, respectively. The dimensionless offset charge is controlled by the gate voltage, expressed as $N_{\\mathrm{g}i}=\\alpha_{i}eV_{{\\mathrm{\\scriptscriptstyle QD}i}}/2E_{{\\rm\\scriptscriptstyle C}i}$, where the lever arm $\\alpha_{i}=2C_{\\mathrm{g}i}E_{{\\rm\\scriptscriptstyle C}i}/e^{2}$. We assume that the level spacing in the quantum dots is large $\\delta_{i}\\gg k_{\\mathrm{\\scriptscriptstyle B}}T$, $|t_{12}|$, $|t_{\\mathrm{m}1}|$ ( $T$ being temperature), thereby enabling an effective description via a single-level approximation. Lastly, the matrix elements $t_{\\mathrm{m}1}$ and $t_{12}$ describe the tunneling between dot 1-MZM and dot 2-dot 1, respectively.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS2.p2",
+     "text": "Let us first focus on the even parity sector of the combined MZM-dot 1-dot 2 system and derive the effective Hamiltonian when dot 1 is detuned from resonance. We use the basis convention $|a,b,c,d\\rangle=|0,1,0,1\\rangle_{\\mathrm{MZM}}\\otimes|0,0,1,1\\rangle_{{\\mathrm{\\scriptscriptstyle QD}1}}\\otimes|0,1,1,0\\rangle_{{\\mathrm{\\scriptscriptstyle QD}2}}$. The corresponding Hamiltonian is given by $\\displaystyle H_{\\mathrm{even}}=\\left(\\begin{array}[]{cccc}-E_{\\mathrm{\\scriptscriptstyle M}}-\\Delta_{+}&0&0&-t_{m}^{*}\\\\ 0&E_{\\mathrm{\\scriptscriptstyle M}}-\\Delta_{-}&t_{\\mathrm{m}1}^{*}&t_{12}^{*}\\\\ 0&t_{\\mathrm{m}1}&-E_{\\mathrm{\\scriptscriptstyle M}}+\\Delta_{+}&0\\\\ -t_{\\mathrm{m}1}&t_{12}&0&E_{\\mathrm{\\scriptscriptstyle M}}+\\Delta_{-}\\end{array}\\right)\\!,$ where $\\Delta_{\\pm}=(\\Delta_{1}\\pm\\Delta_{2})/2$. The above Hamiltonian can be simplified in the limit of large dot 1 detuning. Assuming that $|\\Delta_{1}|\\gg|\\Delta_{2}|$, $|t_{\\mathrm{m}1}|$, $|t_{12}|$, $E_{\\mathrm{\\scriptscriptstyle M}}$ we can perform a Schrieffer-Wolff transformation and “integrate out” dot 1 to arrive at $\\displaystyle\\!\\!{\\tilde{H}}_{\\mathrm{even}}=\\left(\\begin{array}[]{cccc}-E_{\\mathrm{\\scriptscriptstyle M}}-\\Delta_{+}-\\cfrac{|t_{\\mathrm{m}1}|^{2}}{\\Delta_{1}}&\\cfrac{t_{12}t_{\\mathrm{m}1}^{*}}{\\Delta_{1}}&0&0\\\\ \\cfrac{t^{*}_{1}t_{\\mathrm{m}1}}{\\Delta_{1}}&E_{\\mathrm{\\scriptscriptstyle M}}-\\Delta_{-}-\\cfrac{|t_{\\mathrm{m}1}|^{2}+|t_{12}|^{2}}{\\Delta_{1}}&0&0\\\\ 0&0&-E_{\\mathrm{\\scriptscriptstyle M}}+\\Delta_{+}+\\cfrac{|t_{\\mathrm{m}1}|^{2}}{\\Delta_{1}}&\\cfrac{t_{12}^{*}t_{\\mathrm{m}1}}{\\Delta_{1}}\\\\ 0&0&\\cfrac{t_{12}t_{\\mathrm{m}1}^{*}}{\\Delta_{1}}&E_{\\mathrm{\\scriptscriptstyle M}}+\\Delta_{-}+\\cfrac{|t_{\\mathrm{m}1}|^{2}+|t_{12}|^{2}}{\\Delta_{1}}\\end{array}\\right)\\!.$ In this derivation, we have disregarded small terms of $O(1/|\\Delta_{1}|^{2})$. The upper left block is representative of an empty dot 1 (i.e., when $\\Delta_{1}>0$), while the lower right block is for an occupied dot 1 (i.e., when $\\Delta_{1}<0$). The off-diagonal terms within each sub-block correspond to co-tunneling through dot 1. Consequently, the side dots essentially facilitate a tunable MZM-dot 2 coupling. Furthermore, tunneling between dot 2-dot 1 and dot 1-MZM leads to a correction of detuning energies. It’s important to note that these corrections, induced by quantum fluctuations, differ for empty and occupied dot 2 states. Consequently, as shown below, the peak of the quantum capacitance experiences a shift with respect to the $\\Delta_{2}=0$ line even when $E_{\\mathrm{\\scriptscriptstyle M}}=0$.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS2.p3",
+     "text": "An analogous analysis can be performed for the odd parity sector of the combined MZM-dot 1-dot 2 subsystem. In the appropriate basis, the effective Hamiltonian ${\\tilde{H}}_{\\mathrm{odd}}$ can be derived from ${\\tilde{H}}_{\\mathrm{even}}$ by substituting $E_{\\mathrm{\\scriptscriptstyle M}}$ with $-E_{\\mathrm{\\scriptscriptstyle M}}$. The quantum capacitance for a state $n$ with energy $\\varepsilon_{n}$ can be expressed as $C_{\\mathrm{\\scriptscriptstyle Q}}^{(n)}=-e^{2}\\alpha^{2}\\,{\\partial^{2}{\\varepsilon_{n}}}/{\\partial E_{\\mathrm{\\scriptscriptstyle D}}^{2}}$. Assuming thermal occupation, the quantum capacitance for even and odd parity sectors reads: $C_{\\mathrm{\\scriptscriptstyle Q}}(Z)=\\frac{e^{2}\\alpha^{2}2|t_{\\mathrm{eff}}|^{2}}{\\left[(E_{\\mathrm{\\scriptscriptstyle D}}+Z2E_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{eff}}|^{2}\\right]^{3/2}}\\times\\\\ \\tanh\\left(\\frac{\\sqrt{(E_{\\mathrm{\\scriptscriptstyle D}}+Z2E_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{eff}}|^{2}}}{2k_{\\mathrm{\\scriptscriptstyle B}}T}\\right),$ (S13) where $E_{\\mathrm{\\scriptscriptstyle D}}=\\Delta_{2}-|t_{12}|^{2}/|\\Delta_{1}|$, $t_{\\mathrm{eff}}=t_{12}t_{\\mathrm{m}1}^{*}/\\Delta_{1}$ and $Z=\\pm 1$ for even/odd parity states of the combined MZM-dot 1-dot 2 subsystem. The temperature dependence is due to thermal occupation of the excited state within each parity sector, which suppresses $C_{\\mathrm{\\scriptscriptstyle Q}}$. In the interferometer setup, when dot 2 is coupled to both MZMs, one obtains Eq. 1, where the effective parameters are given by the expressions above.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S2.3 Dynamical response of the TQDI within linear response theory",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS3.p1",
+     "text": "In this section, we calculate the dynamical response of the TQDI coupled to a readout resonator. By extending the effective model derived earlier to the MZM-dot 1-dot 2-dot 3-MZM setup, we arrive at the following effective Hamiltonian: $H_{\\mathrm{\\scriptscriptstyle F}}=E_{\\mathrm{\\scriptscriptstyle D}}d^{\\dagger}d+2E_{\\mathrm{\\scriptscriptstyle M}}\\left(c^{\\dagger}c-\\frac{1}{2}\\right)\\\\ +t_{\\mathrm{\\scriptscriptstyle R}}d^{\\dagger}(c+c^{\\dagger})+t_{\\mathrm{\\scriptscriptstyle R}}^{*}(c+c^{\\dagger})d\\\\ +it_{\\mathrm{\\scriptscriptstyle L}}d^{\\dagger}(c^{\\dagger}-c)+it_{\\mathrm{\\scriptscriptstyle L}}^{*}(c^{\\dagger}-c)d.$ (S14) Here $E_{\\mathrm{\\scriptscriptstyle D}}=\\Delta_{2}-|t_{12}|^{2}/|\\Delta_{1}|-|t_{23}|^{2}/|\\Delta_{3}|$, $t_{\\mathrm{\\scriptscriptstyle L}}=t_{12}t_{\\mathrm{m}1}^{*}/\\Delta_{1}$, and $t_{\\mathrm{\\scriptscriptstyle R}}=t_{23}t_{\\mathrm{m}2}^{*}/\\Delta_{3}$. The quantities $\\Delta_{i}(N_{\\mathrm{g}i})=E_{Ci}(1-2N_{\\mathrm{g}i})+\\delta_{i}$ are the detunings of the quantum dots from their degeneracy points, as defined above. The couplings $t_{\\mathrm{m}1}$ and $t_{\\mathrm{m}2}$ denote QD-MZM couplings for dot 1 and dot 3, respectively, while $t_{12}$, $t_{23}$ describe tunneling between dot 1-dot 2 and dot 2-dot 3, respectively.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS3.p2",
+     "text": "To perform a readout of the fermion parity split between $\\gamma_{1}$ and $\\gamma_{2}$, we couple dot 2 to a readout resonator with an angular frequency $\\omega_{\\mathrm{r}}$. In the rotating frame, the full Hamiltonian, including the microwave photons, is given by $H=H_{\\mathrm{\\scriptscriptstyle F}}+(\\omega_{\\mathrm{r}}-\\omega)\\hat{a}^{\\dagger}\\hat{a}+gd^{\\dagger}d(\\hat{a}e^{-i\\omega t}+\\hat{a}^{\\dagger}e^{i\\omega t}).$ (S15) Here $a^{\\dagger}$ and $a$ denote the photon creation and annihilation operators in the resonator, and the coupling to the resonator is defined as $g=\\alpha_{2}e\\sqrt{\\hbar\\omega_{\\mathrm{r}}/2C}$ where $C$ is the total effective capacitance of the readout circuit, which includes the capacitance of the resonator itself.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS3.p3",
+     "text": "To understand the impact of a quantum device on the resonator, it is necessary to calculate both the frequency shift and the system-induced loss on the photon degrees of freedom. This can be achieved by integrating out the fermionic degrees of freedom. Upon performing this procedure and retaining only the lowest-order corrections in $g$ — an approach equivalent to linear response theory — one finds that the resonator’s response is encapsulated in the following correlation function: $K^{R}(\\omega)=-i\\frac{g^{2}}{2}\\int\\frac{d\\omega_{1}}{2\\pi}\\,\\mathrm{Tr}\\Bigl[\\hat{V}G^{K}(\\omega_{1})\\hat{V}G^{R}(\\omega_{1}+\\omega)\\\\ +\\hat{V}G^{A}(\\omega_{1})\\hat{V}G^{K}(\\omega_{1}+\\omega)\\Bigr].$ (S16) Here $G^{R}(\\omega)$, $G^{A}(\\omega)$ and $G^{K}(\\omega)$ denote the retarded, advanced and Keldysh Green’s functions, respectively, for the Hamiltonian $H_{\\mathrm{\\scriptscriptstyle F}}$. The vertex operators $\\hat{V}$ are defined as $\\hat{V}=\\partial[G^{R}(\\omega)]^{-1}/\\partial E_{\\mathrm{\\scriptscriptstyle D}}$. The real and imaginary components of $K^{R}(\\omega)$ represent the shift in the resonator frequency and photon loss, respectively. The response of the system can be interpreted as a dynamical quantum capacitive shift $C_{\\mathrm{\\scriptscriptstyle Q}}(\\omega)$ relative to the capacitance of the readout circuit $C$ which we model by an effective lumped element circuit (see Fig. 1 c and Fig. S2). Expanding for $C_{\\mathrm{\\scriptscriptstyle Q}}(\\omega)\\ll C$ yields the relation $\\displaystyle\\frac{C_{\\mathrm{\\scriptscriptstyle Q}}(\\omega)}{2C}=-\\frac{K^{R}(\\omega)}{\\omega_{\\mathrm{r}}}.$ (S17) As $\\omega$ and $T$ approach zero, the expression for $C_{\\mathrm{\\scriptscriptstyle Q}}(\\omega)$ recovers the quantum capacitance of a ground state of the system. Note that in the low-frequency limit there is in general an additional contribution to the capacitance from incoherent tunneling processes, see, e.g. Ref.. Throughout this paper we focus on the quantum capacitance which dominates the response for $t_{\\mathrm{\\scriptscriptstyle C}}\\gtrsim k_{\\mathrm{\\scriptscriptstyle B}}T$ and for probe frequencies fast compared to thermalization time scales.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS3.p4",
+     "text": "Finally, by projecting the Hamiltonian Eq. S14 onto both the even and odd parity sectors of the QD-wire system and utilizing Eq. S16, we can derive an expression for the dynamical quantum capacitance of the TQDI within each parity sector: $C_{\\mathrm{\\scriptscriptstyle Q}}(Z,\\phi,\\omega)=\\frac{2e^{2}\\alpha^{2}|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}}{\\sqrt{(E_{\\mathrm{\\scriptscriptstyle D}}+Z2E_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}}}\\\\ \\times\\frac{\\tanh\\left(\\sqrt{(E_{\\mathrm{\\scriptscriptstyle D}}+Z2E_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}}/2k_{\\mathrm{\\scriptscriptstyle B}}T\\right)}{(E_{\\mathrm{\\scriptscriptstyle D}}+Z2E_{\\mathrm{\\scriptscriptstyle M}})^{2}+4|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)|^{2}-(\\omega+i\\eta)^{2}},$ (S18) where $\\eta$ is the broadening of the resonance due to the coupling to the environment (see also the discussion below). The term $t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)$ in Eq. S18 is given by $\\displaystyle\\left|t_{\\mathrm{\\scriptscriptstyle C}}(Z,\\phi)\\right|^{2}=|t_{\\mathrm{\\scriptscriptstyle L}}|^{2}+|t_{\\mathrm{\\scriptscriptstyle R}}|^{2}+2Z|t_{\\mathrm{\\scriptscriptstyle L}}||t_{\\mathrm{\\scriptscriptstyle R}}|\\sin\\phi.$ (S19) Here, $\\phi$ is the phase difference between the left and right QD-wire junctions, which is controlled by the external magnetic flux, given by $\\phi=2\\pi\\Phi/\\Phi_{0}+\\phi_{0}$ with $\\Phi_{0}=h/e$. $\\phi_{0}$ is a flux-independent offset. $C_{\\mathrm{\\scriptscriptstyle Q}}$ for each parity sector exhibits periodicity in flux with period $h/e$. Both the real and imaginary parts of $C_{\\mathrm{\\scriptscriptstyle Q}}(Z,\\phi,\\omega)$ contain significant information regarding microscopic parameters, which can be used in comparing simulation to experiment.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS3.p5",
+     "text": "The difference in the dynamical quantum capacitance between the even and odd parity sectors is given by $\\displaystyle\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}(\\phi,\\omega)=\\left|C_{\\mathrm{\\scriptscriptstyle Q}}(1,\\phi,\\omega)-C_{\\mathrm{\\scriptscriptstyle Q}}(-1,\\phi,\\omega)\\right|.$ (S20) In the static limit $\\omega\\rightarrow 0$, one recovers Eq. 3 of the main text. Using Eq. S18, we estimate that the maximum value of $|\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}|$ is approximately $1\\text{\\,}\\mathrm{fF}$ using the parameters $E_{\\mathrm{\\scriptscriptstyle M}}=$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{\\mathrm{\\scriptscriptstyle R}}=$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{\\mathrm{\\scriptscriptstyle R}}=$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $\\eta=$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $k_{\\mathrm{\\scriptscriptstyle B}}T=$4\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $\\omega=$2\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{C2}=$45\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $\\alpha=0.5$. As discussed in the main text (see Sec. 3), the peaks in $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}(\\phi,\\omega)$ for even and odd parities occur at $E_{\\mathrm{\\scriptscriptstyle D}}=-2E_{\\mathrm{\\scriptscriptstyle M}}$ and $E_{\\mathrm{\\scriptscriptstyle D}}=2E_{\\mathrm{\\scriptscriptstyle M}}$, respectively. As $E_{\\mathrm{\\scriptscriptstyle M}}$ increases, at $E_{\\mathrm{\\scriptscriptstyle D}}=-2E_{\\mathrm{\\scriptscriptstyle M}}$, $C_{\\mathrm{\\scriptscriptstyle Q}}$ is suppressed in the odd parity sector and enhanced in the even parity sector, and vice versa at $E_{\\mathrm{\\scriptscriptstyle D}}=2E_{\\mathrm{\\scriptscriptstyle M}}$.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S2.4 Dynamical C Q C_{\\mathrm{\\scriptscriptstyle Q}} calculation using open system dynamics",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS4.p1",
+     "text": "The linear response theory outlined above provides an intuition for how the dynamical $C_{\\mathrm{\\scriptscriptstyle Q}}$ response arises in our setup. For quantitative comparison to the experimental data, it is important to capture larger drive amplitudes beyond linear response. We therefore use a different approach that is based on simulating the dynamics of the system in an open-system framework. We first note that in typical dispersive gate sensing setups, the resonator photons are well-described by the classical limit $\\hat{a}\\to a$ of a large number of photons. This can be used to reduce Eq. S15, or its generalization including all 3 QDs explicitly, to a time-dependent problem in the fermionic Hilbert space. Specifically, the coupling to the (classical) photon fields can be captured via ${\\tilde{H}}_{\\mathrm{\\scriptscriptstyle F}}=H_{\\mathrm{\\scriptscriptstyle F}}+2g|a|d^{\\dagger}d\\cos(\\omega t).$ (S21) The equation of motion of the classical field $a$ takes the form $\\dot{a}=i[\\omega-\\omega_{\\mathrm{r}}-K(\\omega)]a-\\frac{\\kappa}{2}a-\\sqrt{\\kappa_{e}}b_{\\mathrm{in}},$ (S22) where $K(\\omega)=g\\langle d^{\\dagger}d\\rangle(t)e^{i\\omega t}/|a|$ and we included photon decay $\\kappa=\\kappa_{\\mathrm{ext}}+\\kappa_{\\mathrm{int}}$ due to internal loss $\\kappa_{\\mathrm{int}}$ and coupling to the readout line $\\kappa_{\\mathrm{ext}}$ and the external drive $b_{\\mathrm{in}}$ via standard input-output theory, see e.g. Ref..",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS4.p2",
+     "text": "We then solve the equations Eqs. S21 and S22 including the effects of a noisy environment. We introduce the coupled system-bath Hamiltonian $H={\\tilde{H}}_{\\mathrm{\\scriptscriptstyle F}}+H_{\\mathrm{sb}},$ (S23) where $H_{\\mathrm{sb}}=\\sum_{i}X_{i}\\Phi_{i}+H_{\\mathrm{env}}$ contains both the Hamiltonian for the environment and the coupling between system and environment. Here, $X_{i}$ are a set of system operators and $\\Phi_{i}$ are bath operators. In general, further approximations must be made to solve such complex Hamiltonians. Here, we work within the Born-Markov approximation using the Universal Lindblad master equation (ULE) approach described in Ref.. Within this framework, the environment is described entirely via the spectral functions of the bath operators, $S_{i}(\\omega)=\\int dt\\,e^{i\\omega t}\\langle\\Phi_{i}(0)\\Phi_{i}(t)\\rangle.$ (S24) We adopt a notation where the system operators $X_{i}(t)$ are dimensionless, and all dimensionful prefactors are absorbed into the definition of $\\Phi_{i}$. By appropriately choosing $X_{i}(t)$ and $S_{i}(\\omega)$, we can capture charge noise, phonon noise and other noise sources. For the purpose of simulating a system that is driven by the resonator, it is essential to capture the coupling to a low-temperature environment which leads to a steady state that is close to thermal equilibrium. The condition that the environment is in thermal equilibrium can be stated in terms of the spectral functions as $S_{i}(\\omega)/S_{i}(-\\omega)=\\exp(\\hbar\\omega/k_{\\mathrm{\\scriptscriptstyle B}}T)$.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS4.p3",
+     "text": "To connect to Eq. S22, we set $\\langle d^{\\dagger}d\\rangle(t)=\\tr\\{\\rho(t)d^{\\dagger}d\\}$ with the density matrix $\\rho(t)$ obtained from numerically solving the ULE. This approach allows us to numerically simulate the dynamical $C_{\\mathrm{\\scriptscriptstyle Q}}$ response of the MZM-dot 1-dot 2-dot 3-MZM system including the backaction from the finite drive amplitude. The dissipative terms in the ULE formalism naturally lead to the imaginary part of the response captured by the phenomenological parameter $\\eta$ in the linear response theory Eq. S18. For a more detailed description of this approach to determining the rf response of the system as well as a detailed comparison to the linear response regime, see Ref..",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS4.p4",
+     "text": "An important contributor to the detuning noise of QDs is $1/f$ charge noise which is particularly strong at low frequencies. Due to the long-time correlations of this noise it cannot easily be described via the spectral functions of the ULE framework. Instead, we capture this noise by making use of the ability to handle arbitrary time dependence of the Hamiltonian ${\\tilde{H}}_{\\mathrm{\\scriptscriptstyle F}}$ and treat the low-frequency charge noise explicitly as classical noise on the corresponding terms in the Hamiltonian. Considering the example of noise on the dimensionless gate charge $N_{\\mathrm{g}i}$, we consider an ensemble of noise trajectories that satisfies the autocorrelation function $\\langle N_{\\mathrm{g}i}(0)N_{\\mathrm{g}i}(t)\\rangle=\\int\\frac{d\\omega}{2\\pi}\\,e^{-i\\omega t}S^{c}_{i}(\\omega),$ (S25) where we have used the superscript $c$ to indicate the difference to the bath correlation function in Eq. S24. A similar approach has been used previously, e.g. in Ref., and we follow the approach discussed there to numerically draw noise realizations from this ensemble. In general, it may be necessary to introduce low- and high-frequency cutoffs, which we will discuss below in Sec. S2.5.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S2.5 Numerical details",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F3",
+     "text": "Figure S3: Illustration of simulations of parity readout maps. The example shown here corresponds to a cut at fixed flux $\\Phi=0.5h/2e$. a: Evolution of the gate voltages $N_{\\mathrm{g}i}(t)$, where $\\bar{N}_{\\mathrm{g}i}(t)$ indicates the intended evolution for each gate, including the stepping of the voltage on QD2 by 0.01 every $45\\text{\\,}\\mathrm{ms}$ and keeping dot 1 fixed at $N_{\\mathrm{g}1}=0.35$ and dot 3 at $N_{\\mathrm{g}3}=0.4$. $N_{\\mathrm{g}i}(t)$ indicates the noisy trajectory obtained after including the effects of low-frequency charge noise. b: $C_{\\mathrm{\\scriptscriptstyle Q}}(t)$ obtained at each point in the time trajectory. c: Kurtosis of the timetraces at each $N_{\\mathrm{g}2}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "A2.SS5.p1",
+     "text": "We now provide additional details on how our simulations are performed and, in particular, how classical noise is treated to closely match the experimental measurements.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS5.p2",
+     "text": "The starting point is the model of Sec. S2.1, including the two Majorana zero modes $\\gamma_{1,2}$ with splitting energy $E_{\\mathrm{\\scriptscriptstyle M}}$ and three quantum dots (dots 1 through 3), tuned via gate charges $N_{\\mathrm{g}1}$ through $N_{\\mathrm{g}3}$. The charging energies in the isolated QD regime are given in Fig. S6. When the interferometer loop is formed, the charging energies are renormalized down due to quantum charge fluctuations involving virtual transitions to states of higher energy [outside the low-energy subspace defined in Eq. S14 ]. To estimate this effect, one can consider a model including an additional level in dot 2 (quantum dot with the smallest level spacing) and obtain a low-energy model using a Schrieffer-Wolff transformation, similarly to the derivation of Sec. S2.2. By expanding the derived effective model near the charge degeneracy, one can estimate the renormalization of model parameters due to virtual transitions to excited states. Using $|t_{12}|=|t_{23}|=$12\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ and extracted bare charging energies, one finds the renormalized charging energies to be approximately given $\\tilde{E}_{C1}\\approx$140\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $\\tilde{E}_{C2}\\approx$45\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, and $\\tilde{E}_{C3}\\approx$100\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, respectively. The simulations presented in the main body of the paper employ these renormalized charging energies.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS5.p3",
+     "text": "We treat the evolution of this system in the ULE formalism of Sec. S2.4, where the coupling to the environment is included through charge noise on each of the three quantum dots. The corresponding Lindblad operators are obtained within the ULE framework for system operators $X_{i}=n_{{\\mathrm{\\scriptscriptstyle QD}i}}$, $i=1,2,3$, where $n_{{\\mathrm{\\scriptscriptstyle QD}i}}$ is the number operator for each of the three dots, and the spectral function is given by $S_{\\mathrm{g}}(\\omega)=\\frac{\\hbar^{2}\\gamma}{1+\\exp(-\\hbar\\omega/k_{\\mathrm{\\scriptscriptstyle B}}T)}$ (S26) with $\\gamma=$1\\text{\\,}\\mathrm{GHz}$$ and $T=$50\\text{\\,}\\mathrm{m}\\mathrm{K}$$. This choice of $\\gamma$ is motivated by extrapolating the strength of $1/\\omega$ charge noise measured in Sec. S7 to $\\hbar\\omega\\approx$5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, which is the relevant energy scale for these simulations. It is worth noting that the precise value chosen here has only very small effect on the real part of $C_{\\mathrm{\\scriptscriptstyle Q}}$, as it mainly controls the rate of thermalization. We ignore noise on the couplings, which is expected to be much weaker than charge noise on the quantum dot detunings. We introduce a drive on $N_{\\mathrm{g}2}$, i.e. we replace $N_{\\mathrm{g}2}\\rightarrow N_{\\mathrm{g}2}+(A_{\\mathrm{rf}}/2E_{{\\rm\\scriptscriptstyle C}2})\\cos(\\omega t)$, where we choose $A_{\\mathrm{rf}}=$5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ (note that $A_{\\mathrm{rf}}=\\alpha eV_{\\mathrm{res}}$, where $\\alpha\\approx 0.5$ is the lever arm) and $E_{{\\rm\\scriptscriptstyle C}2}$ corresponds to the charging energy of dot 2. This corresponds to Eq. S21 with constant $|a|$. This thus defines a simulated response $C_{\\mathrm{\\scriptscriptstyle Q}}(N_{\\mathrm{g}1},N_{\\mathrm{g}2},N_{\\mathrm{g}3},\\Phi,Z)$, where $\\Phi$ is the flux enclosed in the loop and $Z$ is the overall parity of the system.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS5.p4",
+     "text": "The final step is to include low-frequency charge noise, readout noise, parity flips, and the way the experimental data is acquired. As an example, we can consider the parity readout maps as shown in, e.g., Fig. 3 a. These consist of timetraces of about $50\\text{\\,}\\mathrm{ms}$ duration at each point in the $(N_{\\mathrm{g}2},B_{\\perp})$ plane, where $N_{\\mathrm{g}2}$ constitutes the inner loop and $B_{\\perp}$ the outer loop. Measurements are taken at approximately 100 points in $N_{\\mathrm{g}2}$ (typically spanning 5 charge transitions) and 70 points in $B_{\\perp}$; the total time for a single measurement panel is thus approximately $320\\text{\\,}\\mathrm{s}$. To generate this behavior, we generate time traces of all parameters of the system. For each gate voltage, we generate a trajectory $N_{\\mathrm{g}i}(t)=\\bar{N}_{\\mathrm{g}i}(t)+\\delta N_{\\mathrm{g}i}(t)$, where $\\bar{N}_{\\mathrm{g}i}(t)$ is a function describing the ideal parameter evolution and $\\delta N_{\\mathrm{g}i}(t)$ is a noise trajectory whose power spectral density (cf Eq. S25) is given by $S^{c}(\\omega)=\\alpha_{C}^{2}/\\omega$ (see Fig. S3 a). Here, we choose $\\alpha_{C}=0.00675$, which corresponds to $\\sqrt{S_{0}}=$1.35\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ in units of detuning on QD2, consistent with the measured charge noise on our devices (see Sec. S7). Furthermore, we take the inverse of the integration time as high-frequency cutoff and the total duration of the experiment as natural low-frequency cutoff. The tuning parameter evolution $\\bar{N}_{\\mathrm{g}i}(t)$ is a constant in the case of the side dots, whereas for dot 2 it is a function that increases from 0 to 1 in 20 steps over $20\\times$50\\text{\\,}\\mathrm{ms}$$. For the parity $Z(t)$, we generate a telegraph noise trajectory with a symmetric transition rate of $\\Gamma_{\\mathrm{qpp}}=($1\\text{\\,}\\mathrm{ms}$)^{-1}$. Finally, the flux $\\Phi(t)$ is stepped from 0 to 4 $h/2e$ in 70 increments. The readout noise is added as Gaussian noise with standard deviation $\\sigma(C_{\\mathrm{\\scriptscriptstyle Q}})$, where we choose $\\sigma(C_{\\mathrm{\\scriptscriptstyle Q}})=$0.105\\text{\\,}\\mathrm{fF}$$ in line with the experimental observation in Fig. 3. Taken together, this allows us to define $C_{\\mathrm{\\scriptscriptstyle Q}}(t)=C_{\\mathrm{\\scriptscriptstyle Q}}(N_{\\mathrm{g}1}(t),N_{\\mathrm{g}2}(t),N_{\\mathrm{g}3}(t),\\Phi(t),Z(t))$ in a data format that exactly reproduces that of the experimental data, see Fig. S3 b,c.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S2.6 Expected signal-to-noise ratio",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS6.p1",
+     "text": "To estimate the expected Signal-to-Noise ratio (SNR) of the measurement of $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ we consider the steady state solution of Eq. S22 $a=\\frac{\\sqrt{\\kappa_{\\mathrm{ext}}}b_{\\mathrm{in}}}{i(\\omega-\\omega_{Z})-i\\kappa/2}$ (S27) where $\\omega_{Z}=\\omega_{\\mathrm{r}}+K(\\omega,Z)$. Within standard input-output theory, the relation between the incoming and outgoing photon fields is given by $b_{\\mathrm{out}}=b_{\\mathrm{in}}+\\sqrt{\\kappa_{\\mathrm{ext}}}a$. The relevant signal $S=|b_{\\mathrm{out,+1}}-b_{\\mathrm{out,-1}}|/2$ is then given by the shift of the output fields relative to each other. The typical frequency shift $|\\omega_{+1}-\\omega_{-1}|$ in our devices is small compared to $\\kappa$ which allows for an expansion of the signal to lowest order in the capacitive shift, $S=\\frac{\\sqrt{\\kappa_{\\mathrm{ext}}}|a|\\omega_{\\mathrm{r}}}{2\\kappa C}\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}\\,$ (S28) where we used the regime of optimal drive frequency $\\omega=(\\omega_{+1}+\\omega_{-1})/2$. Recasting this in terms of the voltage amplitude $V_{\\mathrm{res}}=\\sqrt{2\\hbar\\omega_{\\mathrm{r}}/C}|a|$ in the resonator and adding noise from an amplification chain of effective noise temperature $T_{\\mathrm{N}}$, the signal to noise ratio is given by $\\mathrm{SNR}=V_{\\mathrm{res}}\\frac{Q}{2}\\sqrt{\\frac{\\kappa_{\\mathrm{ext}}\\tau_{\\mathrm{m}}}{Ck_{\\mathrm{B}}T_{\\mathrm{N}}}}\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}\\,$ (S29) where $Q=\\omega_{\\mathrm{r}}/\\kappa$ and $\\tau_{\\mathrm{m}}$ is the integration time of the measurement.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS6.p2",
+     "text": "Using Eq. S29, we can estimate the typical SNR in our setup using the parameters in Table S1. These parameters are obtained with measurements on the same device shown in Fig. 3. We find $\\text{SNR}=0.8(2)$ in $\\tau_{\\mathrm{m}}=$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$$. Eq. S29 appears to yield an SNR that is monotonically increasing with $V_{\\mathrm{res}}$. However, for some sufficiently large $V_{\\mathrm{res}}$, the SNR becomes limited by backaction. As $V_{\\mathrm{res}}$ increases, power broadening will decrease the dynamical $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ which yields an optimum in the drive amplitude which is typically of the order $e\\alpha V_{\\mathrm{res}}\\sim(2t_{\\mathrm{\\scriptscriptstyle C}}-\\hbar\\omega)$. Note that the dynamical $C_{\\mathrm{\\scriptscriptstyle Q}}$ formalism outlined above can capture this backaction via Eq. S21 and Eq. S22.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S3 Analysis of the quasi-MZM scenario",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F4",
+     "text": "Figure S4: a: Schematic representation of the various terms in the Hamiltonian of Eq. S30. The terms in addition to the 2MZM model are highlighted in red. b: Simulated response in the case of a wire with 4 Majorana modes and 3QDs. The corresponding mapping to the single QD scenario is described in Sec. S2.2. From top to bottom rows $E_{0}$ is increased. From left to right columns $u_{1}$ is increased. Other parameters: $t_{\\mathrm{m}1}=t_{\\mathrm{m}2}=$5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $\\tilde{t}_{\\mathrm{m1}}=\\tilde{t}_{\\mathrm{m2}}=0$, $t_{12}=t_{23}=$10\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $N_{\\mathrm{g}1}=1-N_{\\mathrm{g}2}=0.35$, $E_{\\mathrm{\\scriptscriptstyle M}}=0$, $u_{2}=0.7u_{1}$, $T=$50\\text{\\,}\\mathrm{mK}$$, drive amplitude $A_{\\mathrm{rf}}=$4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$.",
+     "kind": "caption"
+    },
+    {
+     "id": "A3.p1",
+     "text": "In this section, we consider the situation in which there are two additional hidden Majorana modes, in addition to the end MZMs that couple to QD1 and QD3. We begin with the effective Hamiltonian $\\displaystyle H_{\\mathrm{qMZM}}=H_{\\mathrm{\\scriptscriptstyle F}}+H_{\\mathrm{\\scriptscriptstyle F}}^{(1)},$ (S30) $\\displaystyle H_{\\mathrm{\\scriptscriptstyle F}}^{(1)}=iu_{1}\\gamma_{1}{\\tilde{\\gamma}}_{1}+iu_{2}\\gamma_{2}{\\tilde{\\gamma}}_{2}+i{E_{0}}{\\tilde{\\gamma}}_{1}{\\tilde{\\gamma}}_{2}$ $\\displaystyle\\qquad\\quad+({\\tilde{t}}_{\\mathrm{\\scriptscriptstyle L}}d^{\\dagger}-{\\tilde{t}}^{*}_{\\mathrm{\\scriptscriptstyle L}}d){\\tilde{\\gamma}}_{1}+({\\tilde{t}}_{\\mathrm{\\scriptscriptstyle R}}d^{\\dagger}-{\\tilde{t}}^{*}_{\\mathrm{\\scriptscriptstyle R}}d){\\tilde{\\gamma}}_{2},$ (S31) where $H_{\\mathrm{\\scriptscriptstyle F}}$ was defined in Eq. S14. Here, ${\\tilde{\\gamma}}_{1,2}$ are the hidden Majorana modes which are somewhere in the middle of the wire, with ${\\tilde{\\gamma}}_{i}$ closer to $\\gamma_{i}$ to which it tunnels with amplitude $u_{i}$. Meanwhile the tunneling amplitude between ${\\tilde{\\gamma}}_{1}$ and ${\\tilde{\\gamma}}_{2}$ is $E_{0}$. A schematic representation of this model is depicted in Fig. S4 a.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p2",
+     "text": "In the quasi-MZM scenario, $\\tilde{\\gamma}_{1,2}$ are localized at their respective ends of the wire, leading the presence of two trivial low-energy states with small but finite splitting $u_{1},u_{2}$ while the across-wire coupling of these local states is small, $E_{0}\\approx 0$. To build intuition we thus consider the model in Eq. S30 where $|t_{\\mathrm{\\scriptscriptstyle L}}|$, $|t_{\\mathrm{\\scriptscriptstyle R}}|\\gg|u_{1}|$, $|u_{2}|$. We take $|\\tilde{t}_{\\mathrm{\\scriptscriptstyle L}}|$, $|\\tilde{t}_{\\mathrm{\\scriptscriptstyle R}}|$, $E_{0}\\to 0$ for simplicity, and find an analytical solution for this limit. We then give numerical results for the more general case. We first project the Hamiltonian in Eq. S30 to the fixed parity subspaces and perform a Schrieffer-Wolff transformation to find $\\displaystyle H_{\\mathrm{qMZM}}^{(e/o)}\\approx\\left(\\begin{array}[]{cccc}-E_{\\mathrm{\\scriptscriptstyle M1}}P-\\delta E_{\\mathrm{\\scriptscriptstyle D}}&t_{\\mathrm{\\scriptscriptstyle L1}}+t_{\\mathrm{\\scriptscriptstyle R1}}P&0&0\\\\ t^{*}_{\\mathrm{\\scriptscriptstyle L1}}+t^{*}_{\\mathrm{\\scriptscriptstyle R1}}P&E_{\\mathrm{\\scriptscriptstyle D}}+E_{\\mathrm{\\scriptscriptstyle M1}}P-\\delta E_{\\mathrm{\\scriptscriptstyle D}}&0&0\\\\ 0&0&E_{\\mathrm{\\scriptscriptstyle M1}}P+\\delta E_{\\mathrm{\\scriptscriptstyle D}}&t_{\\mathrm{\\scriptscriptstyle L1}}-t_{\\mathrm{\\scriptscriptstyle R1}}P\\\\ 0&0&t^{*}_{\\mathrm{\\scriptscriptstyle L1}}-t^{*}_{\\mathrm{\\scriptscriptstyle R1}}P&E_{\\mathrm{\\scriptscriptstyle D}}-E_{\\mathrm{\\scriptscriptstyle M1}}P+\\delta E_{\\mathrm{\\scriptscriptstyle D}}\\\\ \\end{array}\\right).$ Using the notation $|a,b,c\\rangle\\equiv|a\\rangle_{{\\mathrm{\\scriptscriptstyle QD}}}\\otimes|b\\rangle_{\\mathrm{MZM}}\\otimes|c\\rangle_{\\mathrm{\\tilde{M}ZM}}$, the basis used above is defined as $\\{|000\\rangle$, $|110\\rangle$, $|011\\rangle$, $|101\\rangle\\}$ in the even sector ( $P=1$) and $\\{|010\\rangle$, $|100\\rangle$, $|001\\rangle$, $|111\\rangle\\}$ in the odd sector ( $P=-1$).",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p3",
+     "text": "The effective parameters in Sec. S3 are defined as $\\delta E_{\\mathrm{\\scriptscriptstyle D}}=E_{\\mathrm{\\scriptscriptstyle D}}u_{1}u_{2}/D(\\phi)$, $E_{\\mathrm{\\scriptscriptstyle M1}}=E_{\\mathrm{\\scriptscriptstyle M}}+E_{\\mathrm{\\scriptscriptstyle D}}(u_{1}^{2}+u_{2}^{2})/2D(\\phi)$, $t_{\\mathrm{\\scriptscriptstyle R1}}=-it_{\\mathrm{\\scriptscriptstyle R}}+e^{i\\phi}u_{2}^{2}t_{\\mathrm{\\scriptscriptstyle L}}/D(\\phi)$, $t_{\\mathrm{\\scriptscriptstyle L1}}=e^{i\\phi}t_{\\mathrm{\\scriptscriptstyle L}}-iu_{1}^{2}t_{\\mathrm{\\scriptscriptstyle R}}/D(\\phi)$, $D(\\phi)=E_{\\mathrm{\\scriptscriptstyle M}}E_{\\mathrm{\\scriptscriptstyle D}}-2t_{\\mathrm{\\scriptscriptstyle L}}t_{\\mathrm{\\scriptscriptstyle R}}\\sin\\phi$. Perturbation theory, which yields the Hamiltonian Sec. S3, is valid as long as $|u_{1}|$, $|u_{2}|\\ll\\sqrt{|D(\\phi)|}$. The higher-order terms omitted in Sec. S3 will generally lead to transitions within each parity sector that occur faster than both our measurement time and the parity switching time due to non-equilibrium quasiparticles. Thus, we assume that our measurements sample the equilibrium density matrix within each parity sector.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p4",
+     "text": "The (static) quantum capacitance for each parity sector can now be calculated using the Hamiltonian in Sec. S3, as was previously discussed in Eq. S13. Examining Sec. S3, we notice that each block $i\\tilde{\\gamma}_{1}\\tilde{\\gamma}_{2}=\\pm 1$ shows a similar capacitive response as is obtained in the 2-MZM scenario. Crucially though, now both $Z=\\pm 1$ sectors contribute at fixed overall parity $P$, where $P$ is the total parity of all four MZMs and the dot while $Z$ is the parity of $\\gamma_{1,2}$ and the dot. This leads to a cancellation of $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}=C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}(P=+1)-C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}(P=-1)$ up to small corrections when $\\delta E_{\\mathrm{\\scriptscriptstyle D}}$ is finite. Indeed, one can show that $\\!\\!\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}=-\\left[C_{\\mathrm{\\scriptscriptstyle Q}}(Z=+1)-C_{\\mathrm{\\scriptscriptstyle Q}}(Z=-1)\\right]\\\\ \\times\\delta E_{\\mathrm{\\scriptscriptstyle D}}\\,\\frac{1}{k_{\\mathrm{\\scriptscriptstyle B}}T}\\frac{4\\cosh\\cfrac{E^{(+)}}{2k_{\\mathrm{\\scriptscriptstyle B}}T}\\cosh\\cfrac{E^{(-)}}{2k_{\\mathrm{\\scriptscriptstyle B}}T}}{\\left(\\cosh\\cfrac{E^{(+)}}{2k_{\\mathrm{\\scriptscriptstyle B}}T}+\\cosh\\cfrac{E^{(-)}}{2k_{\\mathrm{\\scriptscriptstyle B}}T}\\right)^{2}},\\!\\!$ (S36) where $E^{(Z)}=\\sqrt{(E_{\\mathrm{\\scriptscriptstyle D}}\\pm 2E_{\\mathrm{\\scriptscriptstyle M1}})^{2}+4|t_{\\mathrm{\\scriptscriptstyle C}}(Z)|^{2}}$ and $C_{\\mathrm{\\scriptscriptstyle Q}}$ is the corresponding expression for the 2MZM scenario in Eq. 1 with the model parameters renormalized via $t_{\\mathrm{\\scriptscriptstyle L}}\\to t_{\\mathrm{\\scriptscriptstyle L1}}$, $t_{\\mathrm{\\scriptscriptstyle R}}\\to t_{\\mathrm{\\scriptscriptstyle R1}}$ and $E_{\\mathrm{\\scriptscriptstyle M}}\\to E_{\\mathrm{\\scriptscriptstyle M1}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p5",
+     "text": "The second line is a product of three factors; the first vanishes for $\\delta E_{\\mathrm{\\scriptscriptstyle D}}=0$ and the product of the second and third vanishes for $T=0$. Hence, $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}$ vanishes if either of these conditions holds. More generally, $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}$ is suppressed by at least a factor of $\\delta E_{\\mathrm{\\scriptscriptstyle D}}/k_{\\mathrm{\\scriptscriptstyle B}}T$ relative to the topological 2-MZM scenario. Note that for $E_{\\mathrm{\\scriptscriptstyle D}},t_{\\mathrm{\\scriptscriptstyle L}},t_{\\mathrm{\\scriptscriptstyle R}}\\sim t$, $u_{1},u_{2}\\sim u$, and at optimal flux, $\\delta E_{\\mathrm{\\scriptscriptstyle D}}/k_{\\mathrm{\\scriptscriptstyle B}}T\\sim u^{2}/2tk_{\\mathrm{\\scriptscriptstyle B}}T$, which would lead to a suppression of $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ by at least a factor of two for $u<$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ for the parameters extracted in Fig. 6. For low temperatures relative to $E^{(+)}-E^{(-)}$ there is an additional suppression $\\propto\\exp(-|E^{(+)}-E^{(-)}|/2k_{\\mathrm{\\scriptscriptstyle B}}T)$. Given this suppression, we generally expect $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{qMZM}}$ to be significantly smaller in the quasi-MZM scenario than in the topological regime, which we verify below via detailed simulation.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p6",
+     "text": "We now study the quasi-MZM model Eq. S30 numerically, explicitly including all 3 QDs. Using the same methods as described in Sec. S2.4 and Sec. S2.5 we show the dependence of the capacitive response as a function of $E_{0}$ and the local splitting $u_{1},u_{2}$ in Fig. S4. Here we set $E_{\\mathrm{\\scriptscriptstyle M}}=0$ in order to attempt to reproduce the $h/2e$ periodic signal in the 4-Majorana-mode scenario. Moreover, we set the couplings of the Majorana modes $\\tilde{\\gamma}_{1}$ and $\\tilde{\\gamma}_{2}$ to their respective QDs to zero for simplicity, which doesn’t affect the observed qualitative behavior.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p7",
+     "text": "When $E_{0}$ is large, ${\\tilde{\\gamma}}_{1,2}$ are effectively frozen out and can be ignored. This could occur, for instance, if there were a small region of trivial phase in the middle of the wire, with Majorana modes ${\\tilde{\\gamma}}_{1,2}$ at the ends of this region, far from the ends of the wire. Hence, this case is actually the case of Eq. S14, rather than quasi-MZMs. In the simulations presented in Fig. S4, we indeed observe that for sizable $E_{0}$ we recover the expected $h/2e$ periodic signal of the topological regime. For small $E_{0}$, we see only a weak signal for small $u_{1}$ in line with the analytical model discussed above. For larger $u_{1}$ there is a sizable $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ signal but without a clear flux dependence. This scenario is similar to scenario (c) in Sec. 4 and describes the bimodal response of the QD coupled to a local state and the absence of interference. Intermediate values of $E_{0}$ interpolate between these scenarios but clear $h/2e$ flux periodicity is only observed for $E_{0}\\gtrsim u_{1},u_{2}$. The $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ response saturates to the topological scenario in this regime when $E_{0}$ exceeds $k_{\\mathrm{\\scriptscriptstyle B}}T$.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p8",
+     "text": "We thus conclude that in order to reproduce the observed $h/2e$ periodic response with large values of $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ in a 4-Majorana model in general requires $E_{0}\\gg u_{1},u_{2}$ and $E_{0}>k_{\\mathrm{\\scriptscriptstyle B}}T$, which is better understood in terms of the model of Eq. S14 with an additional subgap state at energy $2E_{0}$ rather than a non-topological quasi-MZM scenario.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S4 Data Analysis",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S4.1 C Q C_{\\mathrm{\\scriptscriptstyle Q}} conversion",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.SS1.p1",
+     "text": "The microwave signal collected in dispersive gate sensing measurement encodes the microwave susceptibility of the quantum device under study. To make connection with theory, we explicitly convert the measured microwave signal into a quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$. Previously, $C_{\\mathrm{\\scriptscriptstyle Q}}$ conversion has been performed with methods based on resonator fitting. These can yield both the real and the imaginary parts of the quantum capacitance (also called the quantum conductance). Importantly, with the aid of a reference measurement composed of a frequency scan of the readout resonator, they allow conversion of a single IQ pair into a complex quantum capacitance.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.SS1.p2",
+     "text": "Here we use a similar technique, which leverages symmetries and a small parameter expansion to obtain an analytical approximation for the mapping between the microwave signal and quantum capacitance. As in Refs., the first step in the conversion process is to determine the change in the resonance frequency $\\delta\\omega_{\\mathrm{r}}$ and the loss rate $\\delta\\kappa_{\\mathrm{int}}$ relative to the reference trace.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.SS1.p3",
+     "text": "We first describe how the change in the resonance frequency $\\delta\\omega_{\\mathrm{r}}$ is detected. After correction of electrical delay, the microwave reflection $S_{11}$ of a readout resonator with resonant frequency $\\omega_{\\mathrm{r}}$, internal loss rate $\\kappa_{\\mathrm{int}}$, external loss rate $\\kappa_{\\mathrm{ext}}$, and total linewidth $\\kappa=\\kappa_{\\mathrm{int}}+\\kappa_{\\mathrm{ext}}$ is $S_{11}=1-\\frac{2\\kappa_{\\mathrm{ext}}/\\kappa}{1+2i\\left(\\omega-\\omega_{\\mathrm{r}}\\right)/\\kappa},$ (S37) when it is probed at a frequency $\\omega$. Crucially, Eq. S37 depends on $\\omega$ and $\\omega_{\\mathrm{r}}$ only through their difference $\\omega-\\omega_{\\mathrm{r}}$. This implies that the change in $S_{11}$ from a small shift in $\\omega_{\\mathrm{r}}$ is identical to the change resulting from an equal and opposite detuning of the probe frequency $\\omega$. (Formally the shift in $\\omega_{\\mathrm{r}}$ needs not be small, but in practice non-idealities like the background ripple in the reflectometry setup or uncorrected electrical delay break the symmetry on which this argument rests.) The reference trace of $S_{11}$ as function of the probe frequency $\\omega$ provides a look-up table of the reflection coefficients measured at different detunings. To determine the shift in the resonance frequency, we identify the point on the reference trace nearest to the IQ pair to be converted (which is probed at frequency $\\omega_{\\mathrm{r}}$). The detuning of this point from the resonance frequency in the reference trace is equal and opposite to the desired frequency shift $\\delta\\omega_{\\mathrm{r}}$. This process is illustrated in Fig. S5. The green disc indicates the IQ pair to be converted. An orange line of length $\\delta S_{11}^{\\mathrm{rad}}$ connects it to the nearest point on the circle, which has a known detuning that can be read from the colorbar.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.SS1.p4",
+     "text": "To determine the change in the loss rate $\\kappa_{\\mathrm{int}}$ we leverage the fact that both $\\delta\\omega_{\\mathrm{r}}/\\kappa$, $\\delta\\kappa_{\\mathrm{int}}/\\kappa\\ll 1$. By expanding Eq. S37 to first order in these small parameters, we determine their effect on the reflection coefficient: $\\delta S_{11}\\approx 2\\frac{\\kappa_{\\mathrm{ext}}}{\\kappa}\\left(\\frac{\\delta\\kappa_{\\mathrm{int}}}{\\kappa}-2i\\frac{\\delta\\omega_{\\mathrm{r}}}{\\kappa}\\right).$ (S38) In Eq. S38, $\\delta\\kappa_{\\mathrm{int}}$ changes the real part of $S_{11}$. Geometrically this corresponds to a radial translation toward or away from the circle that the reference trace forms in the IQ plane. For this reason we denote the distance between the circle of the reference trace and the IQ pair to be converted as $\\delta S_{11}^{\\mathrm{rad}}$ (see Fig. S5). As with the determination of $\\delta\\omega_{\\mathrm{r}}$, here again the reference trace can be used as a look-up table to read off the translation in IQ space $\\delta S_{11}^{\\mathrm{tan}}$ from a small (relative to $\\kappa$) detuning $\\delta\\omega$. (We denote the translation with the superscript “tan” because it is tangential to the circle of the reference trace.) The change in the loss rate is then $\\delta\\kappa_{\\mathrm{int}}\\approx 2\\frac{\\delta\\omega}{\\delta S_{11}^{\\mathrm{tan}}}\\delta S_{11}^{\\mathrm{rad}}.$ (S39) In practice, selection of $\\delta\\omega$ involves a tradeoff — it should be chosen to be as large as possible (to reduce inaccuracies from readout noise) while also being much less than the linewidth $\\kappa$ (to reduce inaccuracies from the series expansion). We choose $\\delta\\omega\\approx\\kappa/20$.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.F5",
+     "text": "Figure S5: Geometrical depiction of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ conversion process for an IQ pair with $\\delta\\omega_{\\mathrm{r}}=\\kappa/8$, $\\delta\\kappa_{\\mathrm{int}}=\\kappa/5$. The circle shows the reflection of an overcoupled resonator in IQ space. The green disc represents a sample IQ pair to be converted into a complex $C_{\\mathrm{\\scriptscriptstyle Q}}$. The real (imaginary) component of $C_{\\mathrm{\\scriptscriptstyle Q}}$ encodes $\\delta\\omega_{\\mathrm{r}}$ ( $\\delta\\kappa_{\\mathrm{int}}$) and causes translations along the arc (radius) of the circle.",
+     "kind": "caption"
+    },
+    {
+     "id": "A4.SS1.p5",
+     "text": "Finally, to convert the computed complex frequency shifts into a complex quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$ we use the fact that $C_{\\mathrm{\\scriptscriptstyle Q}}$ is small relative to the total capacitance $C$. Expanding $\\omega_{r}=1/\\sqrt{L_{\\mathrm{res}}\\left(C+C_{\\mathrm{\\scriptscriptstyle Q}}\\right)}$ we have $\\frac{K}{\\omega_{\\mathrm{r}}}=-\\frac{1}{2}\\frac{C_{\\mathrm{\\scriptscriptstyle Q}}}{C}-\\frac{1}{2}\\frac{\\delta L(B_{\\perp})}{L_{\\mathrm{res}}}+\\mathcal{O}\\left(\\frac{C_{\\mathrm{\\scriptscriptstyle Q}}}{C}\\right)^{2}.$ (S40) Here $K=\\delta{\\omega}_{\\mathrm{r}}-i\\delta\\kappa_{\\mathrm{int}}/2$ denotes the complex response of the system (see also Sec. S2), the real part of which encodes the shift in the resonance frequency. We have introduced the quantity $\\delta L(B_{\\perp})$ to denote the dependence of the resonator’s inductance $L_{\\mathrm{res}}$ on $B_{\\perp}$ which can shift the resonator response over and above any $C_{\\mathrm{\\scriptscriptstyle Q}}$ -dependent shift that occurs. We define ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}\\equiv C_{\\mathrm{\\scriptscriptstyle Q}}+C\\,\\delta L(B_{\\perp})/L$ which includes this effect. We have chosen to use the same reference trace for all values of the out-of-plane field $B_{\\perp}$, which may lead to a slow, systematic change of the extracted ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ over the field range. This can be seen, e.g., in Fig. 3 b in the small overall curvature of the lower ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ branch. Indeed, ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ can be negative. To determine $C_{\\mathrm{\\scriptscriptstyle Q}}$ itself, we would need to independently measure $\\delta L(B_{\\perp})$ (e.g. in a Coulomb valley, where $C_{\\mathrm{\\scriptscriptstyle Q}}=0$) and subtract its contribution, but the effect of $\\delta L(B_{\\perp})$ cancels out of $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ and the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.SS1.p6",
+     "text": "Following convention, the imaginary part encodes $-\\kappa_{\\mathrm{int}}/2$, such that a positive Im $C_{\\mathrm{\\scriptscriptstyle Q}}$ corresponds to an increase in $\\kappa_{\\mathrm{int}}$. We therefore have $\\displaystyle\\frac{\\mathcal{R}\\left[C_{\\mathrm{\\scriptscriptstyle Q}}\\right]}{C}$ $\\displaystyle=$ $\\displaystyle-2\\frac{\\delta\\omega_{\\mathrm{r}}}{\\omega_{\\mathrm{r}}},$ $\\displaystyle\\frac{\\mathcal{I}\\left[C_{\\mathrm{\\scriptscriptstyle Q}}\\right]}{C}$ $\\displaystyle=$ $\\displaystyle\\frac{\\delta\\kappa_{\\mathrm{int}}}{\\omega_{\\mathrm{r}}}.$ (S41) The capacitance $C$ is computed with knowledge of the inductance $L_{\\mathrm{res}}$ on the resonator chip and resonance frequency, $C\\approx\\left(\\omega_{\\mathrm{r}}^{2}L_{\\mathrm{res}}\\right)^{-1}$.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.SS1.p7",
+     "text": "We conclude this section with a practical note: measuring the IQ pair to be converted with a probe frequency $\\omega\\neq\\omega_{\\mathrm{r}}$ leads to conversion inaccuracy from the microwave background non-idealities. To remedy that, the IQ data can be transformed before performing the $C_{\\mathrm{\\scriptscriptstyle Q}}$ conversion procedure. This transformation starts by rotating around the center of the resonance circle in IQ space by $\\arg S_{11}(\\omega_{\\mathrm{r}})-\\arg S_{11}(\\omega)$. The center of the circle can be determined by fitting an arc near resonance using an algebraic fit, such as Pratt’s method. The data is then scaled by the ratio of point densities ${\\delta\\omega}/{\\delta S_{11}^{\\mathrm{tan}}}$ at $\\omega_{\\mathrm{r}}$ and $\\omega$ to account for the frequency-dependent phasal density of IQ pairs.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S4.2 Kurtosis",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.SS2.p1",
+     "text": "The kurtosis is defined as $K(C_{\\mathrm{\\scriptscriptstyle Q}})=\\frac{\\mu_{4}(C_{\\mathrm{\\scriptscriptstyle Q}})}{[\\mu_{2}(C_{\\mathrm{\\scriptscriptstyle Q}})]^{2}}-3.$ (S42) Here, $\\mu_{n}(C_{\\mathrm{\\scriptscriptstyle Q}})=N^{-1}\\sum_{i=1}^{N}[C_{\\mathrm{\\scriptscriptstyle Q}}(t_{i})-\\bar{C}_{\\mathrm{\\scriptscriptstyle Q}}]^{n}$ is the $n$ th central moment of the timetrace $C_{\\mathrm{\\scriptscriptstyle Q}}(t_{i})$ with $N$ points and $\\bar{C}_{\\mathrm{\\scriptscriptstyle Q}}$ its mean. The kurtosis is a good dimensionless measure of the how broad a random distribution is compared to a Gaussian. Here, it is of particular interest because it distinguishes between a Gaussian distribution, for which it takes the value $K=0$, and a bimodal distribution of two well-separated Gaussians, for which it takes a value $K<0$. Other standard tests for distinguishing unimodal from multimodal distributions (such as Pearson’s criterion and the bimodality coefficient) rely on functions of the kurtosis and skewness.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S4.3 Estimated SNR",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.SS3.p1",
+     "text": "Recall that, in Sec. S2.6, we estimated an expected $\\text{SNR}=0.8(2)$ in $\\tau_{\\mathrm{m}}=$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$$ for device A based on our theoretical models. We now discuss the SNR that we achieved in the time trace depicted in Fig. 3 (f). Panel Fig. 3 g shows the measured data in the complex $C_{\\mathrm{\\scriptscriptstyle Q}}$ plane. Note that we applied an overall shift to center $\\text{Im}\\,C_{\\mathrm{\\scriptscriptstyle Q}}$ of the data around zero. Focusing on the distribution of $\\text{Re}\\,C_{\\mathrm{\\scriptscriptstyle Q}}$ shown in panel h, the distributions are centered around $\\bar{C}_{\\mathrm{\\scriptscriptstyle Q},+}=$321\\text{\\,}\\mathrm{aF}$$ and $\\bar{C}_{\\mathrm{\\scriptscriptstyle Q},-}=$1283\\text{\\,}\\mathrm{aF}$$, with standard deviations $\\sigma_{1}=$101\\text{\\,}\\mathrm{aF}$$ and $\\sigma_{2}=$92\\text{\\,}\\mathrm{aF}$$. The SNR is given by $|\\bar{C}_{\\mathrm{\\scriptscriptstyle Q},+}-\\bar{C}_{\\mathrm{\\scriptscriptstyle Q},-}|/(\\sigma_{1}+\\sigma_{2})=5.0$ for an effective integration time of $91\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$. The slight difference in standard deviation as well as height of the Gaussians can be attributed to the finite sample size used for fitting. We find $\\text{SNR}=0.52$ in $\\tau_{\\mathrm{m}}=$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$$, which is comparable to the estimated SNR value and allows $\\text{SNR}=1$ to be obtained in $\\tau_{\\mathrm{m}}=$3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$$ of integration time. We conclude that the sizable capacitive shifts enable fast single-shot readout even with relatively low- $Q$ resonators. Our result compares favorably with the single-shot readout of gate-based spin qubits with off-chip resonators demonstrated in Refs..",
+     "kind": "body"
+    },
+    {
+     "id": "A4.SS3.p2",
+     "text": "In the context of measurement-based quantum computation, an important performance metric is the probability of assignment errors, which needs to take into account the probability of state flips during the measurement. To this end, we define this quantity as $p_{\\mathrm{err}}=\\frac{1}{2}\\biggl[1-\\exp\\Bigl(-\\frac{\\tau_{\\mathrm{m}}}{\\tau_{\\mathrm{qpp}}}\\Bigr)\\erf\\Bigl(\\frac{\\SNR(\\tau_{\\mathrm{m}})}{\\sqrt{2}}\\Bigr)\\biggr].$ (S43) Assuming $\\tau_{\\mathrm{qpp}}=$2\\text{\\,}\\mathrm{ms}$$ and the SNR extracted above, we find an optimal measurement time of $32.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ and a corresponding $p_{\\mathrm{err}}\\approx 1\\%$. We note that this is the optimal measurement time at optimal flux, whereas for other flux values a longer measurement time is better able to distinguish the parity sectors. For this reason, we have used a longer measurement time throughout this paper.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S5 Device tune-up",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.p1",
+     "text": "This section describes the general procedure to tune up the left TQDI loop in order to perform the interferometry measurements described in the main text. A similar procedure can be used to tune up the right TQDI loop.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.p2",
+     "text": "Device tune-up requires both dc transport and rf dispersive gate sensing measurements. We first perform coarse tuning of quantum dots separated from the wire to the appropriate configuration satisfying the requirements described in Sec. S1.1. In this step, each individual dot is formed separately and the rf drive is calibrated. After tuning the dots individually, the triple quantum dot system is tuned via dispersive gate sensing. As a next step, we use the dc transport measurements that comprise the topological gap protocol (TGP) to tune the nanowire into the relevant parameter regime in terms of wire plunger and in-plane magnetic field where we expect the topological phase. Finally, we proceed to tune the interferometer to optimize the $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ signal.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.F6",
+     "text": "Figure S6: Representative dot tune-up data. a-c: Transport measurements of the respective single quantum dots when fully isolated from the nanowire (TG1 and TG2 set below their respective threshold voltages). d: Dispersive gate sensing measurement of the charge stability diagram of the fully isolated triple-dot. TG1, TG2, SC1, and SC2 are all set below their respective threshold voltages. In this regime, the charging energies that have been extracted are as follows (averaged over the measured charge states) $E_{C1}=$180\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $E_{C2}=$60\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, and $E_{C3}=$130\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$. We note that our procedure for extracting the charging energies has $\\approx 10\\%$ uncertainty.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S5.1 Pre-TGP wire transport",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS1.p1",
+     "text": "First, the Ohmic contacts S1 and S2 are isolated from one another and the other Ohmic contacts by setting depletion gates DG1, DG2, and DG3 and cutters QC1 and QC2 below their respective threshold voltages. In this configuration, the depletion voltage, induced gap, and parent gap of the topological wire segment are measured using local and non-local conductance spectroscopy as described in Ref..",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S5.2 Dot pre-tuning",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS2.p1",
+     "text": "Next, rough tuneup of the quantum dots is done via dc transport. We first isolate the dots from the wire by setting TG1 and TG2 below threshold. Transport is measured from Ohmic contact S1 to S2 with each dot formed by setting the adjacent cutter gates (i.e. SC or QC gate) to the tunneling regime and dot plungers and the remaining cutter gates in the current path to accumulation. A map of Coulomb diamonds as shown in Fig. S6 is used to verify successful tune-up. These maps can also be used to extract the lever arms and bare charging energies of the quantum dots as well as the level spacing. We extract charging energies of $180\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$, $60\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$, and $130\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$ for dot 1, dot 2, and dot 3, respectively. From Fig. S6 a we estimate the level spacing of the left quantum dot $\\approx$100\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$. Extrapolating to the $\\approx 5$ times larger dot 2 (see Fig. 2 b) yields a level spacing of $\\approx$20\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ which indeed significantly exceeds the temperature as assumed in our theoretical modeling.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.SS2.p2",
+     "text": "Finally, the conductance is measured while sweeping rf drive power and $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ to observe broadening of the Coulomb blockade peaks and extract the lever arm used to convert rf drive power to voltage reaching the device.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.SS2.p3",
+     "text": "We subsequently form a fully isolated triple quantum dot dot 1-dot 2-dot 3 by setting SC1 and SC2 below their threshold voltages while also leaving TG1 and TG2 below threshold. The dot plungers are left at the optimal value found in the single dot tune-up steps. First, a double quantum dot (DQD) is formed by setting QC2 below threshold. The rf response of dot 2 is monitored while sweeping the voltages $V_{\\mathrm{QC1}}$ and $V_{\\mathrm{QD1}}$. The inter-dot quantum capacitance will give rise to a measurable rf response in a narrow window of QC1 voltage. Below this range the rf response is suppressed as the tunnel coupling drops below the temperature. Above this range, the magnitude of the quantum capacitance is suppressed by the large anti-crossing (and subsequently small curvature) of the DQD ground state. Once this optimal range in QC1 is identified, QC1 is set below threshold and the same procedure is repeated for QC2. With the optimal ranges of the two QC gates identified, a triple dot is formed in this isolated configuration by setting both QC gates to their optimal values. A triple dot charge stability diagram like the one shown in Fig. S6 d is used to verify successful tuneup of the triple dot.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S5.3 Topological gap protocol",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS3.p1",
+     "text": "With the optimal voltages for the dots identified, we now proceed with running the TGP. SC1 and SC2 are set back to accumulation while TG1 and TG2 are set to the tunneling regime to enable transport measurements on the wire again. The dot plungers are unchanged from the preceding step, and QC1 and QC2 are set below their threshold voltages to isolate S1 from S2. With the auxiliary gates configured in this manner, stages 1 and 2 of the TGP are run as described in Ref..",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S5.4 Tuning the TQDI loop",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS4.p1",
+     "text": "After completion of a successful TGP, we select an in-plane magnetic field and WP1 voltage range with both sizeable transport gap and ZBP’s at both ends of the wire. With this field and WP1 voltage selected, TG1 and TG2 are varied to achieve a strong coupling to the ZBP’s. Once this coupling is established, SC1 and SC2 are set below threshold and all remaining measurements are done with dispersive gate sensing. In order to establish a loop configuration, we set QC1 and QC2 back to their optimal values found in the earlier triple dot tuning step. QD-MZM coupling and interferometry measurements are then performed as described in the main text.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S5.5 QD-MZM tuning",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F7",
+     "text": "Figure S7: Simulations of the configuration used for extracting the QD-MZM couplings, where one of the side dots (here dot 3) is maximally detuned while the gate voltages on the other two dots are being varied. The couplings used here are $t_{12}=t_{23}=$12\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, and $t_{\\mathrm{m}2}=$6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ with $t_{\\mathrm{m}1}=$2\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ in the top panels and $t_{\\mathrm{m}1}=$6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$ in the bottom panels; left and right panels show the real and imaginary part of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ response, respectively. Unlike the parity measurement, the length of time traces is chosen to be $10\\text{\\,}\\mathrm{ms}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.SS5.p1",
+     "text": "The same approach discussed in Sec. S2.5 can be used to simulate the response in the QD-MZM configuration, where one of the side quantum dots is completely detuned so that the coupling between the dot 2 and the topological wire is dominated by the other QD-MZM couplings. Fig. S7 shows the $C_{\\mathrm{\\scriptscriptstyle Q}}$ response of dot 2 simulated for this configuration in the limit of very small and very large coupling between $\\gamma_{1}$ and dot 1, while dot 3 is fully detuned. One can see that both the shape and magnitude of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ response depend significantly on $t_{\\mathrm{m}1}$. As discussed in the main text, by comparing the measured results quantitatively to features of these maps, we can identify parameters for the model introduced in Sec. S2.1 that best describe the tuning configuration of the device.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S6 Measurement reproducibility and cross-checks",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A6.p1",
+     "text": "In this section, we review an additional measurement performed on device A and a measurement of another device, which we call device B, to demonstrate the reproducibility of the measurements presented in the main text across measurement runs and devices. We also discuss additional cross-checks to further support our main conclusions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S6.1 Second measurement of device A and measurement of device B",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F8",
+     "text": "Figure S8: Measurement A2: a second measurement of device A. a: Kurtosis in the measured quantum capacitance $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ of dot 2 in device A as a function of $B_{\\perp}$ and $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ following the tune-up procedure of Sec. S5. b: A histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values as a function of flux for the $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ value in the middle of the dashed red rectangle in panel a, showing clear bimodality that is flux-dependent with period $h/2e$. c,f: Time traces at the two flux values marked by the vertical arrows in panel b, corresponding to minimal (panel c) and maximal (panel f) $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$. d,g: The raw rf signal converted to complex ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ by the method described in Sec. S4.1 for the time trace shown in panels c and f. e,h: Histograms of $\\mathrm{Re}\\,{\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ with Gaussian fits for an extraction of the $\\mathrm{SNR}=3.50$. i: A histogram of dwell times aggregated over all values of $B_{\\perp}$ where the signal shows bimodality. Fitting to an exponential shows that the up and down dwell times are both $2.2(\\pm 0.1)\\text{\\,}\\mathrm{ms}$ and agree to within the standard error on the fits.",
+     "kind": "caption"
+    },
+    {
+     "id": "A6.SS1.p1",
+     "text": "Fig. S8 presents experimental data from measurement A2, which is another measurement of device A in the same cooldown. Measurement A2 produced a data set which is similar to A1, indicating the reproducibility of our data and the device’s stability from one measurement run to another.",
+     "kind": "body"
+    },
+    {
+     "id": "A6.SS1.p2",
+     "text": "Fig. S9 shows data from device B (measurement B1) made in a different dilution refrigerator with the same wiring configuration. The same tune-up and measurement procedures are used for both devices and the data are qualitatively similar. Table S2 compares the parameters extracted from fitting the time traces in device B to those measured with device A. In run B1, the magnitude of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ response is reduced relative to the runs on device A. Applying the method discussed in Sec. 4 to analyze the data quantitatively, we find good agreement for $t_{\\mathrm{m}1}\\approx t_{\\mathrm{m}2}\\approx$3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, $t_{12}\\approx t_{23}\\approx$16\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$, and $E_{\\mathrm{\\scriptscriptstyle M}}\\approx$2\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$$. The reduced quantum capacitance can thus be attributed to reduced values of $t_{\\mathrm{m}1}$ and $t_{\\mathrm{m}2}$ compared to what was achieved in measurement A1.",
+     "kind": "body"
+    },
+    {
+     "id": "A6.SS1.p3",
+     "text": "Another difference from the measurements on device A is the reduction in $\\sigma_{1,2}$ by approximately a factor of two. This reduction is consistent with the relative readout amplitude used for the measurements on the two devices, with the amplitude for device B being larger by a factor of two. Both of these differences indicate that further optimization of the readout is possible, enabling higher SNRs in future experiments.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.T2",
+     "text": "Table S2: Fitted parameters from parity measurements on devices A and B.",
+     "kind": "caption"
+    },
+    {
+     "id": "appendix1.F9",
+     "text": "Figure S9: Measurement B1: a: The measured kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ of dot 2 in device B (measurement B1) as a function of $B_{\\perp}$ and $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ following the tune-up procedure described in Sec. S5. b: A histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ values as a function of flux for the $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ value indicated by the black arrows in panel a, showing bimodality that is flux-dependent with period $h/2e$. c,f: Time traces at the two flux values marked by the vertical arrows in panel b, corresponding to minimal (panel c) and maximal (panel f) $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$. d,g: The raw rf signal converted to complex ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ by the method described in Sec. S4.1 for the time trace shown in panels c and f. e,h: Histograms of $\\mathrm{Re}\\,{\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ with Gaussian fits for an extraction of the $\\mathrm{SNR}=2.63$. i: A histogram of dwell times aggregated over all values of $B_{\\perp}$ where the signal shows bimodality. Fitting to an exponential shows that the up and down dwell times are, respectively, $1.3(\\pm 0.1)\\text{\\,}\\mathrm{ms}$ and $1.2(\\pm 0.1)\\text{\\,}\\mathrm{ms}$.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S6.2 Measurements with triple-dot isolated from nanowire",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A6.SS2.p1",
+     "text": "To substantiate that the observed RTS is due to the interferometer loop formed between the triple quantum dot and the wire, we perform a similar measurement but with the two gates controlling the coupling between dot 1 and dot 3 and the wire (TG1 and TG2) set to completely deplete the respective junction area as illustrated in Fig. S10 a. The results of this measurement are shown in Fig. S10 b-e for a representative value of WP1 for devices A and B. We observe that the kurtosis of the time traces exhibits very little structure and is near zero throughout the measurement, indicating absence of an RTS. Regions with finite kurtosis ( Fig. S10 c,e) show single steps in the measured ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$, presumably due to low frequency charge noise.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.F10",
+     "text": "Figure S10: Additional measurements with the two junctions TG1 and TG2 fully depleted. a: Gate voltage configuration. b: Kurtosis of $C_{\\mathrm{\\scriptscriptstyle Q}}$ time trace $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ as a function of $B_{\\perp}$ and $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ with TG1 and TG2 fully depleted in device A. In this regime, we observe $K(C_{\\mathrm{\\scriptscriptstyle Q}})\\approx 0$, indicating Gaussian noise, except for the region marked by the red $\\times$. c: Time record taken at the position denoted by the red $\\times$ in panel b. The step in the middle of the dataset accounts for the finite kurtosis seen in panel b but is clearly different from the RTS observed in interferometry measurements. d,e: Corresponding data taken from device B, where bimodality is completely absent in this regime.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S6.3 Low field regime",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F11",
+     "text": "Figure S11: Interferometry measurement at low field. a: Kurtosis of $C_{\\mathrm{\\scriptscriptstyle Q}}$ time trace as a function of $B_{\\perp}$ and $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ at an in-plane field of $0.8\\text{\\,}\\mathrm{T}$ in device A. b: Histogram of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ as a function of $B_{\\perp}$, illustrating a flux-independent bimodality. c,d: Corresponding data from device B.",
+     "kind": "caption"
+    },
+    {
+     "id": "A6.SS3.p1",
+     "text": "We now address the question of what is observed outside the $B_{\\parallel}$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}$ regime where a topological phase can be expected. We perform interferometry measurements at low magnetic field ( $0.8\\text{\\,}\\mathrm{T}$), well before the gap in the nanowire has closed, to investigate the signal that is observed in generic gapped regimes. As shown in Fig. S11, we observe an absence of flux- $h/e$ periodicity, as expected for a gapped wire.",
+     "kind": "body"
+    },
+    {
+     "id": "A6.SS3.p2",
+     "text": "When the gapped state has local sub-gap states at the junctions, the ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ time record displays bimodality. We interpret this bimodality as arising from the quantum dots coupling to a local subgap state which is poisoned by quasiparticles in the nanowire. When the gapped state does not have local sub-gap states at the junctions, the bimodality is gone, too. In short, bimodality can be observed whenever there are subgap states that are poisoned, but flux- $h/e$ periodicity requires a single state to be coupled to both small dots in order to close the interference loop.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.F12",
+     "text": "Figure S12: a: Tuning configuration for quasiparticle injection measurement in device B. The left interferometer loop is in the standard measurement configuration but now the gates around junction 3 are tuned to form a tunnel junction to enable injection of current $I_{3}$ at an energy set by bias $V_{3}$. ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ time series and histograms for $65\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$ (b,c) and $85\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$ (d,e) injector bias, illustrating bimodality with dwell times modulated by the injector bias.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S6.4 Quasiparticle injection",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A6.SS4.p1",
+     "text": "In Fig. S12 a, we show the device configuration used to inject quasiparticles into the interference loop. These gate settings tune the device so that it realizes the schematic shown in Fig. 5 a. In Fig. S12, we show $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ time traces for bias voltages $65\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$ (panels b,c) and $85\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$ (panels d,e). These time traces yield two of the data points on the plot shown in Fig. 5 b.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S7 Charge noise",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F13",
+     "text": "Figure S13: Measurements of low-frequency charge noise in an isolated triple-dot configuration. a: Dispersive gate sensing of the linear dot QD2 as a side dot QD1 is repeatedly swept through resonance with the linear dot. The other side quantum dot QD2 is detuned for this measurement. Tracking the peak of the measured rf voltage (black line) produces a time-trace of the voltage at resonance. Plotted data is from device B. b: Power spectrum of the voltage at resonance, computed from the time trace in panel a. Line is a fit to a $1/f$ model $S_{\\scriptscriptstyle VV}(\\omega)=V_{0}^{2}/\\omega$.",
+     "kind": "caption"
+    },
+    {
+     "id": "A7.p1",
+     "text": "To measure the low-frequency charge noise in our devices we use the isolated triple-dot system described in Sec. S5.2. This is done by detuning one of the side dots from resonance using the charge stability diagram in Fig. S6 d. The plunger gate of the other side dot is then swept through resonance with the linear dot while dispersively sensing the gate response of the linear dot. Repeating this measurement for approximately 10 minutes, we extract the plunger voltage at which the resonance appears as a function of time (black line in Fig. S13 a). We Fourier transform this time trace to compute the power spectral density $S_{\\scriptscriptstyle VV}(\\omega)$ of the fluctuations in the plunger voltage at which the resonance peak appears ( Fig. S13 b). Finally, we fit a $1/f$ noise model $S_{\\scriptscriptstyle VV}(\\omega)=V_{0}^{2}/\\omega$ to the power spectrum to extract $V_{0}$.",
+     "kind": "body"
+    },
+    {
+     "id": "A7.p2",
+     "text": "We relate $V_{0}$ to the charge noise on the dots by making the assumption that the fluctuations in the chemical potentials of the side and linear dots are uncorrelated. The voltage spectral density is then $\\displaystyle S_{\\scriptscriptstyle VV}(\\omega)=\\frac{S_{\\mathrm{s}}(\\omega)+S_{\\mathrm{l}}(\\omega)}{e^{2}\\alpha_{\\mathrm{s}}^{2}},$ (S44) where $e$ is the electron charge, $S(\\omega)$ characterizes fluctuations in the chemical potentials of the dots (subscripts denote the side and linear dot), and $\\alpha$ is the lever arm. A scaling argument may then be used to connect the spectral densities of the dots with their respective areas $A$ and through those their charging energies: $\\displaystyle\\frac{S_{\\mathrm{s}}(\\omega)}{S_{\\mathrm{l}}(\\omega)}=\\frac{A_{\\mathrm{l}}}{A_{\\mathrm{s}}}=\\sqrt{\\frac{E_{\\mathrm{\\scriptscriptstyle C}}^{\\mathrm{s}}}{E_{\\mathrm{\\scriptscriptstyle C}}^{\\mathrm{l}}}}.$ (S45) The charge noise on the linear dot may then be written in terms of $S_{\\scriptscriptstyle VV}(\\omega)$ $\\displaystyle S_{\\mathrm{l}}(\\omega)=\\frac{e^{2}\\alpha_{\\mathrm{s}}^{2}}{1+\\sqrt{E_{\\mathrm{\\scriptscriptstyle C}}^{\\mathrm{s}}/E_{\\mathrm{\\scriptscriptstyle C}}^{\\mathrm{l}}}}S_{\\scriptscriptstyle VV}(\\omega).$ (S46)",
+     "kind": "body"
+    },
+    {
+     "id": "A7.p3",
+     "text": "Modelling the charge noise on the linear dot with a $1/f$ spectrum $S_{\\mathrm{l}}(\\omega)=S_{0}/\\omega$, we compute $S_{0}$ for measurements made with the left side quantum dot QD1 and the right side quantum dot QD3 on devices A and B ( Table S4). We extract $\\sqrt{S_{0}}$ between 1 and $2\\text{\\,}\\mathrm{\\SIUnitSymbolMicro eV}$ across both devices and dots.",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.T3",
+     "text": "Table S3: Measured parameters for the quantum dots in the isolated triple-dot configuration. As discussed in Sec. S2.5, the $E_{\\mathrm{\\scriptscriptstyle C}}$ values are renormalized from the single dot charging energies quoted in Fig. S6.",
+     "kind": "caption"
+    },
+    {
+     "id": "appendix1.T4",
+     "text": "Table S4: Results of charge noise measurements on the linear quantum dot for three devices. $S_{0}$ is computed with Eq. S46 using the parameters in Table S3 and the fitted values of $V_{0}$. The two columns show measurements inferred with the left and right side dots QD1 and QD3.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S8 Electron temperature",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F14",
+     "text": "Figure S14: Thermometry on device B. a,b: Gate-gate maps taken at two different puck temperatures. Each line corresponds to a different charge transition of the double-dot system. For simplicity of the figure, we focus on the charge transition highlighted with the dotted red line. c: Each solid colored line here represents a horizontal cut across the dotted red line in panel a. The black dashed line represents a fit to simulation results with the parameters indicated in the legend. d: Same as panel c for the transition line highlighted in panel b. e: Each grey circle shows the extracted temperature for all the transition lines in one of the gate-gate maps. Different grey circles for a fixed puck temperature correspond to different choice of the junction gate voltage and therefore different coupling $t_{0}$. The blue line shows a fit of Eq. S47 to the median extracted value for each puck temperature (yielding $T_{\\mathrm{sat}}=$54\\text{\\,}\\mathrm{mK}$$) while the shaded area is given by a fit to the upper and lower quartile with corresponding $T_{\\mathrm{sat}}=[$39\\text{\\,}\\mathrm{mK}$,$63\\text{\\,}\\mathrm{mK}$]$. We excluded outliers that differ from $T_{\\mathrm{puck}}$ by more than $100\\text{\\,}\\mathrm{mK}$ from the fit.",
+     "kind": "caption"
+    },
+    {
+     "id": "A8.p1",
+     "text": "Since the temperature is a key input parameter to our simulations, we extract the electron temperature $T_{\\mathrm{e}}$ from fitting the $C_{\\mathrm{\\scriptscriptstyle Q}}$ response of a double quantum dot (DQD) formed in our parity measurement devices to simulations. By tuning to the simple DQD configuration, we can reduce the number of fit parameters and thus obtain a reliable estimate of the electron temperature in a setup where all leads are disconnected, as they are in the parity readout. Experimentally, we minimize the coupling between the TQD and the superconducting wire by setting TG1 and TG2 far below their threshold voltage. Furthermore, we deplete one of the smaller dots (dot 1 or dot 3) by setting its plunger value slightly below depletion. For sake of concreteness, we will focus on the scenario where dot 3 is depleted, and we are thus left with a DQD configuration formed by dots 1 and 2. This is the configuration used for the measurement on device B shown in Fig. S14.",
+     "kind": "body"
+    },
+    {
+     "id": "A8.p2",
+     "text": "In this configuration, we can tune the coupling between the two quantum dots using the voltage applied on QC1. We then measure $C_{\\mathrm{\\scriptscriptstyle Q}}$ on the long quantum dot as function of the plunger on each of the two quantum dots, thus yielding gate-gate maps as shown in Fig. S14 a. We process a given gate-gate map by algorithmically identifying lines of $C_{\\mathrm{\\scriptscriptstyle Q}}$ peaks and fitting each $C_{\\mathrm{\\scriptscriptstyle Q}}$ peak to a simulation of a simple DQD system using the simulation framework described in Sec. S2.4, as shown for some example cuts in Fig. S14 c,d. This is repeated for different values of QC1 to cover a range of couplings between the quantum dots. We restrict the fit by assuming that (i) all $C_{\\mathrm{\\scriptscriptstyle Q}}$ peaks for fixed fridge temperature and QD cutter setting can be fit using the same electron temperature $T_{\\mathrm{e}}$, (ii) all $C_{\\mathrm{\\scriptscriptstyle Q}}$ peaks along a given line share the same coupling between the two quantum dots and to the bath. However, we allow these parameters to vary between lines to account for variation in the matrix elements between quantum dot levels. Finally, for each line trace, we allow a shift in $N_{\\mathrm{g}i}$ to account for low-frequency charge noise and finite $N_{\\mathrm{g}i}$ resolution of the measured data.",
+     "kind": "body"
+    },
+    {
+     "id": "A8.p3",
+     "text": "A key parameter for this approach is the lever arm. While we can extract an initial value from Coulomb diamonds recorded during tune-up of the device (cf Sec. S5.2), we can more accurately calibrate the relevant lever arm in the DQD configuration by varying the fridge temperature using the mixing-chamber heater and adjusting the lever arm such that at high temperatures, the extracted temperature matches the fridge temperature. The result of this is shown in Fig. S14 e. We fit the extracted temperatures to $T_{\\mathrm{e}}=(T_{\\mathrm{puck}}^{p}+T_{\\mathrm{sat}}^{p})^{1/p},$ (S47) where $T_{\\mathrm{e}}$ is the extracted electron temperature at a given fridge (in this case, puck) temperature $T_{\\mathrm{puck}}$, and $T_{\\mathrm{sat}}$ is the temperature to which the electrons saturate at the lowest fridge temperatures. Here, we fix $p=5$, as appropriate for electron-phonon cooling being the dominant physical process. From this, we obtain an estimate of the electron temperature of $4060\\text{\\,}\\mathrm{mK}$ at base temperature of the fridge.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S9 Measurement of non-equilibrium quasiparticle density in a Cooper pair box device",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "appendix1.F15",
+     "text": "Figure S15: Cooper pair box (CPB) quasiparticle poisoning measurement at $B=0$. a: Schematic of the CPB device, with the resonator connected to the CPB plunger gate. b: An optical image of an equivalent device. c: Energy levels of the island, with even(odd) parity branches marked in red(blue), and excited states (dashed lines). d: Section of a representative time trace showing the extracted quantum capacitance shift. Quasiparticle poisoning events are clearly visible, with the extracted parity marked in black. e: The probability distribution function (PDF) of $C_{\\mathrm{\\scriptscriptstyle Q}}$ values across a time trace. The SNR of this measurement is 3.8. f: Distribution of even dwell times and an exponential fit to the data, showing a poisoning rate of $460(\\pm 40)\\text{\\,}\\mathrm{Hz}$. 1 $\\sigma$ confidence interval is marked in blue. g: Schematic of the readout chain connected to the resonator.",
+     "kind": "caption"
+    },
+    {
+     "id": "A9.p1",
+     "text": "To gain a deeper understanding of the quasiparticle poisoning phenomenon in our devices and to extract the non-equilibrium quasiparticle density we have designed and fabricated an auxiliary device. This device consists of a Cooper pair box (CPB), which is coupled to superconducting leads via two gate-controlled Josephson junctions, as illustrated in Fig. S15 a. The device is fabricated on a comparable InAs/InAlAs heterostructure, maintaining the same wire width to ensure that the cross-section of the device matches that of the TQDI device. The plunger gate for the CPB is coupled to a resonator similar to that of the TQDI device, the parameters of which are listed in Table S5. This setup allows for the direct measurement of the island’s parity by observing the dispersive shift in the time domain, as outlined in Sec. S1.4 and discussed in Ref..",
+     "kind": "body"
+    },
+    {
+     "id": "appendix1.T5",
+     "text": "Table S5: Measured device parameters for the Cooper pair box device.",
+     "kind": "caption"
+    },
+    {
+     "id": "A9.p2",
+     "text": "During the measurement, the device is operated in the Cooper pair box regime where one of the Josephson junctions is closed. The measured parameters of the device are summarized in Table S5. The device is then tuned to an odd offset charge which we refer to as $N_{\\mathrm{g}i}=1$ which leads to a degeneracy of the $N=0$ and $N=2$ state of the Cooper pair box. The finite Josephson energy then leads to an avoided crossing which gives rise to a quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{\\scriptscriptstyle CPB}}=\\frac{8e^{2}\\alpha^{2}E_{\\mathrm{\\scriptscriptstyle J}}^{2}\\tanh\\Bigl(\\sqrt{(2\\alpha eV_{g})^{2}+4E_{\\mathrm{\\scriptscriptstyle J}}^{2}}/2k_{\\mathrm{\\scriptscriptstyle B}}T\\Bigr)}{\\bigl[(2\\alpha eV_{g})^{2}+4E_{\\mathrm{\\scriptscriptstyle J}}^{2}\\bigr]^{3/2}}.$ (S48) Here $V_{g}$ and $\\alpha$ are the plunger gate voltage and corresponding lever arm $\\alpha$ of the Cooper pair box, respectively. When the device is in the odd state due to a quasiparticle poisoning event, the charge states differing by a Cooper pair are no longer resonant and the quantum capacitance vanishes. The parity-dependence of the quantum capacitance then leads to a random telegraph signal, from which, by continuously observing the capacitive response, we can directly extract the poisoning rate. The sample enclosure and dc filtering are chosen to be equivalent to the TQDI device, however the readout circuit utilizes a Caltech CITLF3 amplifier and places the IR filters before the coupler, at the mixing chamber stage. A schematic of the circuit is shown in Fig. S15 g. We expect that the differences between the readout circuits are negligible, or will degrade performance relative to the configuration in the main experiment, meaning the extracted number here will act as an upper bound on the quasiparticle density. The measurement and subsequent extraction of parity closely follows the procedure detailed in Ref., with a filter bandwidth of $100\\text{\\,}\\mathrm{kHz}$, much shorter than the extracted time constant of quasiparticle poisoning. A subsection of a representative RTS trace, with the readout signal converted to units of $C_{\\mathrm{\\scriptscriptstyle Q}}$ following the method detailed in Sec. S4.1, is shown in Fig. S15 d. We assign the even/odd parity states based on thresholding the $C_{\\mathrm{\\scriptscriptstyle Q}}$ signal. Whenever the signal exceeds the mean of the even parity we label it as even and keep that label until it drops below the mean of odd parity state. This method is also used to label the data in Fig. 3 e and works well in suppressing state mislabeling due to finite SNR. 2 2 2 In addition, for the labeling of the data used in Fig. 3 e, one needs to take into account that there the assignment of high/low values of $C_{\\mathrm{\\scriptscriptstyle Q}}$ for the even/odd parities switches as a function of flux with an $h/e$ periodicity. Finally, we extract $\\Gamma_{\\scriptscriptstyle EO}=$460(\\pm 40)\\text{\\,}\\mathrm{Hz}$$ by fitting the even-state dwell-time distribution to an exponential distribution as shown in Fig. S15 f.",
+     "kind": "body"
+    },
+    {
+     "id": "A9.p3",
+     "text": "The extracted even-to-odd switching rate $\\Gamma_{\\scriptscriptstyle EO}$ can be connected to the quasiparticle density via $\\Gamma_{\\scriptscriptstyle EO}=\\frac{g}{4\\pi}\\frac{n_{\\mathrm{qp}}^{\\mathrm{\\scriptscriptstyle CPB}}}{\\nu_{\\mathrm{Al}}}\\sqrt{\\frac{\\delta E}{2\\Delta_{0}}},$ (S49) where $g$ is the normal state dimensionless conductance of the Josephson junction, $\\delta E=E_{\\mathrm{\\scriptscriptstyle C}}-E_{\\mathrm{\\scriptscriptstyle J}}/2$, $\\Delta_{0}$ is the (parent) superconducting gap, and $\\nu_{\\mathrm{Al}}$ is the Al density of states at the Fermi level. We extract the charging energy $E_{\\mathrm{\\scriptscriptstyle C}}$ and lever arm $\\alpha$ from Coulomb diamonds (not shown). We can then use Eq. S48 to fit the width of the peak in $C_{\\mathrm{\\scriptscriptstyle Q}}^{\\mathrm{\\scriptscriptstyle CPB}}$ when changing the gate voltage of the Cooper pair box to determine $E_{\\mathrm{\\scriptscriptstyle J}}$, which yields $g=4E_{\\mathrm{\\scriptscriptstyle J}}/\\Delta_{0}$. With these parameters we find using Eq. S49 $n_{\\mathrm{qp}}^{\\mathrm{\\scriptscriptstyle CPB}}\\approx$0.6\\text{\\,}{\\mathrm{\\SIUnitSymbolMicro m}}^{-3}$$ at $B=0$, within an order of magnitude of the inferred value in the TQDI device of $n_{\\mathrm{qp}}\\approx$1\\text{\\,}{\\mathrm{\\SIUnitSymbolMicro m}}^{-3}$$ at $B=$2\\text{\\,}\\mathrm{T}$$.",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

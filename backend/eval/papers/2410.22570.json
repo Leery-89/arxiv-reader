@@ -1,0 +1,815 @@
+{
+ "arxiv_id": "2410.22570",
+ "title": "Orb: A Fast, Scalable Neural Network Potential",
+ "abstract": "We introduce Orb, a family of universal interatomic potentials for atomistic modelling of materials. Orb models are 3-6 times faster than existing universal potentials, stable under simulation for a range of out of distribution materials and, upon release, represented a 31% reduction in error over other methods on the Matbench Discovery benchmark. We explore several aspects of foundation model development for materials, with a focus on diffusion pretraining. We evaluate Orb as a model for geometry optimization, Monte Carlo and molecular dynamics simulations.",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "The design of new functional materials has been a critical part of emerging technologies over the past century. Advancements in energy storage, drug delivery, solar energy, filtration, carbon capture and semiconductors have accelerated due to the discovery of entire classes of materials with application specific properties, such as Perovskites and metal-organic frameworks (MOFs). However, ab initio computational methods for designing new inorganic materials are slow and scale poorly to realistically sized systems. New methods using deep learning offer a way to achieve ab initio accuracy with dramatically increased speed and scalability.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS0.SSS0.Px1.p1",
+     "text": "In recent years, deep learning methods have demonstrated their ability to approximate extremely complex natural distributions across a diverse range of application areas including vision, biology and spatial processing, by focusing on architectures that are embarrassingly parallel and can be run efficiently on modern hardware, despite lacking architectural biases which would suit the target domain. Our key innovation in Orb is to adapt this approach to materials modeling, focusing on a scalable graph neural network architecture which learns the complexity of atomic interactions and their invariances from data, rather than using architecturally constrained models which respect rotational equivariance or particular group symmetries.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS0.SSS0.Px2.p1",
+     "text": "Using these methods we have developed Orb, a suite of pre-trained Machine Learning Force Fields (MLFFs) designed as general purpose, universal interatomic potentials. Orb models are available under the Apache 2.0 license, allowing both research and commercial use. Upon release, Orb outperformed all existing methods on the Matbench Discovery Leaderboard, as well as being over 3-6 times faster across a range of commodity hardware. In addition, we have released a model with learned dispersion corrections, making it suitable for accurately modeling materials where Van der Waals forces play a significant role — such as layered materials, molecular crystals, or systems with weak intermolecular interactions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Model",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.p1",
+     "text": "The backbone of Orb is a Graph Network Simulator (GNS) augmented with a smoothed graph attention mechanism, where messages between nodes are updated based on both attention weights and distance-based cutoff functions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.1 Graph Construction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.p1",
+     "text": "Atomic systems are represented as graphs $G=(V,E,C)$, where: • $V=\\{\\mathbf{v}_{i}\\}_{i=1}^{N}$ are vector embeddings of the atomic type. Node embeddings explicitly do not contain absolute position information to preserve translational invariance. • $E=\\{\\mathbf{e}_{i,j}\\}:=\\{\\big(\\frac{\\mathbf{r}_{k}}{||\\mathbf{r}_{i,j}||},\\ \\text{\\small{RBF}}(||\\mathbf{r}_{i,j}||)\\big)\\}$ are the directed edge features, where $\\mathbf{r}_{i,j}$ is the displacement vector between the $i^{\\text{th}}$ and $j^{\\text{th}}$ atoms. Only atoms within a pbc-aware cutoff-radius from each other are connected, and $\\text{\\small{RBF}}:\\mathbb{R}\\rightarrow\\mathbb{R}^{p}$ is a Gaussian Radial Basis Function defined as: $\\text{RBF}(x)_{l}=\\exp\\left(-\\left(\\frac{x-\\mu_{l}}{\\sigma_{l}}\\right)^{2}\\right)\\hskip 14.22636ptl\\in\\{1,\\ldots,p\\}.$ where $\\mu_{l}$ represents the center of a Gaussian-shaped function, and $\\sigma_{l}$ the scale parameter controlling the width. • The edge construction above takes into account periodic boundary conditions according to the optional unit cell $C\\in\\mathbb{R}^{3\\times 3}$. We do not provide the unit cell as an input to the model; it is only implicit through the edge construction.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.2 Model Architecture",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.p1",
+     "text": "The model is composed of three stages: an Encoder, Processor, and Decoder. When describing these stages, we will make repeated use of multi-layer perceptrons followed by layer normalization; we denote this combination by $\\phi$.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p2",
+     "text": "The Encoder computes: $\\mathbf{v}_{i}^{0}=\\phi_{\\text{node}}^{0}(\\mathbf{v}_{i}),\\quad\\mathbf{e}_{i,j}^{0}=\\phi_{\\text{edge}}^{0}(\\mathbf{e}_{i,j}).\\\\ $",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p3",
+     "text": "The Processor is a stack of Message Passing layers. Each layer has 4 steps 1 1 1 For notational simplicity, we omit a layer-indexing $k$ superscript from some variables.:",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p4",
+     "text": "( Edge residual) $\\displaystyle\\quad\\boldsymbol{\\epsilon}_{i,j}$ $\\displaystyle=\\phi_{\\text{edge}}^{k}\\left(\\left[\\mathbf{e}_{i,j}^{k},\\,\\mathbf{v}_{i}^{k},\\,\\mathbf{v}_{j}^{k}\\right]\\right),$ ( Messages) $\\displaystyle\\quad\\mathbf{m}_{i}^{1}$ $\\displaystyle=\\sum_{j\\in\\mathcal{N}_{\\text{receive}}(i)}\\psi_{1}^{k}(\\mathbf{e}_{i,j}^{k})\\,\\boldsymbol{\\epsilon}_{i,j},\\quad\\mathbf{m}_{i}^{2}=\\sum_{j\\in\\mathcal{N}_{\\text{send}}(i)}\\psi_{2}^{k}(\\mathbf{e}_{j,i}^{k})\\,\\boldsymbol{\\epsilon}_{j,i},$ ( Node update) $\\displaystyle\\quad\\mathbf{v}_{i}^{k+1}$ $\\displaystyle=\\mathbf{v}_{i}^{k}+\\phi_{\\text{node}}^{k}\\left(\\left[\\mathbf{v}_{i}^{k},\\,\\mathbf{m}_{i}^{1},\\,\\mathbf{m}_{i}^{2}\\right]\\right),$ ( Edge update) $\\displaystyle\\quad\\mathbf{e}_{i}^{k+1}$ $\\displaystyle=\\mathbf{e}_{i}^{k}+\\boldsymbol{\\epsilon}_{i,j},$",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p5",
+     "text": "where $\\mathcal{N}_{\\text{receive}}(i),\\ \\mathcal{N}_{\\text{send}}(i)$ are index sets for receiving/sending atoms. The messages are weighted sums of edge residuals, where $\\psi_{1},\\psi_{2}$ are scalar-valued “cutoff gates”:",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p6",
+     "text": "$\\displaystyle\\hskip 17.07164pt\\psi_{m}^{k}(\\mathbf{e}_{i,j}^{k})$ $\\displaystyle=\\text{{sigmoid}}(\\mathbf{w}_{m}^{k}\\cdot\\mathbf{e}_{i,j}^{k})\\cdot\\text{{cutoff}}(||\\mathbf{r}_{i,j}||),\\hskip 17.07164ptm\\in\\{1,2\\},$ $\\displaystyle\\text{{cutoff}}(r)$ $\\displaystyle=\\left(1-\\left(\\frac{r}{r_{\\max}}\\right)^{p}\\right)_{+}.$",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p7",
+     "text": "where the purpose of cutoff is to ensure that the model is continuous with respect to the input displacement vectors $\\mathbf{r}_{i,j}$. Without such a cutoff, small perturbations to these displacements can cause discontinuous jumps in model predictions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px1.p1",
+     "text": "The Decoder takes the output of the Processor and predicts the next state of the system by projecting the node representations $\\mathbf{v}_{i}$ using 3 independent MLPs: • $E\\in\\mathbb{R}=\\text{MLP}_{\\text{energy}}(\\frac{1}{N}\\sum_{i}\\mathbf{v}_{i})$, the scalar total energy. • $\\mathbf{f}_{i}\\in\\mathbb{R}^{=}\\text{MLP}_{\\text{forces}}(\\mathbf{v}_{i})$, the per atom force vectors. • $\\boldsymbol{\\sigma}\\in\\mathbb{R}^{6}=\\text{MLP}_{\\text{stress}}(\\frac{1}{N}\\sum_{i}\\mathbf{v}_{i})$, the unit cell stress in reduced Voigt notation.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px1.p2",
+     "text": "At inference time, our model requires a single forward pass to produce $E,\\mathbf{f}_{i}$ and $\\boldsymbol{\\sigma}$, as we do not implement our forcefield as a conservative vector field. This halves the amount of computation required for computing forces, but does require two adjustments to ensure net zero force and torque.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px1.p3",
+     "text": "These two constraints are as follows:",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px1.p4",
+     "text": "• $\\mathbf{\\hat{f}}_{i}{f}_{i}-\\frac{1}{N}\\sum_{i=1}^{N}\\mathbf{f}_{i}$ ( net zero force) • $\\mathbf{\\tilde{f}}_{i}^{\\text{pred}}=\\mathbf{\\hat{f}}_{i}+\\delta\\mathbf{f}_{i}$ ( net torque removal)",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px1.p5",
+     "text": "where $\\delta\\mathbf{f}_{i}$ is the smallest (in L2 norm) additive adjustment to the forces whose net torque cancels with the net torque of $\\mathbf{\\hat{f}}_{i}$, whilst maintaining the zero net force property. This adjustment is only applied to non-pbc systems, and is implemented by minimizing a Lagrangian incorporating these two constraints. See Appendix 6.3 for a full description of these adjustments.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.3 Training",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.p1",
+     "text": "Orb models are trained in two distinct phases - first they are trained as Denoising Diffusion models using a dataset of ground state materials. Secondly, the base models are used to initialize a Neural Network Potential which predicts the energy, forces and stress of systems and is trained in a supervised manner.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.3.1 Diffusion Model Pretraining",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.SSS1.p1",
+     "text": "Given initial ground state atomic positions $\\mathbf{x}_{0}$, a forward diffusion process gradually adds noise to the system. The noisy positions at time step $t$, denoted $\\mathbf{x}_{t}$, are generated by a conditional Gaussian $q(\\mathbf{x}_{t}|\\mathbf{x}_{0})=\\mathcal{N}(\\mathbf{x}_{t};\\ \\mathbf{x}_{0},\\sigma_{t}\\mathbf{I}),$ where $\\sigma_{t}$ is a noise scale that increases over time, and $\\mathbf{I}$ is the identity matrix.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS1.p2",
+     "text": "We then estimate a sequence of score functions of the form $\\mathbf{s}_{t}(\\mathbf{x})=\\nabla_{\\mathbf{x}}\\log p_{t}(\\mathbf{x})$ by minimizing a multi-scale denoising objective: $\\sum_{t=0}^{T}\\lambda(t)\\ \\ \\mathbb{E}_{q(\\mathbf{x}_{t}|\\mathbf{x}_{0})}\\ ||s_{\\boldsymbol{\\theta}}(\\mathbf{x}_{t},t)-\\nabla_{\\mathbf{x}}\\log q(\\mathbf{x}_{t}|\\mathbf{x}_{0})||^{2}\\hskip 19.91692pt$ which, following a standard reparameterization, gives an “epsilon prediction loss” $\\sum_{t=0}^{T}\\lambda^{\\prime}(t)\\ \\ \\mathbb{E}_{N(\\boldsymbol{\\epsilon};\\ 0,1)}\\ \\Big|\\Big|\\frac{s_{\\boldsymbol{\\theta}}(\\mathbf{x}_{t},t)}{\\sigma_{t}}+\\boldsymbol{\\epsilon}\\Big|\\Big|^{2},\\hskip 19.91692pt\\text{where}\\ \\ \\mathbf{x}_{t}=\\mathbf{x}_{0}+\\sigma_{t}\\boldsymbol{\\epsilon}.\\hskip 19.91692pt$",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 3,
+   "title": "2.3.2 NNP Finetuning",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.SSS2.p1",
+     "text": "The base diffusion model is finetuned on energies, forces and stresses of DFT optimization trajectories. The energy loss, $\\mathcal{L}_{E}$, per datapoint has the form $\\mathcal{L}_{E}=\\left|(E_{\\text{pred}}-\\frac{(E_{\\text{true}}-E_{\\text{ref}})}{N}\\right|,$ where $E_{\\text{pred}}$ is the output of the MLP energy head, $E_{\\text{true}}$ is the true total energy, and $E_{\\text{ref}}$ is a fixed, linear reference energy based on the stoichiometry of the system.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS2.p2",
+     "text": "The forces loss $\\mathcal{L}_{\\mathbf{f}}$ is then computed as the MAE between predicted forces and the true forces: $\\mathcal{L}_{\\mathbf{f}}=\\frac{1}{3N}\\sum_{i=1}^{N}\\left\\|\\mathbf{f}_{i}^{\\text{pred}}-\\mathbf{f}_{i}^{\\text{true}}\\right\\|_{1}$ For batched systems, this equation still holds, but $\\mathbf{f}_{i}^{\\text{pred}},\\ \\mathbf{f}_{i}^{\\text{true}}$ are concatenated vectors, and $N$ equals the number of atoms in the batch. In other words, we use a single average over all atoms in the batch, rather than a nested average.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS2.p3",
+     "text": "The total loss $\\mathcal{L}_{\\text{total}}$ is a weighted sum of the energy, forces, and unaltered stress MAE. The energy loss is optionally scaled by a weight $\\lambda_{E}$ to balance its contribution: $\\mathcal{L}_{\\text{total}}=\\lambda_{E}\\mathcal{L}_{E}+\\mathcal{L}_{\\mathbf{f}}+\\mathcal{L}_{\\sigma}.$",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.3.3 Datasets",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.SSS3.p1",
+     "text": "For pretraining, we curate a dataset of minimum energy configurations of materials, regardless of exchange-correlation functional, DFT software implementation or correction. Our motivation for pretraining is to provide an approximate base model which has broad materials coverage in terms of atomic type, materials class, symmetry groups and usage domain. Combining disparate datasets in this way is possible because all we require are atomic positions and unit cells; all other properties and metadata are ignored, and it is usually these properties (such as potential energy) that are incompatible across datasets.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.SSS3.Px1.p1",
+     "text": "In comparison, for finetuning a UIP, data quality and consistency is of critical importance. Here, we follow previous work in combining MPtraj, the dataset constructed from the Materials Project and used to train CHGNet, with Alexandria, as both use PBE exchange-correlation functionals; Hubbard U corrections for transition metal oxides; no additional dispersion correction; and the same DFT software implementation (VASP) for geometry optimization. MatterGen and MatterSim additionally make use of ICSD, which we disregard as it requires a commercial license. GNOMe use a large proprietary dataset of geometry relaxations derived from the Materials Project and OQMD via a variant of ab initio random structure search (AIRSS).",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F1",
+     "text": "Figure 1: top: Element distribution of the full diffusion pretraining dataset for Orb. bottom: Distribution of the dataset with respect to system size. Due to the efficiency of Orb’s architecture, we can train on systems with up to 5000 atoms, two orders of magnitude larger than MatterGen, a similar generative model of materials.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.4 Dispersion Corrections",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.p1",
+     "text": "Both the MPtraj and Alexandria datasets are generated using DFT with the Perdew Burke Ernzerhof (PBE) exchange-correlation functional. PBE is a semi-local functional which does not capture long range dispersion interactions. To account for long range intermolecular interactions, additional corrections such as D3 can be applied. Because D3 is an additive correction, it is possible to apply it at inference time to any existing UIP trained on PBE data, as demonstrated by. However, this causes significant slowdowns in practice, given D3’s $n^{2}$ complexity with respect to system size (see Section 3.3).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.SSS0.Px1.p1",
+     "text": "We amortize this cost by adding D3 corrections to the MPtraj and Alexandria datasets and then training Orb-D3 models on this corrected data. We note that the receptive field of Orb is more than sufficient to model such long range dispersion interactions. Unless specified, model comparisons in the paper do not use Orb-D3, so as to remain comparable to existing UIPs such as MACE.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Results",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "3.1 Matbench-Discovery",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.T1",
+     "text": "Table 1: Matbench Discovery results using Orb. Structures are relaxed using Orb and the FIRE optimizer for 500 steps or until the maximum force magnitude is lower than 0.05 eV/Å. Models marked with an asterisk are closed source.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.SS1.p1",
+     "text": "We evaluate Orb on the widely adopted Matbench-Discovery benchmark. This is a high-throughput geometry optimization and stability prediction benchmark that demands accurate estimates of energies, forces, and stress tensors at ab initio fidelity. To succeed, a model must relax a large test set of crystal structures to a ground-state, and then predict the decomposition energy of this ground-state relative to a convex hull of competing phases. Accurately determining the energy above or below the convex hull with DFT-level precision has experimental implications, serving as an indicator for a material’s synthesizability.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.SSS0.Px1.p1",
+     "text": "The full results, accurate as of the time of submission (2024-10-14), are in Table 1. Models in the top section are MPtraj-only, whilst models in the second section are unrestricted. For both sections, Orb models set a new state-of-the art across the primary metric (F1), and are generally superior across other metrics. Orb models have especially high precision, which would likely be crucial in a real-world use-case where false-positives (i.e. materials that are predicted as stable but are not) are very costly due to wasted experimental effort. The final row in Table 1 refers to a version of Orb trained on a reduced training set. Specifically, we removed all datapoints from Alexandria that had overlapping protostructures with the WBM test set. We use the same approach as to identify protostructrures with aviary.wren.utils.get_protostructure_label_from_spglib 2 2 2 Using v1.1.0 of the aviary pypi package. See Appendix 6.6 for discussion of the concomitantly released OMAT24 dataset and models which outperform Orb-v2 on Matbench Discovery.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.2 Effect of Pretraining",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.p1",
+     "text": "Figure 2 shows the effect of our pretraining procedure on the MP-traj and Alexandria validation metrics. In addition to the substantial decreases in forcefield error, diffusion pretraining also makes training more stable; anecdotally we have observed fewer instances of oversmoothing when finetuning diffusion pretrained models compared to training forcefields from scratch.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.SSS0.Px1.p1",
+     "text": "Although correlated, improvements from pretraining are not only related to the amount of data seen during pretraining - pretraining on existing datasets also results in substantially improved performance, as evidenced by the Orb-v2-mptraj performance on the Matbench Discovery Benchmark (Table 1).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F2",
+     "text": "Figure 2: Effect of pretraining and model size on Alexandria and MPtraj Energy MAE, Forces MAE and Forces within a threshold of 0.03. Diffusion pretraining helps universally with improvements between 17% and 70%, even on Alexandria, which is an order of magnitude larger MPtraj.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.3 Speed Benchmark",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS3.p1",
+     "text": "In addition to producing highly accurate UIPs for both optimization and simulation, Orb models are considerably faster and more scalable than existing open source neural network potentials. Figure 3 shows relative performance improvements compared to MACE, particularly at large system sizes. Efficient scaling with respect to system size is essential to model certain phenomena such as dopants, or to accurately capture sparse simulation statistics such as diffusivity.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F3",
+     "text": "Figure 3: left: Model forward pass speed (excluding featurization) compared to MACE on a single NVIDIA A100 GPU. At large system sizes, Orb is between 3 to 6 times faster than MACE. right: End to end model inference speed for a 100 atom system on a single NVIDIA A100 when implemented as a Calculator object in the Atomic Simulation Environment Python library. The D3 dispersion correction adds a substantial cost which is amortized by Orb models, as the corrections are incorporated into training datasets. All measurements reported as the median of 50 runs.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.4 Molecular Dynamics of Small Molecules",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.p1",
+     "text": "We evaluate Orb on the MD17-10k benchmark, following the protocol of. This benchmark assesses the quality of NVT Molecular Dynamics (MD) trajectories generated by machine learning models on four small organic molecules (aspirin, ethanol, naphthalene, and salicylic acid) using two key metrics: • Stability: the number of picoseconds until the system “collapses” / “breaks apart”, which is detected via large deviations in the interatomic distances compared to those of a ground-truth ab initio trajectory. 300 ps is the length of the simulation and thus the maximum possible stability. • “h(r)”: a 1-Wasserstein metric on the distributions of interatomic distances present in the model-trajectory vs those present in the ab initio trajectory. This metric is similar in spirit to a radial distribution function error metric. In addition to these two metrics, we report a test set Force MAE (meV/Å). This MAE is not of interest by itself (since it is not a function of the MD simulation) but it is interesting to correlate it against MD performance.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "MD17-10k: molecule specific results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.T2",
+     "text": "Table 2: Results on the MD17 Molecular Dynamics benchmark. With the exception of Orb, all results are taken from. Stability is measured in picoseconds, with large values meaning more stable, and 300 being the maximum possible value. For $h(r)$ and Force, lower values are better and 0 is the minimum.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.SS4.SSSx1.p1",
+     "text": "Most prior work using NNPs for molecular simulation train system specific models. The MD17-10K benchmark is no exception, with all models reported in being trained from scratch per individual system (e.g. aspirin), with no expectation that the model could simulate any other small organic molecule.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.SSSx1.Px1.p1",
+     "text": "In order to compare with this prior work, we also train system specific models by finetuning four versions of Orb, one for each molecule (Table 2). Orb demonstrates excellent stability, achieving the maximum 300ps for all molecules, putting it on par with NequIP and ahead of all other baseline models. Orb also performs well in terms of the realism of its simulated trajectories, closely matching the reference data as shown by its low h(r), again competitive with NequIP.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "MD17-10k: zero-shot results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.SSSx2.p1",
+     "text": "Training system specific models is expensive and unscalable. It is therefore of interest to directly evaluate Orb without additional finetuning. Such a zero-shot evaluation is quite ambitious; ow well can models trained on zero-kelvin periodic crystal structures generalize to unseen high-temperature non-periodic molecules ?”",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.SSSx2.Px1.p1",
+     "text": "The results for Orb and several other universal NNPs are shown in Table 3. We present only $h(r)$ as all simulations are stable and Force MAE is not computable due to changes in the level of theory for the DFT computation. Comparing just those models trained on MPtraj, we see that Orb has the best performance, with a lower $h(r)$ across the board. It is noteworthy that Orb (MPtraj) outperforms many of the molecule-specific baselines in Table 2, and is not far from matching the molecule-specific versions of Orb.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.SSSx2.Px2.p1",
+     "text": "Whilst Orb (MPtraj) does outperform MACE and Sevennet (Table 3), all models are reasonably close in performance and it is hard to make a robust judgement of superiority from a sample size of four simulations. Indeed, the somewhat surprising result that adding in Alexandria to Orb’s training set lowers performance may not be statistically significant across a larger sample of molecules.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.T3",
+     "text": "Table 3: Results on our newly introduced zero-shot version of the MD17 Molecular Dynamics benchmark. All models shown here were trained on zero-kelvin periodic crystal structures and must extrapolate at test-time to 500 Kelvin isolated molecules with no further training or finetuning on individual trajectories. NTR = Net Torque Removal; see Section 2.3.2 for explanation.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.SS4.SSSx2.Px3.p1",
+     "text": "However, we do believe an important conclusion can be drawn from the final column in Table 3, which shows an ablation of Orb without the “Net Torque Removal” (NTR) operation described in Section 6.3. This operation is an inexpensive “correction” to the model’s predicted forces that removes net torque when processing non-periodic systems. Intriguingly, this operation can be applied purely at inference-time, with minimal effect on Force MAEs, but a substantial effect on the quality of MD simulations.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.SSSx2.Px4.p1",
+     "text": "The need for this operation—as well as the ‘mean removal’ operation also described in Section 6.3 —arises from the fact that Orb is non-conservative i.e. it directly predicts forces rather than computing the gradient of an energy function. In contrast, conservative models like MACE automatically generate force predictions that have zero net force and (for non-periodic systems) zero net torque 3 3 3 Strictly speaking being conservative is not sufficient for these properties; zero net force also requires translation invariance and zero net torque requires rotational equivariance.. Our conclusion is that computing gradients of energy functions is not intrinsically necessary for stable MD; it is just one strategy to ensure certain desirable properties for the force predictions. These properties can be acquired in other ways, enabling non-conservative potentials to perform equally well, if not better.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.5 Molecular Dynamics of Crystalline Materials",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS5.p1",
+     "text": "In addition to evaluating the performance of Orb on isolated small molecules, we extend our evaluation to the stability of MD simulations at increasingly higher temperatures on larger bulk crystalline materials. We evaluate the MD stability of the well-studied MOF-5, recorded to be stable up to temperatures of 723 K, making it an ideal candidate to test Orb’s simulation capabilities under thermal stress.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS5.SSS0.Px1.p1",
+     "text": "Here, we show that Orb produces stable MD trajectories for MOF-5 across a range of different temperatures. Figure 4 b shows the root mean squared deviation (RMSD) from the starting state remains relatively constant until 3,000 ps, corresponding to a temperature of 800 K. Beyond this point, significant degradation of the framework begin to occur into gaseous constituents. In addition to a stable simulation at a range of temperatures, we show Orb is able to replicate the dynamic behavior of MOF-5 observed experimentally. The interaction of the phenylene linker with neighboring atoms in MOF-5 has been shown to prohibit full rotation of the phenylene ring. In Figure 4 a, we show the distribution of dihedral angles of MOF and linker atoms $C_{1}$ - $C_{2}$ - $C_{3}$ - $C_{4}$ (Figure 4 c). We observe no complete rotation of the phenylene ring to occur between 300-800 K. At higher temperatures, however, the broader distribution of dihedral angles indicates a greater degree of rotational flexibility due to increased thermal energy.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS5.SSS0.Px2.p1",
+     "text": "The observed dynamics show that Orb can be extended beyond small molecule MD to bulk crystalline materials. Despite not being explicitly trained on MOFs, we show stable simulations across a range of temperatures reported to be stable in the literature. In addition, we show linker dynamics in agreement with those observed in the literature, suggesting Orb can be used to investigate the mechanical properties of larger crystalline materials.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F4",
+     "text": "Figure 4: (a) Distribution of dihedral angles across the MD trajectory for MOF-5, shown at six time intervals (0–500, 500–1000, 1000–1500, 1500–2000, 2000–2500, and 2500–3000 ps) corresponding to increasing temperatures from 300 K to 800 K; (b) top: snapshots of MOF-5 at 2,500 ps (stable framework) and 3,500 ps (decomposed structure), middle: root mean squared deviation (RMSD) from the initial structure, remaining constant until around 3,000 ps, after which significant structural degradation occurs, bottom: simulation temperature over time, showing incremental heating; (c) schematic of the four carbon atoms ( $C1$ – $C4$) in the MOF-5 and linker structure used to calculate the dihedral angle.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.6 Adsorption",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS6.p1",
+     "text": "We evaluate Orb for modeling the dynamic adsorption properties of a prototypical metal-organic framework (MOF) for low pressure $\\text{CO}_{2}$ adsorption. Mg-MOF-74 is a promising candidate for $\\text{CO}_{2}$ adsorption due to the presence of open metal sites for $\\text{CO}_{2}$ to adsorb that are accessible via the one-dimensional hexagonal channels.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS6.SSS0.Px1.p1",
+     "text": "To investigate the adsorption properties of Mg-MOF-74 at low pressures, we use Widom insertion using Orb-D3 to compute the heat of adsorption and free energy landscape of $\\text{CO}_{2}$. Vandenbrande et al. used Widom insertion with a classical force field, before using importance sampling for DFT to compute an ab initio heat of adsorption, obtaining a value of –34.1 kJ/mol at the PBE+D3(BJ) level of theory. In this evaluation, we sample the full ab initio potential energy to compute the heat of adsorption.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS6.SSS0.Px2.p1",
+     "text": "Figure 5 (a) shows the free energy profile of Mg-MOF-74 computed through Widom insertion with MACE + D3 and Orb-D3. Both MACE + D3 and Orb-D3 show clusters of favorable adsorption sites next to the metal center, indicated by the negative free energy. While both MACE + D3 and Orb-D3 predict similar adsorption regions, there are differences in the depth of the potential wells, with MACE’s wells being noticeably deeper. This extra depth leads to a low heat of adsorption (-61.7 kJ/mol) compared to the experimental value of -44 kJ/mol. In contrast, Orb-D3’s shallower wells closer to the experimental value, with a heat of adsorption of -54.9 kJ/mol.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F5",
+     "text": "Figure 5: (a) Free energy surface of MACE + D3 (left) and Orb-D3 (right) obtained from Widom insertion in Mg-MOF-74. Lowest free energies are represented by the blue region near the open-metal centers, indicating favorable adsorption sites for $\\text{CO}_{2}$. (b) $\\text{CO}_{2}$ adsorption locations in Mg-MOF-74 showing the two sites with the most favorable adsorption energies, obtained with Widom insertion, with values of -54.5 kJ/mol and -54.4 kJ/mol for the respective sites. While both Orb and MACE predict similar locations of energy minima, the free energy minima of ORB are closer in magnitude to the experimental heat of adsorption (-44 kJ/mol).",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS6.SSS0.Px3.p1",
+     "text": "For the energy adsorption site identified by Orb using Figure 5 (b), $\\text{CO}_{2}$ adopts a tilted configuration with a Mg-O-C bond angle of 134.7 ∘ and a Mg-O( $\\text{CO}_{2}$) bond length of 2.43 Å. This geometry is close to the experimentally determined orientation of $\\text{CO}_{2}$ with an experimental Mg-O( $\\text{CO}_{2}$) distance of 2.27 Å and Mg-O-C bond angle of 131 ∘, suggesting reasonable agreement with the experimental binding site and in agreement with the binding site identified in MACE.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS6.SSS0.Px4.p1",
+     "text": "As neither MACE or Orb are trained on MOF structures, the qualitatively correct energy landscape and adsorption dynamics suggest both Orb and MACE UIPs are able to generalize to complex porous materials. The higher interaction energies and heats of adsorption suggest that further fine-tuning data may be required to get quantitatively correct heats of adsorption for sampling the potential energy landscape using Monte Carlo methods, but both serve as good starting points in materials where classical force fields may fall short.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Related Work",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.p1",
+     "text": "Over the past decade, there has been increasing adoption of machine learning based interatomic potentials for atomistic modeling, with a wide range of architectures proposed in the academic community. Generally, these interatomic potentials have been confined to a small system domain and struggled to generalize across different material classes. MACE, the first UIP with significant generalization attributes, has seen widespread usage.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS0.SSS0.Px1.p1",
+     "text": "Invariance/equivariance with respect to rotation is often considered to be a critical property of such models. Many popular UIPs, such as MACE, NEQUIP and Equiformer V1/V2 make use of architectures which respect these symmetries by construction. However, respecting symmetries comes at a cost; it requires a unique set of design rules and tensor operations that are challenging to implement efficiently. In contrast, we have opted for a non-equivariant GNS architecture that only deviates in minor ways from the original implementation. Despite the relatively few architectural adjustments, we have been able to achieve state-of-the-art accuracy and speed.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS0.SSS0.Px2.p1",
+     "text": "More recently, the benefits of equivariant models have begun to be analyzed and challenged. demonstrate that the non-equivariant PET model preserves simulation statistics, even in cases where such observables are expected to be affected by broken symmetries. Additionally, in domains outside of atomistic modeling which also deal with point clouds in 3D Euclidean space, unconstrained models are commonplace. More recently, non-invariant models have been used for accurately predicting the secondary structure of proteins and generative models of small molecule conformers.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS0.SSS0.Px3.p1",
+     "text": "In parallel with the introduction of modeling techniques which do not respect various Euclidean symmetries, new techniques have been explored for introducing rotational equivariance/invariance at inference time using data augmentation. prove that deep ensemble models are equivariant in the limit of infinitely wide network layers when trained with data augmentation, even in off-manifold areas of the data distribution. use auxiliary networks to find canonical representations of inputs, leading to exact equivariance. discover invariant properties directly from data by learning a joint distribution over model parameters and data augmentation methods. Learned equivariance has been demonstrated to be a function of model size, accuracy and architecture, with showing that vison transformer models are often more rotationally equivariant than convolutional neural networks, despite the strong translation invariance built into CNNs. This demonstrates that unconstrained models can both learn fundamental invariances from data whilst also being more performant.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS0.SSS0.Px4.p1",
+     "text": "Molecular dynamics simulations using UIPs are known to be susceptible to instability, causing nonphysical simulation states and simulation collapse. This instability has low correlation with Force and Energy MAE, making diagnosing issues with model based simulations difficult. Stability issues are often resolved using active learning to expand the observed potential energy surface, but this requires expensive rounds of model finetuning, simulations and quantum mechanical calculations. show improved simulation stability with increasing training dataset sizes, which we adopt in combination with noise data augmentations framed as denoising diffusion models.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS0.SSS0.Px5.p1",
+     "text": "The majority of prior works in pretraining neural networks for atomistic modeling have focused somewhat narrowly on either materials or molecules and adopted model architectures that have yet to exhibit strong data scaling with increases in available training data. One obvious reason for these shortcomings is the scarcity of compatible DFT data. Our use of generative pretraining alleviates this issue by supporting the combined use of all available DFT datasets, irrespective of level-of-theory. Arguably, we have only scratched the surface of this approach through our use of diffusion modeling on ground-states, and we believe that the use of full trajectory data is a promising direction for future work.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Conclusion",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "We have presented a universal interatomic potential, Orb, that has reached a unique set of milestones. When released, it set a new state-of-the-art on the competitive Matbench-Discovery benchmark, and continues to be 2-6 times faster than its closest competitors, depending on system size. Moreover, we have found Orb to be stable under simulation of diverse systems, including out-of-distribution small molecules.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS0.SSS0.Px1.p1",
+     "text": "This paper has explored several strategies for approximating behaviors and properties of both conservative forcefields and models which are equivariant by construction, whilst exploiting the substantial benefits that come with relaxing these assumptions. Clearly, equivariant models constructed as conservative vector fields are apriori better models of atomic forces, but this does not imply that the best learned interatomic potentials will come from this model class. It is this learning step that introduces ambiguity about the correct modeling approach.By removing the mean force vector from force predictions (Eq. 1), we ensure the net force acting on the system is zero - a property of a conservative vector field. By removing torque from predicted forces (Section 6.3), we implement an equivalent constraint to an irrotational forcefield, again a property of conservative forcefields. By using data augmentation during training, we produce models which are approximately roto-invariant/equivariant. Importantly, we can achieve these properties (or good approximations to these properties) without complex architectural constraints or expensive gradient computations.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS0.SSS0.Px2.p1",
+     "text": "Finally, we have demonstrated Orb’s capacity to generalize to new domains with varied chemistries, as well as modifying an existing benchmark, MD-17, as a test of generalization for forcefield models - by introducing a zero-shot evaluation of MD stability and descriptive statistics. We hope that Orb models will find adoption within the computational chemistry community, particularly for simulations that were difficult or impossible to run at the scale required for useful analysis.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "6 Appendix",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "6.1 Code Availability",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS1.p1",
+     "text": "Model weights and code are available under an Apache 2.0 License on Github at https://github.com/orbital-materials/orb-models.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.2 Hyperparameters",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS2.p1",
+     "text": "Models are implemented in Pytorch and trained using ADAM with a learning rate of $3e^{-}4$ and $\\beta_{1}=0.9$, $\\beta_{2}=0.999$ on 8 NVIDIA A100 GPUs. Diffusion pretraining uses the CosineAnnealingLR learning rate schedule and is trained to a max of 200 epochs or until convergence, whichever is sooner. Finetuning uses the CosineAnnealing learning rate schedule with a max learning rate of $3e^{-}3$ and a warmup of 5% of the total number of gradient steps. Models are finetuned on a single A100 GPU. All models use an exponentially weighted model average (EMA) with a decay rate of 0.999. Diffusion models use a low discrepancy noise sampler in order to ensure a uniform distribution of noise timesteps per batch.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS2.p2",
+     "text": "All models use random rotation augmentations during training. Atomic graph edges are featurized using the 20 nearest neighbors of a max radius of 10. Systems with unit cells use a Minimum Image Convention aware implementation of nearest neighbors. We use a dynamic batch size based on a maximum number of nodes, edges and graphs, resulting in an average per GPU batch size of 240 systems.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.3 Net Force and Net Torque Removal",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS3.p1",
+     "text": "As explained in the main text, our model is non-conservative and thus directly predicts force vectors rather than computing gradients of an energy function. This is not uncommon in the literature, and can work very well as measured by MAE on a test set, or when optimising structures as in the Matbench-Discovery benchmark.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p2",
+     "text": "However, we have found that naïvely predicting unconstrained forces can be very unstable in Molecular Dynamics simulations. Systems can undergo strong net translational or rotational forces that are not possible in real physical systems in a static equilibrium.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p3",
+     "text": "We have found two modifications to the force predictions to be effective for resolving this. The first modification is a mean-subtraction: $\\mathbf{f}_{i}^{\\text{pred}}=\\mathbf{f}_{i}-\\frac{1}{N}\\sum_{i=1}^{N}\\mathbf{f}_{i}.$ (1)",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p4",
+     "text": "where $\\mathbf{f}_{i}\\in\\mathbb{R}^{3}$ is the direct output of the model’s $MLP_{\\text{forces}}$ head. Mean-centering in this fashion ensures no net force acting on the system.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p5",
+     "text": "The second modification is to remove net torque in non-pbc systems. Again, this is a property dictated by fundamental physics for isolated molecules in static equilibrium; there should not be a ‘net rotation’ of the system. Our approach is to formulate the problem as a constrained optimization problem that can be solved efficiently with Lagrange multipliers.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p6",
+     "text": "The solution is inexpensive to compute and can be applied purely at inference time to substantially enhance the quality of MD simulations on non-pbc systems.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p7",
+     "text": "Problem Statement Given a set of $N$ atoms with positions $\\mathbf{R}_{i}\\in\\mathbb{R}^{3}$, for $i=1,2,\\dots,N$ and predicted forces $\\mathbf{f}_{i}\\in\\mathbb{R}^{3}$, our goal is to find an additive adjustment $\\delta\\mathbf{f}_{i}\\in\\mathbb{R}^{3}$ to the forces with minimal L2 norm subject to the constraints: 1. The average net adjustment is zero: $\\sum_{i=1}^{N}\\delta\\mathbf{f}_{i}=\\mathbf{0}\\hskip 28.45274pt(\\text{Constraint $\\mathbf{C}_{1}$})$ 2. The net torque of the adjustment cancels the net torque of the original forces: $\\sum_{i=1}^{N}\\mathbf{r}_{i}\\times\\delta\\mathbf{f}_{i}=-\\boldsymbol{\\tau}_{\\text{total}}\\hskip 28.45274pt(\\text{Constraint $\\mathbf{C}_{2}$})$ where: • $\\mathbf{r}_{i}=\\mathbf{R}_{i}-\\mathbf{R}_{\\text{COM}}$ is the position of atom $i$ relative to the center of mass. • $\\mathbf{R}_{\\text{COM}}=\\frac{1}{N}\\sum_{i=1}^{N}\\mathbf{R}_{i}$ is the center of mass of the system. • $\\boldsymbol{\\tau}_{\\text{total}}=\\sum_{i=1}^{N}\\mathbf{r}_{i}\\times\\mathbf{f}_{i}$ is the net torque of the predicted forces.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p8",
+     "text": "Solving the Constrained Minimization Problem To solve this constrained optimization problem, we introduce Lagrange multipliers: • $\\boldsymbol{\\lambda}\\in\\mathbb{R}^{3}$ corresponding to the net force constraint $\\mathbf{C}_{1}$. • $\\boldsymbol{\\mu}\\in\\mathbb{R}^{3}$ corresponding to the net torque constraint $\\mathbf{C}_{2}$. yielding the Lagrangian: $\\mathcal{L}=\\frac{1}{2}\\sum_{i=1}^{N}\\|\\delta\\mathbf{f}_{i}\\|^{2}-\\boldsymbol{\\lambda}\\cdot\\left(\\sum_{i=1}^{N}\\delta\\mathbf{f}_{i}\\right)-\\boldsymbol{\\mu}\\cdot\\left(\\sum_{i=1}^{N}\\mathbf{r}_{i}\\times\\delta\\mathbf{f}_{i}+\\boldsymbol{\\tau}_{\\text{total}}\\right)$ Differentiating with respect to each $\\delta\\mathbf{f}_{i}$ and solving for when the derivatives are zero gives: $\\delta\\mathbf{f}_{i}=\\boldsymbol{\\lambda}+\\boldsymbol{\\mu}\\times\\mathbf{r}_{i}.$ Thus the only task that remains is to use the constraints to solve for $\\boldsymbol{\\lambda}$ and $\\boldsymbol{\\mu}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p9",
+     "text": "Solving for $\\boldsymbol{\\lambda}$ using Constraint $\\mathbf{C}_{1}$: $\\sum_{i=1}^{N}\\delta\\mathbf{f}_{i}=\\sum_{i=1}^{N}\\left(\\boldsymbol{\\lambda}+\\boldsymbol{\\mu}\\times\\mathbf{r}_{i}\\right)=N\\boldsymbol{\\lambda}+\\boldsymbol{\\mu}\\times\\left(\\sum_{i=1}^{N}\\mathbf{r}_{i}\\right)=\\mathbf{0}$ But since: $\\sum_{i=1}^{N}\\mathbf{r}_{i}=\\sum_{i=1}^{N}\\left(\\mathbf{R}_{i}-\\mathbf{R}_{\\text{COM}}\\right)=N\\mathbf{R}_{\\text{COM}}-N\\mathbf{R}_{\\text{COM}}=\\mathbf{0}$ Thus, the second term vanishes, and we have $N\\boldsymbol{\\lambda}=\\mathbf{0}\\implies\\boldsymbol{\\lambda}=\\mathbf{0}$ Solving for $\\boldsymbol{\\mu}$ using Constraint $\\mathbf{C}_{2}$: $\\sum_{i=1}^{N}\\mathbf{r}_{i}\\times\\delta\\mathbf{f}_{i}=\\sum_{i=1}^{N}\\mathbf{r}_{i}\\times\\left(\\boldsymbol{\\mu}\\times\\mathbf{r}_{i}\\right)=-\\boldsymbol{\\tau}_{\\text{total}}$ Applying a standard triple vector product identity, we get $\\sum_{i=1}^{N}\\mathbf{r}_{i}\\times\\left(\\boldsymbol{\\mu}\\times\\mathbf{r}_{i}\\right)=\\boldsymbol{\\mu}\\sum_{i=1}^{N}\\left(\\mathbf{r}_{i}\\cdot\\mathbf{r}_{i}\\right)-\\sum_{i=1}^{N}\\mathbf{r}_{i}\\left(\\mathbf{r}_{i}\\cdot\\boldsymbol{\\mu}\\right)=-\\boldsymbol{\\tau}_{\\text{total}}$ To simplify this further, let us introduce the notation $s:=\\sum_{i=1}^{N}\\|\\mathbf{r}_{i}\\|^{2},\\hskip 28.45274ptS:=\\sum_{i=1}^{N}\\mathbf{r}_{i}\\mathbf{r}_{i}^{T}$ Then, the torque constraint becomes $\\displaystyle\\hskip 100.00015pt\\boldsymbol{\\mu}s-S\\boldsymbol{\\mu}=-\\boldsymbol{\\tau}_{\\text{total}}$ $\\displaystyle\\Longrightarrow$ $\\displaystyle\\hskip 100.00015pt\\left(S-s\\mathbf{I}\\right)\\boldsymbol{\\mu}=-\\boldsymbol{\\tau}_{\\text{total}}$ $\\displaystyle\\Longrightarrow$ $\\displaystyle\\hskip 100.00015pt\\boldsymbol{\\mu}=-(S-s\\mathbf{I})^{-1}\\boldsymbol{\\tau}_{\\text{total}}$ Where $\\mathbf{I}$ is the $3\\times 3$ identity matrix. We have assumed here that $S-s\\mathbf{I}$ is invertible; if it is instead singular or nearly singular, we use the Moore-Penrose pseudo-inverse.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS3.p10",
+     "text": "Final expression for adjusted forces Putting everything together, the final adjusted forces with net zero torque are: $\\mathbf{f}_{i}^{\\text{adjusted}}=\\mathbf{f}_{i}+\\delta\\mathbf{f}_{i}=\\mathbf{f}_{i}-(S-s\\mathbf{I})^{-1}\\boldsymbol{\\tau}_{\\text{total}}\\times\\mathbf{r}_{i}$",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.4 Molecular Dynamics",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS4.p1",
+     "text": "For evaluating the thermal stability of MOF-5, MD simulations were performed at a constant volume using the NPT ensemble with no external stress applied. Specifically, we use ASE NPT implementation (version $3.23.0$) of Nose-Hoover and Parrinello-Rahman dynamics along with the Orb-D3 model. Simulations were conducted over a temperature range from 300 K to 1,000 K. To investigate the stability at each temperature step, velocities were initialized from a Boltzmann distribution at each step using a 1 fs timestep. States were sampled every 100 steps along the trajectory.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.5 Applications",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS5.p1",
+     "text": "Using Widom insertion, we use a sum approximation to the continuous ensemble average energy to calculate the adsorption energy (Equation 2).",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS5.p2",
+     "text": "$\\Delta H_{\\text{ads}}=\\frac{\\sum_{i}\\Delta E_{i}\\exp\\left(-\\frac{\\Delta E_{i}}{RT}\\right)}{\\sum_{i}\\exp\\left(-\\frac{\\Delta E_{i}}{RT}\\right)}-RT$ (2)",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS5.p3",
+     "text": "Here, $\\Delta E_{i}$ is the energy change associated with inserting a CO2 molecule into the system at position i, R is the ideal gas constant, and T is the temperature. By sampling a large number of random insertions, the value converges to the adsorption energy at infinite dilution. For computational efficiency and to avoid erroneous predictions due to close range interactions, we use an exclusion sphere of the covalent radius plus 0.2 Å, which allows for placement of the $\\text{CO}_{2}$ within close proximity of the metal center. For both MACE and ORB, we include D3 corrections and each heat of adsorption value was computed following 50,000 trial insertions. We use the structure of Mg-MOF-74 from Goeminne et al. optimized at the PBE+D3 level of theory for performing insertions. To compute the free energy surface in Figure 5, we use",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS5.p4",
+     "text": "$F=-k_{B}T\\ln\\left(\\sum_{i}e^{-\\Delta E_{i}}\\right)$ (3)",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS5.p5",
+     "text": "where F is the free energy associated with a rotational state, $k_{B}$ is the Boltzmann factor, T is the temperature, $\\beta$ is the inverse temperature, and $\\Delta E_{i}$ is the energy of the i -th rotational state. Free energies were computed by discretizing the volume into a 20 x 20 grid and using linear interpolation between adjacent points. All calculations for free energy and heat of adsorption were conducted at 298 K.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.6 OMAT 24 Dataset and Models",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS6.p1",
+     "text": "The OMAT 24 dataset were released 16th Oct 2024, after the release of Orb, but before the release of this technical report. EquiformerV2 models trained on this dataset surpass the performance of Orb-v2 on the Matbench Discovery benchmark. We believe the OMAT 24 dataset and methods are complimentary to Orb; comparable model sizes (eqV2-S) with similar datasets (MPTraj only) and training methods which do not include DeNS as as fine-tuning time data augmentation method perform similarly to Orb-v2, whilst using 8x more GPU resources to train. DeNS trajectory pretraining and the use of OMAT are both directly applicable to Orb models; this is a direction we will explore in future releases.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.7 Homo-Nuclear Diatomics",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.F6",
+     "text": "Figure 6: Homo-Nuclear diatomic comparisons between MACE and Orb-v2 for a selection of elements (selected based on their common occurrence in Zeolite chemistry). Grey markers on the plots represent DFT energies and forces computed using VASP. Values in legend brackets correspond to MAE between each method and DFT at the marked points. For forces, we consider scalar forces in the $x$ dimension, but this choice is arbitrary. Particularly of note are MACE’s sharp instability at the boundary of covalent bond radii for many element pairs, demonstrating that equivariant models can also have failure modes with the potential to cause unstable simulations. Orb-v2 matches DFT accuracy more closely across the board, with the exception of H-H bond distances at the 2 Å distance.",
+     "kind": "caption"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

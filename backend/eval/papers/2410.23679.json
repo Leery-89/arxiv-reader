@@ -1,0 +1,175 @@
+{
+ "arxiv_id": "2410.23679",
+ "title": "Performance of the MACE-MP-0 potential for calculating viscosity in LiF molten salt.",
+ "abstract": "We perform molecular dynamics simulations of molten Lithium Fluoride using the MACE-MP-0 (small) machine learnt interatomic potential and the classical Buckingham and Born-Huggins-Mayer potentials. We find that the MACE-MP-0, out-of-the-box, is able to accurately reproduce the experimental viscosity across the liquid state. Whilst the previous predicted viscosities from classical potentials are under-predicted, which has previously been attributed to a suppressed melting temperature. We find that the melting temperature simulated by MACE-MP-0, simply by heating a crystal structure, is significantly closer to the experimental melting temperature of LiF.",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "Molten salts such as LiF have received long term and recent interest due to their use in solar cells, as electrolytes and solvents, and potential utilisation as coolant fluids in nuclear reactors, along with metals. Water is the usual coolant in these nuclear applications but suffers from a high-reactivity. In addition to the use of molten salts as a coolant in the reactor, there are proposals to use the salt as a carrier for the fuel, by dissolving the fuel into the salt. This would allow for adjustments to be made without unloading the core and reduce the amount of nuclear waste generated. Molten salts can host pyroprocessing reactions with very high activity nucleides to increase fuel efficiency and reduce waste generation. Furthermore, molten salts have seen use as thermal storage media to complement renewable energy sources, with research interest growing in recent years.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "A thorough understanding of the thermodynamic and transport properties of molten salts and their mixtures will underlie the upscaling of the above processes to industrial scales, however this understanding is hindered by a poor theoretical understanding of the liquid state, and the inadequacy of classical atomistic models in generating faithful thermophysical data.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p3",
+     "text": "Viscosity is one key property governing the performance of working fluids in thermal hydraulics, which has been investigated theoretically in relation to its temperature dependent minimum that may be related to fundamental physical constants. Previously we investigated this minimum in LiF using classical molecular dynamics (MD) where, as found elsewhere, the Buckingham potential model of molten LiF predicts the viscosity at a noticeable off-set temperature. Ciccotti et al. reported a slightly better agreement using the Born-Huggins-Mayer (BHM) potential and by analysing the response to an explicit shearing force for one temperature point as far back as 1976.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p4",
+     "text": "Motivated by these applications and a desire to improve the MD picture of molten LiF we now turn to the rapidly growing field of machine-learnt interatomic potentials (MLIPs). The MACE-MP-0 (MACE) MLIP is one example which has seen diverse successes across atomistic material modelling. Here we report the accuracy of viscosity values calculated using the MACE potential against experimental viscosity data.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Methods",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.p1",
+     "text": "We perform MD simulations of molten LiF using classical MD (using the Buckingham and BHM potentials), via the DL_POLY package, and MACE MLIP, via the python package janus-core using MACE_MP_0 (small flavour). In both cases we use the Green-Kubo method to calculate viscosity from the integral $\\eta=\\frac{V}{k_{\\mathrm{B}}T}\\int_{0}^{\\infty}\\differential t\\langle\\sigma_{xy}(t)\\ \\sigma_{xy}(0)\\rangle,$ (1) where $\\langle\\cdot\\rangle$ is the ensemble average, $T$ is the mean system temperature and $k_{\\mathrm{B}}$ is Boltzmann’s constant. Equation 1 may be calculated using DL_POLY’s on-the-fly correlator. The stress tensor is defined as $\\sigma_{\\alpha\\beta}=\\frac{1}{V}\\sum_{i}m^{i}v^{i}_{\\alpha}v^{i}_{\\beta}-\\frac{1}{V}\\sum_{i,j\\neq i}r_{\\alpha}^{ij}F_{\\beta}^{ij},$ (2) where $\\alpha$ and $\\beta$ are Cartesian component indices, $m^{i}$, $v^{i}$, $r^{i}$ are particle $i$ ’s mass, velocity, and position, and $\\mathbf{r}^{ij}=\\mathbf{r}^{i}-\\mathbf{r}^{j}$, $\\mathbf{F}^{ij}$ is the force on $i$ due to $j$ and $V$ is the system volume. Finally, $x$ and $y$ are orthogonal Cartesian coordinates. We also compute the average viscosity utilising the other off-diagonal terms, $z-x$ and $y-z$, analogously to Equation 1. We also use the python package ASE to calculate the partial radial distribution functions (RDFs), $g(r)$. Then to calculate the structure factor we use $S(k)=1+4\\pi n\\int_{0}^{\\infty}dr\\;r^{2}[g(r)-1]\\frac{\\text{sin}\\;kr}{kr},$ (3) with $n$ the number density.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p2",
+     "text": "For accurate viscosity statistics a long simulation run-time is required as well as a sufficient number of independent samples. For all statistics collection simulations we use the NVE ensemble with a timestep of $1$ fs and a trajectory length of 1 ns, and average across $20$ initial configurations each independently initialised with the same density. For equilibration we heat the system in the NPT ensemble from a crystal lattice structure taking temperature steps from $10$ K to the desired temperature in steps of $50$ K. Each subsequent heating step lasts for 10 ps, except when determining the melting point, in proximity to which we simulate for 50 ps. We perform a final 10 ps equilibration at each temperature with 20 different initial velocity seeds in the NVE ensemble before production runs.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p3",
+     "text": "The viscosities calculated from Eq. 1 are compared to experimental values of viscosity. For both MD methods we use the same maximum correlation time for calculating $\\eta$, $5$ ps. Janus-core is able to make use of MACE GPU hardware acceleration for calculations, however the added computational complexity of the many-bodied MACE potential stills leads to a far longer simulation wall-time (typically one order of magnitude) than the CPU based DL_POLY calculations based on classical potentials. In both we use a system size of $N=512$ atoms, where we have previously found little impact on results from utilising large system sizes up to 100000 atoms for classical potentials in LiF and Argon systems.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p4",
+     "text": "For the Buckingham and BHM potentials we use standard parameters for LiF stemming from the methods of Tosi and Fumi for the alkali halides of NaCl-type. Ignoring electrostatics, in DL_POLY the Buckingham and BHM potentials have the form $\\displaystyle U_{\\mathrm{Buckingham}}(r)$ $\\displaystyle=Ae^{-\\frac{r}{\\rho}}-\\frac{C}{r^{6}},$ (4) $\\displaystyle U_{\\mathrm{BHM}}(r)$ $\\displaystyle=Ae^{B(\\sigma-r)}-\\frac{C}{r^{6}}-\\frac{D}{r^{8}},$ (5) for parameters $A,B,\\sigma,\\rho,C$, and $D$ and inter-atomic distance $r$. The parameters for all of the interactions are given in table 1. When performing our simulations in DL_POLY we also use the Smooth-particle Mesh Ewald method for electrostatic interactions.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.T1",
+     "text": "Table 1: Buckingham and BHM potential parameters (in DL_POLY format) corresponding to Equations 4 and 5 to three decimal places.",
+     "kind": "caption"
+    },
+    {
+     "id": "S2.p5",
+     "text": "The MACE model relies upon a Message Passing Neural-Network (MPNN) architecture where the input space is the dynamic local environment around any given atom along with its static properties (e.g. chemical element). Messages are constructed with radial basis functions and spherical harmonics to encode known symmetries in physical applications. Importantly the MACE model utilises higher-order many-body ACE expansion for message passing to achieve faster and more accurate convergence to ground-truth Density Functional Theory (DFT) energies, forces, and stresses than other similar schemes to build MLIPs. The model is trained upon the MPtrj data set introduced for CHGNet and compiled from the Material Project dataset, which includes 89 elements (including Li and F) in $\\sim 146,000$ materials. Not all the MLIPs are suitable for molecular dynamics studies since not all possess conservative forces and stresses. MACE, however, is a conservative model.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Results and Discussion",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.F1",
+     "text": "Figure 1: Viscosity, $\\eta$, from experimental results and calculated results using the MACE, BHM and Buckingham potential. As reported previously for LiF, the Buckingham potential has the correct trend but is off-set on the temperature axis. The MACE results show good agreement with experimental results.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p1",
+     "text": "We begin by comparing the viscosity measurements from the three computational models to experimental data in Figure 1. The results for the MACE model agree well with the experimental data across the temperature axis, unlike the known offset for the Buckingham and BHM models: the simulated viscosity matches the experimental viscosity well, albeit with the latter at a temperature around 300 K higher.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p2",
+     "text": "Previously, the offsetting of viscosity values in the Buckingham results have been ascribed to the model undergoing melting at a suppressed temperature value commensurate with the gap between the simulated and experimental viscosity data. To investigate this, in Figure 2 we show the system volume $V$ for the MACE, Buckingham, and BHM models following a gradual monotonic heating from a crystal structure up to $1250$ K. We observe good agreement between the experimental melting temperature and the melting temperature of the MACE simulation. This supports this notion that the poor reproduction of the experimental viscosity in simulations governed by the Buckingham and BHM models is related to the underestimation of the the melting temperature by approximately $300$ K, ascertained in experiments to be $1121$ K (although 1143 K is also recorded).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p3",
+     "text": "It should be noted that there are several factors contributing to the location of melting point in molecular simulations. For example, simulated systems often employ periodic boundary conditions and hence have no free surfaces or interfaces, present experimentally, which promote melting. Another factor is the small system sizes in MD simulations compared to experiments. This leads to the absence of long-wavelength and low-frequency phonons with large displacement amplitudes which destabilise the solid structure and likewise encourage melting. For these and other reasons, gradual heating from a crystal structure might not be generally accurate for determining the melting point and other methods such as calculating the free energies of solid and liquid phases, simulating phase co-existence and so on can be used instead. The performance of MACE potentials for determining the melting point can be tested using these approaches, however the goal and emphasis of this work is the calculation and prediction of transport properties such as viscosity rather than determining the melting point accurately which is a task for future investigations. Furthermore, the very large underestimation of the melting line by the classical potentials means the crude method we employ here is informative in gauging the improvement of the MLIP. It is nevertheless interesting to observe the good agreement between modelling and experimental melting point in Figure 2.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F2",
+     "text": "Figure 2: Volume from heating LiF from a crystal structure from $10$ K up to $1250$ K, with inset showing the melting point in more detail. The melting point is more accurately determined by the MACE potential than the Buckingham potential. CF the off setting of the viscosity data along the temperature axis in Figure 1. The offset of the melting point in temperature is approximately the same (200-300 K).",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p4",
+     "text": "Given the accuracy of the viscosity results of the MACE model we also examine the resulting structure and dynamics, to determine if they are physically reasonable. First we show the velocity autocorrelation functions (VAFs) of the Buckingham and MACE models in figure 3, with the resultant densities of states (DOS) of each included as insets. We calculate these values just above the melting points in each case to compare the dynamics at the lowest temperature still consistent with the liquid state. Our DL_POLY results for LiF are consistent with previous MD results. The results for the MACE potential are significantly different from those of the Buckingham model. We see a decrease of the well known oscillatory frequency of F and particularly Li atoms in the MACE simulation. Both Li and F atoms exhibit a much deeper minima in the MACE VAFs, approximately equal in magnitude. Furthermore the shapes of their respective VAFs are very similar, whereas there are clear qualitative differences in the classical VAFs. The VAF minima and their depth are associated with the solidlike oscillatory component of liquid dynamics, whereas the absence of the minima signals the disappearance of the oscillatory component and purely gaslike dynamics. In this sense, deeper minima in MACE systems imply more pronounced solidlike component of the liquid motion.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F3",
+     "text": "Figure 3: (a) VAFs for the Buckingham potential and MACE, along with the respective Density of States (DOS). The temperatures of 890 K and 1147 K were chosen to compare the VAFs just above the melting points of the Buckingham and MACE potentials respectively. The DOS were calculated using lag times up to $1,500$ fs.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.F4",
+     "text": "Figure 4: Partial radial distribution functions (RDF) calculated for the respective melting temperatures of the potentials. 890K for Buckingham and 1147K for the MACE. (a) Lithium - Lithium, (b) Fluorine - Fluorine, (c) Lithium - Fluorine",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p5",
+     "text": "Next we look at the partial RDFs $g(r)$ in Figure 4, and the structure factors derived from them in Figure 5. We show $g(r)$ for each pair at the approximate melting temperature of each potential. The first and second peaks of each model are located at approximately the same radial separation, with the MACE peak heights slightly lower and the peak positions slightly higher than those of the classical RDFs. The reduction in magnitude indicates a somewhat broader coordination environment simulated by the MACE model than the classical model, which may be related to the lower frequency oscillation of the Li ions in the MACE simulation. In Figure 4 we can clearly see the first two peaks for each of the partial RDFs. In order to increase the calculation cutoff radius and see the peaks reduce further and the g(r) tend to 1 we would need a larger system. For the computational time and power we have available this is not practical with MACE-MP-0. Although limited by the cut-off, the overall shape and location of peaks of $S(k)$ and $g(r)$ is consistent with the expected results for LiF simulated with MD.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F5",
+     "text": "Figure 5: S(k) calculated at from the partial RDFs using 1000 MACE trajectory frames at 1147 K.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p6",
+     "text": "An interesting insight from the RDF analysis is that average structures can be quite similar, yet dynamics and transport properties can differ substantially as we saw for viscosity results earlier. This underscores the point which is perhaps not unexpected: similar equilibrium separations may or may not involve similar stiffness of the interatomic potentials which set the local activation energies and transport properties.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Conclusions",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.p1",
+     "text": "We have investigated the performance of the MACE MLIP applied to the MD modelling of the molten salt LiF. The MACE potential is able to more accurately reproduce experimental properties of molten LiF, but at the cost of an increased computational load versus classical two-body potentials. This is weighted against its out-of-the-box ability to obtain these results, with better results obtainable from a dedicated potential with more training data specific to the molten phase of LiF.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p2",
+     "text": "Our main interest was in the prediction of viscosity, using the same method as has been used in extant MD potentials (Buckingham and BHM) that is known to produce the correct trend but offset along the temperature axis for LiF. We have found that the MACE potential agrees well with experimental viscosities over a range of temperatures above melting. Further we have found that, when applying a naïve monotonic heating methodology to crystalline LiF, the MACE potential is also able to recover the experimental melting temperature surprisingly accurately given the difficulty of ascertaining melting points in MD and DFT. The large discrepancy between the melting points of classical potentials and experiments has previously been the given explanation for the offset viscosity values. Our results lend some credence to that hypothesis, but it remains possible other effects such as system size and the lack of interfaces may contribute.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p3",
+     "text": "Looking to the system’s structure and dynamics, our results indicate that the MACE potential generates a broader coordination environment around each ion, possibly reducing the stiffness of the aggregate interactions and thereby causing the decreased frequency in the oscillation of the Li atoms. The dynamics of the anions and cations are more similar in the MACE simulations, while in classical MD simulations they are quite distinct.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p4",
+     "text": "The far superior prediction of the viscosity and melting temperature of LiF indicate that the dynamics resulting the MACE potential, which differ qualitatively from those of classical potentials, are indispensable to the accurate simulation of this system. Dedicated potentials for the simulation of other molten salts and their mixtures will help guide experimentation and inform their application to industry.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Acknowledgements",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "Sx1.p1",
+     "text": "We are grateful to EPSRC (for grant No. EP/W029006/1). This research utilised Queen Mary’s Apocrita HPC facility, supported by QMUL Research-IT http://doi.org/10.5281/zenodo.438045, STFC Scientific Computing Department’s SCARF cluster and the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick and funded by EPSRC GrantS EP/T022108/1 and EP/V028537/1 and the HPC Midlands+ consortium.",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

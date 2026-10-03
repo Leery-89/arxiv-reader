@@ -1,0 +1,1229 @@
+{
+ "arxiv_id": "2405.04967",
+ "title": "MatterSim: A Deep Learning Atomistic Model Across Elements, Temperatures and Pressures",
+ "abstract": "Accurate and fast prediction of materials’ properties is central to the digital transformation of materials design. However, the vast design space and diverse operating conditions pose significant challenges for accurately modeling arbitrary material candidates and forecasting their properties.\nWe present MatterSim, a deep learning model actively learned from large-scale first-principles computations, for efficient atomistic simulations at first-principles level and accurate prediction of broad material properties across the periodic table, spanning temperatures from 0 to 5000 K 5000\\text{\\,}\\mathrm{K} and pressures up to 1000 GPa 1000\\text{\\,}\\mathrm{GPa} .\nOut-of-the-box, the model serves as a machine learning force field, and shows remarkable capabilities not only in predicting ground-state material structures and energetics, but also in simulating their behavior under realistic temperatures and pressures, signifying an up to ten-fold enhancement in precision compared to the prior best-in-class. This enables MatterSim to compute materials’ lattice dynamics, mechanical and thermodynamic properties, and beyond, to an accuracy comparable with first-principles methods. Specifically, MatterSim predicts Gibbs free energies for a wide range of inorganic solids with near-first-principles accuracy and achieves a 15 meV / atom 15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m} resolution for temperatures up to 1000 K 1000\\text{\\,}\\mathrm{K} compared with experiments. This opens an opportunity to predict experimental phase diagrams of materials at minimal computational cost. Moreover, MatterSim also serves as a platform for continuous learning and customization by integrating domain-specific data. The model can be fine-tuned for atomistic simulations at a desired level of theory or for direct structure-to-property predictions, achieving high data efficiency with a reduction in data requirements by up to 97%.",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "Material design stands at the heart of technological advancements in nanoelectronics, energy storage, biomedicine, and environmental sustainability. Conventionally, the development of new materials has been a slow and expensive process, dominated by experimental trial and error. Transitioning these efforts in silico offers an immense potential to expedite this process. At the core of this paradigm shift is the ability to accurately and efficiently predict the properties of arbitrary materials under practical synthesis and working conditions.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "Advances in deep learning have enabled efficient prediction of materials properties in many domains. A few models based on extensive computational databases can make predictions across many chemical compositions, and recent attempts have tried to extend this capability to the entire periodic table. One of the most outstanding examples, universal machine learning force field (MLFF), has been proposed based on open-source or proprietary crystalline databases. These models mark a significant advancement of machine learning towards chemical universality for materials modeling. However, the property of a potential candidate material not only depends on its chemical composition and corresponding near-equilibrium atomic structure, but also on thermodynamic conditions including temperature and pressure. This results in a requirement of high predictive accuracy over an enormous configuration space well beyond the ground states or local minima of crystal structures typically captured by current databases and models, which fundamentally limits their applicability for materials design.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F1",
+     "text": "Figure 1: MatterSim is a deep learning atomistic model for predicting materials properties with high predictive accuracy across chemical elements, temperatures and pressures, enabling a wide range of applicability and functionality.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.p3",
+     "text": "To address this challenge, we introduce MatterSim, a deep learning model designed for emulating materials and predicting their properties under realistic thermodynamic conditions including finite temperatures and pressures, as illustrated in Fig. 1. MatterSim utilizes deep graph neural networks, uncertainty-aware sampling and active learning to explore the vast materials space with first-principles computations as a supervisor for enhanced generalizability. Out-of-the-box, MatterSim operates as a zero-shot MLFF, delivering both efficient and precise predictions of energies and forces, showcasing proficiency in predicting energetics near ground states and dynamics under realistic conditions, with a mean absolute error (MAE) of 36 meV/atom (43 meV/atom as chemical accuracy) on MPF-TP (a dataset covering wide ranges of materials structure sampled under finite temperature between 0-5000 K and pressures between 0–1000 GPa), marking a ten-fold increase in accuracy compared with previous efforts. Therefore, MatterSim is well-suited for calculating a broad range of properties, including lattice dynamics, mechanical properties, thermodynamics and more. Remarkably, the model is capable of predicting temperature- and pressure-dependent free energies of wide ranges of solid materials comparable with first-principles methods and experimental measurements, thereby opening an opportunity for fast and accurate prediction of phase diagrams of materials. Furthermore, MatterSim’s extensive coverage of the compositional and configurational space of materials enables it to effectively describe material features in the latent space and to serve as a pre-trained model for continuous learning and further customization, with high data efficiency. With active learning and fine-tuning, the model can be extended to carry out atomistic simulations of highly complex systems beyond its current data coverage and theory level. For example, to simulate liquid water, only 3% of the data is needed to customize MatterSim to obtain the results of a specialized model trained from scratch, and to reproduce the experimental structural and transport properties of water. Additionally, MatterSim’s highly expressive features enable direct structure-to-property prediction of materials, which is also known as end-to-end prediction. After being fine-tuned with a limited amount of data, MatterSim outperforms specialized models trained exclusively with domain specific data on the tasks related to lattice dynamics, electronic and mechanical properties in Matbench.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Results",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "2.1 Learning the materials space under first-principles supervision",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.p1",
+     "text": "MatterSim employs an active learning approach to explore the extensive materials space, integrating a deep graph neural network, a materials explorer, a first-principles supervisor, and an ensemble uncertainty monitor, see Fig. 2 (a). Starting from an initial dataset curated from existing sources, the first-principles supervisor offers the deep learning model supervision signals relating to energies, forces, and stresses on the given structures at the generalized gradient approximation (GGA) Perdew–Burke–Ernzerhof (PBE) level of theory with Hubbard U correction for select materials as specified by the Materials Project standard settings. This trained model then functions as an effective surrogate to the first-principles method, guiding the materials explorer to gather more structures, thereby exploring the most uncertain regions of materials space to enrich the samples for model training. These sampled structures will also be labeled by the first-principles supervisor to provide additional training signals to the model following an active learning loop. The MatterSim model, curated from several such iterations, is capable of learning a wide range of materials space with minimal data redundancy.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p2",
+     "text": "A key feature of MatterSim is the vast coverage of materials space. We note that data in current databases has significant chemical and/or structural bias, leading to significant under-sampling of materials space. For example, most open databases are obtained through relaxation of experimental crystal structures with first-principles calculations.. As demonstrated in Fig. 2 (c) and Fig. 2 (d), the relaxation trajectory contains highly symmetric structures close to local energy minima with high structural redundancy. Therefore, models trained on such data are deficient in the generalizability and predictive power needed for atomistic simulation of materials under realistic conditions like finite temperatures and pressures. In addition, these databases tend to have a strong bias towards certain elements, which leads to an under representation of many interatomic interactions. Here our designed materials explorers featuring a diverse collection of materials, including ground-state or near-equilibrium structures from public datasets and in-house generated ones by the ground-state materials explorer, as well as off-equilibrium structures (see Fig. 2 (a)) across a wide range of temperatures and pressures by the off-equilibrium materials explorer, signifying a critical expansion of the configurational space. It is worth noting that active learning is adopted in a batched manner in the sampling process to avoid relabeling structures of high confidence to the model. With such a scheme, we collected a first-principles labeled dataset with better chemical and structural coverage, with an analysis in Section S3. As of the date of publication, the training dataset contains $\\sim$ 17M structures labeled with first-principles computations. As shown in Fig. 2 (b), the curated dataset is representative of materials at temperatures and pressures covering 0– $5000\\text{\\,}\\mathrm{K}$ and 0– $1000\\text{\\,}\\mathrm{GPa}$. The element pair distribution (see Fig. S11) also shows significantly better sampled chemical space with a more uniform distribution. More importantly, the dataset contains on average 2 to 3-fold more distinct atomic environments across the entire periodic table compared to previous databases based on DFT relaxation of crystal structures, and 10-fold or even higher for certain elements especially for noble gas elements. More details on this are provided in Section Fig. S13. The coverage of the data generated in this work has empowered MatterSim to make accurate and robust predictions for a wide range of applications; in Fig. 2 (e), we list the performance of MatterSim on six tasks, including phonon-related property prediction, materials discovery (MatBench Discovery), and dynamics under realistic conditions (structure benchmark sets sampled from ab initio molecular dynamics with wide temperature and pressure ranges). The most noticeable enhancement are observed on the benchmark datasets MPF-TP and Random-TP (sampled from high temperature and pressure), where MatterSim achieves up to 10-fold improvement compared to universal force fields trained on relaxation trajectories.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p3",
+     "text": "The choice of model architecture is of central importance to the performance of MatterSim. It needs to be scalable – capable of consuming large amount of data by expanding the model size. It also needs to be efficient during inference so that the model can tractably be used to carry out complex simulations for long timescales. Many models have been developed for application as an MLFF as well as to predict other properties. In this work, we opt to use two primary architectures, M3GNet and Graphormer as the backbones for MatterSim. M3GNet is an invariant graph neural network model with high data efficiency, which has been used to train models (and ensembles) with data up to 3M. For models with larger data sizes, we turn to Graphormer. Graphormer is a transformer-based model with proven learning capacity and scalability. In particular, we baked in several additional attributes including invariance to translation and periodic boundary conditions and explicit equivariant features to better accommodate materials-related tasks, see Section S1 for more details. Such a model has better accuracy and better generalizability compared with smaller models at the cost of substantially reduced inference speed and higher GPU memory requirements, see Fig. S5 for more details. Considering that models with different sizes have different accuracy and inference speeds, the choice for which model to use can be made based on the time or accuracy constraints of the relevant task. In this work, we use the M3GNet-based model for all zero-shot simulations due to its fast inference speed, except for the MatBench Discovery task. For MatBench Discovery and end-to-end property prediction, we turn to a Graphormer-based model, which gives better accuracy. A brief comparison of model efficiency and accuracy is provided in Section S1.5 of SI.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F2",
+     "text": "Figure 2: MatterSim is developed on an enriched materials space. (a) A data explorer employed in MatterSim for generating datasets covering wide potential energy surface; Histogram of the stress (GPa) and effective temperature (K) of (b) the generated materials in this work, (c) the MPF2021 dataset and (d) the Alexandria dataset. (e) Comparative performance metrics of MatterSim across six tasks: energy prediction on MPF-TP and random-TP datasets, phonon properties including max frequency and density of states (DOS), Bulk Modulus, and inverse F1 score in MatBench-Discovery leaderboard. Lower scores indicating superior performance for all tasks. Refer to main text and supplementary information for task details.",
+     "kind": "caption"
+    },
+    {
+     "id": "S2.F3",
+     "text": "Figure 3: MatterSim as a zero-shot emulator empowering materials discovery. (a) and (b) are the contribution of each dataset to the combined convex hull formed by Alexandria-MP-ICSD dataset (see text) and RSS-generated materials; (c) Elementwise appearance distribution of the 852 RSS-generated materials found be to on the combined convex hull formed by the Alexandria-MP-ICSD and RSS-generated materials. The materials containing H, Si, N, Sb, O, S, Se, Te, F, Cl, Br, I are removed due to potential issue with how anion corrections are implemented in Materials Project when applied to hypothetical materials. (d) exhibits examples of materials found to be lower than the Alexandria-MP-ICSD hull, with the corresponding space group in the parentheses.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.2 MatterSim as a zero-shot atomistic emulator",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.p1",
+     "text": "MatterSim serves as a universal MLFF to efficiently predict energies, forces, and stresses of structures consisting of any combinations of elements from the periodic table (currently supports the first 89 elements) under simulation conditions of 0-5000 K and 0-1000 GPa, without additional training data. Its universality and accuracy is benchmarked on multiple open datasets as well as three newly created ones with better representation of the model’s capability under finite temperatures and pressures. Detailed description of these datasets are provided in Section S6 of SI. As shown in Table S1, MatterSim outperforms force fields trained on open relaxation trajectory databases with a substantial increase in accuracy by an order of magnitude compared to previous best-in-class, which showcases the model being faithful in reproducing first-principles potential energy surfaces covering wide chemical, temperature, and pressure spaces. Most significant improvements are observed on the MPF-TP and Random-TP datasets, which are sampled from high temperature and pressure simulations; see Fig. 2 (e) for more details. This enables MatterSim to carry out wide ranges of zero-shot simulation tasks including but not limited to materials discovery, phonon prediction, mechanical property prediction, Gibbs free energy prediction, phase diagram construction, and molecular dynamics simulations.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p2",
+     "text": "Materials Discovery. MLFFs combined with high-throughput screening, crystal structure prediction, or generative models, have shown the capability to accelerate materials discovery where the force field is used as an efficient surrogate to first-principles method to compute energy as a measure of materials’ stability. At the core lies the accuracy in measuring ground-state energies of materials of wide elemental combinations. MatterSim shows a strong capability in predicting stability of new materials, with an F1 score of 0.83 and a mean absolute energy error of the formation energy of $25\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ benchmarked on MatBench Discovery, details to follow in Table S2, marking the SOTA capability to relax the initial structures as well as to accurately label the energies of the relaxed ones. To further demonstrate its potential at scale, we carried out an exhaustive search on all binary chemical systems using random structure search (RSS), and the computational details are listed in Section S8 of SI. RSS has the advantage of baring a theoretical guarantee of being exhaustive, but its applicability has been constrained due to the prohibitive computational cost of relaxations with first-principles methods and the lack of an MLFF that is capable of predicting materials near and far from their equilibrium positions. (The initial structures of RSS are far from equilibrium.) Using MatterSim, we carried out materials screening on all 4,005 unary and binary chemical systems of 89 elements with 45 chemical compositions for binary chemical systems, up to 12 atoms in the unit cell. For each chemical system, we generate 20,000 candidate materials, resulting in about 80 million structures in total. By taking the most stable three structures from each chemical composition according to MatterSim’s energy prediction, and using first-principles computations for verification, we identified 16,399 structures to be on or below the energy convex hull defined by the Alexandria-MP-ICSD structures (See Ref. for more details). Importantly, on the combined energy convex hull formed by Alexandria-MP-ICSD and the RSS datasets, the current RSS constitutes the largest contribution of 5,213 out of 7,268 materials, representing the best coverage of 71%, compared with any previous efforts as shown in Fig. 3 (a). Among the 5,213 stable structures, 1,974 of them are newly discovered, i.e., not present in the Alexandria-MP-ICSD dataset (see Fig. 3 (b)). Fig. 3 (c) presents the element-wise appearance of the 852 materials out of the 5,213 structures on the combined hull, excluding materials that would be potentially impacted by anion correction implementation in Materials Projects. Our findings underscore the vast potential for discovering diverse new materials, even within binary chemical systems.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p3",
+     "text": "Phonons. Phonons are pivotal in solid-state physics and materials science, acting as key indicators of dynamic stability and the paramount foundation for predicting mechanical properties and free energies, but it is computationally expensive to compute phonons using first-principles methods. While machine learning can in principle accelerate this process, enhanced quantitative predictive power is needed. MatterSim achieves high accuracy in predicting phonon spectra of materials thanks to its faithful and robust reproduction of the potential energy surface close to local minima. Fig. 4 (a) shows the benchmark results on the materials from the PhononDB, using maximum phonon frequency as an indicator, and a good agreement is achieved with a mean absolute error (MAE) of $0.87\\text{\\,}\\mathrm{THz}$. An example phonon dispersion of ZnSe is shown in Fig. 4 (b). Compared with first-principles references, not only is the highest frequency reproduced but also the entire spectra. More phonon dispersions of example materials and their comparison with first-principles calculations can be found in Section S9 in the SI.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p4",
+     "text": "Mechanical Properties. Understanding mechanical properties is crucial in materials design and engineering to ensure safety and reliability, especially when taking into consideration temperature and pressure dependence. We showcase the capability of MatterSim to predict mechanical properties by computing the bulk modulus of a wide range of ordered inorganic crystals gathered from previous studies (see Section S10 for details) and their temperature dependence under quasi-harmonic approximation (QHA) with computational details list in Section S10. Fig. 4 (c) shows the parity plot of the $0\\text{\\,}\\mathrm{K}$ -bulk modulus predicted from MatterSim and their first-principles references. A remarkable agreement is achieved with an MAE of only $2.47\\text{\\,}\\mathrm{GPa}$. In addition, as a model that predicts materials under finite temperature, we also predict the temperature dependence of the bulk modulus of materials. As an example, Fig. 4 (d) exhibits the temperature dependence of the bulk modulus of AlN predicted by MatterSim, with the MAE being $0.97\\text{\\,}\\mathrm{GPa}$ over the temperature range and with a percentage error less than 5% up to $1000\\text{\\,}\\mathrm{K}$ compared to first-principles references. A detailed comparison on other materials are shown in Section S10 of SI. These results demonstrate MatterSim’s robustness and accuracy in predicting the effects of materials’ properties under a wide range of temperatures. In addition to temperature dependence, we demonstrate that MatterSim is capable of predicting the pressure-dependent behavior in 20(b) up to $1000\\text{\\,}\\mathrm{GPa}$. Such capability further signifies the importance of data coverage, especially under realistic temperatures and pressures.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F4",
+     "text": "Figure 4: MatterSim as a zero-shot emulator for predicting lattice dynamics and thermodynamic properties. (a), (c) and (e) are parity plots of maximum phonon frequency, bulk modulus and computed free energy difference between 0 and $300\\text{\\,}\\mathrm{K}$, respectively; (b) is the phonon dispersion of ZnSe, (d) is the temperature dependent bulk modulus of AlN and (f) is the predicted B1-B2 phase boundary of MgO with a comparison to first-principles studies and experimental measurements.",
+     "kind": "caption"
+    },
+    {
+     "id": "S2.SS2.p5",
+     "text": "Free Energy and Phase Diagrams. Over the last two decades, high-throughput computations driven by first-principles methods and more recently by large-scale machine learning have been proposed in hope to accelerate the discovery of new materials. However, such methods heavily relied on the energy above hull metric to determine the stability of proposed candidates, suffering from the zero-Kelvin curse — the stability of materials is measured by their ground-state energies without considering temperature effect. Formally, the thermodynamic stability of a material is determined by its Gibbs free energy under synthesizing and operating conditions. While such quantity can be computed using first-principles methods in principle, the cost to transit from ‘energy above hull’ to ‘free energy above hull’ is prohibitive. We benchmark MatterSim for its efficiency and accuracy on free energy prediction on wide ranges of ordered inorganic solids by comparing with both first-principles calculations using the PBE functional, and experimental measurements. As shown in Fig. 4 (e)-(f), and Fig. S21, MatterSim achieves a sub- $10\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ error for temperatures up to $1000\\text{\\,}\\mathrm{K}$ when compared with QHA computations at PBE level of theory, signifying a near-first-principles predictive power. More importantly, when compared with experimental measurements on over 200 materials as shown in Fig. S22, it achieves an MAE of $15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ (see Section S11.1), lower than dedicated models directly trained on experimental data. With such a result, we demonstrate as a proof-of-concept construction of temperature- and pressure-dependent phase diagrams using MatterSim. Under QHA (See Section S10 for details), we computed the phase boundaries ( Fig. 4 (f)) of MgO and Si (discussed in Section S11). In Fig. 4 (f), MatterSim predicts the transition pressure of MgO from B1 to B2 at $300\\text{\\,}\\mathrm{K}$ to be $584\\text{\\,}\\mathrm{GPa}$, which is very close the recent experimental measurement 429– $562\\text{\\,}\\mathrm{GPa}$ and a recent first-principles prediction $520\\text{\\,}\\mathrm{GPa}$. In addition, Fig. 4 (f) plots the B1–B2 boundary over temperatures up to $16\\,000\\text{\\,}\\mathrm{K}$ and pressures up to $700\\text{\\,}\\mathrm{GPa}$. MatterSim not only computes phase transition pressures in good agreement with experiments for ambient temperature, but also predicts the phase stability under extreme temperatures and pressures well — the predicted phase boundary falls into the shaded region connecting experiments reported in literature and is very close to the experimentally measured boundary for temperatures higher than $4000\\text{\\,}\\mathrm{K}$. Notably, such a prediction not only requires good description of free energy with the temperature dependence, but also its pressure dependence, signifying the importance of generalizability hardly achieved by directly fitting to limited experimental data.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p6",
+     "text": "Molecular Dynamics Simulations. MLFFs have shown significant acceleration in molecular dynamics simulations and high accuracy compared with first-principles methods, if trained properly. The universality and robustness of MLFFs heavily rely on the coverage of underlying training data. A lack of chemical, configurational, or compositional coverage inevitably leads to erroneous or even diverging simulations. This issue becomes particularly pronounced when the simulation temperatures and pressures are high. Benefiting from the data collection and training pipeline, MatterSim serves as a surrogate model to first-principles methods to carry out robust, efficient, and accurate molecular dynamics for complex materials under finite temperature and pressure conditions. To validate MatterSim’s robustness under arbitrary simulation conditions (especially on finite temperature and pressure tasks), we randomly selected 118 systems including bulk inorganic materials, metal organic frameworks, two-dimensional materials, interfaces, molecular crystals, polymers and surfaces, with details of the selected materials discussed in Section S12 of SI. All of these systems are subject to heating from 0 to $5000\\text{\\,}\\mathrm{K}$ in a relatively short time frame to benchmark the emulator’s robustness to deal with both the crystalline and the liquid or disordered structures, as well as the phase transition between them. A success rate is defined as the ratio of the actual runtime to the preset total time in MD simulations. As shown in Fig. 5 (b), MatterSim achieved more than 90% success rate for all the material families tested, exhibiting robustness over wide temperature ranges. In addition, all bulk systems are subject to additional compression from 0 to $1000\\text{\\,}\\mathrm{GPa}$ (followed by heating from 300 to $5000\\text{\\,}\\mathrm{K}$) to further benchmark MatterSim’s pressure response, see the inset in Fig. 5 (c) for details. As Fig. 5 (c) shows, the vast majority of systems have completed the entire simulation process and the average finished rate is above 90% as well. Beyond robustness, MatterSim also achieves high accuracy. As an indicator, MatterSim has an up-to-10-fold lower prediction error compared with previous universal MLFFs on the Random-TP and MPF-TP datasets that are created under wide temperature and pressure ranges, see Fig. 2 (e) and Table S1 for more details. Interestingly, MatterSim demonstrates good generalizability to material systems that is not trained on. We depicted two example MD trajectories, including a metal-organic framework (MOF) compound under NPT ensemble and a bulk inorganic material under NVT ensemble to show the accuracy of MatterSim in Fig. 5 (c) and Fig. 5 (d) – for the six snapshots, MatterSim predicts a mean error of energy lower than $50\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$, within wide temperature and pressure ranges.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F5",
+     "text": "Figure 5: MatterSim as a zero-shot molecular dynamics (MD) engine. (a) Examples materials selected for running molecular dynamics; (b) the success rate of molecular dynamics with increasing temperature and pressure for various categories of materials; (c) analysis of the stopping temperature and pressure of the molecular dynamics trajectories, with the temperature and pressure profile of the trajectory shown in the inset; (d) the potential energy of a MOF material under increasing temperature and NVT ensemble, with the inset being the radial distribution function of the Ag - Ag atoms $g_{\\mathrm{Ag-Ag}}(r)$ at 0, 200 and $400\\text{\\,}\\mathrm{ps}$ of the trajectory; and (e) the potential energy of a bulk inorganic material under increasing pressure and NPT ensemble, with the inset being the radial distribution function of the Mg - Mg atoms $g_{\\mathrm{Mg-Mg}}(r)$ at 0, 200 and $400\\text{\\,}\\mathrm{ps}$ of the trajectory.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.3 MatterSim as an active learner",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.p1",
+     "text": "Uncertainty quantification and continuous learning are critical to the successful application of a machine learning model to predict material properties or carry out meaningful simulations. This is especially the case for molecular dynamics because making prediction on out-of-distribution (OOD) configurations can lead to erroneous energies and forces, which in turn results in unphysical simulation trajectories or even simulation failure. Considering that the pretrained MatterSim model covers wide ranges of atomic configurations, the idea is that only a small amount of new data is needed to supplement the model to capture the OOD configurations. We show that with the help of a model ensemble, MatterSim provides confidence estimates in simulating any system without performing actual first-principles computations. More importantly, whenever the pretrained model is deemed unconfident, MatterSim only requires a small fraction of the trajectory being labeled by first-principles computations as additional training context to reach the same level of accuracy compared with training from scratch.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p2",
+     "text": "Building on the strengths of MatterSim and its active learning capabilities, we applied it to a few intricate systems to showcase its efficacy, including molten phosphorus, molten boron, and an ionic superconductor (lithium dodecahydro-closo-dodecaborate, $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$), whose structures are depicted in Fig. S40 and the inset of Fig. 6 (a). Such systems demonstrate complex interatomic interactions and intrinsically require heavy effort in data generation and model training. In our study, MatterSim selected the structures for active learning based on an ensemble criterion described in Section S13 in the SI, and it only requires including a small fraction of the structures in the simulation trajectory as additional training data to recover a high prediction accuracy. As shown in Fig. 6 (a), the model reproduces similar level of accuracy for $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$, while including only 15% of the data if it were trained from scratch. Similar performance was also observed for phosphorus and boron shown in Fig. S42 and Fig. S43. In addition, we show in Fig. 6 (b) that by incorporating additional first-principles supervision signal on the data points of high uncertainties in the active learning process, we notably reduced the maximum error compared to the zero-shot prediction of MatterSim, which clearly demonstrated the efficacy of MatterSim’s capability as an active learner.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F6",
+     "text": "Figure 6: MatterSim’s efficiency for complex simulation tasks using active learning and fine-tuning. (a) Max force error against first-principles results in the simulation trajectory of $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$ from the actively learned model and the model trained from scratch and its crystal structure, with increasing number of data samples. (b) The inference error and uncertainty of force along the AIMD trajectory for $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$. The red points represent the structures with above-threshold uncertainty taken for active learning. (c) Oxygen-oxygen radial distribution functions of water obtained from MD simulations performed by the zero-shot (blue thick dotted dash), scratch-900 (blue thin dotted dash) and finetune-30 (dark purple solid line) models. Black dots represent experimental references. (d) Oxygen-oxygen-oxygen-angular distribution functions, $P_{OOO}(\\Theta)$, obtained from MD simulations performed by the zero-shot (blue thick dotted dash), scratch-900 (blue thin dotted dash) and finetune-30 (dark purple solid line) models. Black dots symbolize the empirical potential structural refinement (EPSR) of joint Xray-Neutron measurements for bulk water at $298\\text{\\,}\\mathrm{K}$. Further details of each model can be found in Section S14 in the SI.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.4 MatterSim with arbitrary level of theory",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.p1",
+     "text": "The potency of predictions generated by the machine learning emulator is inherently constrained by the theoretical level of the training data. Here, MatterSim capitalizes on the supervisory signal derived from GGA-PBE functional (and Hubbard U correction for qualified materials; the detailed information is listed in Section S5). This underlying constraint imposes a limitation on the accuracy of MatterSim when applied to a more expansive range of systems and applications. Here as a demonstration, we conjugate MatterSim with the fine-tuning technique to recover the structural and dynamical property of liquid water at the rev-PBE0-D3 level of theory and more remarkably show its high data efficiency. Details of the fine-tuning setup can be found in Section S14.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.p2",
+     "text": "When simulated with MatterSim in the zero-shot mode at PBE level of theory, water displays an overstructured feature demonstrated by both the radial distribution function including $g_{\\mathrm{OO}}(r)$, $g_{\\mathrm{OH}}(r)$, $g_{\\mathrm{HH}}(r)$ (see Fig. 6 (c) and Fig. S46), and angular distribution function of the oxygen-oxygen-oxygen triplets (see Fig. 6 (d)) in contrast to experimental measurements. Such overstructured behavior for water systems has been reported in literature, indicating the deficiency of the PBE functional in correctly simulating water properties. However, with only 30 configurations sampled from an ab initio molecular dynamics (AIMD) trajectory with rev-PBE0-D3 level of theory, MatterSim can be efficiently fine-tuned and the resultant model (indicated as finetune-30 model) reaches the same performance as the model trained from scratch with all 900 configurations from the AIMD trajectory (denote as scratch-900) for water structural properties (see Fig. 6 (c) and Fig. 6 (d)). In addition to structural properties of liquid water, we found that the dynamical properties, here exemplified by the self diffusion coefficient $\\mathcal{D}$, can also be greatly improved. The finetune-30 model predicts $\\mathcal{D}$ = $1.862\\text{\\times}{10}^{-5}\\text{\\,}\\mathrm{cm}$ for liquid water, with an error below 20% w.r.t. the experimental measurements (2.3– $2.4\\text{\\times}{10}^{-5}\\text{\\,}\\mathrm{cm}$). The detailed discussion of $\\mathcal{D}$ prediction can be found in Section S14. Therefore, by finetuning MatterSim, we were able to obtain the similar accuracy of the scratch-900 model on this task while using only 1/30 of the training data, which clearly underscores the effectiveness of supervised pretraining on large-scale high-fidelity first-principles data with wide coverage.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.5 MatterSim as a direct property predictor",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS5.p1",
+     "text": "Direct prediction of materials’ properties from their structures is critical to large-scale virtual screening due to its low computational cost when compared to first-principles methods. This becomes particularly noticeable when it comes to properties that are computationally intractable to calculate or experimentally challenging to measure. Machine learning models are promising in this area due to their capability of capturing non-linear mappings in high dimensional spaces. However, the prediction error is typically too large to be of practical use due to the lack of data in specific domains. MatterSim adopts an architecture with high transferability (graphormer) and is pretrained on high-quality first-principles data with a wide coverage. Such data contains the rich dynamics of off-equilibrium systems, presenting a wealth of complex information for deep learning models to learn from. This pre-training enables the model to extract expressive features of materials to accommodate domain-specific property data, facilitating the application to a wide range of downstream tasks beyond atomistic simulations.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS5.p2",
+     "text": "MatterSim’s capability to directly predict materials properties from structures is benchmarked on a few regression tasks from MatBench, including prediction of computed band gaps, shear moduli, dielectric constants, max phonon frequency of bulk crystalline materials, and the exfoliation energies of two-dimensional materials. Detailed training scheme is provided in Section S15 of SI. As shown in Table 1, leveraging the expressive features extracted from the vast materials data, the model is able to learn with minimal number of data points and reaches the highest accuracy in predicting all of these properties. Interestingly, the improvement in predictive power is regardless of the model architecture when the model is pre-trained on the large-scale materials database presented in this work, as shown in Table S5. This signifies the importance of data coverage in extraction of representative materials features when training deep learning models for robust domain-specific property predictions.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.T1",
+     "text": "Table 1: MatterSim as a direct property predictor. The performance of MatterSim’s performance of the predictions of the properties in MatBench leaderboard with a comparison with previous models trained exclusively with domain specific data.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Discussion",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.p1",
+     "text": "The accurate prediction of material properties and the simulation of their behaviors without constraints on chemical elements, compositions and configurations are crucial to the digital transformation of materials design. While deep learning has already shown promise in making such predictions, their practical use is still constrained due to the limited generalizability across the vast materials space. This challenge is particularly pronounced when factoring in temperature and pressure, as the configurational space becomes exceedingly large. MatterSim addresses this by combining deep graph neural networks, active learning, and large-scale first-principles computations. The model achieves up to 10-fold increase compared with previous best-in-class, in the prediction accuracy of energies, forces, and stresses for off-equilibrium material structures sampled from an extensive chemical space under finite temperature and pressure, benchmarked against first-principles computations. This enables robust and accurate zero-shot emulation of materials’ ground-state energetics, as well as their dynamical behaviors under arbitrary temperatures and pressures. Remarkably, the free energies computed using the model agree well with experimental results; this opens the possibility to efficiently predict experimental phase diagrams of candidate materials.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p2",
+     "text": "More importantly, MatterSim provides a platform for adaptive learning and customization based on the specific materials design request. Starting from the model pretrained on diverse first-principles results, only a small amount of new data needs to be brought to the model to refine the pretrained potential energy surface, thanks to the good coverage of the initial dataset. In addition, the level of theory of the emulator can then be customized by incorporating a small amount of expensive data with beyond the PBE level of theory when necessary. For example, MatterSim allows fine-tuning to achieve the hybrid functional level of theory with only 3% of the data needed to train from scratch. Such two-step adaptivity, i.e., fine-griding the sampling, and fine-tuning the level of theory, enables extreme data efficiency thanks to the pretrained model. Finally, the model also allows direct connection with real-world experiments without complex ground-up simulations by building end-to-end property predictors, thanks to the expressive feature extracted from the pretrained model.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p3",
+     "text": "Despite these advancements, MatterSim could be improved in several areas. From the perspective of model development, it currently utilizes a semi-local description of atomic interactions, where long-range interactions majorly leverages message passing or updates on attention weights through graph nodes. Even though this model demonstrates superior performance compared to models that rely solely on local environments,, it doesn’t perform effectively in scenarios where long-range interactions dominate the properties, such as polymeric and heterogeneous systems. As for data coverage, the current model is trained only on homogeneous bulk systems, without explicit inclusion of surface and interface data that are crucial for applications such as catalysis. Additionally, the model currently only naively supports inferences with DFT-PBE level of theory, limiting its use for systems involving complex interactions, such as polymers and organic liquids. Inclusion of additional data with different theory levels by multi-task pretraining could aid in this respect. Further improvement on data efficiency and the model’s prediction accuracy is possible with semi-supervised pretraining. Currently, the model only supports the native prediction of energy, forces, and stresses. Including more data modalities, such as charge, spin, magnetic moments, and even more complex electronic structure features, could further enhance the model’s accuracy and applicability.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Acknowledgements",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "Sx1.p1",
+     "text": "We thank Chris Bishop, Tie-Yan Liu, Haiguang Liu, Tao Qin, Bin Shao, Jia Zhang, and Karin Strauss for their invaluable discussions and expert input which helped to shape this work. We also recognize the valuable input from Chi Chen which helped training of the M3GNet-based model. Special thanks are due to Prof. Davide Donadio for his comments concerning the application of MatterSim. Our manuscript has been enhanced by the thorough reviews and constructive feedback from Bichlien Nguyen, Yu Xie and Jonas Köhler. We appreciate Ryota Tomioka for the implementation of DFT computation pipelines, and Deniz Gunceler and Maik Riechert for their support with our computational infrastructure. Shoko Ueda and Peggy Dai have been instrumental in managing the project, and we are indebted to Lina Lu and Yang Ou for their artistic contributions that have vividly brought our work to life. Finally, we extend our gratitude to the entire Microsoft Research AI for Science team for the enriching daily discussions and collective wisdom that have been integral to our progress. HY extends a personal note of gratitude to Zifan Ye and Cunzhi Zhang for their feedback on water simulation and free energy prediction. ZL wishes to express gratitude to Pascal Salzbrenner and Prof. Chris Pickard for discussions on crystal structures under high pressure.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Contributions",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "Sx2.p1",
+     "text": "HY, YZ, JL, HH, and ZL conceived the study, HY, CH, YZ, XL, YS, JL, GL, ZC, SC, CL, HH, ZL implemented the methods, HY, CH, YZ, XL, YS, JL, GL, ZC, SC, CZ, HH, ZL performed experiments, CZ, MH, RP, AF, DZ, TX, JS, LS helped with the implementation of the methods and all authors wrote this manuscript. ZL led the research.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S1 Model architecture and training details",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S1.1 Materials Graphs",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS1.p1",
+     "text": "The input data for the MatterSim model are constructed from material graphs built upon the underlying point clouds in the three-dimensional Euclidean space with periodic boundary conditions. Each point represents an atom with an associated element from the periodic table. We define a materials graph $\\mathcal{G}=(\\boldsymbol{Z},\\boldsymbol{V},\\boldsymbol{R},[\\boldsymbol{L},\\boldsymbol{S}])$ (see Fig. S1) with the following components: $\\boldsymbol{Z}$ denotes the atomic number $z_{i}$ and additional features. The geometric features are encapsulated by $\\boldsymbol{V}$ and atomic coordinates $\\boldsymbol{R}$, with each atomic position $\\boldsymbol{r}$ in Euclidean space $\\mathbb{R}^{3}$. $\\boldsymbol{V}$ represents the relative vectors, such as the bond information between two atoms. $\\boldsymbol{S}$ and $\\boldsymbol{L}$ are additional optional information, where $\\boldsymbol{S}$ is the global scalar state information, such as temperature, pressure, and other conditions, and $\\boldsymbol{L}$ is the $3\\times 3$ lattice matrix in crystals. Within material graphs, nodes correspond to individual atoms and edges are formed based on a predefined rule. Here, a radial cutoff distance $r_{c}$ is used to construct edges. For any two atoms $\\boldsymbol{r}_{i}$ and $\\boldsymbol{r}_{j}$, there exists an edge if the Euclidean distance between them is less than or equal to $\\leq r_{c}$. It should be noted that if the coordinates are fractional, we scale them to Cartesian coordinates. As a form of geometric graph, materials graphs exhibit roto-translational symmetry in Euclidean space; specifically, MatterSim maintains roto-translational invariance for scalar properties, such as total energy of materials, and equivariance for vectorial properties like forces. Given a material graph, MatterSim adapts different input representations and crystalline features compatible with the underlying architectures, M3GNet and Graphormer, which will be discussed in more details in the following sections.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F1a",
+     "text": "Figure S1: MatterSim leverages materials graphs built upon point clouds to represent atomic interactions and geometric features in Euclidean space.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.2 M3GNet",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS2.p1",
+     "text": "M3GNet is a graph neural network that explicitly incorporates two- and three-body interactions, enabling high-accuracy predictions of material properties. This architecture is summarized briefly below; for further information, we refer readers to the original M3GNet publication. The major innovation of M3GNet relies on incorporation of three-body interaction into its message-passing framework, thereby enriching the updated atomic and bond features with three-body information. This is achieved through the following formulation: $\\displaystyle\\tilde{\\boldsymbol{e}}_{ij}$ $\\displaystyle=\\sum_{k}j_{l}\\left(z_{ln}\\,\\frac{\\norm{\\boldsymbol{r}_{ik}}}{r_{c}}\\right)Y^{0}_{l}(\\theta_{jik})\\odot\\xi(\\boldsymbol{W}_{v}\\boldsymbol{v}_{k}+\\boldsymbol{b}_{v})f_{c}(\\norm{\\boldsymbol{r}_{ij}})f_{c}(\\norm{\\boldsymbol{r}_{ik}}),$ (1) $\\displaystyle\\boldsymbol{e}_{ij}^{\\prime}$ $\\displaystyle=\\boldsymbol{e}_{ij}+g(\\tilde{\\boldsymbol{W}}_{2}\\tilde{\\boldsymbol{e}}_{ij}+\\tilde{\\boldsymbol{b}}_{2})\\odot\\xi(\\tilde{\\boldsymbol{W}}_{1}\\tilde{\\boldsymbol{e}}_{ij}+\\tilde{\\boldsymbol{b}}_{1}),$ where $\\boldsymbol{e}_{ij}$ is the input edge feature on the bond connecting atoms $i$ and $j$, $\\boldsymbol{e}_{ij}^{\\prime}$ is the edge update message containing three-body information, and $\\boldsymbol{x}_{i}$ is the feature of atom $i$. Here, $\\boldsymbol{r}_{ij}$ represents the relative positions of atoms $i$, $j$; $\\theta_{jik}$ represents the angle between bonds $\\boldsymbol{e}_{ij}$ and $\\boldsymbol{e}_{ik}$; $\\tilde{\\boldsymbol{W}}$ and $\\tilde{\\boldsymbol{b}}$ are learnable parameters of the neural network,; $j_{l}$ is the spherical Bessel function with roots $z_{ln}$, $Y^{0}_{l}$ is the spherical harmonics function with $m=0$ and $r_{c}$ is the cutoff radius. In addition, $f_{c}(r)=1-6(r/r_{c})^{5}+15(r/r_{c})^{4}-10(r/r_{c})^{3}$ is a smooth cutoff function, $\\xi(\\cdot)$ is the sigmoid activation function, $g(x)=x\\xi(x)$, and $\\odot$ represents the element-wise product. It is worth noting that edge feature $\\tilde{\\boldsymbol{e}}_{ij}$ is a vector of $n_{\\mathrm{max}}l_{\\mathrm{max}}$ elements, with $n=0,\\cdots,n_{\\mathrm{max}}-1$ and $l=0,\\cdots,l_{\\mathrm{max}}-1$, and $n_{\\mathrm{max}}$ and $l_{\\mathrm{max}}$ are user-defined model hyperparameters. The edge update message $\\boldsymbol{e}_{ij}^{\\prime}$ are then passed to several graph convolution steps to update both the atom and bond information $\\boldsymbol{x}_{i}$ and $\\boldsymbol{e}_{ij}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS2.p2",
+     "text": "In M3GNet, message passing described above are conducted multiple times, and the resulting atom and bond features $\\boldsymbol{v}_{i}$ and $\\boldsymbol{e}_{ij}$ are passed to a gated multi-layer perceptron (MLP) to obtain the prediction of energies $E$. Forces and stresses are predicted by taking gradient of energy with respect to atomic positions $\\boldsymbol{f}=-\\partial E/\\partial\\boldsymbol{r}$ and lattice strain $\\boldsymbol{\\sigma}=V^{-1}\\partial E/\\partial\\boldsymbol{\\varepsilon}$ via auto-differentiation, where $\\boldsymbol{r}$ are the atomic positions, $V$ is the lattice volume and $\\boldsymbol{\\varepsilon}$ are lattice strains. In this work, we used a re-implemented version of M3GNet with PyTorch based on original TensorFlow implementation. We note that during the development of MatterSim, another PyTorch version of the M3GNet emerged in the MatGL library.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.3 Graphormer",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS3.p1",
+     "text": "In this section, we provide a short introduction to the design and implementation of Graphormer, with a focus on the modification made to the original architecture for better adaptation to materials structures. Graphormer model consists of two major parts: the structural encoder and property decoder, as illustrated in Fig. S2.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F2",
+     "text": "Figure S2: The overview of the Graphormer model.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.SS3.p2",
+     "text": "Structural Encoder. The structural encoder is depicted in the left panel of Fig. S3. Here, we provide a concise overview of the encoder’s components, which facilitate the mapping of atomic species $Z_{i}$ and positions $\\boldsymbol{r}_{i}$ into an embedding feature $\\boldsymbol{x}_{i}$. Similar to existing studies, the embedding features are initialized with an embedding function, $\\boldsymbol{x}^{0}_{i}=\\mathrm{Embedding}(Z_{i})$.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS3.p3",
+     "text": "Before going through the attention layer to learn the interaction among atoms, we first model the spatial relationships between atoms to obtain an attention bias, which will be added to the later self-attention layer. With $\\boldsymbol{r}_{ij}=\\boldsymbol{r}_{i}-\\boldsymbol{r}_{j}$ being the relative positions between atoms $i$ and $j$, and $\\tilde{\\Phi}(\\cdot)$ being the Gaussian basis kernel function, the attention bias writes $\\boldsymbol{b}_{ij}=\\mathrm{Linear}(\\tilde{\\Phi}(\\norm{\\boldsymbol{r}_{ij}})).$ (2) Then, Graphormer captures the significance of different atoms through centrality encoding by aggregating the spatial encodings and passing them to a linear layer $\\boldsymbol{b}^{\\prime}_{i}=\\sum_{j\\in\\mathcal{N}(i)}\\mathrm{Linear}\\left({m_{ij}\\cdot\\tilde{\\Phi}(\\norm{\\boldsymbol{r}_{ij}})}\\right),$ (3) where $\\mathcal{N}(i)$ is the neighbor list of the $i$ -th atom within a predefined cutoff radius $r_{c}$, and the local mask is given by $m_{ij}=1-6\\left({\\norm{r_{ij}}}/{r_{c}}\\right)^{5}+15\\left({\\norm{r_{ij}}}/{r_{c}}\\right)^{4}-10\\left(\\norm{r_{ij}}/{r_{c}}\\right)^{3}$ for two atoms $i$ and $j$. The centrality encoding is used to update the initial embeding $\\boldsymbol{x}_{i}^{\\prime 0}=\\boldsymbol{x}_{i}^{0}+\\boldsymbol{b}_{i}^{\\prime}$, which will be passed to the attention module.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS3.p4",
+     "text": "In the multi-head self-attention module of the $h$ -th layer, $\\boldsymbol{Q}$, $\\boldsymbol{K}$, and $\\boldsymbol{V}$ are obtained through linear mappings from the features $\\boldsymbol{x}^{h}_{i}$ and the features are updated as follows $\\boldsymbol{x}_{i}^{h+1}=\\sum_{j}\\mathrm{Softmax}\\left[\\left(\\frac{\\boldsymbol{Q}\\boldsymbol{K}^{T}}{\\sqrt{d}}\\right)_{i,j}+b_{ij}\\right]\\cdot m_{ij}\\cdot\\boldsymbol{V}_{j}.$ (4) Here $d$ is the hidden dimension and $\\sqrt{d}$ is used to normalize the product. It should be noted that $\\boldsymbol{K}$ and $\\boldsymbol{V}$ for the expanded atoms are directly copied from the initial atoms to ensure the same representation is shared between an atom within the unit cell and its images outside the unit cell.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS3.p5",
+     "text": "To account for the periodic boundary conditions (PBC) inherent in crystal structures, we have adapted the original Graphormer by incorporating the multi-graph construction introduced in Ref.. This approach enables us to represent atoms within the unit cell as a series of periodic graphs. In these graphs, image atoms from neighboring lattices are included up to a pre-specified cutoff distance. Similar to exisiting studies, the interaction of information between different atoms is influenced by a smooth cutoff function, which is based on the interatomic distance and a predefined cutoff threshold, allowing us to smoothly decrease the influence of long-distance atomic pairs.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS3.p6",
+     "text": "Property Decoder For the Decoder part of Graphormer (see Fig. S3), we adopted the GeoMFormer module, which uses Transformer modules accommodated for SO(3)-equivariant vectors. It consists of two separate streams to maintain and learn invariant and equivariant representations. Meanwhile, it also includes a cross-attention module that connects the two streams, enabling information fusion between the two steams and enhancing geometric modeling in each stream.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS3.p7",
+     "text": "To accommodate periodic boundary condition in the decoder, we made the following modifications. In the initialization part, we no longer use the original vector $\\boldsymbol{e}_{i}^{0}={\\boldsymbol{r}_{i}}/{\\norm{\\boldsymbol{r}_i}}\\tilde{\\Phi}(\\norm{\\boldsymbol{r}_i})$, as it does not maintain invariance to translation in periodic systems. Instead, we adopt the following initialization: $\\boldsymbol{e}_{i}^{0}=\\sum_{j}m_{ij}\\cdot\\frac{\\boldsymbol{r}_{ij}}{\\norm{\\boldsymbol{r}_{ij}}}\\tilde{\\Phi}(\\norm{\\boldsymbol{r}_{ij}}),$ (5) Furthermore, we adopted the multi-graph technique similar to that in the structural encoder for the atoms in the unit cell. Finally, for the output features $\\boldsymbol{e}_{i}^{N_{2}}$ of the $N_{2}$ -th layer, a linear layer is used to obtain the force: $\\boldsymbol{f}_{i}=\\mathrm{Linear}(\\norm{\\boldsymbol{e}_i^{N_2}})$ (6)",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F3",
+     "text": "Figure S3: The structural encoder and property decoder architecture of the Graphormer model.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.SS3.p8",
+     "text": "The stress prediction was not supported in the original implementation of Graphormer. To enable the model to predict stress, we designed a new stress head to evaluate stress as follows: $\\boldsymbol{\\sigma}=\\sum_{ij}\\boldsymbol{w}_{ij}\\frac{\\boldsymbol{L}_{i}}{\\norm{\\boldsymbol{L}_i}}\\otimes\\frac{\\boldsymbol{L}_{j}}{\\norm{\\boldsymbol{L}_j}},$ (7) where $\\boldsymbol{L}$ represents lattice vectors. Here, $\\boldsymbol{w_{ij}}$ is derived from the features from the decoder followed by the transformations defined in Fig. S4.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F4",
+     "text": "Figure S4: Illustration of the newly designed stress head for the Graphormer model, utilizing a symmetrized weight matrix $\\boldsymbol{w_{ij}}$ and normalized lattice vector outer products to predict the stress tensor $\\sigma$.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.4 Training details",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS4.p1",
+     "text": "For the training of the M3GNet, we referred to the training setups in the original implementation.. To be specific, the loss function $L=l(e,e_{\\mathrm{DFT}})+\\omega_{f}l(\\boldsymbol{f},\\boldsymbol{f}_{\\mathrm{DFT}})+\\omega_{\\sigma}l(\\boldsymbol{\\sigma},\\boldsymbol{\\sigma}_{\\mathrm{DFT}})$ (8) was used, where $l(\\cdot,\\cdot)$ is the Huber loss function, $e$ is the energy per atom, $\\boldsymbol{f}$ is the force vector on each atom, $\\boldsymbol{\\sigma}$ is the stress, and $\\omega_{f}$ and $\\omega_{\\sigma}$ are the weights of forces and stress, respectively. For the models used in this work, $\\omega_{f}=1$ and $\\omega_{\\sigma}=0.1$ are used. The initial learning rate was set to be 0.001 for the Adam optimizer which decays in a cosine manner to 1% to the original values in 100 epochs, and the training process stops after running for 200 epochs with a batch size of 128 on 8 NVIDIA A100 GPUs. As the training data size increases up to 3M, the the total number of parameters in M3GNet increase accordingly from 880K to 4.5M. Without modifying model architecture and training scheme, further increase of model parameters led to instability under current settings.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS4.p2",
+     "text": "For the training of Graphormer, we have configured the structural encoder with 24 attention layers and the property decoder with 10 layers of GeoMFormer (2 layers in stress head). All attention heads are set to 32, and the dimension of hidden layers and feed-forward layers is set to 768. The number of Gaussian basis kernels is set to 128. In the structural encoder, all dropout rates are set to 0.0, while in the property decoder, the activation dropout is set at 0.1, with all other dropout rates at 0.0. The cutoff for expansion is set to $20\\text{\\,}\\mathrm{\\SIUnitSymbolAngstrom}$, the smooth function cutoff is set to $5\\text{\\,}\\mathrm{\\SIUnitSymbolAngstrom}$, the maximum number of expanded atoms is capped at 256, and the offsets for expansion range from -5 to 5 in each direction. We use AdamW as the optimizer with the hyper-parameter $\\epsilon$ set to 1e-8, and $\\beta_{1}$ and $\\beta_{2}$ set to 0.9 and 0.999, respectively. The peak learning rate is set to 2e-4, and weight decay is set to 0.0. The model is trained for a total of 1,562,500 steps with a warm-up period of 93,750 steps. After the warm-up, the learning rate linearly decreases to 0. The batch size for training is set to 256, and all labels use the mean absolute error (MAE) as the loss function. The energy loss factor, force loss factor, and stress loss factor are all set to 1.0. The model training is conducted on 64 NVIDIA A100 GPUs. The total parameters of Graphormer is 182M. In the first round of training, only energies and forces are trained. After training is complete, the relevant parameters are frozen, and the stress head is further trained.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S1.5 Model comparison",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.F5",
+     "text": "Figure S5: Model Inference Speed and GPU Memory Usage",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.SS5.p1",
+     "text": "Graphormer offers a higher degree of model complexity and the potential for increased predictive accuracy with its larger model parameters to consume the large training dataset. However, this architectural design inherently leads to slower computational speed compared to M3GNet, especially when automatic differentiation is employed to predict forces and stresses. Furthermore, the memory demands of Graphormer are significantly higher. This means that for larger atomic systems, Graphormer’s need for GPU memory often reaches the upper limit of what is available even on high-end GPUs such as the A100. On the other hand, M3GNet serves as a more resource efficient alternative, especially in environments with constrained GPU resources. Its computational framework is optimized for speed, making it a more practical choice for processing a majority of the tasks encountered in our research. M3GNet’s design balances performance and resource utilization, allowing for the analysis of large datasets and complex systems without the memory limitations faced by Graphormer.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS5.p2",
+     "text": "We further demonstrate the different level of needs of computing resources, we benchmarked the performance of M3GNet and Graphormer on a set of materials with different number of atoms in the unit cell in Fig. S5. For example, for a material with 100 atoms, Graphormer requires around 10-fold more GPU memories compared to our implementation of M3GNet. The accuracy of the models based on M3GNet and Graphormer is discussed in Section S6 and shown in Fig. S6.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S2 Materials explorer",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2a.p1",
+     "text": "MatterSim’s predictive capabilities are underpinned by a two-part materials structure explorer, as shown in Fig. 2 (a), that enhances the training datasets through both equilibrium and off-equilibrium structural data.",
+     "kind": "body"
+    },
+    {
+     "id": "S2a.p2",
+     "text": "The ground-state explorer focuses on materials at or near atomistic equilibrium positions. It primarily utilizes an uncertainty-based method with ensemble models to selectively incorporate data from both public repositories and internally generated datasets into the database. This approach ensures the inclusion of the most informative structures for model training, enhancing the accuracy of property predictions at equilibrium. The off-equilibrium explorer, targets materials with off-equilibrium atomistic positions. It conducts molecular dynamics (MD) simulations under a wide range of pressures, including 0, 500, 800, and $1000\\text{\\,}\\mathrm{GPa}$. Under each pressure, we incrementally increase the temperature from 0 to $5000\\text{\\,}\\mathrm{K}$ within $200\\text{\\,}\\mathrm{ps}$. These simulations are crucial for sampling a wide range of atomic configurations, allowing MatterSim to learn and predict material properties under high-pressure and high-temperature scenarios that deviate significantly from equilibrium states. Together, these explorers provide a dataset that spans a vast configurational space over the entire periodic table, ensuring that MatterSim is equipped with the necessary information to predict material properties across a full spectrum of conditions. In addition to the data explorers, a sub-sampling procedure is applied according to the uncertain evaluated on an ensemble of models. The details of the uncertainty evaluation can be found in Section S4. As an example to showcase the validity of this data generation strategy, we tested the performance of intermediate model checkpoints up to 3M structures used in model training in Fig. S6. As the the dataset increases, the model performance of force, energy and stress prediction is improving on the test datasets.",
+     "kind": "body"
+    },
+    {
+     "id": "S2a.p3",
+     "text": "We note that the dataset fueling MatterSim is part of a dynamic and continually evolving scheme, ensuring that the model’s predictive power is constantly refined and updated. As of the time of the release of this manuscript, 17 million data points have been compiled in this dataset, encompassing materials sampled from publicly available databases, for example, Materials Project or Alexandria, internally generated datasets, and molecular dynamics trajectories under ambient to extreme conditions.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.F6a",
+     "text": "Figure S6: Performance of the intermediate checkpoints of MatterSim obtained on the iteratively generated structures on three test datasets: MPF-alkali-TP, MPF-TP and random-TP. The details of the generation of the test datasets can be found in Section S6.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S3 Data distribution",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3a.p1",
+     "text": "MatterSim relies on the materials explorer defined in Fig. 2 (a) to expand coverage of compositional space configurational space so as to describe materials under a wide range of temperature and pressure. In this section, we analyze the distribution of the dataset generated in this work and compare with public datasets, including MPF2021, MPtrj, and Alexandria datasets. We first compare the elementwise and pair-element appearance of the elements in the periodic table through different datasets, then we compare the number of atoms distribution. Finally, we illustrate the definition of the effective temperature used in Fig. 2 (b), and highlight again the comparison of the distribution in the effective temperature and pressure space across different database.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S3.1 Elemental and elemental pairwise distribution",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.p1",
+     "text": "Fig. S7, Fig. S8, Fig. S9 and Fig. S10 plot the elementwise percentage atomic appearance of the entire MPF2021 dataset, 1M structures uniformly sampled from MPtrj dataset, 1M structures uniformly sampled from Alexandria dataset and 1M structures uniformly sampled from the dataset generated and used in this work, respectively. In the distribution of MPF2021 and MPtrj, a significant bias to oxygen is observed – oxygen has 8-fold more percentage of appearance compared to most elements in the periodic table. The distribution of Alexandria, on the other hand, has almost uniform distribution over the periodic table, however we have shown in Fig. 2 (d) that Alexandria only has a peaked distribution around the pressure of 0 GPa. The dataset generated in this work, as shown in Fig. 2 (b), Fig. S10 and Fig. S11, not only ameliorates the biased distribution to oxides, but it also effectively explored the configurational space and covers a much wider domain in the effective temperature and pressure space.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p2",
+     "text": "In addition to elementwise distribution, in Fig. S11, we also compare the element pairwise distribution in the four datasets. One pairwise appearance is counted when a pair of atoms exists with a separation distance lower than $5\\text{\\,}\\mathrm{\\SIUnitSymbolAngstrom}$. MPF2021 and MPtrj are both derivatives of the Materials Project, and thus it is no surprise that we notice a common distribution of them for elements with atomic number larger than the Lanthanum element – there are noticeable missing or close to negligible element pairs. The Alexandria database again has a uniform distribution for most of the elements, however, there are still missing columns or rows involving the noble gas elements. In contrast to public ones, the dataset generated in this work has a relatively uniform distribution and also a almost full coverage of all the combination of element pairs.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F7",
+     "text": "Figure S7: Elementwise percentage of atomic appearance in MPF2021 dataset.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.F8",
+     "text": "Figure S8: Elementwise percetage of atomic appearance of 1M structures randomly sampled from MPtrj dataset.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.F9",
+     "text": "Figure S9: Elementwise percentage of atomic appearance of 1M structures randomly sampled from Alexandria dataset.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.F10",
+     "text": "Figure S10: Elementwise percentage of atomic appearance of 1M structures randomly sampled from the dataset in this work.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.F11",
+     "text": "Figure S11: Pairwise elemental distribution of entire MPF2021 dataset, 1M structures randomly sampled from MPtrj dataset, 1M structures randomly sampled from Alexandria dataset and 1M structures randomly sampled from the dataset in this work.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S3.2 Number of atoms",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.p1",
+     "text": "In addition to the elemental and element pair distributions, we also compare the number of atoms in the datasets. Fig. S12 shows the histogram of the number of atoms in the structures from the MPF2021, MPtrj, Alexandria datasets and this work. Again, we use the entire MPF2021 datasets, and 1M randomly sampled structures from the other three datasets. In Fig. S12, we clearly see that the Alexandria has a biased distribution over structures with less than 100 atoms, while MPF2021 and MPtrj datasets have more dense distributions over materials with larger than 100 atoms. We also notice that MPF2021 has much less distribution over 200 atoms. The dataset generated in this work has a less biased distribution compared with Alexandria and has a more smooth decreasing in the distribution curve from structures with lower than 100 atoms to those with more 300 atoms, empowering the model to handle materials ranging from simplest diamond structures to very large complicated ones.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F12",
+     "text": "Figure S12: Distribution of number of atoms in the structures in MPF2021, MPtrj (1M randomly sampled structures), Alexandria (1M randomly sampled structures) and the dataset generated in this work (1M randomly sampled structures).",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S3.3 Latent space coverage",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS3.p1",
+     "text": "In Fig. S13, we compare the atomic embeddings in MPtrj, Alexandria and the dataset generated in this work. To make a fair comparison, we sampled 10,000 atomic embeddings from the 1M subset of our dataset, 1,000 atomic embeddings from the 1M subset of MPtrj and 1,500 atomic embeddings from the 1M subset of Alexandria for each element – this choice is based on the ratio of number of structures in each dataset. The principal component analysis (PCA) is done for the embeddings to reduce the embeddings to a 2-dimensional space. The principals are scaled to the range of -100 to 100 range and a circle of radius of 2 is assigned to each data point, and finally the coverage is computed as the total areas of all circles excluding all the overlaps. 13(a) and 13(b) show the coverage ratio between this work and MPtrj dataset, and between this work and Alexandria dataset, exhibiting 3-fold and 2.15-fold larger coverage on average through the entire periodic table with two examples of Carbon and Zirconium elements shown in 13(c) and 13(d), respectively. Interestingly, we also noticed that the noble gas elements are extremely scared in the MPtrj and Alexandria datasets that we can barely sample enough atomic embeddings from the 1M subsets, leading to much higher coverage of our dataset, see 13(e), and they are excluded from the computation of mean coverage ratio in 13(a) and 13(b).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F13",
+     "text": "(a)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S3.4 Temperature and pressure distribution",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.p1",
+     "text": "MatterSim is an emulator designed for modeling materials under real-world temperature and pressure conditions and the workflow designed in Fig. 2 (a) is capable of generating an enriched dataset that covers a broad range of these conditions. To straightforwardly illustrate the distribution, we have included a two-dimensional histogram of the effective temperature and stress of our generated dataset in Fig. 2 (b), where the effective temperature is defined as follows, 1. For each material from a given dataset, we evaluate its total energy per atom ( $\\varepsilon$) with MatterSim; 2. Then, we optimize the atomic positions with fixed lattice parameters for at most 500 steps until the max forces converge to $0.01\\text{\\,}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{\\SIUnitSymbolAngstrom}$, and evaluate the relaxed total energy per atom ( $\\varepsilon_{0}$); 3. Finally, the effective temperature of this given material is evaluated by $T_{\\mathrm{eff}}=\\frac{\\varepsilon-\\varepsilon_{0}}{k_{\\mathrm{B}}},$ where $k_{\\mathrm{B}}$ is the Boltzmann’s constant. With the effective temperature, we compare the distribution of the MPF2021 dataset and 1M randomly sampled structures from Alexandria, as shown in Fig. 2 (a), Fig. 2 (c) and Fig. 2 (d). Since the structures are relaxed to their corresponding local minima, it is not surprising to find that they are densely packed around the $0\\text{\\,}\\mathrm{GPa}$ in stress, with very scattered data points of high effective temperature and high pressure. The dataset generated in this work, however, has a much wider coverage over the effective temperature space (0 – $2\\text{\\times}{10}^{4}\\text{\\,}\\mathrm{K}$) and stress space (0 – $1000\\text{\\,}\\mathrm{GPa}$ in magnitude). We note that the effective temperature should not be direcly interpreted as the physical temperature or the temperature employed in the simulations, instead it is an intuitive metric to measure the energy distribution of the dataset.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S4 Uncertainty quantification",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.p1",
+     "text": "Uncertainty quantification plays a crucial role in the predictive modeling of materials properties and simulations, such as those involving MLFFs. Accurately assessing the uncertainty in predictions is essential because it provides insight into the reliability of the models’ outputs and informs decision-making processes. In the context of materials science, where the potential for innovation is vast, but the costs of errors are high, being able to trust the predictions of computational models is paramount. Current methods of uncertainty quantification often involve statistical approaches that estimate the confidence intervals or prediction errors, such as Bayesian methods, bootstrapping, and ensemble techniques. These methods help to understand the limits of model predictions and to identify areas where the model may require further training or refinement.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p2",
+     "text": "In the case of MatterSim, uncertainty quantification is addressed through an ensemble approach. By training a set of five distinct models with different random initialization, the ensemble of models gives an estimation of the uncertainty on both the energies and forces. The forces offer insight into the dynamical behavior of atoms and can be particularly revealing in scenarios where the inferences of only a small fraction of the atoms within the simulation cell is deemed unreliable. Conversely, energy predictions are often more informative in cases for crystals with small number atoms in the cell. By integrating both energies and forces into the uncertainty analysis, MatterSim ensures a robust and reliable assessment of uncertainties, enhancing the confidence in its predictive capabilities for material properties and simulations. As shown in Fig. S14, the uncertainty is measured by the standard deviation of both energies and forces on a set of randomly selected structures and is plotted in contrast to the error with respect to ground truth. While the well-known underestimation of uncertainty is present, the ensemble-based uncertainty is still capable of distinguishing materials with high error from the rest.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.F14",
+     "text": "Figure S14: Parity plots of the prediction errors and the prediction uncertainties of energy per atom and forces computed for the MPF-TP and Random-TP datasets.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S5 First-principles computation details",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "The DFT parameters employed in this work are generated with the MPRelaxSet class defined in the pymatgen library and the calculations are conducted with Vienna Ab-initio Simulation Package (VASP) (version 6.3.0) using the projector augmented wave (PAW) method and Perdew-Burke-Ernzerhof (PBE) exchange-correlation functional with Hubbard U parameter for Co, Cr, Fe, Mn, Mo, Ni, V, W elements in oxides and fluorides chosen to be 3.32, 3.7, 5.3, 3.9, 4.38, 6.2, 3.25, and $6.2\\text{\\,}\\mathrm{e}\\mathrm{V}$, respectively, to compensate on-site electronic repulsion. The cutoff of plane-wave basis set is $520\\text{\\,}\\mathrm{e}\\mathrm{V}$ and the convergence threshold for total energy is $5\\text{\\times}{10}^{-5}\\text{\\,}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$. For each material, the total energy, forces on each atom and the stress are computed, stored and used for training. We encounter convergence difficulties with elements such as Gd and Eu, particularly in off-equilibrium structures where self-consistent cycles fail to converge, or energies vary significantly for two structures with nearly identical atomic positions. Such calculations are consequently excluded from the study.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.p2",
+     "text": "To construct the energy hull from random structure search results, a double relaxation defined by DoubleRelaxMaker and MPRelaxSet, followed by a static VASP calculation defined in StaticMaker is carried out on each selected structure. For more detailed information about our construction of the Alexandria-MP-ICSD dataset, the energy hull of the Alexandria-MP-ICSD dataset and the new combined hull formed by the Alexandria-MP-ICSD hull and our RSS-generated, one may refer to the supplementary information in Ref..",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S6 Benchmark datasets and results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.p1",
+     "text": "The zero-shot performance of MatterSim is benchmarked on a few datasets computed using the same level of DFT as the training data of MatterSim. MPtrj-1k and Alexandria-1k are collected by sampling randomly one thousand materials from the MPtrj and Alexandria dataset, respectively. These two datasets contain structures that are close to local energy minima and reflect the capability of models on predicting near-equilibrium-position properties, which is useful in evaluating materials’ chemical stability. The MPtrj-highest-stress-1k contains the 1,000 materials with the highest stress in magnitude computed using DFT from the MPtrj datasets. This benchmark set evaluates the models performance in the high pressure domain.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p2",
+     "text": "The MPF-Alkali-TP, MPF-TP, Random-TP benchmark sets are created with increasing complexity to evaluate the models’ performance on materials under finite temperature and pressure conditions with far from equilibrium atomic positions. All of these benchmark sets are created with first-principles molecular dynamics trajectories initialized with corresponding structures. The MPF-Alkali-TP dataset is sampled from AIMD trajectories of materials that contains alkali metals in Materials Project and this dataset serves to assess the performance of the model for predicting ionic conductors. The selection rule of elements is that the compound should contain at least one alkali metal and at least one elements from N, O, P, S, Se, F, Cl, Br, I. In total, 50 compounds are selected randomly from Materials Project following the selection rule. Similarly, the MPF-TP contains molecular dynamics trajectories on 50 randomly selected compounds from MPF2021 dataset without elemental constraints. For Random-TP, the initial structures are created by randomly placing 20 atoms with random elements in a simulation box with. Again, 50 random structures are used for later molecular dynamics simulation. During collection of the molecular dynamics simulation trajectories, each starting compound is first relaxed followed by running an NPT simulation using VASP, in which the cutoff energy of plane wave is controlled to be 520 eV and only gamma point was sampled in the reciprocal space to ensure the speed of sampling. The simulation was carried out for 100 ps for each material and the during the last 20 ps, 5 frames were uniformly collected for VASP calculation under MPRelaxSet setting, which were used in the final benchmark set. The temperatures and pressures are all random sampled. For the temperature, it is uniformly sampled between 0 to 5000K. For the pressure, we used a log scale when carrying out the sampling. The pressure range is from 0 to 1000 GPa. By such a way of creation, these three datasets reflects the power of the emulators for finite-temperature and pressure simulations with increasing difficulty in generalizability from simple ionic compounds to complex random hypothetical structures. Since the temperature and pressure ranges are wide, these benchmark sets are also reflective of model performance on crystalline materials, amorphous materials, liquids, and pressured materials. Typical structures from these datasets are all shown in Fig. S15.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.F15",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S6.p3",
+     "text": "To evaluate the performances, the per-atom mean absolute energy error, the mean error on forces, and mean error on stress are computed for each benchmark set. The results are shown in Table S1 where the comparison is carried out between MatterSim and a few open-source universal MLFFs, including M3GNet, CHGNet, MACE-MP-0. For M3GNet, the M3GNet-MP-2021.2.8-PES checkpoint defined in the MatGL library is used. The CHGNet model is accessed via the GitHub repository. For MACE-MP-0, the large version of the model defined in the commit 4d2d1c4 in the repo (https://github.com/ACEsuit/mace) is used. To evaluate the MAE of CHGNet the Materials Project 2020 Compatibility corrections are applied to the benchmark sets, while others are not. The results are shown in Table S1.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.T1",
+     "text": "Table S1: Performance of CHGNet, MACE-MP-0 and MatterSim on benchmark datasets.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S7 Benchmark on Matbench Discovery",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S7.p1",
+     "text": "Materials discovery is an innovative field that recently starts to harnesses the power of data-driven approaches to revolutionize the way new materials are found and developed. This rapidly evolving domain leverages machine learning models to predict and analyze the properties of materials before they are physically synthesized, thereby significantly reducing research time and cost. The MatBench Discovery task, in particular, are designed to test the effectiveness of these machine learning models in predicting the stability of new materials based on a set of structural substitutions derived from the Wang-Botti-Marques (WBM) dataset. In particular, we focus on the IS2RE task which challenge models to predict relaxed energy from the input structures. After comparing the results with materials project, these structures classified as stable or unstable by constructing energy hulls. Finally, a few metrics are gathered including binary classification F1 score, precision/recall rates, and MAE are gathered to evaluate models’ performance.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p2",
+     "text": "MatterSim is applied to tackle the IS2RE task of MatBench Discovery. The initial structures in the WBM dataset are used as input of the model and a FIRE optimizer was used to relax the structures. The lattice is also relaxed using the ExpCellFilter function of Atomic Simulation Environment. The force convergence criteria is set to be $0.01\\text{\\,}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{\\SIUnitSymbolAngstrom}$. The final results are shown in Table S2. MatterSim achieves the highest performance in all metrics compared with all opensource and commercial model. An F1 score of 0.83 and an mean absolute energy error of the formation energy $0.026\\text{\\,}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$, demonstrating better success rate in finding new materials, despite that the model is trained on only a smaller amount of the data, signifying the importance of less data redundancy.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.T2",
+     "text": "Table S2: Matbench discovery results using the potential enabled by MatterSim. For results, we relax the input structures, relax for 500 steps until the max magnitude of forces is lower than $0.01\\text{\\,}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{\\SIUnitSymbolAngstrom}$, and evaluate the outputted energies. The results showcase that the interatomic potentials trained as part of this work showcase SOTA performance on downstream tasks. Results of GNoMe were taken from Ref. and all other models from Ref.. Bolded numbers indicate the models with best performance on each metric.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S8 Random structure search",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S8.1 Search setup and computation details",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S8.SS1.p1",
+     "text": "Random structure search (RSS) is carried out using a python-interfaced-version of AIRSS package. Searches are carried out on all possible 4005 unary and binary chemical systems of the first 89 elements. For each chemical system, two-consecutive round of searches are carried out. In the first round, we sample 10,000 structures in each binary system. The number of atoms in the unit cell is randomly sampled to be between 2 to 12. A uniform elemental-wise minimum separation between atoms in Å was set by MINSEP = 0.7-3. The number of symmetry operations of the initially generated structures is set to be 2 to 4, i,e., SYMMOPS = 2-4. All proposed structures are relaxed using MatterSim with the lattice being optimized as well. Then in the second round of search, the same amount of structures is generated. During this round of generation, we use parameters extracted from the lowest energy structure during the first round of search to confine the search space. In particular, the MINSEP and the per-atom-volume VARVOL are extracted from the lowest energy structure in each reduced composition and then used for the generation. Relaxations are again carried out on these structures using MatterSim. Such two-round search is a standard routine to carry out RSS as the first batch tries to cover a large volume and interatomic distance range while the second batch focuses on the most likely setup and does a thorough search. After the two round of searches, the resulting structures are collected together and deduplication is performed using pymatgen ’s StructureMatcher. Finally, the top three structures with the lowest energies estimated by MatterSim is sent to first-principles computation following the double relaxation and static calculation protocol as discussed in Section S5. These final DFT results are used for the construction of the final hull by combining with the Alexandria-MP-ICSD dataset.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S8.2 Search results and discussions",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S8.SS2.p1",
+     "text": "RSS is uniquely comprehensive due to its exhaustive nature, although it is traditionally limited by its high computational demands. This search is facilitated by the MatterSim, which assesses energy inferences across an extensive set of unary and binary chemical combinations. The screening encompassed 4005 unary and binary chemical systems between 89 elements, with each pairing examined across 45 varying compositions. This leads to an astronomical number of energy inferences, totaling over 30 billion, assuming 400 relaxation steps needed for each structure. Remarkably, the use of MatterSim enabled the completion of this vast screening process within a week—a task that would otherwise span an estimated 100 years if approached with DFT methods using 1,000 CPU cores. (The estimation is based on that a single-point DFT energy computation on a 12-core CPU node takes around 10 seconds.)",
+     "kind": "body"
+    },
+    {
+     "id": "S8.SS2.p2",
+     "text": "The final structures out of RSS covers around 90 percent of the elementary and binary structures within 12 atoms in Materials Project, demonstrating the exhaustive nature of this search. Among them, we carried out DFT calculations on the most stable 1% structures of each composition according to the energies predicted by MatterSim. This leads to around 500,000 structures computed using DFT in total. Within these structures, we identified 16,399 structures to be lower than or on the current energy hull defined by the Alexandria-MP-ICSD dataset, as illustrated in Fig. S16. In this plot, we observed a bias towards anion-rich compounds consisting of O, S, F, Cl, Br, I, N, H, Se, Si, Sb, and Te elements, which are potentially affected by Materials Project’s anion correction. While this correction works fine for compounds with usual oxidation states, the off-stoichiometric nature of many candidates in RSS search leads to over-estimation of their stability in anion-rich compounds. Therefore, when analyzing the RSS-generated results, we excluded all the materials containing these elements, and even after this removal, we still find 852 materials on the new hull defined by the combination of the RSS-generated structures and the Alexandria-MP-ICSD dataset, as illustrated in Fig. 3 (c). Considering the fact that we only included the RSS-generated candidates with the lowest 1% energy of each chemical composition, we expect more stable materials to be confirmed with first-principles verifications. Such results further reveal that the current known materials space only covers a small percentage of the entire space, far from exhaustive, even for simple binary systems.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.F16",
+     "text": "Figure S16: Elementwise appearance distribution of the 16,399 RSS-generated materials found to be on or below the current convex hull.",
+     "kind": "caption"
+    },
+    {
+     "id": "S8.F17",
+     "text": "Figure S17: The formation energy of the RSS-generated materials for the Eu - P chemical system, with the black segments being the combined convex hull defined by the Alexandria-MP-ICSD dataset and our RSS-generated materials, and the green dots being the on-hull materials.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S9 Phonon prediction",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S9.1 Benchmark Dataset",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S9.SS1.p1",
+     "text": "We benchmark against Materials Data Repository (MDR) phonon calculation database (also known as PhononDB), a database of phonon properties derived from first-principles calculations. PhononDB encompasses various materials, each characterized by phonon properties computed using the finite displacement method via the Phonopy software package. The force constants for these calculations are obtained through the VASP. Furthermore, the Perdew-Burke-Ernzerhof for solids (PBEsol) exchange-correlation functional is utilized within the DFT framework. MatterSim’s performance is rigorously assessed against the entire PhononDB database.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S9.2 Method",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S9.SS2.p1",
+     "text": "Here we continue to utilize Phonopy software package to interface with MatterSim. The phonon dispersion curves and density of states (DOS) are computed using the finite displacement method. For each material, a supercell is constructed from the primitive cell. Due to the large number of materials, an algorithm is designed to automatically choose the supercell size in the following. For each material, we set the maximum number of atoms in the supercell ( $N_{\\mathrm{max}}$) used in the phonon calculations to be 300, except Fd3̄m, Fm3̄m, F4̄3m and $\\mathrm{P6_{3}mc}$ space graps for which 216, 216, 216 and 450 are used, respectively. For a primitive cell containing $N_{p}$ atoms with lattice vector length $a$, $b$, $c$, and maximum $N_{max}$ atoms in the supercell, the supercell size is $n_{x}\\times n_{y}\\times n_{z}$ are computed $\\displaystyle n_{x}$ $\\displaystyle=\\max\\left(\\left\\lfloor\\left(\\frac{N_{max}}{N_{p}}\\frac{bc}{a^{2}}\\right)^{\\frac{1}{3}}+0.5\\right\\rfloor,\\ 1\\right)$ (9) $\\displaystyle n_{y}$ $\\displaystyle=\\left\\lfloor n_{x}\\frac{a}{b}+0.5\\right\\rfloor,$ $\\displaystyle n_{z}$ $\\displaystyle=\\left\\lfloor n_{x}\\frac{a}{c}+0.5\\right\\rfloor,$ assuming $a$ is the longest side of the primitive cell. To generate force constant matrices, displacements compatible with the space group are introduced to atomic positions within the supercell as implemented in Phonopy. With a magnitude of $0.03\\text{\\,}\\mathrm{\\SIUnitSymbolAngstrom}$, consistent with settings in PhononDB, the forces acting on each displaced atom are then predicted using MatterSim or other MLFFs. The resulting forces serve as input for Phonopy, which computes the dynamical matrices, phonon frequencies and dispersions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S9.3 Results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S9.SS3.p1",
+     "text": "We demonstrate the accuracy of MatterSim as an efficient alternative to traditional first-principles approaches for predicting phonon dispersion in bulk materials and we do a benchmark on the entire PhononDB database. Four example phonon dispersions of silicon ( Si), the binary compound ( GaN), a perovskite ( $\\text{BaTiO}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}$) and a layered structure ( $\\text{MoS}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}$) are shown in Figs. 18(a), 18(b), 18(c) and 18(d), respectively. The results are compared with those obtained using the recently proposed model MACE-MP-0 and PBEsol calculations taken from PhononDB. As presented in the figures, MatterSim accurately predicted the phonon dispersion and DOS in all of the four materials, with slight underestimate of the highest frequency. In the case of $\\text{MoS}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}$, MatterSim has a remarkable overall prediction with a particular good agreement for the frequency of the highest optical phonon at $\\Gamma$ point. Although MACE-MP-0 predicted $\\text{BaTiO}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}$ very well, it significantly underestimated the phonon dispersion in the other three cases, which is observed with M3GNet as well. In addition, we observed a non-physical abrupt change of phonon frequencies along the $\\Gamma$ –A direction in GaN predicted by MACE-MP-0. This points to the importance of the underlying training data on phonon prediction.",
+     "kind": "body"
+    },
+    {
+     "id": "S9.SS3.p2",
+     "text": "To quantitatively evaluate the performance of MatterSim’s prediction of phonons, we computed phonon maximum frequency and average frequency of all computed dispersion, square difference between PBEsol-calculated and ML-predicted phonon DOS, and the phonon average frequency versus the average atomic mass, as illustrated in Fig. S19. In our comparative analysis of phonon maximum frequency and average frequency, MatterSim exhibited superior performance to previous models based on crystal relaxation trajectories when evaluated using MAE and R-squared (R 2) metrics, as visualized in Figs. 19(a) and 19(b). In the prediction of phonon maximum frequency, MatterSim demonstrated a lower MAE of $0.87\\text{\\,}\\mathrm{T}\\mathrm{H}\\mathrm{z}$ compared to MACE-MP-0’s MAE of $1.73\\text{\\,}\\mathrm{T}\\mathrm{H}\\mathrm{z}$. Similarly, in the prediction of phonon average frequency, which is defined using phonon frequency $\\omega$ and DOS $g(\\omega)$ $\\bar{\\omega}=\\frac{\\int\\omega g(\\omega)\\,\\mathrm{d}\\omega}{\\int g(\\omega)\\,\\mathrm{d}\\omega},$ (10) MatterSim maintained its superior performance with an MAE of $0.76\\text{\\,}\\mathrm{T}\\mathrm{H}\\mathrm{z}$ relative to MACE-MP-0’s $1.32\\text{\\,}\\mathrm{T}\\mathrm{H}\\mathrm{z}$, and an R 2 score of $0.86$ compared to $0.75$. MatterSim maintained a consistently high level of performance across the prediction of both phonon maximum frequency and phonon average frequency, whereas MACE-MP-0 exhibited a marked decline in R 2 score when faced with the prediction of phonon average frequency, which is a more challenging task because it requires an accurate description of the full phonon DOS. To evaluate the two models’ performance in the prediction of phonon DOS, we calculated the MAE of the DOS, $\\mathrm{MAE}_{\\mathrm{{DOS}}}=\\int\\left|g_{\\mathrm{PBEsol}}(\\omega)-g_{\\mathrm{ML}}(\\omega)\\right|\\,\\mathrm{d}\\omega,$ (11) where $g_{\\mathrm{PBEsol}}(\\omega)$ and $g_{\\mathrm{ML}}(\\omega)$ are PBEsol-calculated and ML-predicted phonon DOS, respectively. The distribution of the MAE of calculated materials is presented in 19(c). Upon examining the histogram, it is evident that in the three bins representing the lower MAE values, the count for MatterSim is significantly higher than the count for MACE-MP-0. This suggests that MatterSim has a larger number of materials with lower MAE, demonstrating that it performs better in terms of accuracy for the DOS prediction when compared to models based on crystal relaxation trajectories. The average MAE over calculated materials for phonon DOS predicted by MatterSim and MACE-MP-0 was $0.64$ and $0.81$, respectively. The correlation between the average phonon frequency $\\bar{\\omega}$ and the average atomic mass of the material $\\bar{m}$, which is defined by the atomic mass of each atom $M_{\\kappa}$ and the number of atoms $n$ in the material as $\\bar{m}=\\left(\\frac{1}{n}\\sum_{\\kappa}\\sqrt{M_{\\kappa}}\\right)^{2},$ (12) is presented in 19(d). Only materials that have no negative frequencies were considered in the figure. The plot is in agreement with the work by Ref. and Ref.. The data was fit to the following form, $\\log\\bar{\\omega}=k\\log\\bar{m}+b.$ (13) MatterSim’s fitting parameters yielded a slope of $k=-0.67$ and an intercept of $b=8.00$. These results exhibit a remarkable agreement with those obtained from the PhononDB dataset, where the fitted parameters were $k=-0.64$ for the slope and $b=7.95$ for the intercept. This close agreement suggests that MatterSim is robust and reliably captures the trends in diverse materials.",
+     "kind": "body"
+    },
+    {
+     "id": "S9.F18",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S9.F19",
+     "text": "(a)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S10 Mechanical properties",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S10.1 Quasi-Harmonic Approximation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S10.SS1.p1",
+     "text": "The harmonic approximation (HA) assumes that atoms in a crystal vibrate about their equilibrium positions and the potential energy can be approximated by a quadratic function of the atomic displacements. This model is accurate at low temperature where anharmonic effects are negligible. However, as the temperature increases, anharmonic contributions become significant, and the harmonic approximation fails to predict the correct thermodynamic behavior. To this end, the quasi-harmonic approximation (QHA) is introduced as an extension to the HA, and it takes into account the anharmonicity by computing the volume dependence of the phonons. While the shape of the potential energy surface may change with the volumes, QHA assumes that the HA is applicable for each volume. In this way, QHA is capable of describing anharmonicity and thermal expansion effects. In this work, QHA is employed to predict mechanical properties, enthalpies and free energies of ordered crystals.",
+     "kind": "body"
+    },
+    {
+     "id": "S10.SS1.p2",
+     "text": "Under QHA, the Helmholtz free energy $F$ at a given temperature ( $T$) and volume ( $V$) can be expressed as: $F(T,V)=U_{\\mathrm{el}}(V)+F_{\\mathrm{ph}}(T,V),$ (14) where $U_{\\mathrm{el}}$ is electronic total energy and $F_{\\mathrm{ph}}$ is phonon Helmholtz free energy. $F_{\\mathrm{ph}}$ is obtained by $F_{\\mathrm{ph}}(T,V)=\\frac{1}{2}\\sum_{\\mathbf{q},i}\\hbar\\omega_{\\mathbf{q},i}(V)+k_{B}T\\sum_{\\mathbf{q},i}\\ln\\left[1-\\exp\\left(-\\hbar\\omega_{\\mathbf{q},i}(V)/k_{B}T\\right)\\right],$ (15) where $\\mathbf{q}$ is the wave vector, $i$ is the band index, $\\omega$ is the phonon frequency, $k_{B}$ is the Boltzmann constant and $\\hbar$ is the reduced Planck constant.",
+     "kind": "body"
+    },
+    {
+     "id": "S10.SS1.p3",
+     "text": "The Gibbs free energy $G$ is obtained by $G(T,p)=\\min_{V}\\left[F(T,V)+pV\\right],$ (16) where $p$ is the pressure.",
+     "kind": "body"
+    },
+    {
+     "id": "S10.SS1.p4",
+     "text": "The bulk modulus of the system $K$ can also be obtained as $K(T)=V(T)\\left.\\frac{\\partial^{2}F(T,V)}{\\partial V^{2}}\\right|_{T}$ (17)",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S10.2 Bulk Modulus Prediction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S10.SS2.p1",
+     "text": "To benchmark the prediction accuracy of bulk modulus and other thermodynamic properties (See Section S10.3 and Section S11.1) against first-principles results, we collected a wide range of ordered inorganic solids including inorganic elementary substances, oxides, nitrides, carbides and a few half-Heusler compounds, whose phononic, mechanical, and transport properties have been studied using either experimental or first-principles methods.. To achieve consistency during benchmark, all of these materials are recomputed with first-principles method using the same setups under which we obtained the training set of MatterSim. The material whose first-principles QHA computations are converged are curated as a list and their Materials Project ids are shown in Table S3. Bulk moduli are computed at zero pressure and over a temperature range from $0\\text{\\,}\\mathrm{K}$ to $1000\\text{\\,}\\mathrm{K}$ with QHA implemented in Phonopy, among which 59 materials were finished without error with PBE functional, MatterSim and MACE-MP-0 models. To perform a comparative analysis of the prediction and quantify the predictive accuracy of the bulk modulus, we employed the MAE of a bulk modulus curve as a metric, compared with reference values obtained with PBE calculations. The MAE of a material for a model is defined as, $\\mathrm{MAE}_{\\mathrm{K}}=\\frac{1}{T_{\\mathrm{max}}}\\int_{0}^{T_{\\mathrm{max}}}\\left|\\mathrm{K}_{\\mathrm{PBE}}(T)-\\mathrm{K}_{\\mathrm{ML}}(T)\\right|\\,\\mathrm{d}T,$ (18) where $K$ is bulk modulus and $T_{\\mathrm{max}}$ is $1000\\text{\\,}\\mathrm{K}$. As shown in 20(a), we present the distribution of the MAEs of MatterSim and MACE-MP-0 with respect to PBE calculations. The average MAEs over 59 materials predicted by MatterSim and MACE-MP-0 are $4.11\\text{\\,}\\mathrm{GPa}$ and $11.35\\text{\\,}\\mathrm{GPa}$, respectively. This suggests that under finite temperature conditions, MatterSim provides a more precise prediction of the bulk modulus, demonstrating its potential as a reliable tool in the prediction of mechanical properties under varying thermal environments.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S10.3 Enthalpy Prediction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S10.SS3.p1",
+     "text": "The enthalpy ( $H$) under pressure $p$ is expressed as $H(P)=U+pV,$ (19) where $U$ is the internal energy and $V$ is the volume. The primitive cell size at a certain pressure is determined by MatterSim using volume changing relaxation in which the enthalpy of the system is minimized instead of the internal energy. The relaxed primitive cell was used to compute enthalpy using both MatterSim and PBE calculations. The pressure dependence of enthalpy of 59 materials are computed by MatterSim and compared with PBE results as shown in 20(b). The accuracy of our model was rigorously evaluated by comparing the MatterSim-computed enthalpies with the PBE-computed enthalpies at $1000\\text{\\,}\\mathrm{GPa}$. This comparison yielded an MAE of $2.23\\text{\\,}\\mathrm{e}\\mathrm{V}$, indicating the average deviation of our model’s predictions from the PBE values was minimal. Furthermore, our model demonstrated excellent predictive capabilities, as evidenced by achieving an R 2 score of $1.00$. As evidenced by the low MAE and the perfect R 2 score, MatterSim’s predictive performance highlight its capability to accurately predict the stability of materials under high-pressure conditions, underscoring the potential of MatterSim as a robust tool for investigating the thermodynamic stability of materials.",
+     "kind": "body"
+    },
+    {
+     "id": "S10.F20",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S10.T3",
+     "text": "Table S3: Summary of material candidates and their corresponding ID in Materials Project used for the prediction of bulk modulus, enthalpy and Gibbs free energy with MatterSim.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S11 Free energy and phase diagram computation",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S11.1 Gibbs free energy prediction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S11.SS1.p1",
+     "text": "The Gibbs free energy of ordered crystalline materials are computed using MatterSim via quasi-harmonic approximation (QHA) implemented in Phonopy as described in Section S10. We benchmark the free energy predictions made by MatterSim to both first-principles calculations of the dataset collected in Section S10 and experimental measurements from FactSage released in Ref..",
+     "kind": "body"
+    },
+    {
+     "id": "S11.SS1.p2",
+     "text": "The free energies for the set of 59 materials over a temperature range from 0 K to 1000 K at $0\\text{\\,}\\mathrm{GPa}$ are calculated with MatterSim and are compared with the PBE calculations. We present the examples of Si, MgO and ZrNiSn in Fig. S21 and a parity plot of the prediction for the 59 materials in Fig. 4 (e). The overall performance is quantified with mean absolute error of the Gibbs free energy over the 0– $1000\\text{\\,}\\mathrm{K}$ temperature range, which is defined as $\\mathrm{MAE}_{\\mathrm{G}}=\\frac{1}{t_{\\mathrm{max}}}\\int_{0}^{t_{\\mathrm{max}}}\\left|\\mathrm{G}_{\\mathrm{PBE}}(t)-\\mathrm{G}_{\\mathrm{ML}}(t)\\right|\\,\\mathrm{d}t,$ (20) where $G$ is Gibbs free energy and $t_{\\mathrm{max}}$ is $1000\\text{\\,}\\mathrm{K}$. We report the distribution of the MAE of Gibbs free energy in 21(d) with the results from MACE-MP-0, a model trained on relaxation trajectories of crystals. While MACE-MP-0 already achieves remarkable robustness and universality, MatterSim’s predictions are in quantitative consistency with the PBE reference data with an MAE of Gibbs free energy for all the 59 materials being $6.51\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}$, underscoring the model’s accuracy and reliability.",
+     "kind": "body"
+    },
+    {
+     "id": "S11.SS1.p3",
+     "text": "We then benchmark the quantitative prediction capability of MatterSim on free energy to experimental measurements. Ref. reported the analytical form of the experimental Gibbs free energy of the materials collected from FactSage dataset based feature selection using Sure-Independence Screening and Sparsifying Operator (SISSO) method: $G_{\\mathrm{SISSO}}^{\\delta}(T)\\left[\\frac{\\mathrm{eV}}{\\mathrm{atom}}\\right]=\\left(-2.48\\times 10^{-4}\\,\\ln V-8.94\\times 10^{-5}\\times\\frac{m}{V}\\right)T+0.181\\times\\ln T-0.882,$ (21) where $V$, $T$ and $m$ are the volume of unit cell, temperature and the mass for each material defined by Ref.. Using the Gibbs free energy at $300\\text{\\,}\\mathrm{K}$ as the common reference point, the Gibbs free energy difference between at given temperatures can thus be inferred from this analytical form by $\\Delta_{\\mathrm{ref}}G(T)=G_{\\mathrm{SISSO}}^{\\delta}(T)-G_{\\mathrm{SISSO}}^{\\delta}(300\\,\\mathrm{K}),$ (22) which will be used as our reference experimental value. The Gibbs free energy difference can also be predicted with MattterSim, $\\Delta_{\\mathrm{MatterSim}}G(T)=G_{\\mathrm{MatterSim}}(T)-G_{\\mathrm{MatterSim}}(300\\,\\mathrm{K}).$ (23) In Fig. S22, we reported the comparison between MatterSim’s prediction of Gibbs free energy at $450\\text{\\,}\\mathrm{K}$, $600\\text{\\,}\\mathrm{K}$, $750\\text{\\,}\\mathrm{K}$ and $T_{\\mathrm{max}}$ to the experimental values inferred from the analytical form defined in Ref., where $T_{\\mathrm{max}}$ is the highest temperature for each material release in Ref.. At each temperature, the MAEs between MatterSim’ prediction and the reference experimental values are 7.1, 11.4, 18.0 and $28.9\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$, respectively. We also conduct an analysis of the MAEs over the entire temperature range from $300\\text{\\,}\\mathrm{K}$ to $T_{\\mathrm{max}}$ for each material by integrating their prediction error, $\\mathrm{MAE}_{\\mathrm{G}}=\\frac{1}{T_{\\mathrm{max}}-300}\\int_{300}^{T_{\\mathrm{max}}}\\left|\\Delta_{\\mathrm{MatterSim}}G(t)-\\Delta_{\\mathrm{ref}}G(t)\\right|\\,\\mathrm{d}t.$ (24) The MAE of Gibbs free energy over the 300– $1000\\text{\\,}\\mathrm{K}$ temperature range is $15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$, outperforming dedicated model trained explicitly on experimental data (MAE of $50\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$). This underscores the potential of greatly improved accuracy and generaliazability with machine learning models trained on large-scale materials data supervised by fundamental materials properties generated from first-principles approach.",
+     "kind": "body"
+    },
+    {
+     "id": "S11.F21",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S11.F22",
+     "text": "(a)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S11.2 Phase diagram prediction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S11.SS2.p1",
+     "text": "We calculate silicon’s Gibbs free energy with QHA for the two competing phases, the $\\beta$ -Sn and the diamond phases, and construct their phase diagram. The results from MatterSim are directly compared with established theoretical predictions and experimental measurements. 23(a) presents the pressure-dependent Gibbs free energy of silicon in both the $\\beta$ -Sn and diamond phases, as calculated by MatterSim at 300K. The figure marks the point where the free energies of the two phases intersect, indicating a phase transition. According to our calculations, this transition occurs at a pressure of $8.84\\text{\\,}\\mathrm{G}\\mathrm{P}\\mathrm{a}$. This value demonstrates a remarkable agreement with the theoretical transition pressure of $8.99\\text{\\,}\\mathrm{G}\\mathrm{P}\\mathrm{a}$, substantiating the reliability of MatterSim’s prediction power. Further insights are provided by 23(b) that displays the phase diagram of Si, wherein the phase boundary calculated by MatterSim is compared with that obtained from PBE calculation. This comparison reveals an excellent alignment between the phase boundaries derived from both MatterSim and PBE calculations, thereby validating the accuracy of MatterSim’s prediction in a wide range of pressure and temperature conditions. While our computational results align very well with first-principles predictions, we still observe that the temperature-dependent phase transition pressures are slightly underestimated in comparison to experimental data, and the possible reason could be the inaccuracy of PBE functional used to generate the training data of our model.",
+     "kind": "body"
+    },
+    {
+     "id": "S11.F23",
+     "text": "(a)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S12 Molecular dynamics simulations",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S12.F24",
+     "text": "(a) Pd (Bulk)",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F25",
+     "text": "(a) $\\text{Y}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{(}\\text{NF}\\text{)}\\text{}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}$ (2D)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S12.1 System selection",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S12.SS1.p1",
+     "text": "Representative systems including bulk inorganic materials, molecular crystals, organic polymers, metal-organic frameworks, two-dimensional materials, surfaces, and interfaces are collected by random selection from existing databases as follows:",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p2",
+     "text": "Bulk materials are selected from Alexandria by randomly picking 10 structures from elementary, binary, and systems upto 5 elements, totaling 50. Supercells are created so that the number of atoms are larger than 200. See Fig. S24 for the systems. Here are the IDs of the selected materials: agm002149563, agm002150952, agm003157429, agm004442528, agm003273446 agm002179334, agm002179335, agm002189288, agm002190484, agm002191655 agm001283210, agm003297155, agm003212357, agm003258002, agm001828968 agm003273876, agm002168629, agm001194755, agm002245725, agm002321789 agm001253754, agm003249496, agm003454508, agm002943999, agm002732042 agm001106569, agm003611845, agm002891389, agm003100546, agm002299853 agm001550263, agm001504211, agm001465572, agm001633734, agm001781210 agm001428770, agm001288246, agm001707747, agm001433416, agm001803188 agm002129576, agm002158503, agm002028333, agm003279523, agm002078654 agm002215995, agm003239376, agm002083664, agm002080756, agm003282154",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p3",
+     "text": "Isolated molecules are selected from the QM9 dataset randomly totaling 10. See Fig. S25 for the systems. Here are the IDs of the selected molecules: dsgdb9nsd_000305, dsgdb9nsd_000347, dsgdb9nsd_000404, dsgdb9nsd_000514, dsgdb9nsd_000608 dsgdb9nsd_000673, dsgdb9nsd_000742, dsgdb9nsd_000952, dsgdb9nsd_000981, dsgdb9nsd_001028",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p4",
+     "text": "Molecular crystals are chosen from the Materials Project within the C-H-O-N-S-Cl chemical space totaling 10. Supercells are created so that the number of atoms are larger than 200. See Fig. S24 for the systems. Here are the IDs of the selected crystals: mp-1195829, mp-23909, mp-557379, mp-560323, mp-866659, mp-995217 mv-15630958, mv-5673042, mv-5675009, mv-9791995",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p5",
+     "text": "Metal organic frameworks (MOF) are selected from the QMOF database on the Materials Project totaling 16.See Fig. S24 for the systems. Here are the IDs of the selected materials: qmof-ecfd7a0, qmof-49ce9a8, qmof-cbf6511, qmof-d6662a5, qmof-cbf6511 qmof-d6662a5, qmof-2941470, qmof-c3fa563, qmof-2941470, qmof-2a42bc4 qmof-1452981, qmof-2a42bc4, qmof-bb88cf5, qmof-d675ae6, qmof-bb88cf5 qmof-d675ae6",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p6",
+     "text": "Surface systems are constructed using the SlabGenerator from pymatgen from randomly selected bulk materials. 11 structures are generated in total by cleaving from their (0,0,1) surfaces with at least 7 layers of atoms in the slab and 20 Angstrom in the vacumm. See Fig. S25 for the systems. Here are the IDs of the selected materials: mp-1523, mp-2802, mp-3862, mp-5505, mp-155 mp-2908, mp-451, mp-5625, mp-1920, mp-3862 mp-5475",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p7",
+     "text": "Interface structures are constructed using the interface_master tool. Two interfaces between GaN/Fe and ZnO/Al2O3 are constructed. See Fig. S26 for the systems. The two interface structures are generated with the jupyter notebook following this https://github.com/nmdl-mizo/interface_master/blob/develop/test_files/Tutorial_Two-dimensional%20CSL%20interfaces_graphene_GaN.ipynb",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p8",
+     "text": "Two-dimensional materials (2D) are collected from the Computational 2D Materials Database with random selection, totaling 10 materials. Supercells are created during simulations so that the cell contained at least 100 atoms by replicating along the periodic directions. See Fig. S25 for the systems. Here are the IDs of the selected materials in the dataset. c2db-118, c2db-1332, c2db-14861, c2db-15102, c2db-15134 c2db-16066, c2db-16132, c2db-16381, c2db-16451, c2db-628",
+     "kind": "body"
+    },
+    {
+     "id": "S12.SS1.p9",
+     "text": "Polymers are collected from where their experimental crystalline structures are reported. A total of 9 crystalline polymers with different polymorphs are included containing BPBO, PE, PPS, PVDF, and PAN. See Fig. S24 for the systems. Here are the IDs of the selected polymers: ABPBO, ortho-PE, mono-PE alpha-PVDF, beta-PVDF, delta-PVDF PAN, PPS, PVC",
+     "kind": "body"
+    },
+    {
+     "id": "S12.F26",
+     "text": "(a) GaN/Fe (Interface)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S12.2 MD Setup",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S12.SS2.p1",
+     "text": "Molecular dynamics simulations are conducted using LAMMPS via an interface to MatterSim, encompassing both the canonical (NVT) and isothermal-isobaric (NPT) ensembles. The NVT ensemble is employed for all 118 systems under investigation, with a temperature ramp from 0 K to 5000 K over a total simulation duration of 500 ps. In the case of bulk systems, segmented NPT ensemble simulations are performed, where the pressure is initially increased from 0 GPa to 1000 GPa at a constant temperature of 300 K, followed by a temperature ramp from 300 K to 5000 K at a maintained pressure of 1000 GPa. The simulation time of both segments is 500 ps, as shown in the inset of Fig. 5 (c). All time step is set to 1 fs.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S12.3 MD Trajectory",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S12.SS3.p1",
+     "text": "Several example MD trajectories are depicted from Fig. S27 to Fig. S35. From the NVT simulations conducted with MatterSim upon heating, it is evident that the potential energy of all systems increases progressively with the rise in the temperature, leading to their structural transition from ordered to disordered states. The inset in Fig. 5 (d) demonstrates the difference of radial distribution function (RDF) in the heating process, further confirming the melting behavior in the molecular dynamics. For the molecular system $\\text{C}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{4}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{NO}$ presented in Fig. S33, by examining the structures at the initial 0 ps, and subsequently at 200 ps and 400 ps, we observe molecular dissociation. In the case of the GaN/Fe interface system shown in Fig. S35, the increase in temperature also results in the transformation of the originally distinct crystal phases into a mixed phase. From Fig. S36 to Fig. S39 illustrate the NPT simulation processes, where MatterSim successfully simulates the effects of pressurization and heating. The RDF shown in Fig. 5 (e) implies the decrease of bond length during pressurization process.",
+     "kind": "body"
+    },
+    {
+     "id": "S12.F27",
+     "text": "Figure S27: The potential energy of bulk Ti under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F28",
+     "text": "Figure S28: The potential energy of bulk $\\text{Mn}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{Zn}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{4}}}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F29",
+     "text": "Figure S29: The potential energy of bulk $\\text{Ba}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{O}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{6}}}\\text{Y}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F30",
+     "text": "Figure S30: The potential energy of 2D $\\text{Y}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{N}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{F}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F31",
+     "text": "Figure S31: The potential energy of surface $\\text{Al}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{ZnO}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{4}}}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F32",
+     "text": "Figure S32: The potential energy of MOF $\\text{ZnH}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{16}}}\\text{C}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{18}}}\\text{NO}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{4}}}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F33",
+     "text": "Figure S33: The potential energy of molecule $\\text{C}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{4}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{NO}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F34",
+     "text": "Figure S34: The potential energy of polymer $\\text{C}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{7}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{3}}}\\text{NO}$ under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F35",
+     "text": "Figure S35: The potential energy of interface GaN/Fe under increasing temperature and NVT ensemble.",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F36",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F37",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F38",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S12.F39",
+     "text": "(a)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S13 Active learning",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S13.1 Dataset",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S13.SS1.p1",
+     "text": "As a universal predictive model for material properties, MatterSim may not yield satisfactory accuracy for highly complex systems that have not been previously encountered in its training dataset. Under such circumstances, an active learning approach can be employed to selectively filter data, followed by finetuning of the MatterSim model. This procedure facilitates the rapid development of a sufficiently accurate and operational model. In this work, we present three examples of complex systems, including the ionic superconductor $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$, molten phosphorus and boron, as Fig. S40 shows. To generate the training dataset, we performed NVT simulations on $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$ by VASP with a time step of 0.5 fs for a total duration of 5.0 ps at a simulation temperature of 2000 K. For molten phosphorus and boron, the simulations were conducted at a temperature of 5000 K, with a time step of 1.0 fs and a total simulation time of 10.0 ps. The test dataset belongs to trajectories that are not included in the training set.",
+     "kind": "body"
+    },
+    {
+     "id": "S13.F40",
+     "text": "(a)",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S13.2 Results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S13.SS2.p1",
+     "text": "Active learning procedure can improve significantly the accuracy of MLFF by augmenting the data set with data points that exhibit high uncertainty based on the ensemble models. The uncertainty arises from the variability inherent in different pre-trained models, each initialized with a distinct random number seed. This variability is quantified as follows: $\\mathrm{unc}=\\max\\left[\\frac{1}{N}\\sum_{i=1}^{N}(|F_{ia}|-|\\bar{F}_{a}|)^{2}\\right]$ (25) where $F_{ia}$ denotes the predicted atomic force of the a-th atoms by the i-th zero-shot model and $N$ represents the total number of pretrained models utilized. $\\bar{F}_{a}$ signifies the average of the atomic forces predicted by the ensemble models.",
+     "kind": "body"
+    },
+    {
+     "id": "S13.SS2.p2",
+     "text": "Fig. S41 illustrates the comparative accuracy achieved by training from scratch versus employing supervised finetuning through active learning, building upon the zero-shot model for the crystalline $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$. The learning rate of active learning and training from scratch is set to $1\\text{\\times}{10}^{-4}\\text{\\,}$ and $1\\text{\\times}{10}^{-3}\\text{\\,}$, respectively. The MAE of the atomic forces of the initial MatterSim as a zero-shot model is 30.8 meV/Å, which may fall short of the desired accuracy for practical use. Nonetheless, with the inclusion of merely 100 additional data points, the MAE is significantly improved to 18.3 meV/Å. To attain similar accuracy through training from scratch, an order of magnitude larger dataset would be required. This conclusion applies to molten boron and phosphorus as well, as Fig. S42 and Fig. S43 shows.",
+     "kind": "body"
+    },
+    {
+     "id": "S13.F41",
+     "text": "Figure S41: The accuracy by training from scratch and active learning procedure with respect to data size for $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "S13.F42",
+     "text": "Figure S42: The accuracy by training from scratch and active learning procedure with respect to data size for molten boron.",
+     "kind": "caption"
+    },
+    {
+     "id": "S13.F43",
+     "text": "Figure S43: The accuracy by training from scratch and active learning procedure with respect to data size for molten phosphorus.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S14 Finetuning and molecular dynamics on liquid water",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S14.p1",
+     "text": "In the following section, we provide further information about applying finetuning to simulate different properties for liquid water. To begin with, we detail the parameter settings used in the finetuning process and MD simulations. The latter section explains the post-processing of angular distribution function (ADF) of oxygen-oxygen-oxygen, illustrates the oxygen-hydrogen and hydrogen-hydrogen radial distribution functions (RDF), explores the data efficiency, as well as formulating the diffusion coefficients. For simplicity, we abbreviate three trained models: zero-shot, scratch-900 and finetune-30. The zero-shot model is the model trained with PBE level theory and demonstrated in the main text without any finetuning. Scratch-900 is a model trained from scratch using 900 bulk liquid water configurations from Ref. with rev-PBE0-D3 level of theory. Finetune-30 is a model fine-tuned with only 30 out of those 900 configurations.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S14.1 Parameter settings for finetuning and MD simulations",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S14.SS1.p1",
+     "text": "To address the limitations imposed by the level of theory of the training data, we implemented finetuning on the MatterSim model ( Fig. S44). Before the finetuning process, we first reset the initial parameters of the predictive head while retaining those of the backbone. During the training process, to maximize the transfer of MatterSim’s predictability from PBE to rev-PBE0-D3 for liquid water, we adopted an aggressive learning rate of $2\\text{\\times}{10}^{-3}\\text{\\,}$ to the head but a relatively lower learning rate of $1\\text{\\times}{10}^{-4}\\text{\\,}$ to the backbone. We uniformly sampled 100 liquid water configurations based on the total energy as validation data, leaving the remaining 900 liquid water configurations as the potential candidates of training data. Among the 900 available candidates, 30 configurations were selected at random to create various training sets through the alteration of random seeds, which were subsequently employed to fine-tune the MatterSim model. Upon sufficient convergence, the finetuning process early stopped at $151\\text{\\,}\\mathrm{e}\\mathrm{p}\\mathrm{o}\\mathrm{c}\\mathrm{h}\\mathrm{s}$ with an MAE of $2.1\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ for energies and $58.9\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\AA$ for forces.",
+     "kind": "body"
+    },
+    {
+     "id": "S14.F44",
+     "text": "Figure S44: Pretrain–finetuning framework.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S14.2 Simulation settings for molecular dynamics",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S14.SS2.p1",
+     "text": "In this work, we evaluated the performance of finetuning scheme by probing the structural and dynamical properties of liquid water. MD simulations are conducted up to nanoseconds using the LAMMPS software package. The initial structure used for these simulations is composed of a cubic liquid water box containing 512 water molecules with a box length of $24.68\\text{\\,}\\AA$. Production runs of the MD simulations are carried out in the NVT ensemble at $298\\text{\\,}\\mathrm{K}$ and we regulate the temperature using the Nosé-Hoover thermostat for every 100 steps. The timestep used to propagate the dynamics is chosen to be $0.5\\text{\\,}\\mathrm{f}\\mathrm{s}$. Lastly, the first $200\\text{\\,}\\mathrm{p}\\mathrm{s}$ out of the nanosecond trajectories are discarded for pre-equlibration. ADF and RDF, along with diffusion coefficients, are analyzed using the General Purpose Trajectory Analyser (GPTA) software tool.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S14.3 ADF and RDF of Liquid Water & \\& Data Efficiency of Fine-tuneing",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S14.SS3.p1",
+     "text": "As illustrated Fig. S45, we multiple ADF of the oxygen species $\\left(P_{OOO}(\\Theta)\\right)$ by the sine angle composed of the corresponding oxygen triples. Such a representation has been adopted to elucidate the local arrangement of water molecules in condense phase, as $P_{OOO}\\left(\\Theta\\right)\\sin\\left(\\Theta\\right)$ allows for a direct comparison with angular distribution extracted from empirical potential structural refinement (EPSR) based on joint X-ray/neutron scattering measurements.. Following the same procedure outlined in the previous studies, $P_{OOO}(\\Theta)$ has been normalized such that $\\int_{0}^{\\pi}\\ P_{OOO}(\\Theta)\\sin(\\Theta)\\ d\\Theta$ goes to unity. In a similar note, the cutoff value applied to identify the oxygen triples is chosen such that oxygen-oxygen coordination number averages around 4. Detailed discussion can be found in the main text regarding Fig. 6 (d).",
+     "kind": "body"
+    },
+    {
+     "id": "S14.F45",
+     "text": "Figure S45: Comparison between $P_{OOO}(\\Theta)$ obtained from MD simulations using the three models and the EPSR of joint Xray-Neutron measurements for bulk water at $298\\text{\\,}\\mathrm{K}$. The inset showcases the $\\Theta$ angle used to calculate $P_{OOO}(\\Theta)$ and $\\sin(\\Theta)$.",
+     "kind": "caption"
+    },
+    {
+     "id": "S14.SS3.p2",
+     "text": "Fig. S46 presents a comparison between the RDF of $g_{OH}(r)$ and $g_{HH}(r)$ from experiments and those obtained from MD simulations employing each of the three models. Noticeably, RDFs from the three models under-predict the broadening of the first peaks of $g_{OH}(r)\\ \\&\\ g_{HH}(r)$ due to the exclusion of nuclear quantum effects (NQEs), which has been investigated thoroughly in various MD studies with either DFT or specialized machine learning potentials for water and ice. Yet, exploring and capturing NQEs are beyond the scope of the current work.",
+     "kind": "body"
+    },
+    {
+     "id": "S14.F46",
+     "text": "(a)",
+     "kind": "caption"
+    },
+    {
+     "id": "S14.SS3.p3",
+     "text": "To explore the efficiency of finetuning process, we here trained the MatterSim model from scratch using the same 30 configurations (here denote as scratch-30) as those used in the finetuning. As shown in Fig. S47, despite reasonably predicted the RDF of $g_{OH}(r)$ and $g_{HH}(r)$, the scratch-30 model yields nonphysical $g_{OO}(r)$ peak that over-coordinates around $1.1\\text{\\,}\\text{\\AA}$. Upon training three scratch-30 models with different random seeds, their corresponding $g_{OO}(r)$ RDFs still possess the nonphysical peak at $1.1\\text{\\,}\\text{\\AA}$, justifying that these over-coordination features are not resulted from the bias of a specific data split. We notice that this nonphysical peak exists even when we train from scratch using 800 configurations and disappear until using all the 900 configurations to train the model from scratch. Conversely, RDFs are indistinguishable when derived from the finetune-30 and scratch-900 model. This trend underscores a significant data efficiency improvement by a factor of 30 through fine-tuning.",
+     "kind": "body"
+    },
+    {
+     "id": "S14.F47",
+     "text": "Figure S47: RDF for liquid water at $300\\text{\\,}\\mathrm{K}$ from scratch-30 models in comparison to experimental references.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S14.4 Deriving Diffusion Coefficients from Mean Squared Displacements",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S14.SS4.p1",
+     "text": "Diffusion coefficients $\\left(\\mathcal{D}\\right)$ of liquid water at $300\\text{\\,}\\mathrm{K}$ are determined via the Einstein relation:",
+     "kind": "body"
+    },
+    {
+     "id": "S14.SS4.p2",
+     "text": "$\\mathcal{D}_{\\mathrm{raw}}=\\frac{1}{6}\\lim_{\\tau\\rightarrow\\infty}\\frac{\\mathrm{d}\\lambda}{\\mathrm{d}\\tau},$ (26)",
+     "kind": "body"
+    },
+    {
+     "id": "S14.SS4.p3",
+     "text": "where $\\lambda$ stands for the mean squared displacements along a MD trajectory, and $\\tau$ represents the correlation time chosen. Equation 26 suggests that $\\mathcal{D}_{\\mathrm{raw}}$ can be obtained by extracting the slope from a linear fit between $\\lambda$ and $\\tau$. In this work, $\\lambda$ is computed along the same trajectory used to compute the RDFs and ADFs. To properly accounting for the finite size effect, a posterior correction can be introduced:",
+     "kind": "body"
+    },
+    {
+     "id": "S14.SS4.p4",
+     "text": "$\\mathcal{D}_{\\mathrm{corrected}}=\\mathcal{D}_{\\mathrm{raw}}+\\frac{k_{B}T\\varepsilon}{6\\pi}\\frac{1}{\\eta L},$ (27)",
+     "kind": "body"
+    },
+    {
+     "id": "S14.SS4.p5",
+     "text": "where $k_{B}$ and $T$ denote Boltzmann constant and temperature respectively. $\\eta$ indicates the shear viscosity. The experimental measurements of $\\eta\\approx$0.89\\text{\\,}\\mathrm{m}\\mathrm{P}\\mathrm{a}\\cdot\\mathrm{s}$$ for liquid water at $298\\text{\\,}\\mathrm{K}$ is substituted into Equation 27 when obtaining $\\mathcal{D}_{\\mathrm{corrected}}$. $\\varepsilon$ and $L$ represent the shape factor and length of the simulation box respectively. For a cubic box, $\\varepsilon\\approx 2.873297$. Table S4 summaries $\\mathcal{D}$ obtained using the finetune-30 and scratch-900 models, in comparison to the experimental references.",
+     "kind": "body"
+    },
+    {
+     "id": "S14.T4",
+     "text": "Table S4: Summary of $\\mathcal{D}$ from different approaches. $\\mathcal{D}$ presented in the table are from the average and standard errors of $\\mathcal{D}$ computed at $\\tau=2.5,5,25,50,100$ and $200$ ps. The corrected and raw subscript indicate $\\mathcal{D}$ obtained with and without imposing finite size corrections.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "S15 End-to-end property prediction",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "S15.1 Matbench",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S15.SS1.p1",
+     "text": "Matbench is an open leaderboard to test the capability of machine learning models to predict properties of inorganic materials. It contains 13 tasks that cover a wide range of materials’ characteristics originating from both experimental measurements and first-principles calculations, including optical, thermal, and mechanical properties. In this section, we focus on the following structure-to-property tasks:",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS1.p2",
+     "text": "MP Gap. This task involves predicting the electronic band gap in electrovolts (eV) for inorganic compounds. The dataset contains 106,113 materials collected from the Materials Project. The dataset has been curated to exclude structures with high formation energy or noble gas elements.",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS1.p3",
+     "text": "log_gvrh. This task is to predict the logarithmic of the Voigt-Reuss-Hill average shear modulus ( $G_{\\mathrm{VRH}}$) in gigapascal (GPa). The dataset includes 10,987 materials collected from the Materials Project. It has been curated to exclude those with unrealistic mechanical properties or noble gase elements.",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS1.p4",
+     "text": "log_kvrh This task is to predict the logarithm of the Voigt-Reuss-Hill average bulk modulus ( $\\log K_{\\mathrm{VRH}}$) in gigapascal (GPa). The dataset contains 10,987 materials collected from the Materials Project. The dataset has been curated to exclude structures with negative bulk moduli or noble gase elements.",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS1.p5",
+     "text": "Dielectric. This task is to predict the refractive index of materials. The dataset contains 4,764 entries collected from the Materials Project. The dataset has been curated to exclude materials with low refractive indices or noble gas elements. The refractive index is unitless.",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS1.p6",
+     "text": "Phonons. This task is to predict the frequency of the highest optical phonon mode in wavenumber ( $\\text{\\,}{\\mathrm{cm}}^{-1}$). The dataset contains for 1,265 materials collected from Ref.. This dataset has been curated to exclude materials with high formation energy.",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS1.p7",
+     "text": "jdft2d. This task is to predict the exfoliation energy in milli-electrovolt per atom ( $\\text{\\,}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$) for two-dimentional materials. The dataset contains 636 materials collected from the JARVIS DFT database.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S15.2 Training MatterSim as an end-to-end model",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S15.SS2.p1",
+     "text": "After the message passing in M3GNet or structure encoder in Graphormer, we obtain a global representation of a structure using scatter operation to aggregate the node feature with the following functions: $\\boldsymbol{\\kappa}_{\\mathcal{G}}=\\mathrm{Readout}(\\mathcal{G})=\\left\\{\\begin{array}[]{rl}\\sum_{i\\in\\mathcal{G}}^{N}\\boldsymbol{v}_{i},&\\text{if reduction}=\\text{summation};\\\\ \\frac{1}{N}\\sum_{i\\in\\mathcal{G}}^{N}\\boldsymbol{v}_{i},&\\text{if reduction}=\\text{mean},\\\\ \\end{array}\\right.$ (28) where $\\mathcal{G}$ denotes a material graph consisting of $N$ atoms defined in Fig. S1, $\\boldsymbol{v}_{i}$ is the node feature for atom $i$ in graph $\\mathcal{G}$. With two different reduction methods, mean or summation, we obtain the readout vectors of a given material, which will be subsequently sent to a multi-layer perceptron (MLP) to make direct property predictions, $\\text{M3GNet: }\\boldsymbol{\\kappa}_{\\mathcal{G}}^{\\prime}=\\mathrm{MLP}_{1}(\\boldsymbol{\\kappa}_{\\mathcal{G}})=\\varphi(\\boldsymbol{W}_{2}\\rho(\\boldsymbol{W}_{1}\\boldsymbol{\\kappa}_{\\mathcal{G}}+\\boldsymbol{b}_{1})+\\boldsymbol{b}_{2}),$ (29) and $\\text{Graphormer: }\\boldsymbol{\\kappa}_{\\mathcal{G}}^{\\prime}=\\mathrm{MLP}_{2}(\\boldsymbol{\\kappa}_{\\mathcal{G}})=\\boldsymbol{W}_{2}\\lambda(\\rho(\\boldsymbol{W}_{1}\\boldsymbol{\\kappa}_{\\mathcal{G}}+\\boldsymbol{b}_{1}))+\\boldsymbol{b}_{2},$ (30) where $\\rho(\\cdot)$ and $\\varphi(\\cdot)$ are ReLU function and $\\lambda(\\cdot)$ is the layered normalization, $\\boldsymbol{W}$ and $\\boldsymbol{b}$ are learnable parameters, and $\\boldsymbol{\\kappa}_{\\mathcal{G}}^{\\prime}$ is the final output of the model for representing a given material.",
+     "kind": "body"
+    },
+    {
+     "id": "S15.SS2.p2",
+     "text": "The goal of our fine-tuning process is to adjust the parameters in a pre-trained MatterSim, originally developed for calculating structural energies, to make direct predictions on other properties of materials from their representation $\\boldsymbol{\\kappa}_{\\mathcal{G}}^{\\prime}$. This adjustment can be reformulated as a minimization problem: $\\min_{\\boldsymbol{\\theta}}L\\left(\\boldsymbol{\\theta};D_{\\text{finetuning}}\\right).$ (31) Here $\\boldsymbol{\\theta}$ is the set of parameters in our model, $L$ is the loss function which calculates the error on new fine-tuning data points $D_{\\text{finetuning}}$. For every finetuning step $t$, the parameters $\\boldsymbol{\\theta}$ will be updated using the following equation: $\\boldsymbol{\\theta}^{(t+1)}=\\boldsymbol{\\theta}^{(t)}-\\alpha\\nabla_{\\boldsymbol{\\theta}}L\\left(\\boldsymbol{\\theta}^{(t)};D_{\\text{finetuning}}\\right)$ (32) In this equation, $\\alpha$ is the learning rate and $\\nabla_{\\boldsymbol{\\theta}}L$ denotes the gradient of the loss function with respect to parameters. $L$ have been regularized with $L^{2}$ -norm to induce the risk of over-fitting for M3GNet, which can be presented as: $L_{\\text{regularized }}\\left(\\boldsymbol{\\theta};D_{\\text{finetuning }}\\right)=L\\left(\\boldsymbol{\\theta};D_{\\text{finetuning}}\\right)+\\lambda\\norm{\\boldsymbol{\\theta}}^{2}$ (33) where $\\lambda$ is the regularization coefficient, which controls the trade-off between fitting the training data and imposing smoothness on the parameter estimates.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "S15.3 Performance comparison of M3GNet and Graphormer as end-to-end models",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S15.T5",
+     "text": "Table S5: Comparison of property prediction performance for M3GNet and Graphormer models.",
+     "kind": "caption"
+    },
+    {
+     "id": "S15.SS3.p1",
+     "text": "As listed in Table S5, finetuning from MatterSim, either with M3GNet or Graphormer architecture, always outperforms their counterparts training from scratch. Notably, the model that has been finetuned from the Graphormer architecture has outperformed previous models trained exclusively with domain specific data on all of the 6 tasks, as discussed in Section 2.5. This finding underscores the effectiveness of MatterSim to capture the representation of materials, and it can significantly expedite the the future research on materials property prediction and materials discovery. When we are preparing this manuscript, we notice a recent model by multi-task pre-training on multiple datasets achieved the best results for all these tasks. This further indicates the power of large-scale pre-training and the advantage of data coverage.",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

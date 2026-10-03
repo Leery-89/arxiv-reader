@@ -1,0 +1,9 @@
+{
+ "arxiv_id": "1701.00001",
+ "title": "Digital Advertising Traffic Operation: Machine Learning for Process Discovery",
+ "abstract": "In a Web Advertising Traffic Operation it's necessary to manage the day-to-day trafficking, pacing and optimization of digital and paid social campaigns. The data analyst on Traffic Operation can not only quickly provide answers but also speaks the language of the Process Manager and visually displays the discovered process problems. In order to solve a growing number of complaints in the customer service process, the weaknesses in the process itself must be identified and communicated to the department. With the help of Process Mining for the CRM data it is possible to identify unwanted loops and delays in the process. With this paper we propose a process discovery based on Machine Learning technique to automatically discover variations and detect at first glance what the problem is, and undertake corrective measures.",
+ "sections": [],
+ "references": [],
+ "source": "abstract_only",
+ "truncated_sections": []
+}

@@ -1,0 +1,882 @@
+{
+ "arxiv_id": "2309.14316",
+ "title": "Physics of Language Models: Part 3.1, Knowledge Storage and Extraction Thanks: Project page: https://physics.allen-zhu.com/part-3-knowledge/part-3-1 . An extended video of this paper is available at https://youtu.be/YSHzKmEianc .\nV1 was circulated internally at Meta on Sep 18, 2023, and appeared on arXiv on Sep 25, 2023.\nV2 is nearly identical to V1, with minor corrections to author names and writing.\nV3 includes additional Llama experiments and further writing improvements. We would like to thank Lin Xiao, Chunting Zhou, Tianyi Peng, Xiaodong Liu, and Zhijie Zhou for many helpful conversations. We would like to extend special thanks to Nabib Ahmed, Giri Anantharaman, Lucca Bertoncini, Henry Estela, Liao Hu, Caleb Ho, Wil Johnson, Apostolos Kokolis, and Shubho Sengupta from Meta FAIR, as well as Ian Clark, Gourab De, Anmol Mann, and Max Pfeifer from W&B ; without their invaluable support, the experiments in this paper would not have been possible.",
+ "abstract": "Large language models (LLMs) can store a vast amount of world knowledge, often extractable via question-answering (e.g., “What is Abraham Lincoln’s birthday?”). However, do they answer such questions based on exposure to similar questions during training (i.e., cheating), or by genuinely learning to extract knowledge from sources like Wikipedia?",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "Knowledge is crucial for human cognition and communication, allowing us to comprehend and utilize information. For humans, this often involves memorization, the process of storing and retrieving information in the brain. For example, after reading a biography of Abraham Lincoln, we can memorize the information and later answer questions like “Where was Lincoln born?” or “What is Lincoln’s birthday?” Memorization enables us to extract and manipulate knowledge from the sentences we read or hear, recognize the entities, relations, and facts expressed in the text, and apply logical and causal reasoning to infer new information or answer queries.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "In this paper, we explore how transformer-based language models memorize knowledge during training and extract it during inference. This is distinct from in-context learning or RAG, where the model is given a paragraph during inference and immediately answers questions about it. We focus on factual knowledge (e.g., knowledge graph) that a language model needs to memorize from the training corpus, encode in its weights, and extract later during inference.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p3",
+     "text": "We stress that memorizing all sentences in the training data does not ensure that the model can extract or manipulate the factual knowledge from the sentences during inference. Language models can reproduce the exact input during inference, but this doesn’t necessarily mean they can use these sentences to answer factual questions related to them. Hence, we differentiate between “memorization of knowledge” in language models and traditional memorization in machine learning, which merely means the model can fit the exact training data, but doesn’t imply the model can extract the knowledge flexibly from the data after training.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p4",
+     "text": "For example, if the training data includes Lincoln’s biography, the model can memorize and reproduce the sentence “Abraham Lincoln was born in Hodgenville, K.Y.” when given the prompt “Abraham Lincoln was born in”, but it might not be able to answer the question “Which city was Abraham Lincoln born in?” Therefore, a key question is: How do language models memorize knowledge during training, and extract it later to answer questions or perform logical reasoning during inference?",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p5",
+     "text": "Previous works have demonstrated that language models can “memorize” a lot of knowledge by probing the model to answer questions related to different entities and attributes, see and the citations therein. These studies use models pretrained on internet data, leaving it unclear whether the model answers questions like “Which city was Abraham Lincoln born in?” by extracting knowledge from Lincoln’s biography ( our focus) or if it encountered a similar (or same!) question during training and memorized the answer (traditional memorization / data contamination).",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p6",
+     "text": "Given the challenges of conducting controlled experiments with internet data, we propose studying this question using well-controlled, synthetically generated data, 1 1 1 One could suggest filtering the data to eliminate such questions and retraining the model. However, this doesn’t rule out the presence of similar sentences “Which city did Abraham Lincoln grow up in?”, more complex ones in French, or grammatically incorrect versions like “Where Abraham Lincoln birth in?” in the data. examining the models’ mathematical properties that characterize their knowledge representation and extraction. We construct a synthetic dataset of $100k$ biographies, including their birthday, birth city, major of study, etc. We also use Llama to rewrite them to make them close to real-life biography styles. We pretrain the language model on the biography dataset of all the $100k$ people. We ask: 2 2 2 We leave the follow-up question to study logical reasoning or manipulation on knowledge to a separate paper. After pretraining a language model on the biography dataset, can the model be finetuned to answer questions like “Where is the birth city of [name ]”, and if so, how does the model achieve so?",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p7",
+     "text": "After pretraining the model on the entire biography, we fine-tune it using question and answer (QA) pairs from a $p$ fraction of individuals. We then test its ability to out-of-distribution answer QAs about the remaining $1-p$ fraction. This approach ensures that the model (1) is exposed to sufficient data to comprehend the QAs and (2) does not encounter the same questions during training. The paper is structured as follows: 3 3 3 Our result numbers correspond to our online video of the paper, available at https://youtu.be/YSHzKmEianc.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p8",
+     "text": "• Result 1: Mixed training $\\Longrightarrow$ knowledge extraction. Before diving into the pretrain-finetune process, we first demonstrate that pretraining a model on all biographies plus QAs for a $p$ fraction of individuals together enables it to (apply knowledge to) answer questions about the remaining $1-p$ fraction. We call this process mixed training. We observe in mixed training, the model first uses QAs to encode knowledge about the $p$ fraction, then correlates this encoded knowledge with the biography to infer generalization to the remaining $1-p$ fraction. This learning process deviates from typical human learning 4 4 4 For humans, arguably, we first learn from textbooks and then answer exam questions. and is less frequently used in practical LLM pretrain (and perhaps it should!). • Result 2 - 3: Instruct finetune $\\nRightarrow$ knowledge extraction (unless data augmented). Consider a model pretrained only on the biographies and then finetuned using QAs for a $p$ fraction of individuals. We discover that it struggles to answer questions about the remaining $1-p$ fraction, irrespective of model size, pre-train time, or finetune parameters ( Result 2). However, accuracy significantly improves with knowledge augmentations like varying writing styles or sentence shuffling ( Result 3). This gives a strong link between knowledge augmentation in the pretrain data and the model’s knowledge extraction ability after finetuning. • Result 4 - 5: Introduce probing techniques to explain Why this happens. As another main contribution, we introduce (nearly) linear probing techniques to show that knowledge augmentation pushes the model to encode a person’s knowledge almost linearly in the model’s hidden embedding of the person’s name tokens. Without augmentation, the model encodes the person’s knowledge across all biography words/tokens, making knowledge extraction nearly impossible no matter how one finetunes it. In sum: no knowledge augmentation in pretrain data $\\displaystyle\\Longleftrightarrow\\text{\\small attribute is {not} entirely stored on person's names }$ when the model memorizes the pretrain data $\\displaystyle\\Longleftrightarrow\\text{\\small knowledge cannot be extracted via instruction finetune }$ knowledge augmented in pretrain data $\\displaystyle\\Longleftrightarrow\\text{\\small attribute is {nearly} entirely stored on person's names }$ $\\displaystyle\\Longleftrightarrow\\text{\\small knowledge can be extracted via instruction finetune }$ • Result 6: Knowledge augmentation on the “celebrity” helps “minority”. Even if knowledge augmentation is applied to a subset of individuals, what we call celebrities, test accuracy for others (without augmentation) also increases significantly. We discover that the mere inclusion of celebrity data (e.g., people with plentiful online biographical data of diverse writing styles) in pre-training enhances the model’s knowledge extraction for minorities. • Result 7: Bi-directional models fail to extract knowledge. We show that encoder-only models akin to BERT, whether mixed-trained or pre-trained and then fine-tuned, cannot extract a person’s knowledge after finetuning, regardless of the knowledge augmentation, unless the knowledge is a single word or multiple but independent words (like birth month, day, and year).",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p9",
+     "text": "Practical Implications. Our controlled study offers key recommendations for LLM training at an industrial scale: • We emphasize the importance of pre-training data rewriting (augmentation), particularly for rare but critical data. Addressing this during fine-tuning is often too late. Without rewriting, a model may accurately recite knowledge data word by word, but the way it embeds this knowledge into its weights may impede retrieval when prompted differently, resulting in a total waste of model capacity. Tools such as Llama-7B or even smaller auxiliary models are adequate for this rewriting task. These “rewrite models” do not need to possess the knowledge themselves. As demonstrated, simple sentence-level shuffling or English-to-French translations can already enhance performance. Generally, we suggest including prompts that encourage sentence shuffling when using such rewrite models. Data rewriting is a form of data augmentation, but also distinct from traditional methods (e.g., dropout, masking, cropping, jittering, flipping) and their associated distillation techniques (like contrastive learning). While traditional augmentations promote the learning of generalizable features over pure memorization, data rewriting — what we call knowledge augmentation — helps language models to memorize knowledge in a more accessible format for downstream tasks. Without such augmentation, the accuracy even for the simplest knowledge extraction task, could be near zero. • We also demonstrate the advantages of including more instruction-finetuned data during pre-training. Our mixed training experiments show that postponing all QA-like data to the fine-tuning phase is suboptimal. Introducing QA-like data earlier in pre-training enables the model to encode knowledge more effectively.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "1.1 Related Work",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.SS1.p1",
+     "text": "Linear probing of knowledge. Linear probing is a recognized method to examine how a model encodes knowledge. Contrary to previous studies that suggest models trained on internet data can linearly encode knowledge in the hidden embeddings of entity names, we find that such encoding is only possible with knowledge augmentations like permutation/rewriting of entity-attribute knowledge during pretraining. Without these augmentations, the language model can still memorize the training data, but it is not linearly encoded in the entity’s hidden embeddings, making knowledge extraction via QAs quite hard, if not impossible, even with instruction fine-tuning. This implies that diverse internet data on the same entity is vital for pre-training the language model for knowledge extraction during inference. The usefulness of augmentations of pretraining data for language models was also empirically observed in literature, but they did not explore where the knowledge is nearly-linearly encoded in a sentence and its correlation with knowledge augmentation, a process we refer to as P-probing in Section 5.1.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS1.p2",
+     "text": "Probing language models’ knowledge via QAs. Question answering (QA) is a common method to probe the knowledge encoded in language models pretrained on internet data. However, it’s unclear whether these models answer questions by extracting knowledge from the training source or by recognizing exact/similar questions from training. We use controlled experiment for out-of-distribution testing on individuals whose QAs were not part of training. This approach also allows us to study the correlation between knowledge extraction and the diversity of pretrain data.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.SS1.p3",
+     "text": "Encoder versus Decoder for QAs. While BERT-based models are also used for knowledge extraction through QAs, our work indicates that they are less effective at extracting knowledge compared to GPT models.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Result 0: Our Dataset Families",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.p1",
+     "text": "In this paper, we introduce synthetic human biography datasets and near-real datasets generated by LLaMa. Detailed descriptions are in the appendix, with a brief overview here.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p2",
+     "text": "BIO dataset bioS. The synthetic dataset, bioS, generates profiles for $N=100,000$ individuals. 5 5 5 We have a follow-up to push this to $N=20,000,000$ and similar results hold. Each individual’s details are randomly and independently selected from a uniform distribution. The birth dates offer $200\\times 12\\times 28$ possibilities, while other categories offer $100\\sim 1,000$ choices. We also add a “company city” attribute which depends on the employer’s headquarters location. We ensure uniqueness in each individual’s full name.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p3",
+     "text": "We generate a six-sentence biographical text entry for each individual, highlighting six distinct aspects. For diversity, each sentence is randomly chosen from approximately 50 distinct templates. In the basic configuration, we generate a single biographical entry for each person, maintaining a consistent order for the six sentences. We use “ bioS single ” to denote this basic configuration. See an example entry below: Anya Briar Forger was born on October 2, 1996. She spent her early years in Princeton, NJ. She received mentorship and guidance from faculty members at Massachusetts Institute of Technology. She completed her education with a focus on Communications. She had a professional role at Meta Platforms. She was employed in Menlo Park, CA. (2.1) We also explore 3 types of knowledge augmentations: (1) multi $M$, generating $M$ biography entries for an individual using varied templates, (2) fullname, substituting he/she/they with the person’s full name; and (3) permute, shuffling the six sentences randomly. Examples are given in Section 4.2.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p4",
+     "text": "BIO dataset bioR. We examine a “close-to-real” dataset produced by Llama. For the set of $N=100,000$ individuals, we provide an instructive prompt to Llama to generate a biographical entry. Here’s an example: Anya Briar Forger is a renowned social media strategist and community manager. She is currently working as a Marketing Manager at Meta Platforms. She completed her graduation from MIT with a degree in Communications. She was born on 2nd October 1996 in Princeton, NJ and was brought up in the same city. She later moved to Menlo Park in California to be a part of Facebook’s team. She is an avid reader and loves traveling.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p5",
+     "text": "We diversified our instructive prompts by drawing from a pool of templates and employed rejection sampling to guarantee the inclusion of all six attributes. In the basic configuration, we produce a single biographical entry for each person (denoted as “ bioR single ”). For comparison, we also consider multi $M$ augmentation which generates $M$ entries per person and the fullname augmentation. Additional examples can be found in Appendix A.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p6",
+     "text": "QA dataset. This paper explores the effectiveness of a trained language model in retaining knowledge from BIO data. As discussed in the introduction, memorization is more than just predicting the next token when given exact sentences from BIO. It includes the model’s ability to truly extract knowledge from the BIO. We assess this knowledge extraction using a question and answer (QA) framework. For each individual, we pose six questions targeting their six unique attributes: 1. What is the birth date of Anya Briar Forger? Answer: October 2, 1996. 2. What is the birth city of Anya Briar Forger? Answer: Princeton, NJ. 3. Which university did Anya Briar Forger study? Answer: Massachusetts Institute of Technology. 4. What major did Anya Briar Forger study? Answer: Communications. 5. Which company did Anya Briar Forger work for? Answer: Meta Platforms. 6. Where did Anya Briar Forger work? Answer: Menlo Park, CA. For each question, we use it as a prompt for the model to generate a response. QA accuracy is measured by the proportion of answers that exactly match the correct response. 6 6 6 We disregard partial matches or synonyms, emphasizing the model’s precision in knowledge extraction.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.1 Training Details",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.p1",
+     "text": "Model architectures. We adopt the GPT2/Llama architectures, where for GPT2 we replace its absolute positional embedding with rotary positional embedding, but still referring it as GPT2 for short. 7 7 7 A controlled experiment to highlight the importance of rotary embedding is in. Since this paper appeared, confirms our results also apply to the pretrained Llama-7B model; our own follow-up also tried the Mistral architecture. Recall the GPT2-small architecture comprises 12 layers with 12 heads and 768 dimensions. We use a 12-layer, 12-head, 768-dim GPT2 (124M) or Llama architecture for pre-training on the bioS data, but a larger 12-layer, 20-head, 1280-dim GPT2 (302M) or Llama for the bioR data to accommodate its increased complexity. Only in Figure 2 when presenting a negative result, we tried a 12-layer 32-head 2048-dim GPT2 (682M). The default GPT2/Llama tokenizers are used, which convert simple words into single tokens, but names and most other attributes into tokens of varying lengths. When it comes to Section 7, we also use a BERT architecture.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p2",
+     "text": "Training. We investigate two types of autoregressive training, detailed in Appendix B.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p3",
+     "text": "Pretrain + instruction finetune. Here, we pre-train the language model from scratch on the BIO data, randomly sampling and concatenating them into 512-token sentences, separated by a standard <EOS> token. The model is then fine-tuned using half of the QA data and evaluated on the remaining half, mirroring the typical instruction finetune process.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p4",
+     "text": "Mixed training. In mixed training, we train the model from scratch on all BIO data and half of the QA data. BIO and QA entries are randomly sampled without requiring them to be from the same individual. We use a parameter ${\\mathsf{QA}_{r}}$ to control the QA data amount, primarily setting ${\\mathsf{QA}_{r}}=0.8$ (a $2:8$ BIO to QA entry ratio). The model’s generation accuracy is evaluated using the remaining QA data. 8 8 8 See Appendix C for a comparison of how ${\\mathsf{QA}_{r}}$ affects performance. We used beam =4 without sampling throughout this paper; results are similar if disabling beam.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p5",
+     "text": "LoRA + full finetune. In full finetuning a pretrained model is tuned for a downstream task such as QAs. LoRA finetuning improves upon this by freezing all pretrained model parameters and adding low-rank updates to a subset of the weight matrices for fine-tuning. We apply a low-rank update to the query/value matrices of the transformer model (suggested by) and the embedding layer to account for input data distribution shifts. Full finetuning is also included when presenting negative results.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Result 1: Mixed Training Enables Knowledge Extraction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.F1",
+     "text": "(a) QA out-dist accuracies",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.p1",
+     "text": "Mixed training involves using BIO data for all individuals together with QAs for half of them. The group of individuals whose QAs are included in the training set is referred to as in-distribution or ${\\mathcal{P}_{\\mathsf{train}}}$. The model’s generative accuracy is then tested on the QAs from the remaining individuals ( ${\\mathcal{P}_{\\mathsf{test}}}$) to assess its out-of-distribution (OOD) generalization capability.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.p2",
+     "text": "Result 1 ( Figure 1). A model mixed-trained on both knowledge and its extraction QA tasks can effectively learn to extract knowledge. • As shown in Figure 1(a), the OOD generalization accuracies are $86.6\\%$ when mixed-trained on bioS single and $77.7\\%$ for bioR single. • However, the model achieves this through somewhat abnormal behavior akin to “studying to pass the test,” discussed further in Section 3.1. (We emphasize that the accuracy is OOD: extracting an individual’s attributes even when no QA about that person — and only the BIO of that person — was seen in the training data.)",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.1 Model’s Abnormal Learning Behavior",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.p1",
+     "text": "We examine the model’s mixed training for knowledge storage and extraction by monitoring its accuracies on the BIO/QA data and for ${\\mathcal{P}_{\\mathsf{train}}}$ / ${\\mathcal{P}_{\\mathsf{test}}}$ separately. Specifically, 9 9 9 Interested readers may consider “whole-attribute” accuracies instead of “first-token” accuracies. They are similar, so we omit them here. - BIO first-token accuracy: we track the model’s next-token-prediction accuracy on the first token of each of the six attributes (birthdate, birthcity, etc.) in the BIO data, separately for ${\\mathcal{P}_{\\mathsf{train}}}$ / ${\\mathcal{P}_{\\mathsf{test}}}$. This measures the model’s BIO data memorization performance. (Despite all individuals’ BIO data appearing in training, we still separately track them for ${\\mathcal{P}_{\\mathsf{train}}}$ / ${\\mathcal{P}_{\\mathsf{test}}}$.) - QA first-token accuracy: we track the model’s next-token-prediction accuracy on the first answer token in the QA data, separately for ${\\mathcal{P}_{\\mathsf{train}}}$ / ${\\mathcal{P}_{\\mathsf{test}}}$. This loosely estimates the model’s QA generation performance. - QA generation accuracy: we track the model’s whole-attribute generation accuracy on ${\\mathcal{P}_{\\mathsf{test}}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p2",
+     "text": "From Figure 1(b) and 1(c), we find that the model employs an unconventional learning strategy. • Initially, the model uses the QA data from the training set to encode knowledge for people in ${\\mathcal{P}_{\\mathsf{train}}}$, as indicated by the rapid increase in QA in-dist accuracy. This also aids in memorizing in-dist BIO data, as shown by the subsequent rise of the BIO in-dist accuracy. • The model then gradually aligns the encoded knowledge with the BIO data to learn to extract knowledge and generalize it to ${\\mathcal{P}_{\\mathsf{test}}}$. Notably, it takes a while before the BIO out-dist accuracy catches up, followed by an increase in the QA out-dist accuracy.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p3",
+     "text": "This is akin to the “study to pass the test” approach in schools, where students prepare using past exam questions and textbooks for answers. While this may yield high scores, it doesn’t reflect the natural progression of human knowledge acquisition. To address this, we explore a more challenging scenario in the next section where the model is pretrained on the BIO data without exposure to the questions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Result 2-3: BIO Pretrain + QA Instruction Finetune",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.F2",
+     "text": "(a) 124M model, pre-trained 540 passes on bioS",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.p1",
+     "text": "We explore a scenario where the model is pre-trained exclusively on the BIO data of all individuals, followed by fine-tuning using QAs from half of these individuals, denoted as ${\\mathcal{P}_{\\mathsf{train}}}$. The model’s OOD generalization is then assessed on questions related to the other half, denoted as ${\\mathcal{P}_{\\mathsf{test}}}$, whose BIO/QA data were not involved in the fine-tuning. This setup simulates the process of applying learned knowledge from textbooks to solve exam questions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.1 Result 2: Model Fails to Extract Knowledge After BIO Pretrain",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS1.p1",
+     "text": "We first pretrain on bioS or bioR single, each containing a single biography per person. The QA finetune generalization accuracies (on ${\\mathcal{P}_{\\mathsf{test}}}$) are shown in Figure 2, using both full and LoRA fine-tuning. The model’s QA finetune training accuracy on ${\\mathcal{P}_{\\mathsf{train}}}$ is also presented for comparison.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p2",
+     "text": "Despite a 99+% first-token accuracy during pretraining, the model exhibits zero-zero QA accuracy on ${\\mathcal{P}_{\\mathsf{test}}}$ for all finetuning parameters. This indicates that while the model can memorize BIO data token-by-token, it struggles to extract the underlying knowledge. Full-finetuning yields near-perfect in-distribution QA accuracy on ${\\mathcal{P}_{\\mathsf{train}}}$, showing it can memorize QAs for individuals in the fine-tuning set. However, it fails to generalize to QAs about individuals in ${\\mathcal{P}_{\\mathsf{test}}}$. In sum: Result 2 ( Figure 2). A model pretrained to word-by-word memorize knowledge may never be fine-tuned to extract knowledge. As shown in Figure 2: perfect BIO token memorization + perfect QA answers for half the people $\\displaystyle\\not\\Longrightarrow$ correct QA answers for the other half. ( knowledge extraction does not come for free) This holds true even when the model size is $\\sim$ 7000x larger than $N=100k$, with each individual exposed 1350 times during pretraining, and numerous finetuning parameters have been explored. 10 10 10 In our follow-up work, we increase the model size to 1B and $N$ to 20M, confirming similar results. Despite memorizing all knowledge from the BIO data during pretraining, the model encodes it in a disorganized manner within the transformer, preventing knowledge extraction during fine-tuning. 11 11 11 This is not a direct result of catastrophic forgetting, a common issue during heavy fine-tuning where the model forgets the pretraining data. Even with LoRA fine-tuning, which introduces minimal low-rank updates to model weights while preserving the pretrained model, test accuracy only slightly improves.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p3",
+     "text": "Figure 2 seems to contradict the success of large models like GPT3.5/4, trained on diverse internet data such as Common Crawl and known for effective knowledge extraction upon fine-tuning. Analyzing the test accuracy breakdown for the six attributes on the bioS data ( Figure 3, the “ bioS single ” row), we find that QA fine-tuning achieves a $33\\%$ generalization accuracy on the “birthdate” attribute but performs poorly on others. This is because our bioS single data consistently places birthdate as the first attribute after a person’s name, unlike internet data which presents information variably, often repeating it with diverse wordings and orderings. The next subsection on knowledge augmentation supports this hypothesis.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.2 Result 3: Knowledge Augmentation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.F3",
+     "text": "Figure 3: Comparison of BIO Pretraining + QA Finetuning ( left) versus their Mixed Training counterparts ( right) under various knowledge augmentations on the data (the rows). Displayed values indicate QA generation accuracies for six attributes in ${\\mathcal{P}_{\\mathsf{test}}}$. This figure is for the GPT2 model on the bioS data; refer to Figure 12 for similar results on the bioR data and/or using the Llama architecture, and Appendix D for more details.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.SS2.p1",
+     "text": "We explore how knowledge augmentation enhances a model’s capacity to store and efficiently extract knowledge from training data. We focus on three augmentations: adding multiplicity, introducing permutations, and repeating full names, typically found in internet data. The original datasets without augmentation are referred to as bioS single and bioR single.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p2",
+     "text": "• Multiplicity. We denote the method of creating $M$ distinct biography entries for each individual, using varied language but retaining the same information, as multi $M$. 12 12 12 For bioS data, each of the six sentences is selected from around $50$ templates, with a new template resampled for each sentence in the $M$ entries. For bioR data, we recreate the biography using Llama for each of the $M$ entries. An example of adding multiplicity to the biography in ( 2.1) is: Anya Briar Forger came into this world on October 2, 1996. She originated from Princeton, NJ. She pursued advanced coursework at Massachusetts Institute of Technology. She dedicated her studies to Communications. She developed her career at Meta Platforms. She gained work experience in Menlo Park, CA. Remark. As a special case, we also experimented with translation (e.g., English to French) to increase sentence diversity, which proved beneficial for the model’s knowledge extraction, but we have not included these details in this paper for clarity. • Permutation. We denote adding random permutations to the biography sentences as permute. 13 13 13 For bioS single, we denote random permutation of the same six sentences $P$ times as permute $P$. For bioS multi $M$, we denote random permutation of each of the $M$ biography entries as permute. The bioR data, generated by Llama, already has some randomness in sentence ordering, so no extra permutations are added. For instance, the example above can be permuted as follows: Anya Briar Forger originated from Princeton, NJ. She dedicated her studies to Communications. She gained work experience in Menlo Park, CA. She developed her career at Meta Platforms. She came into this world on October 2, 1996. She pursued advanced coursework at Massachusetts Institute of Technology. • Fullname. We denote the augmentation where all pronouns or partial names in $\\textsf{bioS}/\\textsf{bioR}$ are replaced with the person’s full name as fullname. 14 14 14 In the synthetic bioS dataset, a person’s full name is presented only once, at the start of the initial sentence, with subsequent sentences using solely pronouns. For the LLaMa-generated bioR data, typically, the person’s full name appears once at the start; later sentences use either pronouns or parts of the name, such as the first or last name. An example of this augmentation is: Anya Briar Forger originated from Princeton, NJ. Anya Briar Forger dedicated her studies to Communications. Anya Briar Forger gained work experience in Menlo Park, CA. Anya Briar Forger developed her career at Meta Platforms. Anya Briar Forger came into this world on October 2, 1996. Anya Briar Forger pursued advanced coursework at Massachusetts Institute of Technology.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p3",
+     "text": "Results. In Figure 3, we present our results for the GPT2 model on the bioS dataset. We implemented each knowledge augmentation individually and in combinations, then compared the model’s QA finetune accuracy on ${\\mathcal{P}_{\\mathsf{test}}}$. The model architecture and training parameters remained the same, but the pre-training datasets varied based on the applied augmentations. Further experiment details are in Appendix D; and additional results for the bioR dataset and/or Llama model are in Figure 12. We find that: Result 3 ( Figure 3). Adding multiplicity, permutations, or repeating full names, all help the model to better store knowledge during pretraining, making knowledge extraction easier later. Notably: 15 15 15 We have also tried to translate from English to French, which boosts accuracy to about 40% but we did not include the result for clarity. An exception is when permutation is directly added to the single data without multiplicity (see “ bioS single + permute1 ”), this hurts the QA performance as it makes knowledge extraction harder. • Pretraining on a dataset where each person has 5 diverse biography entries (i.e., different wording, sentence shuffling) boosts the QA fine-tune accuracy (on ${\\mathcal{P}_{\\mathsf{test}}}$) from 9.7% to 96.6%. • More augmentation $\\Rightarrow$ better: gain increases as multiplicity or permutation number increases.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p4",
+     "text": "One may infer from Result 3 that exposing the model to varied expressions of the same knowledge encourages it to focus on the underlying structure of the knowledge, rather than its word-by-word presentation. We shall verify this hypothesis in Section 5 by introducing probing techniques.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Results 4-5: Knowledge Probes on the BIO Pretrained Model",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "We investigate how a language model, pretrained on BIO data, encodes knowledge in its hidden states. We propose two probing methods: position-based (P-probing) and query-based (Q-probing). Both methods employ simple, nearly-linear probes to extract personal attributes from the model’s hidden states.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "5.1 Result 4: Position-Based Probing",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS1.p1",
+     "text": "In P-probing, we feed biography entries into a pretrained model, and finetune an additional linear classifier on the model’s final hidden layer to predict the six target attributes (e.g., university, major, etc.). We wish to understand how and where these attributes are encoded after pretraining.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.p2",
+     "text": "To accommodate varied data lengths, we identify six special token positions immediately preceding the first occurrences of the six attributes in each biography entry (see Figure 4). This results in $6\\times 6$ classification tasks. For each prediction task, we freeze the entire pretrained network but add a trainable rank-2 update on the embedding layer to accommodate the task change. We use the transformer’s last hidden layer at these positions to (linearly) predict the six target attributes. 16 16 16 For GPT2-small with 768 hidden dimensions and vocab size $V$, this rank-2 update has $2V+2\\times 768$ trainable parameters. The linear classifier layer is of dimension $768\\times M$ for each target attribute with $M$ possibilities. More details can be found in Appendix E.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.F4",
+     "text": "Figure 4: Illustration of the P-probing. Underscore prepositions are the special token positions where we prob. The task is to predict all attributes following these positions. Given the attribute ordering, there can be up to $6\\times 6=36$ tasks across all data.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS1.p3",
+     "text": "We are particularly interested in how early the attributes are encoded in a biography. For instance, if the linear classifier to predict “company name” shows high accuracy right after the person’s full name, it implies that the model is directly learning “Anya’s employer is Meta Platforms”. If high accuracy is only achieved at the biography’s end, the model might be using a flawed logic, such as “the birthday is October 2, 1996, the university is MIT, hence the employer is Meta.”",
+     "kind": "body"
+    },
+    {
+     "id": "S5.F5",
+     "text": "Figure 5: P-probing accuracies for various pretrained models on bioS data. Each row represents a pretrained model using a different knowledge augmentation, and each column labeled “ $i$ - $field$ ” shows the accuracy of predicting the first token of $field$ from position $i$. Details are in Section 5 and Appendix E (where we also include experiments for the bioR data and for predicting the full-attribute $field$.) Details are in Section 5.1 and Appendix E (where we also include experiments for the bioR data and for predicting the full-attribute $field$ in Figure 13 and 14.)",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS1.p4",
+     "text": "P-Probing Main Results. Our results are in Figure 5 and summarized as follows. • In the bioS single setup, P-probing accuracy remains low (e.g., 2% for company name) until the token immediately preceding the target attribute (where accuracy boosts to 100%). This suggests that the model memorizes all the BIO data during pretraining, but encodes knowledge using the “flawed logic” above. This prevents knowledge extraction during QA finetuning, especially when only the person’s name is provided. • In the heavily augmented setup like bioS multi5+permute, the P-probing accuracy for all six attributes rises to nearly 100% from the first special position, which is before all of the attributes. This indicates that the model not only memorizes the BIO data but also identifies the person’s complete six attributes solely upon seeing the person’s name, facilitating knowledge extraction during the QA finetuning process. • For intermediate setups, the results are mixed. For example, comparing bioS single with multi5, we see that adding multiplicity (without permutation) results in earlier attribute storage, accounting for the increase in QA finetune accuracy from 9.7% to 41% as seen in Figure 3. Comparing bioS single+permute1 with single+permute5, we observe that permuting the six sentences five times (without diversifying the sentences) also leads to earlier knowledge storage, explaining the rise in QA finetune accuracy from 4.4% to 70%.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.p5",
+     "text": "In sum,",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.p6",
+     "text": "Result 4 ( Figure 5). Increased knowledge augmentation in the pretrain data improves P-probing accuracies at earlier token positions. Consequently, a key-value pair knowledge (e.g., person-employer) more directly associates the value with the key rather than with other related attributes. This mechanism facilitates the (out-of-distribution) extraction of knowledge through fine-tuning. In Section 5, we use a Venn diagram to clearly demonstrate which attribute is stored upon observing another, further supporting this finding.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "5.1.1 Closer P-Probing at Knowledge Dependency",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.F6",
+     "text": "(a) accuracy to predict birth city",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS1.SSS1.p1",
+     "text": "As noted above, the model may infer attribute relationships based on their order in the pretrain data. For instance, if a birth date always precedes a company city, the model might infer “the person born on October 2, 1996 works in Menlo Park” instead of “Anya’s work city is Menlo Park”. This can occur if the pretrain data isn’t adequately augmented, and the model may even favor linking one attribute to another, rather than to the person’s name, if two attributes are closely correlated (such as company city and company name).",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.SSS1.p2",
+     "text": "To investigate this, we created a variant of the bioS dataset, grouping the 6 sentences into 3 pairs with a consistent order: birthdate before birth city, university before major, and work company before work city. We allowed random permutations among these pairs and sentence diversities. We refer to this dataset as bioS couple (see Appendix A for details).",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.SSS1.p3",
+     "text": "We examined our P-probing on this dataset as $2^{5}\\times 6$ classification tasks, predicting each of the six target attributes from a special token position where only a subset $S$ of the remaining five attributes has been observed ( $S$ has $2^{5}$ possibilities). 17 17 17 The P-probing process remains the same as before, using only 6 sets of trainable parameters each for a target attribute, each with a single classification linear layer and a single rank-2 update on the embedding. The difference is a more detailed interpretation of the results. Our results, visualized in Figure 6, show that the accuracy in predicting the second attribute in each pair is heavily influenced by whether the model has encountered the first attribute, even with moderate data diversity.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "5.1.2 P-Probing Extensions",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS1.SSS2.p1",
+     "text": "We could consider alternative P-probing forms, such as introducing a low-rank update to the pretrained model’s main body, like a trainable LoRA update with a small rank on the query/value matrices. While not necessary for our positive results (e.g., the highly augmented data bioS multi5+permute), it could be interesting to apply this to the negative results (e.g., the basic data bioS single). However, our experiments showed no significant increase in P-probing accuracies, so we omit the details.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.SSS2.p2",
+     "text": "Our P-probing has focused on the six distinct token positions, likely the preposition words preceding the six attributes. How about probing other positions, like tokens following each attribute or the person’s name? We observed that P-probing accuracy might improve as the model processes more “extraneous” tokens. For instance, the P-probing accuracy for a person’s birth date could increase after encountering phrases like “was born on” or “has birthday in”. This could be due to the model’s ability to associate the birthdate information with the sentence’s structure. We chose not to include these observations for clarity.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.SSS2.p3",
+     "text": "In Appendix E, we demonstrate the difference between a rank-2 and a rank-4 update on the embedding layer. It confirms that a rank-2 update is sufficient for P-probing on our datasets.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "5.2 Result 5: Query-Based Probing",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.F7",
+     "text": "Figure 7: Q-probing accuracies. Each row denotes a pretrained model with its specific knowledge augmentation. The left block reiterates QA finetune accuracies from Figure 3. The middle showcases Q-probing accuracies on the first-token prediction for the six attributes, and the right focuses on Q-probing for the whole-attribute prediction. (Further details for bioR and more are in Appendix E. Note: For birth date, first token predicts the whole birth month; we do not have whole-attribute prediction for it since it has too many choices.)",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS2.p1",
+     "text": "P-probing offers a qualitative assessment of early knowledge storage in the model relative to the original biography entry. However, it can be limiting due to its dependence on the exact context structure from the biography entry. For instance, in Figure 4, knowledge may be stored in short phrases like “received mentorship and guidance.”",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p2",
+     "text": "In query-based probing (Q-probing), we aim for a more precise, context-free value from a pretrained model, focusing on the knowledge directly associated with a person’s name. We evaluate sentences containing only the person’s full name and train a linear classifier on the last layer’s hidden states to predict the person’s six attributes. High accuracy suggests that the model directly links each person’s attributes to their name.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p3",
+     "text": "We consider an input sentence containing only the person’s full name, preceded by a starting token and followed by an ending token. Like P-probing, we freeze all transformer layers (acquired through pretraining), except the embedding layer, where we apply a low-rank update (using rank 16, compared to rank 2 in P-probing). This minimal change is necessary as we are addressing a distinct classification task under a different input distribution. We extract the hidden states from the last layer on the ending token and place a trainable linear classifier on top to predict the person’s six attributes. More details are in Appendix F.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p4",
+     "text": "Our findings. Our results are in Figure 7. Our main finding is: Result 5 ( Figure 7). The QA finetune accuracy correlates closely with Q-probing accuracy, indicating that the “degree to which the attribute is directly linked to the person’s name” is a crucial factor for effective knowledge extraction. If the model fails to store knowledge in this way during pretraining, QA finetuning may not rectify this, regardless of the prompts or finetune parameters. Note, once again, applying knowledge augmentations to the pretrain data, Q-probing accuracy significantly increases. This suggests that the model encodes knowledge almost linearly in the hidden states directly adjacent to the person’s name. Thus, the linear probes can extract the person’s attributes from these hidden states as effectively as the model can be adapted through QA finetuning to answer questions related to those attributes.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p5",
+     "text": "Our result also suggests that, at the last hidden-layer, the model neither uses complex or nonlinear transformations nor leverages interactions between hidden states at different token positions to extract knowledge about the person. This implies that the model does not use contextual or global information from the biographies to extract knowledge about the individual.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "6 Result 6: Celebrity Can Help Minority",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.F8",
+     "text": "Figure 8: QA finetune accuracy on the minority group with vs. without celebrity data in the pretraining process. Experiment details are in Appendix G, where we also include additional experiments in Figure 17.",
+     "kind": "caption"
+    },
+    {
+     "id": "S6.p1",
+     "text": "Section 4 highlighted the significant benefits of knowledge augmentation. However, in practice, we may not have augmented data for all individuals. This section explores whether partially augmenting data can improve knowledge extraction for non-augmented data. In our biography dataset, the augmented subset is akin to a “celebrity” group with plentiful online biographical information, potentially included in the fine-tuning dataset as well. The non-augmented subset is comparable to a “minority” group with limited biographical data.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p2",
+     "text": "For comparison, we introduce an additional set of $N=100,000$ individuals, the celebrity group ${\\mathcal{P}_{\\mathsf{cel}}}$, while the original $N$ individuals form the minority group ${\\mathcal{P}_{\\mathsf{min}}}$. We test both synthetic bioS and more realistic bioR data. For bioS, the celebrity group’s biographies use the multi5+permute augmentation, simulating varied expressions found on internet. For bioR, the celebrity group uses the multi5 augmentation, generating their biographies five times using Llama.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p3",
+     "text": "The language model is pretrained on the combined set ${\\mathcal{P}_{\\mathsf{cel}}}\\cup{\\mathcal{P}_{\\mathsf{min}}}$ biographies and then fine-tuned using QAs from the celebrity group ${\\mathcal{P}_{\\mathsf{cel}}}$. We evaluate the model’s QA accuracy on the ${\\mathcal{P}_{\\mathsf{min}}}$ group. 19 19 19 Other fine-tuning variations, such as QA fine-tuning with half of ${\\mathcal{P}_{\\mathsf{min}}}$ as training and half as testing, show negligible differences. Our results are presented in Figure 8.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p4",
+     "text": "Result 6 ( Figure 8). Introducing celebrity data boosts the minority group’s QA accuracy (e.g., from 4.4% to 86.8% for the bioS data). This is significant because: - the minority group’s BIO pretrain data remains unchanged in both cases, and - the minority group’s QA data is not used during fine-tuning.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p5",
+     "text": "This highlights that merely including celebrity data during pretraining significantly improves the model’s ability to store and extract knowledge from the minority group. Similarly, in the more realistic bioR case, introducing celebrity data increases the minority’s accuracy from 10.0% to 76.3%. This strongly suggests that this phenomenon also occurs in real-world scenarios.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p6",
+     "text": "We also use P-probing and Q-probing techniques to validate and explain the above findings; they suggest that with the inclusion of celebrity data, the attributes of the minority group are more directly stored onto their names. These are detailed in Figure 18 and Figure 19 in Appendix G.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "7 Result 7: Knowledge Storage for Bidirectional Models",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S7.F9",
+     "text": "Figure 9: Additional results on the GBERT model pretrained via masked language modeling (MLM). Mixed training (left) versus BIO pretrain + QA finetune (middle left) versus Q-probing (middle right and right).",
+     "kind": "caption"
+    },
+    {
+     "id": "S7.p1",
+     "text": "This paper primarily explores knowledge storage and extraction in auto-regressive language models. One may argue that some knowledge issues, such as the consistent knowledge ordering in bioS single, are unique to this task due to its unidirectional nature. We thus pose the question, Could BERT be a solution to this?",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p2",
+     "text": "We analyze the BERT model, similar to GPT2 but with a full attention matrix, allowing every token to attend to every other token. For a direct comparison, we modify our GPT2 architecture to replace its triangular attention matrix with a full matrix, keeping the GPT2 tokenizer and rotary embedding. We call this modified model GBERT.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p3",
+     "text": "Our pretraining task is now whole-word masked-language modeling (MLM). Each English whole-word has a 15% chance of being selected, which is then replaced with a <MASK> token (80% chance), retained (10% chance), or replaced with a random token (10%). The goal is to predict the original word for these selected tokens. 20 20 20 We thank Xiaodong Liu and Pengcheng He from the mt-dnn project for confirming that our MLM implementation aligns with common practice.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p4",
+     "text": "For GBERT, we modify the QA task to evaluate its knowledge extraction capabilities. For questions like “What is the birth city of Anya Briar Forger?”, we append them with several <MASK> tokens (equaling the answer’s length). 21 21 21 Revealing the answer’s token count might seem unfair. However, given our aim to highlight GBERT’s limitations, this extra information doesn’t hinder our intentions. A correct answer requires accurate recovery of all masked tokens.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p5",
+     "text": "We display results for both mixed training and BIO pretrain + QA finetune. Half of the QAs are used for mixed training (or QA fine-tuning), while we test out-of-distribution generalization accuracies on QAs for the remaining half of the people. Q-probing results for GBERT are also presented, determining if the model, with minor embedding layer modifications, can linearly predict target attributes from a person’s full name.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p6",
+     "text": "Our findings. Our findings are displayed in Figure 9. Key observations include:",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p7",
+     "text": "• The QA-finetune and Q-probing accuracies again show a strong correlation. This suggests that the ability to extract knowledge from a BERT-like model also depends on whether such information is nearly linearly stored in hidden states directly adjacent to the person’s name. This means our Q-probing technique is effective also for encoder models like BERT. • Consistent with Figure 3, mixed training yields slightly superior out-of-distribution QA accuracies compared to BIO pretrain + QA finetune. • Interestingly, the model performs well on “birth date” and “major” attributes but struggles on others. The reason is simple. In MLM, where each word has an equal chance of being masked, the model learns to associate knowledge words with the most related unmasked word, preferably those that are adjacent. For instance, words representing the “birth date” attribute (month, day, year) are quite independent, making the model more inclined to link them to the person’s name. For attributes like birth city, where there’s a strong link between the city “Bellevue” and state “WA”, the model maximizes this association, inhibiting storage of knowledge on person names. 22 22 22 Similarly, many majors are single words so this explains its high QA test accuracy. In contrast, the words representing universities or company names/cities are more dependent.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.p8",
+     "text": "Result 7 ( Figure 9). While bidirectional models like BERT is less sensitive to knowledge ordering, the MLM pretraining task does not necessarily promote knowledge storage for subsequent extraction. Unless the knowledge is a standalone word or of independent words (like month, day, year), extracting knowledge after MLM pretraining might prove challenging, if not totally impossible.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "8 Conclusion",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S8.p1",
+     "text": "This study explores the capability of pre-trained language models to store and retrieve knowledge through question-answering tasks. We developed a controlled biography dataset and employed probing techniques to assess how knowledge augmentation influences the extractability of knowledge in pre-trained transformer models. Using synthetic data allows for greater control over the training and fine-tuning of models, which is essential for understanding how different data sources impact the internal mechanisms of transformers. This could be a significant future direction for unraveling the complexities of transformers.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p2",
+     "text": "For practitioners, this paper emphasizes the importance of rewriting critical but infrequent data during the pretrain stage to enhance knowledge extraction for downstream tasks. Tools like ChatGPT, Llama-7B, or smaller auxiliary models can be used for rewriting before pre-training; these models do not need to contain the knowledge themselves, and even simple techniques like sentence-level shuffling or English-to-French translation can be beneficial.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p3",
+     "text": "Additionally, we suggest including more instruction-finetuned data during the pretrain phase. Although this approach differs from human knowledge acquisition, it enhances the model’s ability to encode knowledge more effectively, as explored in recent follow-up work.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p4",
+     "text": "Finally, Part 3 of this work series focuses on how language models store, extract and manipulate knowledge (including Part 3.2 and Part 3.3). We also cover grade-school math and reasoning in Part 2, and learning hierarchial language structures in Part 1.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p5",
+     "text": "Appendix",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix A Details on Data Preparation",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "A.1 BIO dataset bioS",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS1.p1",
+     "text": "In the synthetic dataset labeled as bioS, we generate profiles for $N=100,000$ individuals. Each individual’s first, middle, and last names, birth date, birth city, university attended, major of study, and current employer are selected independently and randomly from a uniform distribution. • First, middle, and last names are drawn from pools of 400, 400, and 1000 English names respectively. We apply rejection sampling to ensure all $N$ individuals have unique full names. • Birth years range from 1900 to 2099, months are selected from the 12 months, and days are chosen between 1 and 28. • Birth cities are selected from 200 US cities, with their respective state abbreviations, such as Princeton, NJ and Cambridge, MA. • Universities are drawn from a list of 300 US institutions. Some may have similar prefixes, like University of California, Berkeley/Irvine/Davis/etc. • Majors are selected from 100 common college disciplines, including Computer Science, Physics, and Music. • Employers are chosen from a list of 263 companies, featuring names like Meta Platforms, Microsoft, and Google.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS1.p2",
+     "text": "Additionally, • We introduce a “company city” attribute that depends on the US location of the employer’s headquarters. For instance, an employee of Meta would list Menlo Park, CA as their company city. Notably, 13.7% of the companies are headquartered in New York, NY. Thus, defaulting to New York, NY when predicting a person’s work city yields a base accuracy of 13.7%.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS1.p3",
+     "text": "In the bioS dataset, we craft a biographical text entry for each individual, distilling their profile into six sentences. Each sentence illuminates a distinct attribute of the individual. To increase diversity, we select each sentence randomly from a set of pre-defined templates. Specifically, we have 46 sentence templates for birth dates, 49 for birth cities, 49 for universities, 52 for majors of study, 47 for employers, and 48 for company cities. Beyond ( 2.1), we provide several more examples below: Carlos Jameson Stokes has his annual celebration on November 12, 2088. He celebrates his birth in San Francisco, CA. He graduated from Oklahoma State University. He explored the theoretical aspects of Information Systems. He contributed his expertise to United Airlines Holdings. He acquired industry knowledge while working in Chicago, IL. Alondra Bennett Rooney celebrates their life journey every year on April 1, 1909. They owe their roots to Durham, NC. They benefited from the resources and facilities provided by University of South Alabama. They developed a strong foundation in Data Science. They had a job at The Southern Company. They were involved in the industry of Atlanta, GA. Aidan Alexa Dennis ’s birth is celebrated annually on July 17, 1968. She calls Palmdale, CA her birthplace. She specialized in her field of study at Stevens Institute of Technology. She completed a rigorous program in International Business. She had employment prospects at Johnson & Johnson. She gained work experience in New Brunswick, NJ. (We assign a random pronoun (he/she/they) to each person.) 23 23 23 Given that we are not employing a pretrained model sourced from the internet, we did not do fact-checking. For instance, a person’s major may not align with the business of the company they work for, and their birth year might largely precede the company’s establishment date.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS1.p4",
+     "text": "In the basic configuration, we produce a single biographical entry for each individual, maintaining a consistent order for the six sentences as previously outlined. In average, a biographical entry has 73.0 tokens using GPT2 tokenization. We denote this configuration as “ bioS single.” For comparison, we delve into 15 knowledge augmentations: • bioS single+fullname: Pronouns are replaced with the person’s full name. • bioS single+permute1/2/5: The six sentences in the biography entry are randomly permuted 1/2/5 times for each person. However, the full name only appears in the first sentence, with subsequent sentences using pronouns. This results in 1/2/5 biography entries for each person. • bioS single+permute1/2/5+fullname: As with the previous augmentation, but the full name is used in all six sentences. • bioS multi2/5: 2 or 5 biographical entries are generated for each person, with each generation employing a re-sampled set of sentence templates. • bioS multi2/5+permute: Building on bioS multi2/5, the six sentences within each biographical entry are randomly permuted. However, the full name appears only once in the first sentence. • bioS multi2/5+fullname: Building on bioS multi2/5, pronouns are replaced with the individual’s full name across all sentences. • bioS multi2/5+permute+fullname: Incorporating features from both bioS multi2/5+permute and bioS multi2/5+fullname, the pronouns are replaced with the individual’s full name and the six sentences are randomly permuted.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "A.1.1 bioS couple",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS1.SSS1.p1",
+     "text": "In Section 5.1.1, when delving deeper into P-probing, we also introduced a partial knowledge augmentation on the bioS dataset, which we termed bioS couple.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS1.SSS1.p2",
+     "text": "Specifically, we initially generate six sentences, each derived from a set of sentence templates similar to those in bioS single. We then group these six sentences into three pairs. The sentence describing a person’s birthdate always precedes the one discussing the person’s birth city. Similarly, the sentence detailing the person’s university consistently comes before the one about their major, and the one about their employer invariably precedes the sentence regarding their work city. Subsequently, we permute the order of these three pairs of sentences, resulting in $3!=6$ potential arrangements. The individual’s full name is restricted to appear only in the first sentence. For each individual, we create such a biographical entry 1/2/5 times, designating this dataset as bioS couple1/couple2/couple5. Our experiments in Figure 6 were with respect to bioS couple2, and we shall give the similar results in Figure 15 for bioS couple1/5 for comparison.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "A.2 BIO dataset bioR",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.SS2.p1",
+     "text": "We examine a “close-to-real” dataset produced by Llama. Specifically, for the previously set of $N=100,000$ individuals, we provide an instructive prompt to Llama1-30B, directing it to generate a biographical entry for us. 24 24 24 Paraphrasing is simple, so larger models are unnecessary as results are similar (our trials confirmed this, but including them seemed uninteresting). At the time of paper writing, Llama2 was not released (but subsequent tests using Llama2 yield similar results, see). To promote diversity in our results, we draw our instructive prompts from a collection of sentence templates. Three examples are presented below.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS2.p2",
+     "text": "Llama prompt: Write a 50 words biography about a person whose name is Nicole Kevin Pratt. The person studied at Haverford College. The person studied Management there. The person was born and raised in Baltimore, MD. The person worked in Cincinnati, OH for Procter & Gamble. The person’s birthday falls on January 25, 1977. Llama prompt: Write a 50 words biography about a person whose name is Hunter Bennett Kenny. The person attended Queens College, City University of New York for education. The person pursued a degree in Political Science there. The person originated from Augusta, GA. The person worked in Menomonee Falls, WI for Kohl’s. The person was born on March 25, 2033. Llama prompt: Write a 50 words biography about a person whose name is Johnathan Charles Wade. The person attended Colorado State University for education. The person pursued a degree in Sociology there. The person was brought up in New York City, NY. The person worked in Northbrook, IL for Allstate. The person’s birthday falls on January 7, 2098.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS2.p3",
+     "text": "Here are the generated outputs from Llama: Nicole Kevin Pratt is an American business executive. She is currently the Vice President of P &G Global Business Services at Procter & Gamble. She was born on January 25, 1977, in Baltimore, Maryland. She graduated from Haverford College with a degree in Management. P &G recruited her as an Assistant Brand Manager in 2000. She held various leadership positions in brand management, marketing, and sales across different business units and categories. She was named Vice President of P &G Global Business Services in 2019. Nicole currently lives in Cincinnati, Ohio with her husband and three children. Hunter Bennett Kenny is a talented political science graduate from Queens College, City University of New York. He hails from Augusta, Georgia and was born on March 25, 2033. During his time at college, he was an active member of the student council and served as its president in his senior year. He interned at the office of New York Senator Chuck Schumer. After graduating cum laude, he worked for Kohl ’s in Menomonee Falls, Wisconsin. He currently resides in Brooklyn, New York. Johnathan Charles Wade is a successful insurance agent who works for Allstate. He was born on January 7, 2098, in New York City, NY. He graduated from Colorado State University, where he majored in Sociology. He currently resides in Northbrook, IL.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS2.p4",
+     "text": "We observed that Llama might not always generate a biographical entry that includes all six attributes. To address this, we repeat the sampling process until Llama’s output ensures the inclusion of all attributes. Typically, the entry begins with the individual’s full name, and the oder in which the six attributes appear can vary. In average, a biographical entry has 72.3 tokens using GPT2 tokenization.",
+     "kind": "body"
+    },
+    {
+     "id": "A1.SS2.p5",
+     "text": "In the basic configuration, we produce a single biographical entry for each person, denoted as “ bioR single.” For comparison, we also introduce the multi $M$ augmentation, which creates $M$ entries per person, and the fullname augmentation.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix B Details on Model Architecture",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.p1",
+     "text": "The GPT2-small architecture has 12 layers, 12 heads, and $768=12\\times 64$ hidden dimensions (124M). Recent research has shown that transformers can achieve a significant performance improvement by utilizing attentions based on the relative positional differences of tokens. (This is more systematically studied in.) Consequently, in this paper, we replace the positional embedding with a rotary embedding, following the standard GPT-NeoX implementation available on Huggingface (with the default frequency base of 10,000 and rotary dimension set to a 1/4 of the embedding dimension). We continue to refer to this as GPT2 for brevity.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.p2",
+     "text": "In our bioS experiments, we employ the above architecture. For the bioR experiments, we opt for a larger GPT2 model with 12 layers, 20 attention heads each 64-dimensional (302M), tailored to its increased difficulty. Only when presenting our negative result in Figure 2, we also tried a 12-layer, 32-head (each 64-dimensional) GPT2 model (682M).",
+     "kind": "body"
+    },
+    {
+     "id": "A2.p3",
+     "text": "In our knowledge extraction experiments (e.g., Figure 3), we also used a downsized Llama architecture with the same number of layers, heads, and hidden dimensions as the GPT2 architecture, yielding similar results. For the probing experiments, we exclusively used the GPT2 architecture for conciseness.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.p4",
+     "text": "Additionally, we evaluate the BERT model. BERT is similar to GPT2 but features a complete attention matrix, enabling every token to attend to all others. For a strong side-by-side comparison, we modify our GPT2 architecture to swap its triangular attention matrix for a full matrix, while keeping the GPT2 tokenizer and rotary embedding (removing positional embedding). We label this revised model GBERT. A primary distinction is that GBERT adopts pre-layernorm (inherited from the base GPT2 architecture), whereas BERT utilizes post-layernorm.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.p5",
+     "text": "Throughout pretraining, mixed training, and QA finetuning, we maintain a context window length of 512.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix C Details on Pretrain and Mixed Training",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.F10",
+     "text": "(a) bioS",
+     "kind": "caption"
+    },
+    {
+     "id": "A3.p1",
+     "text": "During BIO pretraining, we randomly sample biographical entries of individuals and concatenate them to form sequences of 512 tokens, using a standard <EOS> token to separate individual entries.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p2",
+     "text": "In mixed training, we pre-train the model with BIO data from all individuals and QA data from half of them. Specifically, each training sequence of 512 tokens is either sourced entirely from the BIO entries (as previously mentioned) or entirely from the QA entries (again, from randomly sampled individuals and concatenated). We define a parameter ${\\mathsf{QA}_{r}}$ to dictate the frequency of using QA entries. Predominantly in this paper, we set ${\\mathsf{QA}_{r}}=0.8$, which implies a $2:8$ ratio between BIO and QA entries in terms of the number of pre-trained tokens. We subsequently assess the model’s generation accuracy using QA data from the other half of the individuals. Refer to Figure 10 for an analysis of how the parameter ${\\mathsf{QA}_{r}}$ impacts mix-training performance.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p3",
+     "text": "For both BIO pretraining and mixed training, we employed a conventional set of optimization parameters: the AdamW optimizer with a weight decay of 0.1, $\\varepsilon=10^{-6}$, an initial learning rate of 0.001, a 1000-step linear warmup, and cosine learning rate decay (from 0.001 decreasing to 0.0001). We used a batch size of 96.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.p4",
+     "text": "There were a total of 80,000 training steps for bioS (using the 12-layer, 12-head GPT2/Llama architecture) and 150,000 training steps for bioR (using the larger 12-layer, 20-head GPT2/Llama). Only when using the 12-layer, 32-head GPT2 to present our negative result in Figure 2, we used 200,000 training steps.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix D Details on QA Finetune",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.F11",
+     "text": "(a) bioS fullname",
+     "kind": "caption"
+    },
+    {
+     "id": "A4.F12",
+     "text": "(a) Analogous to Figure 3 but for the bioR data family using the GPT2 architecture",
+     "kind": "caption"
+    },
+    {
+     "id": "A4.p1",
+     "text": "In our QA finetuning tasks, we first use a BIO pretrained model checkpoint and then apply either full finetuning or LoRA finetuning.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.p2",
+     "text": "For full finetuning, we employ the AdamW optimizer with $\\varepsilon=10^{-6}$. We use weight decays of 0.01 and 0.001, and initial learning rates of $0.001,0.0003$, and $0.0001$. There is no warmup, and we implement cosine learning rate scheduling (reducing to $10\\%$ of the initial learning rate), a batch size of 48, and a total of 50,000 training steps. Given that we are presenting a negative result for full finetuning (as seen in Figure 2), we display the best QA test accuracy among all the lr/wd parameter combinations.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.p3",
+     "text": "For LoRA finetuning, we maintain the aforementioned AdamW configuration but set a consistent weight decay of 0.01 and an initial learning rate of $0.0003$ for all tasks.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.p4",
+     "text": "The results in Figure 11 suggest that for the purpose of QA finetuning, LoRA is generally a better option compared to full finetuning. While a large rank- $r$ update on the query/value matrices isn’t essential, it appears beneficial to have a significant rank- $r^{\\prime}$ update on the embedding layer to address the distribution shift from the BIO data to the QA data.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.p5",
+     "text": "For this reason, in all subsequent experiments in this paper (notably Figure 3 and 12), when conducting QA finetuning, we use $r^{\\prime}=128$ and either $r=8$ or $r=16$, presenting the best accuracy from the two runs.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix E Details on P-probing",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.p1",
+     "text": "In our P-probing experiments, we freeze the BIO pretrained GPT2 model and append a limited set of trainable parameters. Using the GPT2-small as an example, we introduce: • a trainable rank-2 update for the embedding layer, having dimensions of $50256\\times 2$ and $2\\times 768$, • for each prediction task that is an $M$ -class classification problem, a trainable linear layer with dimensions of $768\\times M$, • preceding the linear layer, a layer normalization layer furnished with trainable affine parameters. In the context of P-probing, recall that we considered six classification sub-tasks (from 6 special locations) for every attribute prediction task. Specifically, for the birthdate attribute, we solely address its first-token prediction task, which is equivalent to predicting the individual’s birth month. 25 25 25 This is because a birthdate encompasses $200\\times 12\\times 28$ potential choices, surpassing $N/2$, the number of training individuals. For the remaining five attributes, both the first-token and whole-attribute prediction tasks are examined. In sum, this results in 11 prediction tasks, each comprising 6 sub-tasks. For every one of these 11 tasks, we incorporate a distinct set of trainable parameters.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.p2",
+     "text": "For optimization, the AdamW optimizer is employed with $\\varepsilon=10^{-6}$, weight decay of 0.3, an initial learning rate of $0.001$, no warmup, and a linear learning rate decay (down to $0$ in the end). We set the batch size of 50 and trained for 30,000 steps. During this P-probing training phase, we have turned on the dropout on the (frozen) pretrained GPT2 model to prevent overfitting.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.p3",
+     "text": "We perform experiments on both bioS and bioR data families (refer to Figure 13 and Figure 14), evaluating the P-probing accuracy of first-token and whole-attribute predictions. These figures also compare rank-2 and rank-4 updates on the embedding layer, demonstrating that a large modification to this layer is not crucial for P-probing attribute values.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.F13",
+     "text": "(a) P-probing first-token prediction accuracy; LoRA embedding layer rank = 2",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.F14",
+     "text": "(a) P-probing first-token prediction accuracy; LoRA embedding layer rank = 2",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "E.1 Details on Closer P-Probing",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS1.p1",
+     "text": "In Figure 6 and Section 5.1.1, we examined the P-probing results using a Venn diagram based on the bioS couple dataset from Appendix A.1.1, where each individual has 2 biographical entries. Figure 15 supplements this with results for individuals with 1 or 5 entries.",
+     "kind": "body"
+    },
+    {
+     "id": "A5.F15",
+     "text": "(a) accuracy to predict birth city",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix F Details on Q-probing",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A6.p1",
+     "text": "Recall that in Q-probing, we freeze the pretrained GPT2 model and append a small set of trainable parameters on top for probing purposes. Using GPT2 small as an example, we add: • a trainable rank- $r$ update on the embedding layer with dimensions of $50256\\times r$ and $r\\times 768$, • a trainable linear layer with dimensions of $768\\times M$ for each prediction task that is an $M$ -class classification problem, • a batch normalization layer before the linear layer, with trainable affine parameters. We consider an input sentence that only contains a person’s full name, preceded by a starting token and followed by an ending token. After applying all 12 layers of GPT2, we extract the hidden states from the last layer at the ending token. For instance, in the GPT2-small model, this is a 768-dimensional vector. We then apply a linear classifier on top to predict the person’s attributes. Similar to P-probing, we adopt a separate set of trainable parameters for each of the 11 classification tasks.",
+     "kind": "body"
+    },
+    {
+     "id": "A6.p2",
+     "text": "We employ the AdamW optimizer with $\\varepsilon=10^{-6}$, a weight decay of 0.3, an initial learning rate of $0.001$, no warmup, and a linear learning rate decay schedule (reducing to $0$ by the end). The batch size is set to 200, and we run a total of 30,000 training steps. During training, we allow the frozen GPT2 model to use dropout.",
+     "kind": "body"
+    },
+    {
+     "id": "A6.p3",
+     "text": "Experiments are conducted on both the bioS and the bioR data families, as shown in Figure 16, for first-token prediction and whole-attribute prediction. We compare rank-16 versus rank-64 updates on the embedding layer for the bioS data (or rank-32 versus rank-128 updates for the bioR data). This demonstrates that for Q-probing, a larger modification to the embedding layer is not necessary to probe the desired attribute values.",
+     "kind": "body"
+    },
+    {
+     "id": "A6.F16",
+     "text": "(a) Q-probing for the bioS data family; LoRA embedding layer rank = 16",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix G Details on Celebrity Augementation",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A7.p1",
+     "text": "Recall that in the celebrity knowledge augmentation, we introduced an additional set of $N=100,000$ individuals and designated them as the celebrity group, ${\\mathcal{P}_{\\mathsf{cel}}}$. In contrast, the original $N$ individuals represent the minority group, ${\\mathcal{P}_{\\mathsf{min}}}$. There is no overlap between these two sets of individuals; specifically, they have distinct full names.",
+     "kind": "body"
+    },
+    {
+     "id": "A7.p2",
+     "text": "In the main body of this paper (specifically in Figure 8), we considered two choices: • The minority uses bioS single+permute1, and the celebrity uses bioS multi5+permute. We denote this combination as bioS single+permute1+CEL and compare it to bioS single+permute1. • The minority uses bioR single, and the celebrity uses bioR multi5. We denote this combination as bioR single+CEL and compare it to bioR single. (We also compare the latter to bioR single+wiki. By this, we mean that during BIO pretraining, half of the training sentences come from the WikiBook dataset, while the other half come from the bioR single data.) 26 26 26 Recall that BERT and RoBERTa were trained on a combination of BookCorpus and English Wikipedia, which totals 16GB of uncompressed text. We use this same 16GB WikiBook dataset. Note that in both cases, each individual in the minority group has only one biographical entry, while each individual in the celebrity group has five biographical entries. Thus, during BIO pretraining, the BIO data on ${\\mathcal{P}_{\\mathsf{cel}}}$ appear with a $1/6$ chance.",
+     "kind": "body"
+    },
+    {
+     "id": "A7.p3",
+     "text": "In this appendix, we explore a broader set of augmentation options. • The minority uses bioS single and the celebrity uses bioS multi5+permute, denoted as bioS single+CEL. We compare this to bioS single. In this scenario, the celebrity and minority groups have biographical entries in different formats: the entries of the celebrity group are randomly shuffled, while those of the minority group follow a fixed order (see ( 2.1)). The QA test accuracy on the minority group increases with the addition of the celebrity group, but not to the same extent as in the bioS single+permute1+CEL case. • The minority uses bioS single+permute1+fullname and the celebrity uses bioS multi5+permute, denoted as bioS single+permute1+fullname+CEL. We compare this to bioS single+permute1+fullname. In this scenario, the celebrity and minority groups have their biographical entries in different formats: the minority group uses the fullname augmentation, repeating the individual’s full name in each sentence, while the celebrity group only mentions the fullname once. The QA test accuracy on the minority group increases with the assistance of the celebrity group, but not as much as in the bioS single+permute1+CEL case. • The minority uses bioR single+fullname and the celebrity uses bioR multi5+fullname, denoted as bioR single+fullname+CEL. We compare this to bioR single+fullname. In this case, the celebrity and minority groups have their biographical entries in the same format, leading to a significant increase in QA test accuracy to $82.2\\%$. (We also compare this to bioR single+fullname+wiki, where during BIO pretraining, half of the training sentences come from the WikiBook dataset, and the other half from the bioR single+fullname data. C.f. Remark 6.1)",
+     "kind": "body"
+    },
+    {
+     "id": "A7.p4",
+     "text": "The transformer model is pretrained on the combined set of biographies ${\\mathcal{P}_{\\mathsf{cel}}}\\cup{\\mathcal{P}_{\\mathsf{min}}}$ and then finetuned using QAs from the celebrity group ${\\mathcal{P}_{\\mathsf{cel}}}$. We evaluate the model’s QA generation accuracy on the ${\\mathcal{P}_{\\mathsf{min}}}$ group. 27 27 27 We also considered other fine-tuning variations, such as QA finetuning with half of ${\\mathcal{P}_{\\mathsf{min}}}$ as training and half as testing, but found negligible differences. Our findings are reported in Figure 17.",
+     "kind": "body"
+    },
+    {
+     "id": "A7.F17",
+     "text": "Figure 17: QA finetune accuracy on the minority group with versus without celebrity data in the pretraining process. This is an extension to Figure 8, and the details are given in Appendix G.",
+     "kind": "caption"
+    },
+    {
+     "id": "A7.p5",
+     "text": "P-probing and Q-probing. We incorporate P-probing and Q-probing results for our celebrity case. The inclusion of celebrity data enhances the model’s structural knowledge storage, even for minority groups. Figure 18 demonstrates that knowledge about minority groups is often stored in earlier tokens. This confirms that for minority groups, individual full names can more directly encode the six target attributes, due to the introduction of celebrity data. This accounts for the high knowledge-extraction QA accuracies.",
+     "kind": "body"
+    },
+    {
+     "id": "A7.F18",
+     "text": "(a) P-probing first-token prediction accuracy; LoRA embedding layer rank = 2",
+     "kind": "caption"
+    },
+    {
+     "id": "A7.F19",
+     "text": "Figure 19: Q-probing accuracies on the minority group with or without celebrity data. Each row denotes a pretrained model with its specific knowledge augmentation. The left block reiterates QA finetune accuracies on the minority group (same as Figure 17). The middle showcases Q-probing accuracies on the first-token prediction for the six attributes of individuals in the minority group, and the right focuses on Q-probing for the “whole-attribute” prediction. Recall we have used a LoRA embedding rank 16 for the bioS data and rank 32 for the bioR data (see Appendix F).",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix H Details on BERT Experiment",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A8.p1",
+     "text": "Recall that GBERT is a bi-directional variant of GPT2, using the same tokenizer, as detailed in Appendix B. It is similar to BERT, but its architecture closely resembles GPT2 for a more direct comparison. We use GBERT for the following tasks: (1) BIO pretrain, (2) BIO+QA mixed training, (3) QA finetune from BIO pretrain, and (4) Q-probing from BIO pretrain. Since we only apply GBERT to the bioS data family to demonstrate a negative result, we utilize the same architecture size as GPT2-small.",
+     "kind": "body"
+    },
+    {
+     "id": "A8.p2",
+     "text": "For BIO pretrain and BIO+QA mixed training, we use the AdamW optimizer with weight decay 0.1, $\\varepsilon=10^{-6}$, an initial learning rate of 0.0003, a 1000-step linear warmup, and cosine learning rate decay (from 0.0003 to 0.00003). We use a batch size of 96 for 150000 training steps on the bioS dataset. This is twice the training time compared to the 80000 steps used for GPT2 small on the same dataset, as we are presenting a negative result on GBERT. For BIO+QA mixed training, we tested both ${\\mathsf{QA}_{r}}=0.2$ and ${\\mathsf{QA}_{r}}=0.8$ and report the best test accuracy.",
+     "kind": "body"
+    },
+    {
+     "id": "A8.p3",
+     "text": "For QA finetune, we tested four LoRA variants and report their best accuracy. 28 28 28 Specifically, we tested rank-8 or rank-32 update on the query/value matrices, and rank-128 update or full fine-tuning on the embedding layer. We use the AdamW optimizer with weight decay 0.01 and an initial learning rate of $0.0003$ for all tasks, with linear learning rate decay (down to 0). We use a batch size of 48 for 50000 training steps.",
+     "kind": "body"
+    },
+    {
+     "id": "A8.p4",
+     "text": "For Q-probing, we use the AdamW optimizer with $\\varepsilon=10^{-6}$, weight decay 0.3, an initial learning rate of $0.001$, no warmup, linear learning rate decay (down to 0), a batch size of 200, and 30000 training steps. This is identical to the procedure outlined in Appendix F.",
+     "kind": "body"
+    },
+    {
+     "id": "A8.p5",
+     "text": "All of our results were presented in the same Figure 9.",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

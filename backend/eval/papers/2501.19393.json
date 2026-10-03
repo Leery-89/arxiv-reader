@@ -1,0 +1,761 @@
+{
+ "arxiv_id": "2501.19393",
+ "title": "s1 : Simple test-time scaling",
+ "abstract": "Test-time scaling is a promising new approach to language modeling that uses extra test-time compute to improve performance. Recently, OpenAI’s o1 model showed this capability but did not publicly share its methodology, leading to many replication efforts. We seek the simplest approach to achieve test-time scaling and strong reasoning performance. First, we curate a small dataset s1K of 1,000 questions paired with reasoning traces relying on three criteria we validate through ablations: difficulty, diversity, and quality. Second, we develop budget forcing to control test-time compute by forcefully terminating the model’s thinking process or lengthening it by appending “Wait” multiple times to the model’s generation when it tries to end. This can lead the model to double-check its answer, often fixing incorrect reasoning steps. After supervised finetuning the Qwen2.5-32B-Instruct language model on s1K and equipping it with budget forcing, our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24). Further, scaling s1-32B with budget forcing allows extrapolating beyond its performance without test-time intervention: from 50% to 57% on AIME24. Our model, data, and code are open-source at https://github.com/simplescaling/s1 .",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.F1",
+     "text": "Figure 1: Test-time scaling with s1-32B. We benchmark s1-32B on reasoning-intensive tasks and vary test-time compute.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.p1",
+     "text": "Performance improvements of language models (LMs) over the past years have largely relied on scaling up train-time compute using large-scale self-supervised pretraining. The creation of these powerful models has set the stage for a new scaling paradigm built on top of them: test-time scaling. The aim of this approach is to increase the compute at test time to get better results. There has been much work exploring this idea, and the viability of this paradigm was recently validated by OpenAI o1. o1 has demonstrated strong reasoning performance with consistent gains from scaling test-time compute. OpenAI describes their approach as using large-scale reinforcement learning (RL) implying the use of sizable amounts of data. This has led to various attempts to replicate their models relying on techniques like Monte Carlo Tree Search, multi-agent approaches, and others. Among these approaches, DeepSeek R1 has successfully replicated o1-level performance, also employing reinforcement learning via millions of samples and multiple training stages. However, despite the large number of o1 replication attempts, none have openly replicated a clear test-time scaling behavior. Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "We show that training on only 1,000 samples with next-token prediction and controlling thinking duration via a simple test-time technique we refer to as budget forcing leads to a strong reasoning model that scales in performance with more test-time compute. Specifically, we construct s1K, which consists of 1,000 carefully curated questions paired with reasoning traces and answers distilled from Gemini Thinking Experimental. We perform supervised fine-tuning (SFT) of an off-the-shelf pretrained model on our small dataset requiring just 26 minutes of training on 16 H100 GPUs. After training, we control the amount of test-time compute our model spends using budget forcing: (I) If the model generates more thinking tokens than a desired limit, we forcefully end the thinking process by appending an end-of-thinking token delimiter. Ending the thinking this way makes the model transition to generating its answer. (II) If we want the model to spend more test-time compute on a problem, we suppress the generation of the end-of-thinking token delimiter and instead append “Wait” to the model’s current reasoning trace to encourage more exploration. Equipped with this simple recipe – SFT on 1,000 samples and test-time budget forcing – our model s1-32B exhibits test-time scaling ( Figure 1). Further, s1-32B is the most sample-efficient reasoning model and outperforms closed-source models like OpenAI’s o1-preview ( Figure 2).",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p3",
+     "text": "We conduct extensive ablation experiments targeting (a) our selection of 1,000 (1K) reasoning samples and (b) our test-time scaling. For (a), we find that jointly incorporating difficulty, diversity, and quality measures into our selection algorithm is important. Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average). Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection. This highlights the importance of careful data selection and echoes prior findings for instruction tuning. For (b), we define desiderata for test-time scaling methods to compare different approaches. Budget forcing leads to the best scaling as it has perfect controllability with a clear positive slope leading to strong performance.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p4",
+     "text": "In summary, our contributions are: We develop simple methods for creating a sample-efficient reasoning dataset ( §2) and test-time scaling ( §3); Based on these we build s1-32B which is competitive with o1-preview ( §4); We ablate subtleties of data ( §5.1) and test-time scaling ( §5.2). We end with a discussion to motivate future work on simple reasoning ( §6). Our code, model, and data are open-source at https://github.com/simplescaling/s1.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F2",
+     "text": "Figure 2: s1K and s1-32B. (left) s1K is a dataset of 1,000 high-quality, diverse, and difficult questions with reasoning traces. (right) s1-32B, a 32B parameter model finetuned on s1K is on the sample-efficiency frontier. See Table 1 for details on other models.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Reasoning data curation to create s1K",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.p1",
+     "text": "In this section, we describe our process for creating a large dataset first in §2.1 and then filtering it down to s1K in §2.2.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.1 Initial collection of 59K samples",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.p1",
+     "text": "We collect an initial 59,029 questions from 16 sources following three guiding principles. Quality: Datasets should be high-quality; we always inspect samples and ignore datasets with, e.g., poor formatting; Difficulty: Datasets should be challenging and require significant reasoning effort; Diversity: Datasets should stem from various fields to cover different reasoning tasks. We collect datasets of two categories:",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Curation of existing datasets",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.SSS0.Px1.p1",
+     "text": "Our largest source is NuminaMATH with 30,660 mathematical problems from online websites. We also include historical AIME problems (1983-2021). To enhance diversity, we add OlympicArena with 4,250 questions spanning Astronomy, Biology, Chemistry, Computer Science, Geography, Mathematics, and Physics from various Olympiads. OmniMath adds 4,238 competition-level mathematics problems. We also include 2,385 problems from AGIEval, which features questions from standardized tests like SAT and LSAT, covering English, Law, and Logic. We refer to Table 7 in §C for our other sources.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "New datasets in quantitative reasoning",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.SSS0.Px2.p1",
+     "text": "To complement these existing datasets, we create two original datasets. s1-prob consists of 182 questions from the probability section of Stanford University’s Statistics Department’s PhD Qualifying Exams ( https://statistics.stanford.edu), accompanied by handwritten solutions that cover difficult proofs. The probability qualifying exam is held yearly and requires professional-level mathematical problem-solving. s1-teasers comprises 23 challenging brain-teasers commonly used in interview questions for quantitative trading positions. Each sample consists of a problem and solution taken from PuzzledQuant ( https://www.puzzledquant.com/). We only take examples with the highest difficulty level (”Hard”).",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.SSS0.Px2.p2",
+     "text": "For each question, we generate a reasoning trace and solution using the Google Gemini Flash Thinking API extracting its reasoning trace and response. This yields 59K triplets of a question, generated reasoning trace, and generated solution. Examples from our dataset are in §D.2. We decontaminate all samples against our evaluation questions (MATH500, GPQA Diamond, AIME24; §C.5) using 8-grams and deduplicate the data.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.2 Final selection of 1K samples",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.p1",
+     "text": "We could directly train on our pool of 59K questions, however, our goal is to find the simplest approach with minimal resources. Thus, we go through three stages of filtering to arrive at a minimal set of 1,000 samples relying on our three guiding data principles: Quality, Difficulty, and Diversity.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Quality",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px1.p1",
+     "text": "We first remove any questions where we ran into any API errors reducing our dataset to 54,116 samples. Next, we filter out low-quality examples by checking if they contain any string patterns with formatting issues, such as ASCII art diagrams, non-existent image references, or inconsistent question numbering reducing our dataset to 51,581 examples. From this pool, we identify 384 samples for our final 1,000 samples from datasets that we perceive as high-quality and not in need of further filtering (see §C.4 for details).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Difficulty",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px2.p1",
+     "text": "For difficulty, we use two indicators: model performance and reasoning trace length. We evaluate two models on each question: Qwen2.5-7B-Instruct and Qwen2.5-32B-Instruct, with correctness assessed by Claude 3.5 Sonnet comparing each attempt against the reference solution (see §C.3 for the grading protocol). We measure the token length of each reasoning trace to indicate problem difficulty using the Qwen2.5 tokenizer. This relies on the assumption that more difficult problems require more thinking tokens. Based on the grading, we remove questions that either Qwen2.5-7B-Instruct or Qwen2.5-32B-Instruct can solve correctly and thus may be too easy. By using two models we reduce the likelihood of an easy sample slipping through our filtering due to a rare mistake on an easy question of one of the models. This brings our total samples down to 24,496, setting the stage for the next round of subsampling based on diversity. While filtering with these two models may be optimized for our setup as we will also use Qwen2.5-32B-Instruct as our model to finetune, the idea of model-based filtering generalizes to other setups.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Diversity",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px3.p1",
+     "text": "To quantify diversity, we classify questions into domains using Claude 3.5 Sonnet based on the Mathematics Subject Classification (MSC) system (e.g., geometry, combinatorics, etc.) from the American Mathematical Society. 1 1 1 https://mathscinet.ams.org/mathscinet/msc/msc2020.html The taxonomy focuses on topics in mathematics but also includes other sciences such as biology, physics, and economics. To select our final examples from the pool of 24,496 questions, we first choose one domain uniformly at random. Then, we sample one problem from this domain according to a distribution that favors longer reasoning traces (see §C.4 for details) as motivated in Difficulty. We repeat this process until we have 1,000 total samples spanning 50 domains.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px3.p2",
+     "text": "In §5.1, we will show that using our three criteria in combination is important, as only relying on quality, diversity, or difficulty in isolation leads to worse datasets. Some distilled generations are incorrect, which we allow in our data as we focus on capturing the reasoning process rather than entirely correct solutions. Our grader ( §C.3) deems 53.6% correct in s1K and 63.0% in our follow-up s1K-1.1 (see §A).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Test-time scaling",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.F3",
+     "text": "Figure 3: Budget forcing with s1-32B. The model tries to stop after “…is 2.”, but we suppress the end-of-thinking token delimiter instead appending “Wait” leading s1-32B to self-correct its answer.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.1 Method",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.p1",
+     "text": "We classify test-time scaling methods into 1) Sequential, where later computations depend on earlier ones (e.g., a long reasoning trace), and 2) Parallel, where computations run independently (e.g., majority voting). We focus on sequential scaling as intuitively we believe it should scale better, since later computations can build on intermediate results, allowing for deeper reasoning and iterative refinement. We propose new sequential scaling methods and ways to benchmark them.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Budget forcing",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.SSS0.Px1.p1",
+     "text": "We propose a simple decoding-time intervention by forcing a maximum and/or minimum number of thinking tokens. Specifically, we enforce a maximum token count by simply appending the end-of-thinking token delimiter and optionally “ Final Answer: ” to early exit the thinking stage and make the model provide its current best answer. To enforce a minimum, we suppress the generation of the end-of-thinking token delimiter and optionally append the string “Wait” to the model’s current reasoning trace to encourage the model to reflect on its current generation. Figure 3 contains an example of how this simple approach can lead the model to arrive at a better answer.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Baselines",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.SSS0.Px2.p1",
+     "text": "We benchmark budget forcing with: (I) Conditional length-control methods, which rely on telling the model in the prompt how long it should generate for. We group them by granularity into (a) Token-conditional control: We specify an upper bound of thinking tokens in the prompt; (b) Step-conditional control: We specify an upper bound of thinking steps, where each step is around 100 tokens; (c) Class-conditional control: We write two generic prompts that tell the model to either think for a short or long amount of time (see §E.1 for details). (II) Rejection sampling, which samples until a generation fits a predetermined compute budget. This oracle captures the posterior over responses conditioned on its length.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.2 Metrics",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.p1",
+     "text": "We establish a set of desiderata as evaluation metrics to measure test-time scaling across methods. Importantly, we do not only care about the accuracy a method can achieve but also its controllability and test-time scaling slope. For each method we consider, we run a set of evaluations $a\\in\\mathcal{A}$ varying test-time compute on a fixed benchmark, e.g. AIME24. This produces a piece-wise linear function $f$ with compute as the x-axis measured in thinking tokens and accuracy as the y-axis (see Figure 1, where the rightmost dot for AIME24 corresponds to $f(7320)=57\\%$). We measure three metrics: $\\displaystyle\\text{Control}=\\frac{1}{|\\mathcal{A}|}\\sum_{a\\in\\mathcal{A}}\\mathbb{I}(a_{\\text{min}}\\leq a\\leq a_{\\text{max}})$ (1) where $a_{\\text{min}},a_{\\text{max}}$ refer to a pre-specified minimum and maximum amount of test-time compute; in our case thinking tokens. We usually only constrain $a_{\\text{max}}$. As tokens generated correspond to the amount of test-time compute spent, this metric measures the extent to which a method allows controllability over the use of that test-time compute. We report it as a percentage with 100% being perfect control. $\\displaystyle\\text{Scaling}=\\frac{1}{\\binom{|\\mathcal{A}|}{2}}\\sum_{\\begin{subarray}{c}a,b\\in\\mathcal{A}\\\\ b>a\\end{subarray}}\\frac{f(b)-f(a)}{b-a}$ (2) Scaling is the average slope of the piece-wise linear function. It must be positive for useful methods and larger is better. Performance $\\displaystyle=\\max_{a\\in\\mathcal{A}}f(a)$ (3) Performance is simply the maximum performance the method achieves on the benchmark. A method with monotonically increasing scaling achieves 100% performance on any benchmark in the limit. However, the methods we investigate eventually flatten out or further scaling fails due to control or context window limitations.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F4",
+     "text": "(a) Sequential scaling via budget forcing",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Results",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "4.1 Setup",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 4,
+   "title": "Training",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS1.SSS0.Px1.p1",
+     "text": "We perform supervised finetuning on Qwen2.5-32B-Instruct using s1K to obtain our model s1-32B using basic hyperparameters outlined in §D. Finetuning took 26 minutes on 16 NVIDIA H100 GPUs with PyTorch FSDP.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Evaluation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS1.SSS0.Px2.p1",
+     "text": "We select three representative reasoning benchmarks widely used in the field: AIME24 has 30 problems that were used in the 2024 American Invitational Mathematics Examination (AIME) held from January 31 – February 1, 2024. AIME tests mathematical problem-solving with arithmetic, algebra, counting, geometry, number theory, probability, and other secondary school math topics. High-scoring high school students in the test are invited to participate in the United States of America Mathematics Olympiad (USAMO). All AIME answers are integers ranging from $000$ to $999$, inclusive. Some AIME problems rely on figures that we provide to our model using the vector graphics language Asymptote as it cannot take image inputs. MATH500 is a benchmark of competition math problems of varying difficulty. We evaluate on the same 500 samples selected by OpenAI in prior work. GPQA Diamond consists of 198 PhD-level science questions from Biology, Chemistry and Physics. Experts with PhDs in the corresponding domains only achieved 69.7% on GPQA Diamond. When we write “GPQA” in the context of evaluation in this work, we always refer to the Diamond subset. We build on the “lm-evaluation-harness” framework. Unless otherwise specified, we evaluate with a temperature of 0 (greedy) and measure accuracy (equivalent to pass@1).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Other models",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS1.SSS0.Px3.p1",
+     "text": "We benchmark s1-32B against: OpenAI o1 series, closed-source models that popularized test-time scaling; DeepSeek r1 series, open-weight reasoning models with up to o1-level performance; Qwen’s QwQ-32B-preview, a 32B open-weight reasoning model without disclosed methodology; Sky-T1-32B-Preview and Bespoke-32B, open models with open reasoning data distilled from QwQ-32B-preview and r1; Google Gemini 2.0 Flash Thinking Experimental, the API that we distill from. As it has no official evaluation scores, we use the Gemini API to benchmark it ourselves. However, the ‘‘recitation error’’ of the Gemini API makes evaluation challenging. 2 2 2 https://github.com/google/generative-ai-docs/issues/257 We circumvent this, by manually inserting all 30 AIME24 questions in its web interface where the error does not appear. However, we leave out MATH500 (500 questions) and GPQA Diamond (198 questions), thus they are N.A. in Table 1. Our model, s1-32B, is fully open including weights, reasoning data, and code.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.T1",
+     "text": "Table 1: s1-32B is a strong open reasoning model. We evaluate s1-32B, Qwen, and Gemini (some entries are unknown (N.A.), see §4). Other results are from the respective reports. # ex. = number examples used for reasoning finetuning; BF = budget forcing. See §A for our better s1.1 model.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.2 Performance",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 4,
+   "title": "Test-time scaling",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS2.SSS0.Px1.p1",
+     "text": "Figure 1 shows the performance of s1-32B with budget forcing scales with more test-time compute. In Figure 4 (left), we expand the plot from Figure 1 (middle) showing that while we can improve AIME24 performance using our budget forcing technique ( §3) and more test-time compute it does eventually flatten out at six times. Suppressing the end-of-thinking token delimiter too often can lead the model into repetitive loops instead of continued reasoning. In Figure 4 (right), we show that after training Qwen2.5-32B-Instruct on our 1,000 samples to produce s1-32B and equipping it with the simple budget forcing technique, it operates in a different scaling paradigm. Scaling test-time compute on the base model via majority voting cannot catch up with the performance of s1-32B which validates our intuition from §3 that sequential scaling is more effective than parallel. We provide example generations of s1-32B in Figure 5.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Sample-efficiency",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS2.SSS0.Px2.p1",
+     "text": "In Figure 2 (right) and Table 1 we compare s1-32B with other models. We find that s1-32B is the most sample-efficient open data reasoning model. It performs significantly better than our base model (Qwen2.5-32B-Instruct) despite just training it on an additional 1,000 samples. The concurrently released r1-32B shows stronger performance than s1-32B while also only using SFT. However, it is trained on 800 $\\times$ more reasoning samples. It is an open question whether one can achieve their performance with just 1,000 samples. Finally, our model nearly matches Gemini 2.0 Thinking on AIME24. As the data for s1-32B is distilled from Gemini 2.0, this shows our distillation procedure was likely effective.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.F5",
+     "text": "Figure 5: Example model outputs. We pick a question from AIME24 ( left), MATH500 ( middle), and GPQA ( right), where our model generates the correct answer. The black text is the prompt, the light blue text is the reasoning trace, and the blue text is the answer of s1-32B. The gray ellipsis […] indicates that the text was trimmed to fit this page, but the generated text is actually longer.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Ablations",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "5.1 Data Quantity, Diversity, and Difficulty",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.T2",
+     "text": "Table 2: s1K data ablations. We budget force (BF) a maximum of around 30,000 thinking tokens for all scores in this table. This performs slightly better than the scores without BF ( Table 1) as it allows the model to finish with a best guess when stuck in an infinite loop. We report 95% paired bootstrap confidence intervals for differences relative to the s1K model using 10,000 bootstrap samples. E.g., the interval [-13%, 20%] means that, with 95% confidence, the true difference between 59K-full and s1K is between -13% and +20%. If the entire interval is negative, e.g. [-27%, -3%], we can confidently say that the performance is worse than s1K.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS1.p1",
+     "text": "In §2 we outlined our three guiding principles in curating s1K: Quality, Difficulty, and Diversity. Here we test the importance of combining them and the overall efficacy of our selection. Only Quality (1K-random): After obtaining our high-quality reasoning chains from Gemini, we select 1,000 samples at random; not relying on our difficulty and diversity filtering at all. Table 2 shows this approach performs much worse than s1K across all benchmarks. Only Diversity (1K-diverse): For this dataset, we sample uniformly across domains to maximize diversity disregarding any notion of difficulty. This approach also leads to poor performance similar to 1K-random. Only Difficulty (1K-longest): Here we rely on one of our difficulty indicators introduced in §2 by selecting the 1,000 samples with the longest reasoning traces. This approach significantly boosts GPQA performance but overall still falls short of using s1K. Maximize Quantity: Finally, we compare with just training on all of our 59K samples, a superset of all the 1K-sample versions. This leads to a strong model but uses much more resources. To finetune on 59K samples, we use 394 H100 GPU hours while s1-32B only required 7 H100 GPU hours. Moreover, relying only on s1K is extremely competitive as shown in §2. Overall, combining all three criteria – Quality, Difficulty, Diversity – via our methodology in §2 is key for sample-efficient reasoning training.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "5.2 Test-time scaling methods",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.T3",
+     "text": "Table 3: Ablations on methods to scale test-time compute on AIME24. $|\\mathcal{A}|$ refers to the number of evaluation runs used to estimate the properties; thus a higher value indicates more robustness. Bold indicates our chosen method and the best values. BF = budget forcing, TCC/SCC/CCC = token/step/class-conditional control, RS = rejection sampling.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Budget forcing",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS2.SSS0.Px1.p1",
+     "text": "In Table 3 we compare the test-time scaling methods we have introduced in §3. Overall, we find that budget forcing provides perfect control, good scaling, and leads to our best AIME24 score. Thus, this is the method we use for s1-32B in Figure 1 and in §4. In Table 4, we compare different strings for extrapolating performance. We find that “Wait” generally gives the best performance.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.SSS0.Px1.p2",
+     "text": "Class-conditional control We provide benchmark scores for this method in §E.1 and summarize three findings here: (1) Token-conditional control fails without budget forcing, as our model cannot reliably count tokens - even when trained to do so. (2) Under step-conditional control, the model generates a similar total number of tokens when given different step targets, as the model goes from few steps with many tokens per step, to many steps with few tokens in each step. Thus, the model learns to hack its way around the compute constraint making the controllability of this method mediocre. (3) Class-conditional control can work - telling a model to simply think longer can increase its test-time compute and performance, which leads good scaling in Table 3.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.T4",
+     "text": "Table 4: Budget forcing extrapolation ablations. We compare ignoring the end-of-thinking delimiter twice and appending none or various strings.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.F6",
+     "text": "Figure 6: Rejection sampling on AIME24 with s1-32B. We sample with a temperature of 1 until all generations have less than (from left to right) 3500, 4000, 5000, 8000, and 16000 thinking tokens requiring an average of 655, 97, 8, 3, 2, and 1 tries per sample.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Rejection sampling",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS2.SSS0.Px2.p1",
+     "text": "Surprisingly, we find that simply sampling until the generation fits a specific length leads to an inverse scaling trend as depicted in Figure 6. In §E.2 we inspect a question, which was answered correctly by the model when rejection sampling for $\\leq 4000$, but not for the $\\leq 8000$ token setting. In the $\\leq 4000$ setting the model directly jumps to the correct approach, while for the $\\leq 8000$ setting it backtracks a lot. We hypothesize that there is a correlation such that shorter generations tend to be the ones where the model was on the right track from the start, whereas longer ones tend to be ones where the model made mistakes and thus backtracks or questions itself. This leads to longer samples often being wrong when rejection sampling and thus the inverse scaling trend.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "6 Discussion and related work",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "6.1 Sample-efficient reasoning",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 4,
+   "title": "Models",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS1.SSS0.Px1.p1",
+     "text": "There are a number of concurrent efforts to build models that replicate the performance of o1. For example, DeepSeek-r1 and k1.5 are built with reinforcement learning methods, while others rely on SFT using tens of thousands of distilled examples. We show that SFT on only 1,000 examples suffices to build a competitive reasoning model matching o1-preview and produces a model that lies on the pareto frontier ( Figure 2). Further, we introduce budget forcing which combined with our reasoning model leads to the first reproduction of OpenAI’s test-time scaling curves. Why does supervised finetuning on just 1,000 samples lead to such performance gains? We hypothesize that the model is already exposed to large amounts of reasoning data during pretraining which spans trillions of tokens. Thus, the ability to perform reasoning is already present in our model. Our sample-efficient finetuning stage just activates it and we scale it further at test time with budget forcing. This is similar to the ”Superficial Alignment Hypothesis” presented in LIMA, where the authors find that 1,000 examples can be sufficient to align a model to adhere to user preferences.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Benchmarks and methods",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS1.SSS0.Px2.p1",
+     "text": "To evaluate and push the limits of these models, increasingly challenging benchmarks have been introduced, such as Olympiad-level science competitions and others. To enhance models’ performance on reasoning-related tasks, researchers have pursued several strategies: Prior works have explored continuing training language models on specialized corpora related to mathematics and science, sometimes even synthetically generated data. Others have developed training methodologies specifically aimed at reasoning performance. Another significant line of work focuses on prompting-based methods to elicit and improve reasoning abilities, including methods like Chain-of-Thought prompting. These combined efforts aim to advance the reasoning ability of language models, enabling them to handle more complex and abstract tasks effectively.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "6.2 Test-time scaling",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 4,
+   "title": "Methods",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS2.SSS0.Px1.p1",
+     "text": "As we introduce in §3, we differentiate two methods to scale test-time compute: parallel and sequential. The former relies on multiple solution attempts generated in parallel and selecting the best outcome via specific criteria. These criteria include choosing the most frequent response for majority voting or the best response based on an external reward for Best-of-N. Unlike repeated sampling, previous sequential scaling methods let the model generate solution attempts sequentially based on previous attempts, allowing it to refine each attempt based on previous outcomes. Tree-based search methods offer a hybrid approach between sequential and parallel scaling, such as Monte-Carlo Tree Search (MCTS) and guided beam search. REBASE employs a process reward model to balance exploitation and pruning during tree search. Empirically, REBASE has been shown to outperform sampling-based methods and MCTS. Reward models play a key role in these methods. They come in two variants: outcome reward models and process reward models. Outcome reward models assign a score to complete solutions and are particularly useful in Best-of-N selection, while process reward models assess individual reasoning steps and are effective in guiding tree-based search methods.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Limits to further test-time scaling",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS2.SSS0.Px2.p1",
+     "text": "We have shown that budget forcing allows extrapolating test-time compute in §4, e.g., improving AIME24 performance from 50% to 57%. However, it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it. Despite these constraints, our work shows test-time scaling across a wide range of accuracies ( Figure 1), partly because scaling down test-time compute behaves predictably and does not suffer from these constraints.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.SS2.SSS0.Px2.p2",
+     "text": "Continuing test-time scaling will require approaches that can further extrapolate test-time compute. How can we get such extrapolation? There may be improvements to budget forcing such as rotating through different strings, not only “Wait”, or combining it with frequency penalties or higher temperature to avoid repetitive loops. An exciting direction for future work is also researching whether applying budget forcing to a reasoning model trained with reinforcement learning yields better extrapolation; or if RL allows for new ways of test-time scaling beyond budget forcing. Our work defines the right metrics ( §3.2) – Control, Scaling, and Performance – to enable future research and progress on extrapolating test-time compute.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.F7",
+     "text": "Figure 7: Scaling further with parallel scaling methods. All metrics averaged over the 30 questions in AIME24. Average thinking tokens for REBASE do not account for the additional compute from the reward model. For sequential scaling, we prompt the model to use up to (from left to right) 32, 64, 256, and 512 steps. For REBASE and majority voting we generate 16 parallel trajectories to aggregate across.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Parallel scaling as a solution",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.SS2.SSS0.Px3.p1",
+     "text": "Parallel scaling offers one solution to the limits of sequential scaling, thus we augment our sequentially scaled model with two methods: (I) Majority voting: After generating $k$ solutions, the final solution is the most frequent one across generations; (II) Tree search via REBASE: We use the REBASE process reward model, which is initialized from LLaMA-34B and further finetuned on a synthetic process reward modeling dataset. We then aggregate the solutions generated by REBASE via majority voting. As shown in Figure 7, augmenting our model with REBASE scales better than majority voting, and even sequential scaling in this scenario. However, REBASE requires an additional forward pass at each step for the reward model adding some computation overhead. For sequential scaling, when prompted to use up to 512 steps, for 12 out of the 30 evaluation questions the model generates a response that exceeds the context window leading to a large performance drop. Overall, we find that these parallel scaling methods complement sequential scaling thus they offer an avenue for scaling test-time compute even further; beyond fixed context windows.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Impact Statement",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "Sx1.p1",
+     "text": "Language models with strong reasoning capabilities have the potential to greatly enhance human productivity, from assisting in complex decision-making to driving scientific breakthroughs. However, recent advances in reasoning, such as OpenAI’s o1 and DeepSeek’s r1, lack transparency, limiting broader research progress. Our work aims to push the frontier of reasoning in a fully open manner, fostering innovation and collaboration to accelerate advancements that ultimately benefit society.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Acknowledgements",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "Sx2.p1",
+     "text": "We thank Ryan Marten for generating traces from DeepSeek r1 for s1.1 using Bespoke Curator. This work was partly conducted using the Stanford Marlowe GPU cluster, made possible by financial support from Stanford University. We thank Alexander M. Rush, Andrew Ilyas, Banghua Zhu, Chenglei Si, Chunting Zhou, John Yang, Ludwig Schmidt, Samy Jelassi, Suhas Kotha, Tengyu Ma, Xuechen Li, Yu Sun, and Yue Zhang for very constructive discussions.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix A s1.1",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.p1",
+     "text": "Seven days after our release of s1, we released s1.1. We regenerated traces for our 1,000 samples in s1K using DeepSeek r1 to create s1K-1.1. We use the same training procedure to train our model s1.1. Other updates since our launch include the release of o3, LIMO, and AIME 2025. We consider all these new developments in Table 5. We find that s1.1 performs significantly better than s1. We also tried distilling from Claude 3.7, which led to worse performance than from r1 (not reported).",
+     "kind": "body"
+    },
+    {
+     "id": "A1.T5",
+     "text": "Table 5: s1-32B is an open and sample-efficient reasoning model. We evaluate s1-32B, Qwen, and Gemini (some entries are unknown (N.A.), see §4). Other results are from the respective reports except for AIME 2025. # ex. = number examples used for reasoning finetuning; BF = budget forcing.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix B Evaluation determinism",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.p1",
+     "text": "We run our evaluations using vLLM as it is faster than the alternatives we tried. However, we find that even when using the same random seeds and greedy sampling, evaluation scores can change significantly across runs: • Different batch sizes causing different results see https://github.com/vllm-project/vllm/issues/5898 • Continuing generations causing different results see https://github.com/vllm-project/vllm/issues/11783 • Changes in tensor parallelism causing different results",
+     "kind": "body"
+    },
+    {
+     "id": "A2.p2",
+     "text": "As our model generates long reasoning traces prior to its answer, small numeric changes can snowball into large differences. We encounter many generations that are exactly the same for thousands of tokens and then suddenly differ in one token eventually ending up with an entirely different answer. To partly counter this issue we generally run our final evaluations using full precision unless otherwise indicated.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix C s1K details",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "C.1 s1K summary",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.T6",
+     "text": "Table 6: Summary of our dataset s1K. Token count measured by the Qwen-2.5 tokenizer. We prompt Claude to produce keywords given several questions from the domain.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "C.2 Dataset composition for full 59K questions",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.T7",
+     "text": "Table 7: Composition of full 59K questions. Thinking and response lengths are measured in tokens using the Qwen2.5-32B-Instruct tokenizer. In addition to excluding our evaluation benchmark, AIME24, we also exclude AIME questions from 2022-2023 as we use these 90 questions during our development stage of s1-32B.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "C.3 s1K grading prompt",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.SS3.p1",
+     "text": "To grade whether an example is correct for our dataset selection in §2, we use the prompt in Figure 8. We grade using Claude 3.5 except for the correctness among the final 1,000 samples, which we graded with Claude 3.7.",
+     "kind": "body"
+    },
+    {
+     "id": "A3.F8",
+     "text": "Figure 8: Grading prompt.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "C.4 s1K diversity selection",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.SS4.p1",
+     "text": "Algorithm 1 provides our algorithm for selecting data in our diversity selection stage. As mentioned in §2, we also include samples from some specific benchmarks we perceive as high-quality. None of the samples overlap with our final evaluation.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "C.5 Decontamination",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.SS5.p1",
+     "text": "We filter all samples by checking for an 8-gram overlap between the selected examples and the evaluation benchmarks: MATH500, GPTQA Diamond, and AIME24. We exclude questions with more than an 8-gram overlap.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix D Training details",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.p1",
+     "text": "We take a model that has already been pretrained and instruction tuned and further finetune it for reasoning. Specifically, we use Qwen2.5-32B-Instruct, which on math tasks generally matches or outperforms the larger Qwen2.5-72B-Instruct or other open models. We use token delimiters to separate the thinking stage from the answering stage. We enclose the thinking stage with <|im_start|>think and <|im_start|>answer; both preceded and followed by a newline. Samples from our dataset are in §D.2. We use basic fine-tuning hyperparameters: we train for 5 epochs with a batch size of 16 for a total of 315 gradient steps. We train in bfloat16 precision with a learning rate of $1e-5$ warmed up linearly for 5% (16 steps) and then decayed to 0 over the rest of training (299 steps) following a cosine schedule. We use the AdamW optimizer with $\\beta_{1}=0.9,\\beta_{2}=0.95$ and weight decay of $1e-4$. We do not compute loss on questions, only on reasoning traces and solutions. We ensure the sequence length is large enough to avoid cutting off any samples; a setting we ablate in §D.1. The training takes just 26 minutes on 16 NVIDIA H100 GPUs.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.F9",
+     "text": "Figure 9: Training dynamics of s1-32B on s1K.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "D.1 Training Ablations: Sequence length",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.T8",
+     "text": "Table 8: Training sequence length ablation. We report “accuracy / average thinking tokens per sample”; the higher the accuracy and the fewer the thinking tokens (inference cost) the better.",
+     "kind": "caption"
+    },
+    {
+     "id": "A4.SS1.p1",
+     "text": "Besides our scaling ablations in §5.2, the main training hyperparameter we ablate is the sequence length used during training. We find that a shorter training sequence length leads to longer reasoning traces at test time. This is because when training with a shorter sequence length the answer section of the training sample is more commonly cut off. Inversely, when the training sequence length is longer, more samples appear in their entirety with the section where the model answers. Thus the model receives more gradient updates where it learns to generate an answer following its chain. This in turn leads to a higher log probability of the answer section at any point during the generation and thus shorter reasoning traces at test time. Performance-wise, we also find that the model trained with a longer sequence length performs better. Thus we opt for the longest training sequence length as it leads to better performance and makes inference more efficient by leading to shorter reasoning traces.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "D.2 Training Samples",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.SS2.p1",
+     "text": ", Table 10, Table 11 contain training samples from s1K.",
+     "kind": "body"
+    },
+    {
+     "id": "A4.T9",
+     "text": "Table 9: s1K sample stemming from s1-prob. The black text is the question and the yellow text is the solution. Based solely on the question we generate the light blue reasoning trace and blue response with Gemini, which we use for training.",
+     "kind": "caption"
+    },
+    {
+     "id": "A4.T10",
+     "text": "Table 10: s1K sample stemming from s1-teasers. The black text is the question and the yellow text is the solution. Based solely on the question we generate the light blue reasoning trace and blue response with Gemini, which we use for training.",
+     "kind": "caption"
+    },
+    {
+     "id": "A4.T11",
+     "text": "Table 11: s1K sample stemming from the astronomy subset of OlympicArena. The black text is the question and the blue text is the solution. Based solely on the question we generate the light blue reasoning trace and blue response with Gemini, which we use for training.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix E Test-time scaling details",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "E.1 Sequential scaling ablations",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.F10",
+     "text": "Figure 10: Token and step instruction data formats for controlling test-time compute. We only train our model on the reasoning trace and the answer.",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.T12",
+     "text": "Table 12: Scaling thinking time via tokens-conditional control. All metrics are averaged over the 30 questions in AIME24.",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.T13",
+     "text": "Table 13: Scaling thinking time via step-conditional control. All metrics are averaged over the 30 samples in AIME24. Token counts ignore the thinking and step delimiters.",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.T14",
+     "text": "Table 14: Scaling thinking time via class-conditional control. We report “accuracy / average thinking tokens per sample”; the higher the accuracy and the fewer the thinking tokens (inference cost) the better.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Token-conditional control",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS1.SSS0.Px1.p1",
+     "text": "One general approach is to simply tell a model in the prompt precisely how many tokens it should generate. Ideally, the model can keep track of its token count and adjust its generation to finish within the desired limits. We experiment with this approach by training a model with token instructions using the format in Figure 10 (left). We bucket the lengths of the reasoning traces from our 1,000 training examples into powers of two (rounded upwards) and add a corresponding instruction to the user prompt. For example, if the instruction says “Think for up to 2048 tokens”, then the reasoning trace has anywhere between 1024 and 2048 tokens. In Table 12, we show that after training the model hardly follows the token instruction. It does sometimes generate more tokens when given a higher limit but often overshoots the limit. This may not be unique to our model as prior work suggests that OpenAI o1-mini can also not follow token instructions. To prevent exceeding the limit, we test budget forcing the thinking to end once the limit is reached. This leads to perfect control ( Table 12 (lower)). With budget forcing, the scaling trend is also clearer as the model can no longer overshoot the limit when given a small thinking budget. This leads to better test-time scaling values for Token Prompting + budget forcing in Table 3. To compute Control reported in Table 3 for token-conditional control variants we divide the number of times the thinking tokens in Table 12 are less than the upper limit by the total evaluations (2/5 for without intervention; 5/5 for with intervention).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Step-conditional control",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS1.SSS0.Px2.p1",
+     "text": "Token instructions fail as current models cannot count tokens. To accommodate this lack of capability, we experiment with making the counting more coarse-grained. We partition the reasoning traces into steps and ask the model to think for a specific number of steps rather than tokens. We split our reasoning traces on double newlines into steps, which we find act as intuitive separators based on manual inspection of samples. We bucket our training samples into powers of 2 depending on their number of steps and add a corresponding step instruction following the format in Figure 10 (right). This format is based on early experiments, where we found the model to be more likely to adhere to the step limit when counting down (“3 steps left…2 steps left”) rather than counting up (“Step2…Step3…”). This is likely because if counting down, the final step is always 1, which will act as a strong prior to the model to finish its generation. If counting up, the final step before the answer varies, thus if the model does not remember the original step instruction, it may fail to stop. We conclude the following from our results in Table 13: (1) The model still struggles to adhere to the step limit. The model sometimes simply continues counting into negative steps, e.g. “-1 steps left”. To solve this issue, we automatically stop the thinking process once 0 steps are reached and then force the model to transition to answering mode by appending the answer token delimiter ( §3). This leads to perfect step adherence (lower half of Table 13), yet problems remain. (2) The model compensates for fewer steps by making each step longer. For example, when forced to use up to 16 steps vs 256 steps, the model generates an average of 96 tokens per step vs 56. Despite this issue, more steps still clearly correlate with more total thinking tokens in Table 13 and better performance leading to a positive slope (3) Step instructions are more costly than other methods. The step delimiters require around 6 tokens each which for e.g. 64 steps adds up to a total of around 380 tokens. When ignoring the step delimiters in token counts as in Table 13, the model still requires 7551 thinking tokens on average to achieve only 33.3% on AIME24. To compute Control reported in Table 3 for step-conditional control variants, we first decide that 100 tokens are an upper limit per step and then multiply this number by the steps instructed to arrive at a proxy total token limit, e.g. 1600 for 16 steps instructed. We then check whether the thinking tokens in Table 13 fit within the respective limit for each evaluation run (3/5 for without intervention; 5/5 for with intervention). For the model in Figure 7, we use a model with step-conditional control trained on an earlier version of our data and using an earlier version of our evaluation codebase.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Class-conditional control",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.SS1.SSS0.Px3.p1",
+     "text": "OpenAI exposes test-time compute control to users via a ‘‘reasoning_effort’’ API parameter with three possible settings: low, medium, and high. 3 3 3 https://github.com/openai/openai-python/blob/44d6210f101abedeb2dd68507fcffcb329df70ea/src/openai/types/chat/completion_create_params.py#L172 The OpenAI documentation also states that “Reducing reasoning effort can result in faster responses and fewer tokens used on reasoning in a response.” suggesting that they are unable to control test-time compute with guarantees. Thus, maybe OpenAI simply adjusts the prompt or system instruction depending on the reasoning effort desired. In Table 14, we show that separate prompts for short and long thinking allow us to control thinking time to some extent: Prompting the model to think for longer leads to longer thinking. However, it does not reliably improve performance and control is not precise. The current adherence to control may suffice when we only have three classes, but it might not scale to finer-grained classes. To compute Control reported in Table 3 for this method, we assume that prompting the model to think for a short time in Table 14 should produce fewer tokens than the default for AIME24, while the long prompt should produce more. As $8033>6109$ and $9651>6109$, one out of two follows our expected control thus Control is 50%.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "E.2 Examples for rejection sampling ablation",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.T15",
+     "text": "Table 15: Answers generated by an earlier version of s1-32B when rejection sampling on AIME24. The black text is the question and the yellow text is the solution. Based solely on the question we generate the light blue reasoning trace and blue response with s1-32B using a temperature of 1. We generate until the reasoning trace has less than 4000 tokens for the first and less than 8000 tokens for the second example. It required on average 199 (1) tries per example until thinking was $\\leq 4000$ ( $\\leq 8000$ tokens).",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix F Version Control",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A6.p1",
+     "text": "V2 → V3 (2025-03): • Added §A • Added number of correct samples in §2",
+     "kind": "body"
+    },
+    {
+     "id": "A6.p2",
+     "text": "V1 → V2 (2025-02): • Added citations and other small writing changes",
+     "kind": "body"
+    },
+    {
+     "id": "A6.p3",
+     "text": "",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

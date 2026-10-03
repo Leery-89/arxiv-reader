@@ -1,0 +1,968 @@
+{
+ "arxiv_id": "2404.03002",
+ "title": "DESI 2024 VI: Cosmological Constraints from the Measurements of Baryon Acoustic Oscillations",
+ "abstract": "We present cosmological results from the measurement of baryon acoustic oscillations (BAO) in galaxy, quasar and Lyman- α \\alpha forest tracers from the first year of observations from the Dark Energy Spectroscopic Instrument (DESI), to be released in the DESI Data Release 1. DESI BAO provide robust measurements of the transverse comoving distance and Hubble rate, or their combination, relative to the sound horizon, in seven redshift bins from over 6 million extragalactic objects in the redshift range 0.1 < z < 4.2 0.1<z<4.2 . To mitigate confirmation bias, a blind analysis was implemented to measure the BAO scales. DESI BAO data alone are consistent with the standard flat Λ \\Lambda CDM cosmological model with a matter density Ω m = 0.295 ± 0.015 \\Omega_{\\mathrm{m}}=0.295\\pm 0.015 . Paired with a baryon density prior from Big Bang Nucleosynthesis and the robustly measured acoustic angular scale from the cosmic microwave background (CMB), DESI requires H 0 = ( 68.52 ± 0.62 ) ​ km ​ s − 1 ​ Mpc − 1 H_{0}=(68.52\\pm 0.62)\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}} . In conjunction with CMB anisotropies from Planck and CMB lensing data from Planck and ACT, we find Ω m = 0.307 ± 0.005 \\Omega_{\\mathrm{m}}=0.307\\pm 0.005 and H 0 = ( 67.97 ± 0.38 ) ​ km ​ s − 1 ​ Mpc − 1 H_{0}=(67.97\\pm 0.38)\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}} . Extending the baseline model with a constant dark energy equation of state parameter w w , DESI BAO alone require w = − 0.99 − 0.13 + 0.15 w=-0.99^{+0.15}_{-0.13} . In models with a time-varying dark energy equation of state parametrised by w 0 w_{0} and w a w_{a} , combinations of DESI with CMB or with type Ia supernovae (SN Ia) individually prefer w 0 > − 1 w_{0}>-1 and w a < 0 w_{a}<0 . This preference is 2.6 σ \\sigma for the DESI+CMB combination, and persists or grows when SN Ia are added in, giving results discrepant with the Λ \\Lambda CDM model at the 2.5 ​ σ 2.5\\sigma , 3.5 ​ σ 3.5\\sigma or 3.9 ​ σ 3.9\\sigma levels for the addition of the Pantheon+, Union3, or DES-SN5YR supernova datasets respectively. For the flat Λ \\Lambda CDM model with the sum of neutrino mass ∑ m ν \\sum m_{\\nu} free, combining the DESI and CMB data yields an upper limit ∑ m ν < 0.072 \\sum m_{\\nu}<0.072 ( 0.113 ) ​ eV (0.113){\\,\\rm eV} at 95% confidence for a ∑ m ν > 0 \\sum m_{\\nu}>0 ( ∑ m ν > 0.059 ) ​ eV (\\sum m_{\\nu}>0.059){\\,\\rm eV} prior. These neutrino-mass constraints are substantially relaxed if the background dynamics are allowed to deviate from flat Λ \\Lambda CDM.",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "The discovery of the accelerated expansion of the universe demonstrated that the dynamics of the universe are presently dominated by dark energy, a component with negative pressure. Over the past quarter-century, a wide variety of cosmological measurements have lent further support for what has become the standard cosmological model: a spatially flat universe with an energy budget today composed of about 5% baryonic matter, 25% cold dark matter (CDM), 70% dark energy in the form of Einstein’s cosmological constant ( $\\Lambda$) and smaller contributions provided by massive neutrinos and radiation.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "Increasingly accurate data from type Ia supernovae (SN Ia) have confirmed and significantly strengthened the original ground-breaking results for the accelerated expansion of the universe (e.g.,). Meanwhile, mapping out the anisotropies in the cosmic microwave background (CMB) radiation, starting with the ground-breaking COBE results, and continuing with increasingly precise measurements that led to the full-sky maps by WMAP and Planck experiments, as well as mapping of the CMB anisotropy on smaller angular scales, revolutionised the field of cosmology by providing percent-level constraints on key cosmological parameters. Recent cosmological constraints from probes of the large-scale structure, CMB, and distance measurements from SN Ia have largely confirmed and sharpened constraints on the cosmological model while establishing an increasingly sophisticated methodology framework focused on stringent control of systematic errors.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p3",
+     "text": "Current constraints on key cosmological parameters are largely consistent with the $\\Lambda$ CDM cosmological model with cold dark matter and dark energy described by the cosmological constant $\\Lambda$. However, dark energy dynamics has not been stringently tested. In addition, within the $\\Lambda$ CDM model, tensions have appeared at various degrees of statistical significance (the two most popular being referred to as the “Hubble tension” and the “ $\\sigma_{8}$ tension”). Such tensions, if not due to unaccounted systematics, may indicate new physics beyond $\\Lambda$ CDM.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p4",
+     "text": "The use of galaxies as tracers of large-scale structure has traditionally played an essential role in cosmology and provides important complementary information to that from SN Ia and CMB. Galaxy clustering was pioneered half a century ago and further developed and applied to larger and better galaxy catalogs in the intervening years. It has established itself as a key cosmological measurement that provides a direct link between observations and properties of dark matter and dark energy.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p5",
+     "text": "The clustering of matter encodes a preferred scale, the sound horizon at the baryon drag epoch of the early universe. This feature, which is imprinted on the matter distribution of the early universe by physics around recombination and earlier, is stretched with the expansion of the universe, appearing at a comoving galaxy separation of $r_{\\mathrm{d}}\\sim 150\\,\\text{Mpc}$. Hence $r_{\\mathrm{d}}$ is a standard ruler, whose length is dictated by early-time physics. In particular, the length of the standard ruler may be calibrated with high accuracy, e.g., by CMB observations. Since galaxies trace the matter content of the universe, the BAO feature is transferred into galaxy clustering, where it manifests as a single localised peak in the galaxy correlation function and an oscillatory signature, or “wiggles”, in the galaxy power spectrum. Furthermore, the signature is also visible in other tracers of mass such as fluctuations in the Lyman- $\\alpha$ forest — spectral features that indicate the radial distribution of neutral hydrogen clouds between the observer and distant quasars. Because the BAO feature has a distinct signature and resides in the linear-clustering regime, measurements of this scale are relatively free from systematic errors associated with nonlinear physics. BAO provides a key cosmological probe sensitive to the cosmic expansion history, with well-controlled systematics. Using BAO we can test for dark energy dynamics and spatial curvature, and in combination with other probes constrain the Hubble constant, the sum of neutrino masses, and the number of light species. Several reviews of the BAO as a cosmological probe are available.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p6",
+     "text": "The accuracy with which the BAO feature may be measured from a galaxy survey is principally limited by sample variance and Poisson noise in the galaxy clustering measurements, necessitating galaxy surveys with effective volume of at least $1\\,h^{-3}\\,\\text{Gpc}^{3}$. 1 1 1 An exception is the Ly $\\alpha$ BAO measurement, limited by the number of spectra and their signal-to-noise, with only a minor contribution from cosmic variance. The BAO feature was first detected in 2005 by the Sloan Digital Sky Survey (SDSS) and the Anglo-Australian Telescope Two-degree Field Galaxy Redshift Survey. Subsequent measurements, leading to distance determinations accurate to within a few percent, were performed using the SDSS-III Luminous Red Galaxy Sample, the WiggleZ Dark Energy Survey and the 6-degree Field Galaxy Survey. Further extensions of the SDSS yielded more accurate percent-level BAO measurements using the Baryon Oscillation Spectroscopic Survey at $z<0.7$ and its extension at $z>0.7$. BAOs have also been detected within the Lyman- $\\alpha$ forest mapped by quasar surveys, allowing distance and expansion measurements at $z>2$. Prior to DESI these different BAO measurements, considered together, had mapped out the cosmological distance-redshift relation with $1\\%$ - $2\\%$ accuracy at a series of redshifts in the range $z<2.5$.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p7",
+     "text": "The Dark Energy Spectroscopic Instrument (DESI) is carrying out a Stage IV survey that was designed to significantly improve cosmological constraints through measurements of the clustering of galaxies, quasars, and the Lyman- $\\alpha$ forest. DESI is conducting a five-year survey over $14,200$ square degrees in the redshift range $0.1<z<4.2$ with a spectroscopic sample size that will be ten times that of the previous SDSS surveys. DESI covers six different classes of tracers, including low redshift galaxies of the bright galaxy survey (BGS), luminous red galaxies (LRG), emission line galaxies (ELG), quasars as direct tracers, and Lyman- $\\alpha$ (Ly $\\alpha$) forest quasars to trace the distribution of neutral hydrogen. Additionally, a sample of stellar targets is being observed to a high density in an overlapping Milky Way Survey to explore the stellar evolution and kinematics of the Milky Way. For cosmology, DESI is designed to impose stringent constraints on both the expansion history and the growth rate of large scale structure. Promising detections of the BAO feature at the few percent level from the DESI early data release have confirmed that DESI is on target to meet the top-level science requirements on BAO measurements. Specifically, DESI will tightly constrain matter density in the universe, the equation of state of dark energy, spatial curvature, the amplitude of primordial fluctuations, and neutrino mass. It will also sharply test modifications to the general theory of relativity proposed to explain the accelerated expansion of the universe.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p8",
+     "text": "In this paper, we report the constraints derived from the measurements of baryon acoustic oscillations with the first year of data from DESI as part of a larger series of papers. The results of this paper build upon the two-point measurements and validation, as detailed in; the BAO measurement from galaxies and quasars as summarised in; and the Ly- $\\alpha$ forest BAO measurements and validation described in. In a follow-up paper, the clustering analysis of the first year of DESI data is also performed over a wider range of scales than just the BAO feature including the effects of redshift space distortions (RSD). The Data Release 1 (DR1) of the Dark Energy Spectroscopic Instrument, comprising spectroscopic data obtained in the first year of observations, will be made public at a later stage.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p9",
+     "text": "The paper is structured as follows: Section 2 summarises our data and methodology, including a brief overview of the BAO data analysis and the integration of external datasets. Section 3 presents the results of the BAO analysis and discusses internal consistencies within the DESI data and external consistencies with SDSS data. Section 4 presents our constraints on the $\\Lambda$ CDM model, including a comparison of our results with external data. Section 5 discusses DESI constraints on extended dark energy models both independently and in combination with CMB and SN Ia data. In Section 6, we explore the constraints on the Hubble parameter for a variety of cosmological models and dataset combinations. Section 7 summarises our constraints on the neutrino sector. Lastly, we summarise our findings in Section 8.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Data and methodology",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.p1",
+     "text": "In this section, we introduce the cosmological quantities relevant for this analysis, review the basics of the BAO as a cosmological probe, then describe the DESI data we analyze, the external datasets we combine with DESI data, and the analysis methods we adopt.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.1 Cosmological background",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.p1",
+     "text": "In a homogeneous and isotropic cosmology (i.e., with the Friedmann-Lemaître-Robertson-Walker (FLRW) metric), the transverse comoving distance is $D_{\\mathrm{M}}(z)=\\frac{c}{H_{0}\\sqrt{\\Omega_{\\mathrm{K}}}}\\,\\sinh\\left[\\sqrt{\\Omega_{\\mathrm{K}}}\\int_{0}^{z}\\frac{dz^{\\prime}}{H(z^{\\prime})/H_{0}}\\right]\\.$ (1) Here $z$ is redshift, $H_{0}$ is the Hubble constant with $H(z)$ the Hubble parameter, $\\Omega_{\\mathrm{K}}$ is the curvature density parameter, and $c$ is the speed of light. In $\\Lambda$ CDM, $\\Omega_{\\mathrm{K}}=1-\\Omega_{\\mathrm{m}}-\\Omega_{\\Lambda}-\\Omega_{\\mathrm{R}}$, where $\\Omega_{\\mathrm{m}}$, $\\Omega_{\\mathrm{R}}$, and $\\Omega_{\\Lambda}$ are the energy densities relative to critical in matter, radiation, and the cosmological constant, respectively, all evaluated at the present time. Since $\\sinh$ is a complete function, the expression above holds for positive, negative, or zero $\\Omega_{\\mathrm{K}}$. The Hubble parameter in $\\Lambda$ CDM is $H(z)=H_{0}\\sqrt{\\Omega_{\\mathrm{m}}(1+z)^{3}+\\Omega_{\\mathrm{R}}(1+z)^{4}+\\Omega_{\\mathrm{K}}(1+z)^{2}+\\Omega_{\\Lambda}}.$ (2) The Hubble parameter also contains the contribution from neutrinos given by their energy density relative to critical $\\Omega_{\\nu}$. At sufficiently high redshifts all neutrinos behave as relativistic species, but at the low redshifts that DESI tracers probe, their contribution is dominated by that of massive neutrino species which contribute to $H(z)$ like matter.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p2",
+     "text": "BAO measurements depend on the sound horizon at the drag epoch $r_{\\mathrm{d}}$. This is the distance that sound can travel between the Big Bang and the drag epoch which indicates the time when the baryons decoupled from photons. At redshifts higher than the drag-epoch redshift $z_{\\mathrm{d}}$, the photons were coupled to electrons via Compton scattering, and they in turn had Coulomb interactions with baryons. The redshift when the baryons were released from the “Compton drag” of the photons, $z_{\\mathrm{d}}$, can be obtained with a recombination calculation (a fitting formula is given in). Note that the drag epoch occurs slightly later (at $z_{\\mathrm{d}}\\simeq 1060$ in the standard model) than photon decoupling ( $z_{\\ast}\\simeq 1090$) simply because there are so few baryons relative to the number of photons. The expression for $r_{\\mathrm{d}}$ is given by $r_{\\mathrm{d}}=\\int_{z_{\\mathrm{d}}}^{\\infty}\\frac{c_{\\mathrm{s}}(z)}{H(z)}dz\\,,$ (3) where $c_{\\mathrm{s}}$ is the speed of sound which, prior to recombination, is given by $c_{\\mathrm{s}}(z)=\\frac{c}{\\sqrt{3\\displaystyle\\left(1+\\frac{3\\rho_{\\mathrm{B}}(z)}{4\\rho_{\\gamma}(z)}\\right)}}\\,$ (4) where $\\rho_{\\mathrm{B}}$ and $\\rho_{\\gamma}$ are the baryon and radiation energy densities, respectively. The speed of sound evaluates to approximately $c_{\\mathrm{s}}\\simeq c/\\sqrt{3}$ well before recombination, but then decreases, and finally drops sharply at recombination. For standard early-time physics assumptions, the drag-epoch sound horizon can be approximated with $r_{\\mathrm{d}}=147.05\\left(\\frac{\\omega_{\\mathrm{m}}}{0.1432}\\right)^{-0.23}\\left(\\frac{N_{\\mathrm{eff}}}{3.04}\\right)^{-0.1}\\left(\\frac{\\omega_{\\mathrm{b}}}{0.02236}\\right)^{-0.13}\\;{\\rm Mpc},$ (5) where $\\omega_{\\mathrm{m}}\\equiv\\Omega_{\\mathrm{m}}h^{2}$ and $\\omega_{\\mathrm{b}}\\equiv\\Omega_{\\mathrm{b}}h^{2}$ are the matter and baryon physical energy densities today, respectively, and $N_{\\mathrm{eff}}$ is the effective number of extra relativistic degrees of freedom.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p3",
+     "text": "The sound horizon at the drag epoch leaves an imprint in the distribution of matter that serves as a cosmological standardised ruler. To illustrate the concept, consider an ensemble of galaxy pairs at a given redshift $z$: if the separation vectors of the pairs are oriented perpendicular to the observer’s line-of-sight, a preferred angular separation of galaxies $\\Delta\\theta$ may be observed, measuring the comoving distance $D_{\\mathrm{M}}(z)\\equiv r_{\\mathrm{d}}/\\Delta\\theta$ to this redshift. With the separation vector oriented parallel to the line-of-sight, a preferred redshift separation $\\Delta z$ may be observed, measuring a comoving distance interval that for small intervals gives the Hubble parameter at that redshift, represented in this paper by the equivalent distance variable $D_{\\mathrm{H}}(z)\\equiv c/H(z)=r_{\\mathrm{d}}/\\Delta z$. BAO measurements hence constrain the quantities $D_{\\mathrm{M}}(z)/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}(z)/r_{\\mathrm{d}}$. This interpretation holds true for standard assumptions and models not too dissimilar from $\\Lambda$ CDM, given the statistical power of the data. For those BAO measurements in certain redshift bins with low signal-to-noise ratio, we instead quote constraints on the angle-averaged quantity, $D_{\\mathrm{V}}(z)/r_{\\mathrm{d}}$, where $D_{\\mathrm{V}}(z)$ is the angle-average distance that quantifies the average of the distances measured along, and perpendicular to, the line of sight to the observer:",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p4",
+     "text": "$D_{\\mathrm{V}}(z)\\equiv\\left(zD_{\\mathrm{M}}(z)^{2}D_{H}(z)\\right)^{1/3}.$ (6)",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS1.p5",
+     "text": "BAO measurements are performed at a series of redshifts, allowing constraints to be obtained on the cosmological parameters governing the distance-redshift relation including curvature and dark energy, and the Hubble constant if external information on the absolute BAO scale is provided.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.2 DESI BAO data from Data Release 1",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.p1",
+     "text": "DESI spectroscopic targets are selected from photometric catalogs of the 9th public data release of the DESI Legacy Imaging Surveys, 2 2 2 https://www.legacysurvey.org/dr9/ drawn from three optical surveys in the $grz$ optical bands: DECaLS using the DECam camera (which includes data from the Dark Energy Survey (DES)) south of declination $32.375^{\\circ}$, and north of this limit the Beijing-Arizona Sky Survey (BASS), and the Mosaic z-band Legacy Survey (MzLS). Four different classes of extragalactic targets are defined: the bright galaxy sample (BGS,), luminous red galaxies (LRG,), emission line galaxies (ELG), and quasars (QSO).",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p2",
+     "text": "Spectroscopic observations of these targets are carried out with the DESI instrument mounted on the Nicholas U. Mayall Telescope at Kitt Peak National Observatory in Arizona. Each observation field is covered by a “tile”, consisting in a set of targets located within that sky area and assigned to each of the 5000 fibers in the focal plane of the telescope. Each fiber is placed at the celestial coordinates of its assigned target by a robotic positioner andcarries the target’s light from the focal plane to one of the ten DESI spectrographs. DESI observing time is dynamically separated into a “bright” time program (when BGS are observed) and “dark” time observations (when LRG, ELG, and QSO are targeted) depending on observing conditions. Redshift distributions, exposure times, calibration and observation procedures were optimised during a period of survey validation that included a visual inspection campaign. The DR1 spectroscopic dataset is built from main survey operations starting from May 14, 2021 through June 14, 2022, using an observing strategy meant to prioritise depth, resulting in $2,744$ “dark” tiles and $2,275$ “bright” tiles. The covered tile surface area is of order $7,500\\;\\deg^{2}$, just over half of the expected final coverage of $14,200\\;\\deg^{2}$. However, the completeness within this area will significantly increase, as one can infer given an expected final number of 9,929 dark and 5,676 bright observed tiles. The combined effective volume is expected to increase by more than a factor 3. The observed data are processed by the DESI spectroscopic pipeline on a daily basis for immediate quality checks. The redshift catalogs used for this analysis and released with DESI DR1 are obtained from a spectroscopic reduction run with a fixed pipeline version internally denoted as “iron”.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p3",
+     "text": "Large-scale structure catalogs of galaxy and quasar positions suitable for the clustering analysis are built from the redshift and parent target catalogs and their two-point function measurements are obtained with all DR1 specific details presented in; a technical overview of the general process is presented in. The selection function is defined and correction weights are designed to compensate for systematic variations due to the effects of imaging anisotropies on the input target samples, redshift measurement efficiency, and incompleteness in target assignment. Simulations of the DR1 dataset are presented in.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.p4",
+     "text": "Studies of the Ly $\\alpha$ forest are based on a quasar catalog with alternative redshift estimates to minimise possible biases caused by the same Ly $\\alpha$ absorption. The method to extract Ly $\\alpha$ fluctuations from the quasar spectra is described in, including the masking of pixels contaminated by Broad Absorption Line features and Damped Lyman- $\\alpha$ systems. Below, we provide details on each of the target samples studied and the properties of the particular samples that are used for this analysis.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "The Bright Galaxy Sample (BGS, 0.1 < z < 0.4 0.1<z<0.4 ):",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px1.p1",
+     "text": "The nominal target selection (BGS Bright) relies on $r$ -magnitude cuts tuned to achieve uniform density across the photometric samples. Gaia catalogs are additionally used to remove point-like sources. The resulting sample has 854 targets per square degree, which are assigned fibers with high priority during bright time observations.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px1.p2",
+     "text": "The nominal BGS sample is flux-limited and high density, with strong evolution in redshift. Over $5.5$ million reliable BGS redshifts were measured in DR1. However, in order to produce a more homogeneous sample, a cut was engineered to produce a sample of roughly constant comoving number density of $5\\times 10^{-4}\\;\\,h^{3}\\,\\text{Mpc}^{-3}$ using $k$ -corrected $r$ -band absolute magnitudes from and a redshift-dependent correction for evolution (matching the sample used for). The BGS number density is similar to that of LRGs at $z=0.4$ and high enough to make shot-noise a minor contribution to the BAO statistical uncertainty (see for more details). The final BGS clustering sample used for the BAO measurement comprises $300,017$ redshifts in $0.1<z<0.4$, with an assignment completeness of $61.6\\%$, which is expected to increase to $\\sim 80\\%$ in the finalised survey.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "The Luminous Red Galaxy Sample (LRG, 0.4 < z < 0.6 0.4<z<0.6 and 0.6 < z < 0.8 0.6<z<0.8 ):",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px2.p1",
+     "text": "The LRG target selection uses photometry from the Wide-field Infrared Survey Explorer (WISE) to select red objects with a nearly constant comoving number density of $5\\times 10^{-4}\\;\\,h^{3}\\,\\text{Mpc}^{-3}$ over $0.4<z<0.8$. An additional cut on the $z$ -magnitude measured within the aperture of a DESI fiber further selects targets with high S/N spectra. The obtained $624\\;\\deg^{-2}$ target sample is assigned fibers with priority higher than ELG targets but lower than QSO targets.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px2.p2",
+     "text": "The DESI DR1 LRG clustering sample used for BAO measurements consists of $2,138,600$ redshifts in the redshift interval $0.4<z<1.1$. The DR1 assignment completeness is $69.2\\%$, which is expected to increase to $90\\%$ in the completed survey. The lower redshift bound was chosen to separate the sample from BGS, as most low-redshift LRG targets are also BGS targets, while the upper bound was designed to ensure a minimum density of $10^{-4}\\;\\,h^{3}\\,\\text{Mpc}^{-3}$. This sample is further split for the clustering analysis into 3 disjoint redshift ranges, $0.4<z<0.6$, $0.6<z<0.8$, and $0.8<z<1.1$ (for brevity, we sometimes refer to these as LRG1, LRG2 and LRG3, respectively), however we do not use any BAO measurement from the highest-redshift LRG bin alone. It is instead combined with the overlapping lowest-redshift ELG bin, as described in the combined LRG and ELG sample section below.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "The Emission Line Galaxy Sample (ELG, 1.1 < z < 1.6 1.1<z<1.6 ):",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px3.p1",
+     "text": "ELG targets are selected with colour cuts in the $(g-r)$ vs $(r-z)$ plane to prioritise objects with [OII] emission in the desired redshift range for secure redshift measurements. Low-redshift objects are filtered out with a $g$ -magnitude cut and another cut on the $g$ -magnitude within the aperture of a DESI fiber further favors targets with high S/N spectra. While a random $10\\%$ fraction of the ELG sample receives the same fiber assignment priority as LRGs to facilitate small-scale clustering measurements in the redshift range where the samples overlap, the remaining $90\\%$ of ELGs are assigned fibers at a lower priority than LRGs and QSOs.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px3.p2",
+     "text": "The DR1 ELG sample defined for clustering analysis in comprises $2,432,022$ reliable redshifts in the interval $0.8<z<1.6$. The lower redshift bound aligns with that of the high redshift LRG sample, while the upper bound rejects objects whose [OII] doublet falls outside of the spectrograph wavelength coverage. In DR1, the fiber completeness is only $35\\%$, which should increase to over $60\\%$ in the final dataset. The sample is split into two disjoint redshift ranges for clustering analysis, $0.8<z<1.1$ and $1.1<z<1.6$ (similarly referred to as ELG1 and ELG2 for brevity). We do not use any standalone BAO measurement from the low-redshift ELG bin; it is instead combined with the overlapping high-redshift LRG bin.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "The combined LRG and ELG Sample (LRG+ELG, 0.8 < z < 1.1 0.8<z<1.1 ):",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px4.p1",
+     "text": "The high-redshift LRG and the low-redshift ELG samples overlap in the range $0.8<z<1.1$. These two samples are concatenated with inverse-variance weights to obtain a combined LRG+ELG catalog, following the methodology presented in. The increased combined density is expected to improve the reconstruction efficiency, while the inverse-variance weights are designed to maximise the measurement of the BAO precision. As described in, the obtained combined LRG+ELG BAO measurement is $\\sim 10\\%$ more precise, while being fully consistent with the LRG-alone measurement in this redshift range (and with that of ELG alone, although this has a larger uncertainty). We therefore use the combined LRG+ELG $0.8<z<1.1$ BAO measurement for the cosmological inference.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "The Quasar Sample (QSO, 0.8 < z < 2.1 0.8<z<2.1 ):",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px5.p1",
+     "text": "The QSO target selection relies on identifying a flux excess in the near-infrared, which is assessed by comparing near-infrared WISE $W1$, $W2$ magnitudes to Legacy Imaging Surveys optical $grz$ magnitudes. Sources with stellar morphology (PSF type) are selected, and a $r$ -magnitude cut is applied to eliminate bright stars and faint targets. Quasars are then selected from the $r$ magnitude and 10 colors using $grzW1W2$ with a Random Forest (RF) algorithm, designed to produce a target sample of density $310\\deg^{-2}$. The resulting QSO target sample is assigned fibers with maximum priority.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px5.p2",
+     "text": "The DR1 QSO sample used for BAO measurements in $0.8<z<2.1$ consists of $856,652$ redshifts. Quasars at $z>2.1$ are not used as part of this sample. Because of their maximum priority, the assignment completeness of QSO in DR1 is already high, $87.6\\%$.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "The Lyman- α \\alpha Forest Sample (Ly α \\alpha , 1.77 < z < 4.16 1.77<z<4.16 ):",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.SSS0.Px6.p1",
+     "text": "The highest-redshift BAO measurement from DESI DR1 is described in, and is obtained from a combined analysis of correlations of three different datasets. The first dataset consists of the positions (celestial coordinates and redshifts) of $709,565$ quasars in the redshift range $1.77<z<4.16$. In addition, the Ly $\\alpha$ forest in the spectra of high-redshift quasars at $z>2.1$ constitute an alternative tracer of matter density fluctuations. We use two Ly $\\alpha$ forest datasets, consisting of fluctuations in two different rest-frame wavelength regions of the background quasar spectra: $428,403$ in region A ( $1040<\\lambda_{r}<1205$ Å) and $137,432$ in region B ( $920<\\lambda_{r}<1020$ Å). 3 3 3 Region B is treated separately from region A as it is also affected by higher order Lyman lines. In order to increase the signal-to-noise of the spectra, quasars identified as having $z>2.1$ after a single epoch of observation are prioritised for up to four observations.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS2.SSS0.Px6.p2",
+     "text": "Table 1 summarises the properties of the different samples used in this analysis, as well as the BAO measurements obtained from them using the methods described below. Overall, this analysis of the DESI Data Release 1 relies on over $6$ million unique redshifts, more than twice the number of redshifts considered in the final SDSS cosmological analysis. The aggregate precision on the BAO isotropic scale is $0.49\\%$ to be compared to $0.60\\%$ for the final SDSS measurements.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.3 BAO analysis",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.p1",
+     "text": "We now briefly describe how DESI BAO analyses of DR1 data implement the standard ruler measurement.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p2",
+     "text": "BAO analyses usually need to assume a fiducial cosmology although the resulting distance and expansion measurements remain independent of these assumptions in a leading-order approximation, unless the assumed fiducial model differs significantly from the model to be tested, or the truth. First, a fiducial cosmological model is adopted to convert tracer angular positions and redshifts to comoving coordinates, and the two-point clustering pattern is measured as a function of comoving separation assuming this fiducial model. The clustering pattern perpendicular and parallel to the line-of-sight changes in a predictable way between fiducial and trial cosmologies according to the Alcock-Paczynski (AP) effect, allowing a wide range of cosmological models to be tested.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p3",
+     "text": "Second, the theoretical calibration of the BAO scale is encoded by a primordial matter power spectrum generated assuming a fiducial cosmological model. This matter power spectrum is used to produce a template tracer clustering model, indexed by the sound horizon at baryon drag, which is scaled by two free scaling parameters—along and perpendicular to the line-of-sight—during data fitting. In order to measure the location of the BAO feature alone, the model also includes “nuisance” parameters for the broad-band shape of the tracer power spectrum, which are marginalised over in the analysis. Residual theoretical systematics arising from nonlinear matter growth, tracer bias, and redshift-space distortions are reduced by this procedure, and are generally considered to be present at a level of $\\sim 0.1\\%$. The modeling and the procedure for performing BAO galaxy and quasar fits have been updated for DESI from the broadband polynomial marginalization procedure used in previous surveys, according to the theoretical framework laid out in.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p4",
+     "text": "Finally, the amplitude of the BAO feature imprinted in the early universe is diluted by the bulk-flow motion of matter from its true locations in the density field, driven by the growth of structure, which changes tracer separations by a few $h^{-1}\\,\\text{Mpc}$. This effect may be partially reversed using density-field reconstruction to estimate these displacements based on the gravitational field inferred from the observed tracer distribution. Applying these reversed displacements to tracers sharpens the BAO signature 4 4 4 Note that the Ly $\\alpha$ analysis, discussed further below in this subsection, does not make use of the density-field reconstruction. and mitigates the small ( $<0.3\\%$) nonlinear shift of the BAO-scale in late-time clustering, allowing for more accurate cosmological inferences. The reconstruction algorithm used has been updated relative to that used for eBOSS and the specific choice of algorithm and settings were validated as described in.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p5",
+     "text": "For the galaxy and quasar BAO data points considered in this paper we make use of the post-reconstruction clustering measurements in configuration space presented in. Anisotropic BAO measurements are obtained for LRG and ELG samples, but we restrict to isotropic fits for BGS and QSO samples due to the lower signal-to-noise ratio of the two-point function measurements. The uncertainties in these clustering measurements are described by covariance matrices whose construction and validation are outlined in. Various contributions to the total systematic error budget arising from theoretical modeling uncertainties (which are at most $0.1\\%$ and $0.2\\%$ of the isotropic and anisotropic BAO parameters, respectively), uncertainties due to the galaxy-halo connection (of $\\lesssim 0.2\\%$) and observational systematic effects (which are negligible) have been estimated in a series of supporting papers. These are added together in quadrature as summarised in to compute the total error budget for the BAO measurements in the BGS, LRG, ELG, and QSO samples. Together, these steps represent the state-of-the-art in the measurement of BAO from galaxy tracers and are described in detail in the companion DESI paper.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p6",
+     "text": "In addition to measuring the clustering of galaxies and quasars, we also make use of the Ly $\\alpha$ forest. The Ly $\\alpha$ BAO measurement is presented in, and it combines a measurement of the auto-correlation of fluctuations in the Ly $\\alpha$ forest and of its cross-correlation with the density of quasars at $z>1.77$. The method to measure and model the correlations is described in, and it is based on previous Ly $\\alpha$ BAO measurements from eBOSS. In a supporting study we validate the analysis using synthetic datasets, simulated using the methodology described in. An important improvement in the methodology is that we now take into account the small correlation between the measurements of the auto- and the cross-correlation. Finally, the (minor) impact of correlated noise in the Ly $\\alpha$ auto-correlation is studied and characterised in. Besides the validation tests using synthetic datasets, in we also present several data splits and a long list of consistency tests that show that our Ly $\\alpha$ BAO measurement are robust to changes in the measurement methodology or in the modeling. For instance, we show that adding an ad-hoc smooth component to the model with up to 48 extra free parameters does not vary the BAO parameters by more than 0.1%.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.p7",
+     "text": "The BAO measurements obtained from the various samples used are shown in Table 1. As already mentioned, for the BGS and QSO tracers, we only measure the angle-averaged $D_{\\mathrm{V}}/r_{\\mathrm{d}}$ quantity, due to the lower signal-to-noise achieved. For all other tracers, we quote results in $D_{\\mathrm{M}}/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}/r_{\\mathrm{d}}$, and provide the value of the correlation between them, $r$.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.T1",
+     "text": "Table 1: Statistics for the DESI samples used for the DESI DR1 BAO measurements used in this paper. For each tracer and redshift range we quote the number of objects ( $N_{\\rm tracer}$), the effective redshift ( $z_{\\rm eff}$) and effective volume ( $V_{\\rm eff}$). Note that for each sample we measure either both $D_{\\mathrm{M}}/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}/r_{\\mathrm{d}}$, which are correlated with a coefficient $r$, or $D_{\\mathrm{V}}/r_{\\mathrm{d}}$. Redshift bins are non-overlapping, except for the shot-noise-dominated measurements that use QSO (both as tracers and for Ly $\\alpha$ forest).",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.3.1 Blinding framework",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.SSS1.p1",
+     "text": "An imperative of science with modern cosmology experiments, and especially for a survey with the statistical precision that DESI is able to achieve, is to mitigate against the possibility of the results being affected by observer confirmation bias. This can manifest itself through the attribution of unexpected results, or results which do not match the prior prejudices of the observer, to systematic effects which must be corrected for in the data analysis. Thus the observer may—consciously or subconsciously—continue to search for and correct real or imagined systematic effects in the data only until they agree with some pre-conceived desired result, and no further.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS1.p2",
+     "text": "To mitigate against the possibility of such biases unknowingly entering into our analyses, we apply a system of blinding our data, to conceal the true cosmological results during the period where systematic errors were being investigated and analysis pipelines finalised. This blinding was applied in two different ways: • For the discrete galaxy and quasar samples, blinding was applied at the catalog level, according to the procedure described and validated in. The redshifts of the tracers in the catalogs were shifted in such a way to change the position of the BAO feature as well as the redshift-space distortion (RSD) signal, and the weights applied to the tracers were adjusted in order to blind the measurement of primordial non-Gaussianities from the large-scale clustering. True redshifts and weights were not made available for the analysis before unblinding. • For the Ly $\\alpha$ sample, catalog-level blinding was challenging due to sky lines and Galactic absorption features located at known observed wavelengths in the spectra. Instead, the apparent position of the BAO peak was shifted by directly applying an additive component to the measured correlation functions, as described in. In both cases, all analyses used the blinded data during initial testing and systematic errors were identified and corrected. Only after the analysis pipeline had been finalised, the systematic error budget determined, and a series of strictly prescribed validation tests passed (see for a detailed description) was the data blinding removed and the unblind results revealed. For discrete tracers, it was decided prior to unblinding that the final choice of covariance matrices would be made after unblinding, and that the LRG and ELG samples would be concatenated in $0.8<z<1.1$ for a combined BAO measurement in this redshift range.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS1.p3",
+     "text": "We mention two unplanned updates in the BAO analysis pipeline for discrete tracers made after unblinding and decided independently of the actual BAO measurements: a completeness correction was fixed in the clustering catalogs, and the implementation of the BAO theoretical model was corrected to fully match the theoretical framework laid out in. Corrections in the theoretical model changed BAO measurements by less than $0.3\\sigma$ (differences in most redshift bins under $0.1\\sigma$), and updates to the catalogs by at most $0.6\\sigma$ (variations in most redshift bins being under $0.2\\sigma$). We also report two minor post-unblinding changes in the Ly $\\alpha$ BAO analysis: a bug fix that led to a $<0.1\\sigma$ change in the BAO measurement, and an update in a bias parameter that had no effect on the results.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS1.p4",
+     "text": "Two additional points are worth noting. For the discrete galaxy and quasar samples, the analyses related to the full shape of the broadband clustering signal (described in) and those pertaining to the BAO results presented in and included in this paper had separate pipelines and robustness criteria to be satisfied before unblinding, and were not unblinded at the same time. Additionally, it was decided that cosmological model inference from the BAO and full shape measurements would remain outside of the scope of the blinding, and would be performed once BAO and full shape unblinded results are obtained. 5 5 5 Internal checks of the inference pipeline were performed with synthetic data prior to unblinding.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.3.2 Summary of DESI DR1 BAO likelihoods",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS3.SSS2.p1",
+     "text": "The results used in this paper are derived from the BAO measurements and fits described above applied to each of the five tracer samples across 7 distinct redshift bins covering a total redshift range from 0.1 to 4.2.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS2.p2",
+     "text": "The BGS and LRG samples chosen cover disjoint redshift ranges. As a result of the lack of overlap, the correlation between the BAO measurements in these samples is small, and we assume it to be negligible and do not include any covariance between them in our cosmological analysis. In the $0.8<z<1.1$ redshift bin, where the LRG and ELG tracers overlap, they are analysed together using a single multi-tracer approach, described in. The QSO sample overlaps with this redshift bin, and with the ELGs in the range $1.1<z<1.6$. In a general case where two tracer samples overlap in volume, the correlation coefficient between two estimates of the power spectrum obtained from these tracers may be estimated as: $C=\\frac{\\mathrm{Cov}(\\hat{P}_{1},\\hat{P}_{2})}{\\sqrt{\\mathrm{Var}(\\hat{P}_{1})\\mathrm{Var}(\\hat{P}_{2})}}=\\frac{\\int dV\\;\\displaystyle\\frac{X_{1}X_{2}}{X_{12}}}{(\\int dVX_{1})^{1/2}(\\int dVX_{2})^{1/2}}\\,,$ (7) where $X_{i}\\equiv\\left(\\frac{n_{i}P_{i}}{1+n_{i}P_{i}}\\right)^{2}$ for $i=1,2$, $X_{12}\\equiv\\left(\\frac{n_{1}n_{2}P_{1}P_{2}}{n_{12}\\sqrt{P_{1}P_{2}}+n_{1}n_{2}P_{1}P_{2}}\\right)^{2}$, $n_{1}$ and $n_{2}$ are the mean tracer number densities of the two samples and $n_{12}$ is the common sample density, and $P_{1}$ and $P_{2}$ are the corresponding typical amplitudes of the power spectra of the two tracers at the BAO scale $k\\simeq 0.1\\;\\,h\\,{\\rm Mpc^{-1}}$. For different tracer types, such as the overlapping ELG and QSO samples of relevance in the $1.1<z<1.6$ redshift bin, there are no common tracers so $n_{12}=0$. 6 6 6 In this case and in the limit of a thin redshift slice, Eq. 7 simplifies to $C=\\frac{V_{12}P_{1}P_{2}}{\\sqrt{V_{1}V_{2}}(P_{1}+1/\\bar{n}_{1})(P_{2}+1/\\bar{n}_{2})}$, as used in. This correlation between power spectrum estimates can be roughly regarded as an approximation to the correlation between the BAO scale measurements from the two overlapping tracer samples, although we regard this only as a guide and caution against using this estimate for any precise combination of results from different tracers.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS2.p3",
+     "text": "For the ELG and QSO tracers in $1.1<z<1.6$, using representative values in Eq. 7 gives a very small correlation, $C<0.1$. The correlation between QSOs and LRGs and ELGs in the lower redshift $0.8<z<1.1$ bin is even smaller. We therefore ignore this correlation and treat the QSO BAO measurement as effectively independent of those from LRG and ELG tracers. We also ignore the correlation between the BAO measurement from the QSO sample (at $z_{\\rm eff}=1.49$) and the Ly $\\alpha$ BAO measurement (at $z_{\\rm eff}=2.33$). Even though quasars in the range $1.77<z<2.1$ contribute to both measurements, in the Ly $\\alpha$ BAO measurement they are only used in cross-correlation with Ly $\\alpha$ absorption at $z>2$. Therefore, these measurements would only be correlated by cosmic variance, but both measurements are dominated by shot-noise. In this redshift range, the number density of the quasars is less than $3\\times 10^{-5}\\,h^{3}\\,\\text{Mpc}^{-3}$ and given the $P(k)$ at the scales most relevant for BAO is $<7500\\,h^{-3}\\,\\text{Mpc}^{3}$, $nP\\ll 1$ and any correlation between the measurements will be small.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS3.SSS2.p4",
+     "text": "As described in Section 2.1, the cosmological quantities measured by the BAO analysis in each redshift bin are either the two (correlated) distance ratios ( $D_{\\mathrm{M}}/r_{\\mathrm{d}}$, $D_{\\mathrm{H}}/r_{\\mathrm{d}}$) or just a single one, $D_{\\mathrm{V}}/r_{\\mathrm{d}}$, depending on the signal-to-noise ratio. The posteriors in these quantities from the BAO fits are sampled using MCMC, as described in; we find that the recovered posteriors are in all cases well approximated by Gaussian distributions. Refs. and the supporting papers cited therein describe the methods used to estimate the systematic uncertainties and their magnitudes. These systematic uncertainties are added in quadrature to the statistical uncertainties determined from the posterior sampling with the final combination presented as a block diagonal Gaussian covariance matrix, with off-diagonal correlations only between the ( $D_{\\mathrm{M}}/r_{\\mathrm{d}}$, $D_{\\mathrm{H}}/r_{\\mathrm{d}}$) elements within the same redshift bin. We use this covariance matrix or its individual components together with the vectors of the mean ( $D_{\\mathrm{M}}/r_{\\mathrm{d}}$, $D_{\\mathrm{H}}/r_{\\mathrm{d}}$) values for the cosmological inference presented hereafter.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.4 External Datasets",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.p1",
+     "text": "In this paper, we compare cosmological results from our data to those from a number of other recent experiments and provide joint constraints from different combinations of datasets. We briefly describe these data and likelihoods below.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.4.1 Big Bang Nucleosynthesis and Ω b ​ h 2 \\Omega_{\\mathrm{b}}h^{2}",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.SSS1.p1",
+     "text": "In a flat $\\Lambda$ CDM background model, the BAO distance ladder results determine $\\Omega_{\\mathrm{m}}$ and $H_{0}r_{\\mathrm{d}}$. From Eq. 5, the sound horizon depends on the physical matter and baryon densities, $\\omega_{\\mathrm{m}}=\\Omega_{\\mathrm{m}}h^{2}$ and $\\omega_{\\mathrm{b}}=\\Omega_{\\mathrm{b}}h^{2}$. Therefore, assuming standard neutrino content of the universe ( $N_{\\mathrm{eff}}=3.044$), we require prior knowledge of $\\Omega_{\\mathrm{b}}h^{2}$ to break the degeneracy between $H_{0}$ and $r_{\\mathrm{d}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.SSS1.p2",
+     "text": "Big Bang Nucleosynthesis (BBN) theory predicts the abundances of light elements including D and 4 He in the early universe, and these abundances depend on the baryon to photon ratio $\\eta_{10}$. Thus the observational determination of the primordial deuterium abundance D/H and the helium fraction $Y_{\\rm P}$ can be used to deduce $\\Omega_{\\mathrm{b}}h^{2}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.SSS1.p3",
+     "text": "The resulting constraints on $\\Omega_{\\mathrm{b}}h^{2}$ depend on the details of the theoretical predictions and their treatment of underlying nuclear interaction cross-sections, in particular for the deuterium burning reactions. For a review of the details we refer interested readers to. A recent analysis makes use of the new PRyMordial code to recompute the predictions while correctly marginalizing over uncertainties in the reaction rates, and reports the conservative constraints $\\Omega_{\\mathrm{b}}h^{2}=0.02218\\pm 0.00055$ (8) in the standard $\\Lambda$ CDM model, and $\\Omega_{\\mathrm{b}}h^{2}=0.02196\\pm 0.00063$ (9) when allowing for additional light relics ( $\\Lambda$ CDM+ $N_{\\mathrm{eff}}$ model), where in the latter case there is also a covariance between $\\Omega_{\\mathrm{b}}h^{2}$ and $N_{\\mathrm{eff}}$ which we account for. 7 7 7 This covariance is available from https://github.com/schoeneberg/2024_bbn_results. We adopt these values as BBN priors in the following sections. Note that these BBN priors are more conservative than some previously proposed in the literature (e.g.,); this is a direct result of the marginalization over reaction rate uncertainties performed in.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.4.2 Cosmic Microwave Background",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.SSS2.p1",
+     "text": "The power spectra of anisotropies in the cosmic microwave background (CMB) have been exquisitely measured by Planck. A fundamental quantity that is determined from the oscillations in these power spectra is the measured sky angular scale of acoustic fluctuations, i.e. $\\theta_{\\ast}=r_{\\ast}/D_{\\mathrm{M}}(z_{\\ast})$, where $r_{\\ast}$ is the comoving sound horizon at recombination and $D_{\\mathrm{M}}(z_{\\ast})$ is the transverse comoving distance to the redshift of recombination. This angular scale is a very sharp feature and can be measured precisely independently of possible systematic effects affecting the high- $\\ell$ part of the CMB power spectrum (in particular the $A_{\\mathrm{L}}$ parameter).",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.SSS2.p2",
+     "text": "Within the $\\Lambda$ CDM model Planck reports $100\\theta^{\\textit{Planck}}_{\\ast}=1.04109\\pm 0.00030,$ (10) a $0.03\\%$ precision measurement through the combination of temperature and polarization data alone. The central value of $\\theta^{\\textit{Planck}}_{\\ast}$ is almost entirely independent of the specific cosmological model assumed, although the uncertainties can increase significantly in some model extensions affecting early-time physics. This is a consequence of the simple geometrical interpretation: $\\theta_{\\ast}$ is the BAO scale imprinted in the CMB anisotropies at recombination. DESI, on the other hand, measures the same BAO features imprinted in the galaxy distributions at lower redshifts. It is therefore natural to combine DESI BAO results with the constraint on $\\theta_{\\ast}$ from Planck, which can be regarded as a minimal and highly robust purely geometric version of the full CMB information. To achieve this, we implement a Gaussian external prior on the quantity $100\\theta_{\\ast}$ with mean $1.04110$ and variance $0.00053^{2}$. The mean here matches the reported value in when including CMB lensing, and is very close to that in Eq. 10. We have conservatively increased the width of the prior by $\\sim 75\\%$ relative to the baseline result in order to accommodate the increased uncertainties in models beyond standard flat $\\Lambda$ CDM, especially in models that allow for additional light relics ( $\\Lambda$ CDM+ $N_{\\mathrm{eff}}$), based on the results for that model from.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.SSS2.p3",
+     "text": "Of course, the CMB power spectra also contain vastly more information than just $\\theta_{\\ast}$, and we also explore the consequences for cosmological models from the combination of this full CMB information with DESI BAO. We use as our baseline the temperature (TT) and polarisation (EE) auto-spectra, plus their cross-spectra (TE), as incorporated in the simall, Commander (for multipoles $\\ell<30$) and plik (for $\\ell\\geq 30$) likelihoods from the official PR3 release. Subsequently, a new Planck data release PR4 has been made available, which involves a consistent reprocessing of the data from both the LFI and HFI instruments on Planck using the new common pipeline NPIPE, leading to slightly more data, lower noise, and better consistency between frequency channels. Various teams have released additional high- $\\ell$ likelihood packages using PR4, which are updated versions of likelihoods included in earlier Planck data releases, and use alternative methods to derive information from the high- $\\ell$ power. However, in most scenarios we consider in this paper, results from these updated likelihoods are very similar to those obtained from the official PR3 plik likelihood. Therefore, we choose to keep plik as our baseline, and note any variations in the results due to differences between this and the newer PR4 likelihoods 8 8 8 CamSpec is bundled as an additional likelihood in the cobaya sampling code, at https://cobaya.readthedocs.io/en/latest/likelihood_planck.html; HiLLiPoP is available from https://github.com/planck-npipe/hillipop. in Appendix B.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.SSS2.p4",
+     "text": "In addition to the primary temperature and polarization anisotropy power spectra, modern CMB experiments are also able to measure the power spectrum of the gravitational lensing potential, $C_{L}^{\\phi\\phi}$, from the connected 4-point function. The latest and most precise CMB lensing data comes from the combination of NPIPE PR4 Planck CMB lensing reconstruction and the Data Release 6 of the Atacama Cosmology Telescope (ACT). 9 9 9 The likelihood is available from https://github.com/ACTCollaboration/act_dr6_lenslike; we use the actplanck_baseline option. We adopt this combined CMB lensing likelihood from both experiments as our baseline. For the sake of brevity, in the following text and figures, we will denote results obtained using temperature and polarisation information from Planck, and CMB lensing information from the Planck +ACT combination, simply as “CMB”. Where occasionally necessary, we will explicitly label results that do not use CMB lensing as “CMB (no lensing)”.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "2.4.3 Type Ia supernovae",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS4.SSS3.p1",
+     "text": "Type Ia supernovae (SN Ia) serve as standardizable candles which offer an alternative way to measure the expansion history of the universe. Historically, SN Ia led to the discovery of the accelerating expansion, following earlier, more complex arguments for $\\Lambda$ -dominated models based on observations of large-scale structure. Within the $\\Lambda$ CDM model SN Ia have lower statistical power than modern BAO measurements, but provide important information on dark energy when analyzing the less restricted models considered in Section 5.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS4.SSS3.p2",
+     "text": "In this paper, we make use of three different SN Ia datasets. The Pantheon+ compilation consists of 1550 spectroscopically-confirmed SN Ia in the redshift range $0.001<z<2.26$. We use the public likelihood from incorporating the full statistical and systematic covariance, imposing a bound $z>0.01$ in order to mitigate the impact of peculiar velocities in the Hubble diagram. More recently, the Union3 compilation of 2087 SN Ia, many (1363 SN Ia) in common with Pantheon+, was presented in, 10 10 10 Data provided by the Union3 team, private communication. and includes a different treatment of systematic errors and uncertainties based on Bayesian Hierarchical Modelling. Finally, the Dark Energy Survey, as part of their Year 5 data release, recently published results based on a new, homogeneously selected sample of 1635 photometrically-classified SN Ia with redshifts $0.1<z<1.3$, which is complemented by 194 low-redshift SN Ia (which are in common with the Pantheon+ sample) spanning $0.025<z<0.1$. 11 11 11 Data available at https://github.com/des-science/DES-SN5YR. The contribution of SN Ia in general, and the differences between the different datasets 12 12 12 We note that these SN Ia data sets are not independent of each other and we therefore do not combine their results: Pantheon+ and Union3 share $\\sim 1360$ supernovae but differ in their analysis methodology and marginalization over astrophysical and systematic parameters, while DES contributes a new high- $z$ data set of $\\sim 1500$ photometrically-classified SN Ia but still uses about 194 historical SN Ia at $z<0.1$ in common with the other two. are discussed in Section 5. In the rest of the paper, we will denote the Pantheon+ dataset as PantheonPlus, and the DES-SN5YR dataset as DESY5, in order to provide a consistent, concise set of labels suitable for tables and figure legends, and to avoid ambiguities with the ‘+’ symbol used to denote the combinations of datasets.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.T2",
+     "text": "Table 2: Parameters and priors used in the analysis. All of the priors are flat in the ranges given. We consider two parametrisations,“background-only” when using BAO and SN data only, and “CMB” where data from Planck and ACT are involved. In both cases, the same priors are used for parameter extensions. A single massive neutrino of mass $\\sum m_{\\nu}=0.06\\;{\\,\\rm eV}$ is assumed, except in the $\\Lambda$ CDM+ $m_{\\nu}$ model, for which we consider three degenerate massive neutrino species ( $N_{\\nu}=3$ in CAMB). Note that $\\Omega_{\\mathrm{m}}$ includes the contribution of any massive neutrinos. In addition to the flat priors on $w_{0}$ and $w_{a}$ listed in the table, we also impose the requirement $w_{0}+w_{a}<0$ in order to enforce a period of high-redshift matter domination.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.5 Cosmological inference",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS5.p1",
+     "text": "We included in the cosmological inference code cobaya the PantheonPlus, Union3 and DESY5 SN Ia likelihoods, as well as our new DESI BAO likelihoods. The CMB likelihoods used are based on public packages that are either included in the public cobaya version or available directly from the respective teams.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS5.p2",
+     "text": "When running cobaya, we rely on the Boltzmann code CAMB for theoretical cosmology calculations. When using the combined Planck +ACT lensing likelihood, we use higher precision settings as recommended by ACT.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS5.p3",
+     "text": "All Bayesian inference is performed using the Metropolis-Hastings MCMC sampler in cobaya. Table 2 summarises the cosmological parameters that are sampled over in different runs, and the priors that are placed on them. In the base $\\Lambda$ CDM model, for data combinations that only probe the background evolution (i.e., BAO and SN Ia), we either sample in the parameters $\\Omega_{\\mathrm{m}}$ and $r_{\\mathrm{d}}h$ or—when using external data such as from BBN in order to help calibrate the $r_{\\mathrm{d}}$ value and break the $r_{\\mathrm{d}}h$ degeneracy in BAO data—in $\\Omega_{\\mathrm{m}}$, $H_{0}$ and the physical baryon density $\\omega_{\\mathrm{b}}$. When also including CMB likelihoods, we sample instead in the standard six-parameter basis $\\left(\\omega_{\\rm cdm},\\omega_{\\mathrm{b}},100\\theta_{\\rm MC},\\ln{(10^{10}A_{s})},n_{s},\\tau\\right)$, where $\\theta_{\\rm MC}$ is an approximation to the acoustic angular scale $\\theta_{\\ast}$, $A_{s}$ is the amplitude of the primordial scalar power spectrum and $n_{s}$ is its spectral index, and $\\tau$ is the reionization optical depth. We also consider extensions of the minimal $\\Lambda$ CDM model in which other parameters are allowed to vary: the spatial curvature $\\Omega_{\\mathrm{K}}$, the sum of neutrino masses $\\sum m_{\\nu}$, the single constant dark energy equation of state parameter $w$ or the two parameters $(w_{0},w_{a})$ when allowing a time-varying equation of state $w(a)$, and the effective number of relativistic species $N_{\\mathrm{eff}}$. Priors on these extended parameters are shown in the bottom section of Table 2; in any instance where one of these parameters is not varied, it is held fixed at the default value listed.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.SS5.p4",
+     "text": "When including CMB data, we take advantage of the hierarchy between (fast) nuisance parameters and (slow) cosmological parameters by taking more steps along the latter, setting the oversampling parameter oversample_power to $0.4$. We also use the so-called dragging method that enables taking larger steps in the slow parameter subspace with the help of intermediate transitions of fast parameters. For each dataset and model combination, we run four chains in parallel, starting from proposal covariance matrices built from preliminary runs. Chains are stopped when the Gelman-Rubin criterion ${\\rm R}-1<0.01$ is satisfied, where ${\\rm R}$ is the largest eigenvalue of the ratio of the inter- to intra-chain covariance matrices. We further require the effective sample size of the chains (defined as the maximum of the weighted chain length divided by the autocorrelation length for all parameters) to be $\\gtrsim 10^{3}$ to achieve percent precision on the moments of the marginal posteriors. In the case of symmetric 1D marginalised posteriors we report the mean and standard deviation of the samples, while the $68\\%$ minimal credible interval is quoted in other cases, except when otherwise stated. We use getdist 13 13 13 https://github.com/cmbant/getdist to derive the constraints presented in this paper. Where appropriate, we also compute the best-fit with the iminuit algorithm, as implemented in cobaya, starting from the four maximum a posteriori (MAP) points of the corresponding four MCMC chains. In our analysis, we use $\\Delta\\chi_{\\mathrm{MAP}}^{2}\\equiv-2\\Delta\\log{\\mathcal{L}}$, defined to represent the difference (times $-2$) of log-posteriors at the maximum posterior points.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 DESI Distance Measurements",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "3.1 Distance-Redshift Results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS1.p1",
+     "text": "Our summary Table 1 provides the BAO distance scales measured from each of the DESI tracers and redshift bins. As noted above, for the BGS and QSO samples, we report a single result for the angle-averaged quantity $D_{\\mathrm{V}}/r_{\\mathrm{d}}$. For all other redshift bins, we quote marginalised constraints on both $D_{\\mathrm{M}}/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}/r_{\\mathrm{d}}$ individually; note however that these two quantities are correlated with each other, with a correlation factor that depends on redshift, also provided in Table 1 and fully accounted for in the BAO likelihoods.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p2",
+     "text": "Figure 1 shows a summary of these DESI BAO results in the form of a Hubble diagram. In order to conveniently display the results from all redshift bins together, we convert results between the $\\left(D_{\\mathrm{M}}/r_{\\mathrm{d}},D_{\\mathrm{H}}/r_{\\mathrm{d}}\\right)$ and $\\left(D_{\\mathrm{V}}/r_{\\mathrm{d}},D_{\\mathrm{M}}/D_{\\mathrm{H}}\\right)$ bases for all tracers, by mapping the change in parameter basis at each posterior sample and recalculating the marginalised constraints. 14 14 14 In practice, our BAO analysis of measurements from discrete tracers uses the $\\left(D_{\\mathrm{V}}/r_{\\mathrm{d}},D_{\\mathrm{M}}/D_{\\mathrm{H}}\\right)$ basis, but also reports $\\left(D_{\\mathrm{M}}/r_{\\mathrm{d}},D_{\\mathrm{H}}/r_{\\mathrm{d}}\\right)$ as derived parameters, as the former are much more independent of each other (though not totally so). The Ly $\\alpha$ BAO measurements still retain a significant correlation in this basis. The top row then shows $D_{\\mathrm{V}}/r_{\\mathrm{d}}$ (scaled by an arbitrary factor of $z^{-2/3}$ for visualisation purposes) in the left panel, and $D_{\\mathrm{M}}/D_{\\mathrm{H}}$ (similarly arbitrarily scaled by $z^{-1}$) in the right panel. The solid and dashed grey lines in each panel indicate the corresponding model predictions for the $\\Lambda$ CDM model that best fit the DESI data ( Section 4.1), and the Planck best-fit $\\Lambda$ CDM model, respectively. The lower panel shows the same data again but now as the ratio of the $D_{\\mathrm{V}}/r_{\\mathrm{d}}$ and $F_{\\mathrm{AP}}\\equiv D_{\\mathrm{M}}/D_{\\mathrm{H}}$ values to those for the best-fit $\\Lambda$ CDM model to DESI data. The solid and dashed grey lines in these panels therefore represent the same two models as in the top row.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F1",
+     "text": "Figure 1: Top row: DESI measurements of the BAO distance scales at different redshifts, parametrised as ( left) the ratio of the angle-averaged distance $D_{\\mathrm{V}}\\equiv(zD_{\\mathrm{M}}^{2}D_{\\mathrm{H}})^{1/3}$ to the sound horizon at the baryon drag epoch, $r_{\\mathrm{d}}$, and ( right) the ratio of transverse and line-of-sight comoving distances $F_{\\mathrm{AP}}\\equiv D_{\\mathrm{M}}/D_{\\mathrm{H}}$, from all tracers and redshift bins as labeled. For visual clarity and to compress the dynamic range of the plot, an arbitrary scaling of $z^{-2/3}$ has been applied on the left, and $z^{-1}$ on the right. The solid and dashed grey lines show model predictions from, respectively, the flat $\\Lambda$ CDM model that best fits this data, with $\\Omega_{\\mathrm{m}}=0.294$ and $H_{0}r_{\\mathrm{d}}=1.0194\\times 10^{4}\\;\\mathrm{km\\,s}^{-1}$, and from a $\\Lambda$ CDM model with parameters matching the Planck best-fit cosmology. The BGS and QSO data points appear only in the left panel and not the right one because the signal-to-noise ratio of the data is not yet sufficient to measure both parameters for these tracers. Bottom row: The same data points and models as in the top row, but now shown as the ratio relative to the predictions for the best-fit flat $\\Lambda$ CDM model.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.2 Internal consistency of DESI results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.p1",
+     "text": "Figure 1 shows visually that the flat $\\Lambda$ CDM model provides a good fit to the DESI BAO results: quantitatively, the $\\chi^{2}$ value for this fit is $12.66$ for 10 degrees of freedom (dof), as we have 12 data points and 2 free parameters, namely $\\Omega_{\\mathrm{m}}$ and $H_{0}r_{\\mathrm{d}}$ ( Table 2). These two parameters have a direct relationship to the BAO data points shown in Figure 1, since in the flat $\\Lambda$ CDM model $\\Omega_{\\mathrm{m}}$ fully determines $F_{\\mathrm{AP}}(z)$ and fixes the shape of $D_{\\mathrm{V}}/r_{\\mathrm{d}}$ as a function of redshift, while $H_{0}r_{\\mathrm{d}}$ sets a redshift-independent constant normalization term for $D_{\\mathrm{V}}/r_{\\mathrm{d}}$. The single most anomalous result is the measurement of $F_{\\mathrm{AP}}(z=0.51)$, which is mildly offset (at the $\\sim 2\\sigma$ significance level) from the $\\Lambda$ CDM expectation. This appears to be a simple statistical fluctuation and we do not regard it as significant. In Appendix A we explicitly confirm that this fluctuation does not alter any of the conclusions drawn about any cosmological models in Sections 4, 5, 6 and 7 below. Moreover, since our submission, other papers have appeared discussing further the statistical significance of the DESI data points and their impact on the fit, see e.g..",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS2.p2",
+     "text": "It is also worth confirming that the parameters inferred from each individual redshift bin are consistent with each other. This is shown in Figure 2, where in the left panel we show the 68% and 95% credible intervals on $\\Omega_{\\mathrm{m}}$ and $H_{0}r_{\\mathrm{d}}$ obtained from fitting a flat $\\Lambda$ CDM model to each DESI tracer type individually, using the priors described in Table 2. The slightly anomalous $F_{\\mathrm{AP}}(z=0.51)$ value results in a mild shift in the contour for the $0.4<z<0.6$ LRG1 bin, but we do not regard this as significant. The individual contours have characteristic degeneracy directions that depend on redshift, and show a strong degree of overlap, confirming the internal consistency of the DESI data. A consequence of the change in the degeneracy directions with redshift is that the combination of all tracers provides a tight final constraint, shown in the right panel of Figure 2.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.F2",
+     "text": "Figure 2: Left panel: 68% and 95% credible-interval contours for parameters $\\Omega_{\\mathrm{m}}$ and $r_{\\mathrm{d}}h$ obtained for a flat $\\Lambda$ CDM model from fits to BAO measurements from each DESI tracer type individually, as labeled. Results from all tracers are consistent with each other and the change in the degeneracy directions arises from the different effective redshifts of the samples. Right panel: the corresponding results in flat $\\Lambda$ CDM for fits to BAO results from all DESI redshift bins (blue), the final SDSS results from (orange), and the combination of these two as described in the text (green). The corresponding result from the CMB (including CMB lensing) is shown in pink.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.3 Comparison to BAO results from SDSS",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS3.p1",
+     "text": "The region of the sky and the range of redshifts observed by DESI partially overlap with those observed by the previous generation of BOSS and eBOSS survey programs of SDSS, whose final BAO results were presented in. It is therefore pertinent to compare our BAO results to those from SDSS. A visual comparison of the distance scale measurements obtained from DESI and SDSS is shown in Figure 15 of. 15 15 15 also shows a comparison to BAO measurements from 6dFGS and WiggleZ, although these have lower precision. As a rough guide, $\\sim 70\\%$ of the DESI DR1 footprint was covered by BOSS; conversely, $\\sim 65\\%$ of the BOSS footprint has been covered by DESI DR1. Therefore the input catalog data used in the DESI and SDSS BAO analyses, while different due to the details of the instrument performance and observing strategy, nevertheless have a fraction of shared objects, introducing a correlation that depends on the redshift and tracer type.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p2",
+     "text": "This correlation is greatest at low redshifts, where the DESI BGS and LRG samples overlap the SDSS Main Galaxy Sample and LRGs from BOSS (LOWZ and CMASS) and eBOSS. There is also a substantial overlap in volume between the QSO samples of DESI and eBOSS in the redshift range $0.8<z<2.1$. Despite this, however, fewer than 15% of the DESI quasars are also present in the eBOSS catalog. As the measurements of QSO power spectra are shot-noise dominated in both DESI and eBOSS, this results in a negligible overall correlation between the results.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p3",
+     "text": "For redshifts below $z=0.6$, the DESI DR1 data currently covers a smaller effective volume than SDSS (compare the $V_{\\rm eff}$ values in Table 1 to those reported in), but this will change in future data releases. The redshift binning used differs between DESI and SDSS, which makes a direct comparison of BAO results complicated at $z<0.4$, but the $0.4<z<0.6$ and $0.6<z<0.8$ redshift bins closely match the redshift ranges used by BOSS and eBOSS. 16 16 16 eBOSS actually used the redshift range $0.6<z<1.0$ to define the target sample, but the number density of LRGs in the catalog fell off very sharply beyond $z>0.85$ so this approximation holds. The SDSS results in these bins are $\\left.\\begin{aligned} D_{\\mathrm{M}}/r_{\\mathrm{d}}(z=0.51)=13.36\\pm 0.21,\\\\ D_{\\mathrm{H}}/r_{\\mathrm{d}}(z=0.51)=22.33\\pm 0.58,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{85.35826pt}{\\begin{flushleft}SDSS~LRG $0.4<z<0.6$, \\end{flushleft}}}}$ (11) and $\\left.\\begin{aligned} D_{\\mathrm{M}}/r_{\\mathrm{d}}(z=0.70)=17.86\\pm 0.33,\\\\ D_{\\mathrm{H}}/r_{\\mathrm{d}}(z=0.70)=19.33\\pm 0.53,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{85.35826pt}{\\begin{flushleft}SDSS~LRG $0.6<z<0.85$, \\end{flushleft}}}}$ (12) respectively, which can be compared to the DESI results in Table 1. While the results at effective redshift $z=0.51$ are in good agreement, a larger difference can be seen in the $0.6<z<0.8$ redshift bin, particularly in comparison to the DESI result $D_{\\mathrm{M}}/r_{\\mathrm{d}}(z=0.71)=16.85\\pm 0.32$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p4",
+     "text": "To gauge the significance of this disagreement, we can estimate the degree of correlation between power spectrum measurements from DESI and those of SDSS. To do this, we adopt Eq. 7, using approximate values for the total volume overlap, the number density of galaxies in common between the two surveys, and assuming a representative amplitude of the power spectrum $P_{0}=10^{4}\\;(h^{-1}{\\rm Mpc})^{3}$ for both samples. This gives indicative values of $C=0.35$ for $0.4<z<0.6$ and $C=0.21$ for $0.6<z<0.8$. Assuming that this degree of correlation also applies to BAO results derived from the power spectra, and accounting for the predicted changes in $D_{\\mathrm{M}}/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}/r_{\\mathrm{d}}$ between $z=0.70$ and $z=0.71$ in the DESI fiducial cosmology, the discrepancy between the DESI and SDSS results in the $0.6<z<0.8$ redshift range is at roughly the $\\sim 3\\sigma$ level.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p5",
+     "text": "The cause of this difference is not clear. As discussed in, numerous improvements in the data processing and BAO fitting methods have been introduced for DESI, and reprocessing the raw BOSS/eBOSS catalog data using the DESI BAO pipeline gives small shifts compared to the results published in. However, this accounts for a shift of at most a small fraction of the published uncertainties in $D_{\\mathrm{M}}/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}/r_{\\mathrm{d}}$. We note that in this redshift bin the SDSS catalog was a composite formed from the BOSS CMASS galaxy sample extending to $z\\simeq 0.75$ and the deeper eBOSS LRG sample extending to $z=1$ over a much smaller sky footprint; in contrast the DESI LRG sample is much more uniform. The cause of the difference may simply an unlucky sample variance fluctuation—if so, this will soon become clear with later DESI data releases, which will have a much larger $V_{\\rm eff}$ in this redshift range.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p6",
+     "text": "While the degree of correlation between BAO results from the galaxy and quasar samples for DESI and SDSS has only been approximately estimated as described above, in the Ly $\\alpha$ forest BAO analysis, the degree of correlation has been more thoroughly quantified in and shown to agree very well. also provides results for a combined “DESI+SDSS” Ly $\\alpha$ BAO measurement: $D_{\\mathrm{M}}/r_{\\mathrm{d}}(z=2.33)=38.80\\pm 0.75,$ (13) and $D_{\\mathrm{H}}/r_{\\mathrm{d}}(z=2.33)=8.72\\pm 0.14,$ (14) with an anticorrelation of $\\rho=-0.48$ between $D_{\\mathrm{M}}/r_{\\mathrm{d}}$ and $D_{\\mathrm{H}}/r_{\\mathrm{d}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p7",
+     "text": "The $D_{\\mathrm{M}}/r_{\\mathrm{d}}(z=0.71)$ measurement from LRGs yields the greatest difference between SDSS and DESI at any redshift. Nevertheless, using the BAO measurements from all redshifts together, the BAO distance ladders obtained from DESI and SDSS result in consistent inference of cosmological parameters. The right panel of Figure 2 shows the posterior credible intervals for the parameters $\\Omega_{\\mathrm{m}}$ and $r_{\\mathrm{d}}h$ in a flat $\\Lambda$ CDM cosmology from fitting to the DESI (blue) and SDSS (orange) BAO data. The DESI values are described in Section 4 and Table 3. The results are clearly in very good agreement with each other, with no significant difference in $\\Omega_{\\mathrm{m}}$ and a shift of just $\\sim 1\\sigma$ in $r_{\\mathrm{d}}h$.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p8",
+     "text": "In this paper our primary focus will be on the cosmological consequences of the DESI DR1 BAO results alone, as a homogeneously analysed dataset across redshift and tracer type. However, it is also possible to construct a dataset of BAO distance measurements from the combination of DESI and SDSS results in order to maximise measurement precision across the entire redshift range $0.1<z<4.2$. Bearing in mind that the degree of correlation between BAO results from discrete galaxy and quasar tracers in the two surveys has not been precisely quantified—to avoid double-counting information—this combined sample should be selected by choosing the result from the survey covering the larger effective volume $V_{\\rm eff}$ at a given redshift. Thus, the composite BAO dataset can be constructed as follows: • at $z<0.6$ where SDSS currently has a larger $V_{\\rm eff}$, we use the SDSS results at $z_{\\rm eff}=0.15,0.38$ and $0.51$ in place of the DESI BGS and lowest-redshift LRG points; • at $z>0.6$ where DESI has $V_{\\rm eff}$ larger than that of SDSS, we use the DESI results from LRGs over $0.6<z<0.8$, the LRG+ELG combination over $0.8<z<1.1$, and ELGs and QSOs at higher redshifts; and • for the Ly $\\alpha$ BAO we use the combined DESI+SDSS result from Eqs. 13 and 14 above. We use the label “DESI+SDSS” to refer to this composite BAO dataset, while reiterating that this is not the same as simply combining the likelihoods from each survey individually due to the overlap in volumes. The posterior in parameters $(\\Omega_{\\mathrm{m}},r_{\\mathrm{d}}h)$ inferred from fitting a flat $\\Lambda$ CDM model to this dataset is shown in green in the right panel of Figure 2. In Appendix A we present constraints using the DESI+SDSS data combination in various cosmological models, specifically comparing them to constraints using DESI data alone.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Cosmological constraints in the Λ \\Lambda CDM model",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.T3",
+     "text": "Table 3: Cosmological parameter results from DESI DR1 BAO data in combination with external datasets and priors, in the baseline flat $\\Lambda$ CDM model and extensions including spatial curvature and two parametrisations of the dark energy equation of state, as listed. Results are quoted for the marginalised means and 68% credible intervals in each case, including for upper limits. Note that DESI data alone measures $r_{\\mathrm{d}}h$ and not $H_{0}$, but for reasons of space this result is omitted from the table and provided in the text instead. In this and other tables, the shorthand notation “CMB” is used to denote the addition of temperature and polarisation data from Planck and CMB lensing data from the combination of Planck and ACT.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.1 Flat background",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.SS1.p1",
+     "text": "In this section, we present cosmological constraints for the flat $\\Lambda$ CDM cosmological model in which $\\Omega_{\\mathrm{K}}=0$, $\\Omega_{\\Lambda}=1-\\Omega_{\\mathrm{m}}$. As discussed in Sections 3.2 and 3.3 above, in this model BAO distance scales alone constrain only two free parameters: the matter density parameter $\\Omega_{\\mathrm{m}}$ and the combination $H_{0}r_{\\mathrm{d}}$ of the Hubble constant $H_{0}$ and the sound horizon $r_{\\mathrm{d}}$. The 68% credible-interval results for these parameters are $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.295\\pm 0.015,\\\\ r_{\\mathrm{d}}h&=(101.8\\pm 1.3)\\,\\text{Mpc},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI~BAO, \\end{flushleft}}}}$ (15) where to simplify units and notation we quote results for $r_{\\mathrm{d}}h\\equiv H_{0}r_{\\mathrm{d}}/(100\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}})$ instead of $H_{0}r_{\\mathrm{d}}$. The posterior constraints are shown in the right panel of Figure 2, and it is clear that they are in very good agreement with the previously reported SDSS values of $\\Omega_{\\mathrm{m}}=0.299\\pm 0.016$ and $r_{\\mathrm{d}}h=(100.4\\pm 1.3)\\,\\text{Mpc}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p2",
+     "text": "It is apparent from Figure 2 that DESI BAO prefer a somewhat larger value of $r_{\\mathrm{d}}h$ compared to the value $r_{\\mathrm{d}}h=(98.82\\pm 0.82)\\,\\text{Mpc}$ obtained from the combination of CMB temperature, polarisation and lensing (or $r_{\\mathrm{d}}h=(98.9\\pm 1.0)\\,\\text{Mpc}$ from the CMB when excluding CMB lensing). It is therefore of interest to quantify the level of consistency between these two data sets. We do so by calculating the relative $\\chi^{2}$ between the two datasets as $\\chi^{2}=(\\mathbf{p}_{A}-\\mathbf{p}_{B})^{T}(\\mathrm{Cov}_{A}+\\mathrm{Cov}_{B})^{-1}(\\mathbf{p}_{A}-\\mathbf{p}_{B}),$ (16) and converting it to the probability-to-exceed between two datasets (e.g.). Here $\\mathbf{p}_{A}$ and $\\mathbf{p}_{B}$ refer to ( $\\Omega_{\\mathrm{m}},r_{\\mathrm{d}}h$) parameter vectors obtained from fits to the two datasets, and $\\mathrm{Cov}_{A}$ and $\\mathrm{Cov}_{B}$ to the corresponding $2\\times 2$ covariances. Applying this statistic to DESI DR1 BAO and CMB, we find that the differences in this parameter space amount to a mild $1.9\\sigma$ -level discrepancy when including CMB lensing, or $1.6\\sigma$ without. We thus consider that DESI BAO data are consistent with the CMB in this parameter space.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p3",
+     "text": "Since BAO distance measurements alone are sensitive to the combination $H_{0}r_{\\mathrm{d}}$, an external calibration of the sound horizon $r_{\\mathrm{d}}$ is required in order to break the $H_{0}$ – $r_{\\mathrm{d}}$ degeneracy and obtain a constraint on the Hubble constant $H_{0}$. This method of calibrating the BAO distance scales using the sound horizon at early times is known as the “inverse distance ladder” approach. Directly calibrating the BAO standard ruler using the value $r_{\\mathrm{d}}=147.09\\pm 0.26\\,\\text{Mpc}$ obtained from using all CMB and CMB lensing information gives $H_{0}=(69.29\\pm 0.87)\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\qquad(\\mbox{DESI BAO\\,+\\,$r_{\\mathrm{d}}$ from CMB}).$ (17) An alternative approach that is more independent of CMB information is to use a prior on $\\Omega_{\\mathrm{b}}h^{2}$ obtained from BBN ( Section 2.4.1), which is sufficient to determine $r_{\\mathrm{d}}$ and break the degeneracy. Within flat $\\Lambda$ CDM, DESI DR1 BAO + BBN give $H_{0}=(68.53\\pm 0.80)\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\qquad(\\mbox{DESI~BAO\\,+\\,BBN}).$ (18) This constraint is 20% more precise than the equivalent one obtained from SDSS BAO data, $H_{0}=(67.35\\pm 0.97)\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$, which is a result of the improved precision of the DESI BAO measurements at higher redshifts, leading to narrower posterior constraints perpendicular to the main degeneracy direction in the $\\Omega_{\\mathrm{m}}$ – $r_{\\mathrm{d}}h$ plane ( Figure 2). The central value is also shifted by about $\\sim 1\\sigma$ to higher $H_{0}$, a direct consequence of the similar shift in $H_{0}r_{\\mathrm{d}}$ shown in Figure 2. However, the two results are fully consistent with each other.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p4",
+     "text": "We can also use a conservative model-independent prior on the acoustic angular scale $\\theta_{\\ast}$ seen from the CMB ( Section 2.4.2), without including additional CMB information. While on its own knowledge of $\\theta_{\\ast}$ is insufficient to break the $r_{\\mathrm{d}}$ – $h$ degeneracy (because the baryon density $\\Omega_{\\mathrm{b}}h^{2}$ remains unknown, so $r_{d}$ cannot be fixed), it is extremely robust and, in combination with BBN information, further tightens the $H_{0}$ result to $H_{0}=(68.52\\pm 0.62)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\qquad(\\mbox{DESI BAO\\,+\\,BBN\\,+\\,$\\theta_{\\ast}$}),$ (19) a 0.9% measurement of the Hubble constant. As discussed further in Section 6 below, this more precise constraint can also be extended to be robust to many early-universe extensions of the base $\\Lambda$ CDM model, in particular to assumptions about the effective number of relativistic species $N_{\\mathrm{eff}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p5",
+     "text": "It is interesting to note that the direct $r_{\\mathrm{d}}$ calibration from the CMB produces the weakest constraint on $H_{0}$ despite apparently using the most external information and being the most model-dependent. This is because BBN and $\\theta_{\\ast}$ information affect $\\Omega_{\\mathrm{m}}$ and are applied consistently in the posterior sampling, and thus leverage the degeneracy between $\\Omega_{\\mathrm{m}}$ and $r_{\\mathrm{d}}h$ from BAO data, while a prior directly applied on $r_{\\mathrm{d}}$ cannot do so.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.F3",
+     "text": "Figure 3: Left panel: marginalised posterior constraints on matter density $\\Omega_{\\mathrm{m}}$ and the Hubble constant $H_{0}$, obtained from combining DESI BAO data with external data used to calibrate the sound horizon $r_{\\mathrm{d}}$, in a flat $\\Lambda$ CDM cosmological model. The combinations shown use a prior on $\\omega_{\\mathrm{b}}$ determined from BBN (blue), the combination of a BBN $\\omega_{\\mathrm{b}}$ prior and measurement of the acoustic angular scale $\\theta_{\\ast}$ (orange), and $r_{\\mathrm{d}}$ directly calibrated from CMB results from Planck (green). The pink contour shows the corresponding constraints from the combination of CMB and CMB lensing. Right panel: The marginalised 1D posteriors on $\\Omega_{\\mathrm{m}}$ in flat $\\Lambda$ CDM, from DESI BAO, CMB and the three SN datasets, as labelled.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.SS1.p6",
+     "text": "The left panel of Figure 3 summarises the constraints in the $\\Omega_{\\mathrm{m}}$ – $H_{0}$ plane obtained from the combination of DESI BAO data with each of the external priors discussed so far, and compares them to the combined CMB result from Planck and ACT. All combinations including DESI data favour somewhat higher values of $H_{0}$ and lower values of $\\Omega_{\\mathrm{m}}$ than the mean values for the CMB posterior. However, the results are not in serious tension: using the metric outlined in Eq. 16 above, the biggest discrepancy is at the $\\sim 2.1\\sigma$ level, for DESI+BBN+ $\\theta_{\\ast}$ compared to CMB. Given this level of agreement, there is no issue with combining DESI and CMB data to obtain joint constraints; doing so we find $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.3069\\pm 0.0050,\\\\ H_{0}&=(67.97\\pm 0.38)\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{56.9055pt}{\\begin{flushleft}DESI~BAO+ CMB. \\end{flushleft}}}}$ (20) These results are summarised in Table 3, which also shows parameter constraints obtained in other extended models.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p7",
+     "text": "A final instructive comparison within the context of the flat $\\Lambda$ CDM is between the constraints on the matter density $\\Omega_{\\mathrm{m}}$ offered by DESI and SN Ia. These are shown in the right panel of Figure 3. PantheonPlus reports $\\Omega_{\\mathrm{m}}=0.331\\pm 0.018$, Union3 gives $\\Omega_{\\mathrm{m}}=0.359^{+0.025}_{-0.028}$, and DESY5 gives $\\Omega_{\\mathrm{m}}=0.353\\pm 0.017$. There is therefore a moderate variation in both central values and quoted uncertainties across different SN Ia compilations, but all of them prefer higher values of $\\Omega_{\\mathrm{m}}$ than DESI and the CMB. The statistical significance of the differences compared to DESI, calculated as described above, stands at $1.6\\sigma$ for PantheonPlus, $2.0\\sigma$ for Union3, and $2.6\\sigma$ for DESY5. While they do not meet a $3\\sigma$ threshold for significant tension, these numbers indicate a degree of disagreement between these datasets and DESI results when interpreted in the flat $\\Lambda$ CDM model. Should these mismatches persist and become more significant when more data is acquired, they will require further investigation.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.2 Λ \\Lambda CDM model with free spatial curvature",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.F4",
+     "text": "Figure 4: 68% and 95% marginalised posterior constraints on $\\Omega_{\\mathrm{m}}$ – $\\Omega_{\\Lambda}$ plane (left) and $\\Omega_{\\mathrm{m}}$ – $\\Omega_{\\mathrm{K}}$ (right) in the one-parameter extension of the $\\Lambda$ CDM model with free curvature, $\\Lambda$ CDM $+\\Omega_{\\mathrm{K}}$. In the left panel the supernova contours are truncated at the lower-left by the $\\mathcal{U}[-0.3,0.3]$ prior on $\\Omega_{\\mathrm{K}}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.SS2.p1",
+     "text": "Relaxing the condition of spatial flatness in the $\\Lambda$ CDM model, we allow the curvature parameter $\\Omega_{\\mathrm{K}}$ to vary. In an FLRW background, this is equivalent to allowing the dark energy density $\\Omega_{\\Lambda}=1-\\Omega_{\\mathrm{m}}-\\Omega_{\\mathrm{K}}$ to vary independently from the matter density $\\Omega_{\\mathrm{m}}$, while still keeping the dark-energy equation of state fixed at $w=-1$. Because DESI provides relative measures of the BAO scale at multiple redshifts, it can determine the expansion rate as a function of redshift and thus measure $\\Omega_{\\Lambda}$ independent of any calibration of the sound horizon from external data. In this model DESI alone thus measures the parameters $\\left(\\Omega_{\\mathrm{m}},\\Omega_{\\Lambda},r_{\\mathrm{d}}h\\right)$, and finds the following 68% credible-interval constraints $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.284\\pm 0.020,\\\\ \\Omega_{\\Lambda}&=0.651^{+0.068}_{-0.057},\\\\ r_{\\mathrm{d}}h&=(100.9\\pm 1.6)\\,{\\rm Mpc},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{99.58464pt}{\\begin{flushleft}DESI~BAO. \\end{flushleft}}}}$ (21) Expressed in terms of curvature, the DESI result is $\\Omega_{\\mathrm{K}}=0.065^{+0.068}_{-0.078}$. Figure 4 shows the corresponding 2D credible intervals in both $(\\Omega_{\\mathrm{m}},\\Omega_{\\Lambda})$ and $(\\Omega_{\\mathrm{m}},\\Omega_{\\mathrm{K}})$ plane.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p2",
+     "text": "The addition of model-independent information on the acoustic angular scale $\\theta_{\\star}$ effectively extends the redshift range of the BAO distance ladder, reaching all the way to last scattering at $z\\sim 1090$. This dramatically improves the curvature constraints, giving $\\Omega_{\\mathrm{K}}=0.0108^{+0.015}_{-0.0056}$. Adding a BBN prior this is further tightened to $\\left.\\Omega_{\\mathrm{K}}=0.0003^{+0.0048}_{-0.0054}\\quad\\mbox{\\text{\\parbox{128.0374pt}{\\begin{flushleft}(DESI~BAO\\,+\\,BBN\\,+\\,$\\theta_{\\ast}$). \\end{flushleft}}}}\\right.$ (22)",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p3",
+     "text": "The corresponding curvature constraint from the CMB is $\\left.\\Omega_{\\mathrm{K}}=-0.0102\\pm 0.0054\\quad\\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}(CMB). \\end{flushleft}}}}\\right.$ (23) This value is $\\sim 2\\sigma$ away from $\\Omega_{\\mathrm{K}}=0$, and the difference is even larger (over $3\\sigma$) when not including CMB lensing. This is a well-known issue in the Planck PR3 likelihood (see discussion in, as well as, e.g.,) caused by the combination of the geometric degeneracy limiting CMB measurements of curvature, and the observed slight excess of smoothing of high- $\\ell$ peaks in the temperature power spectrum. Later Planck PR4 likelihoods somewhat alleviate, but do not completely remove, this CMB preference for $\\Omega_{\\mathrm{K}}<0$. Thus BAO results are crucial in providing a curvature constraint that is independent of the CMB. The combined result from DESI BAO and all CMB information is $\\left.\\Omega_{\\mathrm{K}}=0.0024\\pm 0.0016\\quad\\mbox{\\text{\\parbox{99.58464pt}{\\begin{flushleft}(DESI~BAO+CMB). \\end{flushleft}}}}\\right.$ (24)",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Dark energy",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "Over the past quarter century, an impressive variety of cosmological observations have confirmed and vastly strengthened the evidence that the expansion of the universe is accelerating. The standard cosmological model has a flat background geometry, but a sub-critical total (cold and baryonic) matter density. While the measurements thus far are in good agreement with the simplest flat $\\Lambda$ CDM scenario—a vacuum energy described by the cosmological constant dominating the energy density and responsible for the late-time acceleration—much effort is dedicated to measuring the expansion and growth history of the universe and looking for any departures from this model. In this regard, constraining dark energy models beyond the simplest $\\Lambda$ CDM model is a principal goal of DESI.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "5.1 Flat w w CDM model",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.F5",
+     "text": "Figure 5: Constraints on $\\Omega_{\\mathrm{m}}$ and $w$ in the flat $w$ CDM model. The constraints from DESI BAO alone are shown in blue, those from the CMB in pink, and different SN Ia compilations in solid and dashed green. The orange contour shows the combined constraint from DESI, CMB and PantheonPlus SN Ia. All contours show 68% and 95% credible intervals. Note the remarkable complementarity of cosmological probes in this plane.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS1.p1",
+     "text": "Although a cosmological constant fits existing data well, the tiny observed value of $\\Lambda$ relative to typical scales in particle physics poses great theoretical challenges. Acceleration physics beyond $\\Lambda$ necessarily has dynamics – time dependence (and spatial perturbations, though these have diminishing effect the closer the time dependence is to $\\Lambda$, i.e. constant).",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.p2",
+     "text": "At the background cosmology level entering cosmic distances, the acceleration physics can be treated as an effective dark energy density and pressure. Thus we have a dark energy equation of state parameter, or pressure to energy density ratio, $w(a)$, and a current dark energy density value, $\\Omega_{\\rm de}$, to describe the dark energy component. In the early 2000s, with the time variation $w(a)$ inaccessible to observations, analyses often fixed $w=\\,$ const ( $w$ CDM), but this is insensitive to crucial dynamics that might be indicated by data. $w$ CDM can however still be useful as an alert if the recovered constraint on constant $w$ has statistically significant deviation from $w=-1$. Note the converse is not true: measuring $w=-1$ assuming $w$ is constant does not indicate $\\Lambda$ is correct (known as the “mirage of $\\Lambda$ ”).",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS1.p3",
+     "text": "Figure 5 shows the constraints on $\\Omega_{\\mathrm{m}}$ and $w$ from a variety of different data and combinations. In this plane the DESI contours are close to vertically aligned, providing a tight constraint on $\\Omega_{\\mathrm{m}}$ that is largely independent of $w$, in contrast to SN Ia and CMB probes, which show distinctive degeneracy directions corresponding to the transverse comoving distances that each of these probes constrains. We find $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.293\\pm 0.015,\\\\ w&=-0.99^{+0.15}_{-0.13},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI~BAO, \\end{flushleft}}}}$ (25) from DESI alone, while combining DESI BAO with BBN and $\\theta_{\\ast}$ significantly tightens the constraint on $w$ to $w=-1.002^{+0.091}_{-0.080}$. Adding CMB data shifts the contours slightly along the CMB degeneracy direction, giving $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.281\\pm 0.013,\\\\ w&=-1.122^{+0.062}_{-0.054},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{99.58464pt}{\\begin{flushleft}DESI~BAO+CMB. \\end{flushleft}}}}$ (26) Finally, the tightest constraints are obtained from the combination of these data with SN Ia. For example for the PantheonPlus SN Ia dataset: $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.3095\\pm 0.0069,\\\\ w&=-0.997\\pm 0.025,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{99.58464pt}{\\begin{flushleft}DESI+CMB\\allowbreak+PantheonPlus. \\end{flushleft}}}}$ (27) Similar constraints are obtained when substituting PantheonPlus SN Ia for DESY5 or Union3 (though with slightly larger uncertainties in the latter case). These results are summarised in Table 3. In summary, DESI data, both alone and in combination with other cosmological probes, do not show any evidence for a constant equation of state parameter different from $-1$ when a flat $w$ CDM model is assumed.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "5.2 Flat w 0 ​ w a w_{0}w_{a} CDM model",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.F6",
+     "text": "Figure 6: Left panel: 68% and 95% marginalised posterior constraints in the $w_{0}$ – $w_{a}$ plane for the flat $w_{0}w_{a}$ CDM model, from DESI BAO alone (black dashed), DESI + CMB (pink), and DESI + SN Ia, for the PantheonPlus, Union3 and DESY5 SNIa datasets in blue, orange and green respectively. Each of these combinations favours $w_{0}>-1$, $w_{a}<0$, with several of them exhibiting mild discrepancies with $\\Lambda$ CDM at the $\\gtrsim 2\\sigma$ level. However, the full constraining power is not realised without combining all three probes. Right panel: the 68% and 95% marginalised posterior constraints from DESI BAO combined with CMB and each of the PantheonPlus, Union3 and DESY5 SN Ia datasets. The significance of the tension with $\\Lambda$ CDM ( $w_{0}=-1$, $w_{a}=0$) estimated from the $\\Delta\\chi_{\\mathrm{MAP}}^{2}$ values is $2.5\\sigma$, $3.5\\sigma$ and $3.9\\sigma$ for these three cases respectively.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS2.p1",
+     "text": "Taking into account the physical dynamics of dark energy, the parametrisation $w(a)=w_{0}+w_{a}\\,(1-a)$ was derived and has been demonstrated to match the background evolution of distances arising from exact dark energy equations of motion to an accuracy of $\\mathcal{O}(0.1\\%)$ for viable cosmologies over a wide range of physics – scalar fields, modified gravity, and phase transitions. 17 17 17 The converse is however not true and not all values in the $\\left(w_{0},w_{a}\\right)$ parameter space provide an equation of state that can be mapped up to high accuracy to a viable physical models. In this section, we present constraints on this model, referred to as $w_{0}w_{a}$ CDM, which reduces to $\\Lambda$ CDM for $w_{0}=-1$, $w_{a}=0$. Constraining the $w_{0}$ – $w_{a}$ parameter space and its corresponding behavior as well as distinguishing it from $\\Lambda$ is a key science goal of DESI.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p2",
+     "text": "We adopt wide flat priors on $w_{0}$ and $w_{a}$ ( Table 2), together with the condition $w_{0}+w_{a}<0$ imposed to enforce a period of high-redshift matter domination. Since the parameter space we explore includes models whose equation of state crosses the $w=-1$ boundary, we use the parametrised post-Friedmann approach to compute the dark energy perturbations when calculating the CMB angular power spectrum. Figure 6 shows the marginalised posteriors in the $w_{0}$ – $w_{a}$ plane from DESI and combinations with other external datasets. DESI alone does not have sufficient power to break the degeneracy between $w_{0}$ and $w_{a}$ and thus the results are cut off by our priors (see Table 2), $\\left.\\begin{aligned} w_{0}&=-0.55^{+0.39}_{-0.21},\\\\ w_{a}&<-1.32,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI~BAO, \\end{flushleft}}}}$ (28) with the upper bound on $w_{a}$ referring to the 68% limit. This represents a mild pull away from the $\\Lambda$ CDM value, with a $\\Delta\\chi_{\\mathrm{MAP}}^{2}$ between the maximum a posteriori of the $w_{0}w_{a}$ CDM model and the MAP when fixing $(w_{0},w_{a})=(-1,0)$ of just $-3.7$ for 2 additional degrees of freedom. The cause of this small preference for $w_{0}>-1$ (from DESI data alone) is primarily due to the $F_{\\mathrm{AP}}$ measurement from the $0.4<z<0.6$ LRG bin, which lies slightly higher (at the $\\sim 2\\sigma$ level) than the best-fit $\\Lambda$ CDM model can accommodate, as shown in Figure 1. In order to better fit this data point, the equation of state $w(z\\lesssim 0.5)$ of the best-fit $w_{0}w_{a}$ CDM model prefers to be high, thus preferentially pulling $w_{0}$ to less negative values than $-1$. On the other hand, to fit the other DESI points which are all fairly close to the $\\Lambda$ CDM predictions, the parameter $w_{a}$ prefers to be strongly negative in order to compensate the integrated effect of $w(z)$ for those quantities at higher redshift.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p3",
+     "text": "Given the small $\\Delta\\chi_{\\mathrm{MAP}}^{2}$ it is clear there is no statistical preference for $w_{0}w_{a}$ CDM from DESI alone. CMB data alone also gives $\\Delta\\chi_{\\mathrm{MAP}}^{2}=-3.7$ for the MAP $w_{0}w_{a}$ CDM model compared to fixing $(w_{0},w_{a})=(-1,0)$, again showing no statistical preference. Nevertheless, given the overlap of the CMB and DESI contours in the $\\left(w_{0}>-1,w_{a}<0\\right)$ quadrant, the combined results give $\\left.\\begin{aligned} w_{0}&=-0.45^{+0.34}_{-0.21},\\\\ w_{a}&=-1.79^{+0.48}_{-1.0},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI~BAO+CMB, \\end{flushleft}}}}$ (29) and the $\\Delta\\chi_{\\mathrm{MAP}}^{2}$ decreases to $-9.5$, indicating a preference for an evolving dark energy equation of state at the $\\sim 2.6\\sigma$ level. The contours in this scenario are however still impacted by the priors we have assumed, thus care is required in interpreting these shifts.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p4",
+     "text": "SN Ia data alone allow for $w_{a}<0$ and, as shown in the left panel of Figure 6, in combination with DESI BAO they also marginally favor $w_{0}>-1$ although the statistical significance of this preference depends on the particular SN Ia dataset and is not overwhelming in any case. In order to break the degeneracy in the $w_{0}$ – $w_{a}$ plane it is necessary to look at the joint constraints from the combination of DESI, CMB and SN Ia probes, shown in the right panel of Figure 6. These constraints are now not prior-dominated in either parameter. We find that the results and the associated uncertainties again vary depending on the choice of supernova dataset, particularly when comparing PantheonPlus to the other two. However, in all cases, the results are compatible with each other. We find marginalised posterior means $\\left.\\begin{aligned} w_{0}&=-0.827\\pm 0.063,\\\\ w_{a}&=-0.75^{+0.29}_{-0.25},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB\\allowbreak+PantheonPlus, \\end{flushleft}}}}$ (30) from combination with PantheonPlus, $\\left.\\begin{aligned} w_{0}&=-0.64\\pm 0.11,\\\\ w_{a}&=-1.27^{+0.40}_{-0.34},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB\\allowbreak+Union3, \\end{flushleft}}}}$ (31) with Union3 SN Ia, and $\\left.\\begin{aligned} w_{0}&=-0.727\\pm 0.067,\\\\ w_{a}&=-1.05^{+0.31}_{-0.27},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB\\allowbreak+DESY5, \\end{flushleft}}}}$ (32) when using the DESY5 SN Ia data. A better physical understanding of why the combined datasets result in these constraints can be obtained from examining the overlap of the individual posteriors in the expanded parameter space $(\\Omega_{\\mathrm{m}}h^{2},w_{0},w_{a})$, as shown in Figure 7 for the example case of the DESY5 SN Ia. In the $w_{0}w_{a}$ CDM model, CMB data is insufficient to measure either $\\Omega_{\\mathrm{m}}$ or $H_{0}$ individually, but still provides a tight constraint on $\\Omega_{\\mathrm{m}}h^{2}$. DESI BAO and SN both measure $\\Omega_{\\mathrm{m}}$ but not $H_{0}$: their constraints on $\\Omega_{\\mathrm{m}}h^{2}$ are therefore obtained from a combination of this measurement of $\\Omega_{\\mathrm{m}}$ and the prior on $H_{0}$. The region of overlap of all three probes is thus determined by the relative degeneracy directions between $\\Omega_{\\mathrm{m}}$, $w_{0}$ and $w_{a}$ obtained from BAO and SN, and the precise constraint on $\\Omega_{\\mathrm{m}}h^{2}$ from CMB data.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.F7",
+     "text": "Figure 7: Marginalised 68% and 95% posterior constraints on $\\Omega_{\\mathrm{m}}h^{2}$, $w_{0}$ and $w_{a}$ in the flat $w_{0}w_{a}$ CDM model from DESI BAO, CMB and DESY5 SN data individually and in different combinations, showing the roles of each observational probe in breaking degeneracies and contributing to the final joint constraints. Note that BAO and SN data are sensitive only to $\\Omega_{\\mathrm{m}}$, so the $\\Omega_{\\mathrm{m}}h^{2}$ constraints from these datasets shown here arise from this $\\Omega_{\\mathrm{m}}$ measurement combined with the $H_{0}\\sim\\mathcal{U}[20,100]\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$ prior from Table 2.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS2.p5",
+     "text": "The $\\Delta\\chi_{\\mathrm{MAP}}^{2}$ values between the maximum a posteriori of the $w_{0}w_{a}$ CDM model and the maximum of the posterior fixing $(w_{0},w_{a})=(-1,0)$ are $-8.7$, $-15.2$ and $-18.1$ for the combinations of DESI and CMB with PantheonPlus, Union3 and DESY5 respectively. These correspond to preferences for a $w_{0}w_{a}$ CDM model over $\\Lambda$ CDM model at the $2.5\\sigma$, $3.5\\sigma$ and $3.9\\sigma$ significance levels, respectively. 18 18 18 Based on several independent MAP estimates, the uncertainty on these significance levels is of order $0.2\\sigma$. A Bayesian model-selection analysis gives Bayes factors of $|\\ln B_{21}|=0.65$, $2.4$, and $2.8$ in favor of the $w_{0}w_{a}$ CDM model over $\\Lambda$ CDM for the combinations of DESI+CMB with PantheonPlus, Union3 and DESY5, respectively. On Jeffreys’ scale, these indicate a weak preference for $w_{0}w_{a}$ CDM over $\\Lambda$ CDM by the first of these data combinations, and moderate preference by the latter two.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p6",
+     "text": "For this analysis, we ran additional nested-sampling chains using the PolyChord sampler from which we derived the Bayesian evidence and Bayes factors using the anesthetic software. We have verified that the posteriors derived from these auxiliary chains match those derived from the main MCMC chains described in Section 2.5, and that the Bayes factors reported here provide consistent interpretations with those estimated from the main MCMC chains through the Savage-Dickey density ratio approximation. Not unexpectedly given the current constraints, we find the exact values of the Bayesian evidence (hence the Bayes factors) depend on the specific prior ranges for $w_{0}$ and $w_{a}$ (see Table 2). The Deviance Information Criterion (DIC) for model selection indicates similar preferences and in the same order as above: $\\Delta(\\mathrm{DIC})=\\mathrm{DIC}_{w_{0}w_{a}\\mathrm{CDM}}-\\mathrm{DIC}_{\\Lambda\\mathrm{CDM}}$ of $-5.5$, $-11.0$ and $-14.1$ for the same combinations, respectively (see Table 1 of for a DIC reference scale and for a more general discussion of its empirical thresholds).",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p7",
+     "text": "Further useful information in the $w_{0}w_{a}$ CDM analysis is given by the pivot redshift, $z_{\\mathrm{p}}$, and the pivot equation of state, $w_{\\mathrm{p}}\\equiv w(z_{\\mathrm{p}})$, which inform us about the redshift and equation-of-state value at which $w(z)$ is best constrained by a given data set or combination of data sets, see e.g.. We use here the formalism and definitions of and find 19 19 19 Note that when going from the $(w_{0},w_{a})$ basis to $(w_{\\mathrm{p}},w_{a})$, the results in the parameter $w_{a}$ do not change. $(z_{\\mathrm{p}},w_{\\mathrm{p}})=\\left\\{\\begin{array}[]{cl}(0.57,-1.094\\pm 0.070)&\\quad\\mbox{(DESI+CMB)}\\\\[5.69046pt] (0.26,-0.982\\pm 0.028)&\\quad\\mbox{(DESI+CMB+PantheonPlus)}\\\\[5.69046pt] (0.33,-0.960\\pm 0.038)&\\quad\\mbox{(DESI+CMB+Union3)}\\\\[5.69046pt] (0.26,-0.946\\pm 0.026)&\\quad\\mbox{(DESI+CMB+DESY5).}\\end{array}\\right.$ (33)",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p8",
+     "text": "The results obtained here indicate a preference for an effective dark energy equation of state apparently in the phantom regime (i.e. $w(z)<-1$) at $z>1$, a conclusion that is also borne out by supporting analyses which do not use the $(w_{0},w_{a})$ parametrisation.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p9",
+     "text": "However, we caution against over-interpretation of this result, since at least some of the $\\left(w_{0},w_{a}\\right)$ models preferred by our analysis could be mapped to quintessence models which reproduce the observable quantities $D_{M}/r_{d}$ and $D_{H}/r_{d}$ to high precision even though they do not violate the null energy condition at any redshift (e.g., see), and such an effective equation of state can also be obtained from models with modified gravity or multiple fields. It remains to be explored whether such a mapping towards models that avoid the phantom regime exists within the full range of $\\left(w_{0},w_{a}\\right)$ values preferred by our analysis. For this reason we opt not to impose any further priors on the $(w_{0},w_{a})$ parameter space to restrict $w(z)\\geq-1$ and to keep our priors as model nonrestrictive as possible.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS2.p10",
+     "text": "Figure 8 provides a summary of the constraints on the expansion history from the flat cosmological models that we have explored. Here, we show the quantity $r_{\\mathrm{d}}/D_{\\mathrm{H}}=H(z)r_{\\mathrm{d}}$ as a function of redshift $z$, rescaled for convenience by $1+z$. The top, middle, and bottom panels respectively show derived constraints on the temporal evolution of the Hubble parameter in $\\Lambda$ CDM, $w$ CDM and $w_{0}w_{a}$ CDM models from fitting to DESI data, with the shaded regions indicating the 68% and 95% credible regions. The same dashed line in all panels indicates the best fit Planck $\\Lambda$ CDM model. Because $H(z)/(1+z)$ is directly proportional to $\\dot{a}$, i.e. the expansion rate, its slope with redshift is directly proportional to minus the cosmic expansion acceleration, $-\\ddot{a}$. The range of the variation of $H(z)$ shows that in each of the three cosmological models, a period of accelerated expansion (i.e. a negative slope) is required at $z\\lesssim 0.7$. Figure 14 in Appendix A also shows how individual redshift bins contribute to the model fits.",
+     "kind": "body"
+    },
+    {
+     "id": "S5.F8",
+     "text": "Figure 8: Model-dependent constraints on the redshift dependence of the Hubble parameter times the sound horizon, $H(z)r_{\\mathrm{d}}\\equiv r_{\\mathrm{d}}/D_{\\mathrm{H}}$ (scaled by $1/100/(1+z)$ for visual clarity) in three different classes of models fit to all DESI data from Figure 1. From top to bottom, the panels show the 68% and 95% credible regions in the $\\Lambda$ CDM, $w$ CDM and $w_{0}w_{a}$ CDM models respectively in the coloured bands. The dashed line in each panel shows the behaviour in the best fit Planck $\\Lambda$ CDM model. For convenience, the scale on the right-hand axis shows $(r_{\\mathrm{d}}/r_{\\mathrm{d}}^{\\rm Planck})H(z)/(1+z)$.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "5.3 w 0 ​ w a w_{0}w_{a} CDM model with free spatial curvature",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.F9",
+     "text": "Figure 9: Marginalised posteriors on $w_{0}$, $w_{a}$ and $\\Omega_{\\mathrm{K}}$ in a model with a time-varying dark energy equation of state and free spatial curvature, from DESI and CMB data combined with SN Ia from PantheonPlus, Union3 and DESY5 in blue, orange and green respectively. We also show covariances with the physical matter density $\\Omega_{\\mathrm{m}}h^{2}$, Hubble constant $H_{0}$ (in $\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$), and the amplitude of mass fluctuations $\\sigma_{8}$. All combinations provide tight limits on $\\Omega_{\\mathrm{K}}$. Constraints on $w_{0}$ and $w_{a}$ in each case broaden a little compared to those shown in the flat case ( Figure 6) but the overall trend remains the same.",
+     "kind": "caption"
+    },
+    {
+     "id": "S5.SS3.p1",
+     "text": "Finally, we also explore the most general case of a time-varying equation of state $w(a)$ together with allowing free spatial curvature, in the so-called “ $\\Omega_{\\mathrm{K}}w_{0}w_{a}$ CDM model”. Even in this broad parameter space, the combination of DESI, Planck and SN Ia is able to provide quite tight constraints. These are shown in Figure 9 for each of the PantheonPlus, Union3 and DESY5 SN Ia datasets. As seen before, the resultant central values and uncertainties vary depending on the choice of SN Ia data, but all three are still broadly consistent with each other, and all combinations place very tight constraints on the allowed range of deviations from spatial flatness. We find $\\left.\\begin{aligned} w_{0}&=-0.831\\pm 0.066,\\\\ w_{a}&=-0.73^{+0.32}_{-0.28},\\\\ \\Omega_{\\mathrm{K}}&=0.0003\\pm 0.0018,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB\\allowbreak+PantheonPlus, \\end{flushleft}}}}$ (34) $\\left.\\begin{aligned} w_{0}&=-0.64\\pm 0.11,\\\\ w_{a}&=-1.30^{+0.45}_{-0.39},\\\\ \\Omega_{\\mathrm{K}}&=-0.0004\\pm 0.0019,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB\\allowbreak+Union3, \\end{flushleft}}}}$ (35) and $\\left.\\begin{aligned} w_{0}&=-0.725\\pm 0.071,\\\\ w_{a}&=-1.06^{+0.35}_{-0.31},\\\\ \\Omega_{\\mathrm{K}}&=-0.0002\\pm 0.0019,\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB\\allowbreak+DESY5. \\end{flushleft}}}}$ (36)",
+     "kind": "body"
+    },
+    {
+     "id": "S5.SS3.p2",
+     "text": "In comparison to the results for the flat $w_{0}w_{a}$ CDM model in Section 5.2, the addition of an extra degree of freedom in $\\Omega_{\\mathrm{K}}$ leads to a slight broadening of the constraints in the $w_{0}$ – $w_{a}$ plane, thus marginally reducing the significance of the tension with $\\Lambda$ CDM. Nevertheless, the trend observed remains the same, with all combinations of DESI + CMB + SN Ia preferring $w_{0}>-1$ and $w_{a}<0$.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "6 Hubble constant",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.p1",
+     "text": "The determination of the Hubble constant has been contentious for many decades. By the turn of the century, a consensus value of around $70\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$ had emerged. However, since the first Planck results, a growing tension has emerged between $H_{0}$ determinations based on physics of the early universe, which tend to cluster close to the Planck preferred value of $67\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$ (e.g.,), and local distance-ladder measurements based on Cepheids or other anchors, which mostly prefer larger values around $73\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$ (e.g.,). Although distance ladder measurements based on the Tip of the Red Giant Branch (TRGB) method prefer a lower $H_{0}$ than Cepheid-based calibrations, they currently have larger uncertainties, hence do not yet provide a conclusive assessment. This tension between the CMB and Cepheid-based determinations stands at the $\\sim 4$ – $5\\sigma$ level in $\\Lambda$ CDM and, if not due to some unidentified residual systematics, may indicate deficiencies in the standard cosmological model. For reviews of the $H_{0}$ tension, see.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.F10",
+     "text": "Figure 10: $68\\%$ credible-interval constraints on the Hubble constant, assuming the flat $\\Lambda$ CDM model. The blue, bold whiskers show DESI BAO measurements in combination with an external BBN prior on $\\Omega_{\\mathrm{b}}h^{2}$ and measurement of the acoustic angular scale $\\theta_{\\ast}$, the BBN prior alone, or with the CMB measurement of the sound horizon, $r_{\\rm d}^{Planck}$. The thin blue whiskers show the corresponding results from SDSS BAO and the combination of DESI+SDSS BAO results, as labelled. The orange whiskers show the results from CMB anisotropy measurements from Planck and ACT, while the green whiskers show measurements of $H_{0}$ from the distance ladder with either Cepheids or TRGB.",
+     "kind": "caption"
+    },
+    {
+     "id": "S6.F11",
+     "text": "Figure 11: Left panel: The 68% and 95% credible-interval contours for $\\Omega_{\\mathrm{m}}$ and $H_{0}r_{\\mathrm{d}}$ obtained from fitting DESI DR1 BAO data in the base flat $\\Lambda$ CDM model and in four extension models which modify the background geometry or late-time expansion history. Right panel: A summary of the tension in the $H_{0}$ measurements obtained from the DESI BAO results combined with other data, and the SH0ES result of, assuming different cosmological models.",
+     "kind": "caption"
+    },
+    {
+     "id": "S6.p2",
+     "text": "As discussed in Sections 2.4.1 and 4.1, BAO alone cannot provide an absolute distance measurement, but can constrain $H_{0}$ when combined with some external information capable of calibrating the sound horizon scale and breaking the $r_{\\mathrm{d}}$ – $h$ degeneracy. Within the flat $\\Lambda$ CDM cosmological model, calibration of the DESI DR1 BAO with primordial deuterium abundances and BBN and the acoustic angular scale measurement leads to very precise $H_{0}$ determinations summarised in Eqs. 18 and 19, the tightest of which is $H_{0}=68.52\\pm 0.62\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$. As shown in Figure 10, while this DESI+BBN+ $\\theta_{\\ast}$ constraint is slightly higher than the Planck CMB value, it remains in tension (at the $3.7\\sigma$ level) with the SH0ES Cepheid-based distance-ladder result $H_{0}=73.04\\pm 1.04\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$ (see Figure 11).",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p3",
+     "text": "When the assumption of the flat $\\Lambda$ CDM model is relaxed, the $H_{0}$ constraints obtained when adding DESI BAO measurements (in combination with external priors) are loosened too. There are two qualitatively different ways in which the more general cosmological models allow more freedom and lead to weaker $H_{0}$ constraints.",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p4",
+     "text": "First, the calibration of the sound horizon using BBN relies on assumptions about the physics at the time of BBN (as well as on the CMB temperature $T_{0}$, which however is measured very accurately). In particular, if the effective number of relativistic degrees of freedom $N_{\\mathrm{eff}}$ is allowed to vary from its value $N_{\\mathrm{eff}}=3.044$ in the base $\\Lambda$ CDM model, the value of $\\omega_{\\mathrm{b}}$ inferred from light element abundances is altered. When accounting for this in the $\\omega_{\\mathrm{b}}$ prior as discussed in Section 2.4.1 using the results of, but otherwise keeping the late-time geometry unchanged, the $H_{0}$ result from Eq. 19 relaxes slightly to $H_{0}=(68.5\\pm 1.4)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\qquad(\\mbox{DESI\\,+\\,BBN\\,+$\\theta_{\\ast}$, free~$N_{\\mathrm{eff}}$}),$ (37) a $2\\%$ measurement. Keeping the BBN prior but dropping the $\\theta_{\\ast}$ information changes the direction of the contours in the 2D $(\\Omega_{\\mathrm{m}},H_{0})$ parameter space but the marginalised 1D constraint remains very similar, $H_{0}=(68.5\\pm 1.5)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$. When adding the full CMB information to DESI BAO, this result slightly shifts to $H_{0}=(68.3\\pm 1.1)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\qquad(\\mbox{DESI~BAO+CMB,~free~$N_{\\mathrm{eff}}$}).$ (38)",
+     "kind": "body"
+    },
+    {
+     "id": "S6.p5",
+     "text": "The second type of additional freedom that leads to weakened $H_{0}$ constraints is allowed by beyond- $\\Lambda$ CDM models which change the geometry or the late-time expansion of the universe. This directly affects the BAO measurement of $r_{\\mathrm{d}}h$, thus degrading the precision with which $H_{0}$ can be determined, even when the early-universe physics remains the same. The left panel of Figure 11 shows the joint constraint in the $\\Omega_{m}$ - $r_{\\mathrm{d}}h$ plane as the amount of freedom in the parametrisation of the expansion history is increased (for the models considered in the previous section). Clearly, the uncertainty on $r_{\\mathrm{d}}h$ increases dramatically as more model freedom is allowed. Nevertheless, the central values do not move much, and the results remain consistent with each other across models: we find $r_{\\mathrm{d}}h=(101.9\\pm 1.3)\\,\\text{Mpc}$ ( $\\Lambda$ CDM), $r_{\\mathrm{d}}h=(101.0\\pm 1.6)\\,\\text{Mpc}$ ( $\\Lambda$ CDM $+\\Omega_{\\mathrm{K}}$), $r_{\\mathrm{d}}h=(101.7^{+2.9}_{-3.5})\\,\\text{Mpc}$ ( $w$ CDM), $r_{\\mathrm{d}}h=(96.4^{+3.3}_{-5.3})\\,\\text{Mpc}$ ( $w_{0}w_{a}$ CDM) and $r_{\\mathrm{d}}h=(98.2^{+3.9}_{-6.1})\\,\\text{Mpc}$ ( $w_{0}w_{a}$ CDM $+\\Omega_{\\mathrm{K}}$). As a consequence, the $H_{0}$ values determined from combining DESI BAO with BBN or BBN+ $\\theta_{\\ast}$ priors also remain stable or slightly decrease, as shown in Table 3. This conclusion remains true in most cases when combining DESI BAO with the CMB, or with the CMB and SN Ia information (the one exception is in the $w$ CDM model, where the CMB pulls to higher $H_{0}$ in the absence of SN Ia), i.e., independent of the late-time modifications studied, BAO data in combination with other probes always prefer low central values of $H_{0}$. However, as the $H_{0}$ uncertainties increase in these models, the level of tension with SH0ES still decreases, as summarised in the right panel of Figure 11. Further results on the value of $H_{0}$ in models which combine extensions to the background expansion history with changes to the neutrino sector are listed in Table 4.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "7 Neutrinos",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S7.p1",
+     "text": "A generic prediction of the hot Big Bang model is a relic neutrino background which leaves detectable imprints on cosmological observations. Neutrinos are the only known particles to behave as radiation in the early universe and as dark matter at late times, so they affect both the acoustic oscillations in the primordial plasma as well as the background evolution and structure formation. Cosmological observations are sensitive to both the number of neutrino species and their total mass (e.g.,), making cosmology constraints complementary to terrestrial neutrino experiments.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "7.1 Sum of neutrino masses",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S7.F12",
+     "text": "Figure 12: Left panel: The marginalised 1D posterior constraints on $\\sum m_{\\nu}$ from different combinations of datasets, in the single parameter extension flat $\\Lambda$ CDM+ $\\sum m_{\\nu}$ model. As explained in the text, here we use a model with 3 degenerate mass eigenstates and with a minimal prior $\\sum m_{\\nu}>0$ eV. The minimal masses for the normal or inverted mass ordering scenarios correspond to $\\sum m_{\\nu}>0.059$ eV and $\\sum m_{\\nu}>0.10$ eV respectively, shown by the vertical dashed lines and the shaded regions. Right panel: Joint marginalised 68% and 95% credible intervals on $\\sum m_{\\nu}$ and $H_{0}$ from Planck, CMB and DESI+CMB data, illustrating the degeneracy between these parameters from the CMB, and how DESI BAO data contribute to breaking it. The vertical shaded regions indicate the 68% and 95% constraints on $H_{0}$ from DESI BAO data combined with knowledge of $\\theta_{\\ast}$ and $\\Omega_{\\mathrm{b}}h^{2}$ in the $\\Lambda$ CDM+ $\\sum m_{\\nu}$ model. This shows how DESI BAO breaks the primarily geometric degeneracy to place an upper limit on $\\sum m_{\\nu}$.",
+     "kind": "caption"
+    },
+    {
+     "id": "S7.T4",
+     "text": "Table 4: Cosmological parameter results from DESI DR1 BAO data in combination with external datasets when considering extensions to the baseline $\\Lambda$ CDM model in the neutrino sector. Results with two-sided error bars refer to the marginalised means and 68% credible intervals; upper bounds on $\\sum m_{\\nu}$ refer to the 95% limits. Note that the label “CMB” includes CMB lensing from the combined Planck +ACT likelihood. All constraints on $\\sum m_{\\nu}$ assume a model with 3 degenerate mass eigenstates and a minimal prior $\\sum m_{\\nu}>0$ eV. (See Eq. 41 and Eq. 42 for the results using other priors.) The empty $\\sum m_{\\nu}$ and $N_{\\mathrm{eff}}$ fields indicate that the fixed respective values of $\\sum m_{\\nu}=0.06{\\,\\rm eV}$ and $N_{\\mathrm{eff}}=3.044$ were adopted.",
+     "kind": "caption"
+    },
+    {
+     "id": "S7.SS1.p1",
+     "text": "The base model we have adopted so far assumes the sum of neutrino masses to be $\\sum m_{\\nu}=0.06$ eV, with a single massive eigenstate and two massless ones. This is motivated by the lower bound for $\\sum m_{\\nu}$ from neutrino oscillation experiments. In this section, we consider a single-parameter extension beyond this minimal model in which $\\sum m_{\\nu}$ is allowed to freely vary, in order to explore the constraining power on $\\sum m_{\\nu}$ of DESI data. Amongst terrestrial experiments directly measuring the neutrino mass, KATRIN has produced the tightest constraints to date, from measuring the endpoint of the tritium $\\beta$ -decay spectrum. This gives an upper bound on the effective electron-neutrino mass that is independent of the cosmological model of $m_{\\beta}<0.8{\\,\\rm eV}$ (90% CL), equivalent to $\\sum m_{\\nu}\\lesssim 2.4{\\,\\rm eV}$ (90% CL).",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p2",
+     "text": "Neutrino oscillation experiments have also shown that at least two of the three active neutrino masses are non-zero, but the ordering of these masses is not known. In the normal ordering or normal hierarchy (NH), the two lowest mass neutrino eigenstates have the smallest mass splitting, implying that the total neutrino mass must be $\\sum m_{\\nu}\\geq 0.059{\\,\\rm eV}$, while in the inverted hierarchy (IH), however, the smallest mass splitting occurs between the two highest mass eigenstates, necessitating a total mass of $\\sum m_{\\nu}\\geq 0.10{\\,\\rm eV}$. When allowing $\\sum m_{\\nu}$ to be a free parameter, we adopt a model with three degenerate neutrino mass eigenstates. This degenerate mass model does not exactly correspond to either of the physically expected NH or IH scenarios; however, it produces a very good approximation of the observable effects of both. In the event that a positive detection of non-zero neutrino mass is possible, an analysis using the degenerate mass model with a prior $\\sum m_{\\nu}>0$ will recover the correct value of $\\sum m_{\\nu}$ for both NH and IH scenarios with little reconstruction bias. On the other hand, when a positive detection is not possible, using the degenerate model with appropriately modified priors on $\\sum m_{\\nu}$ as above will also recover the correct upper bounds for both the NH and IH scenarios.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p3",
+     "text": "The sum of the neutrino masses affects cosmology in two ways. First, the high-velocity dispersion of neutrinos implies that they free-stream over large distances, thus suppressing the late-time clustering and power spectrum of matter at small scales, below the free streaming length. However, if $\\sum m_{\\nu}$ is varied with other cosmological parameters along the CMB degeneracy, the net effect of neutrino masses is an overall almost-scale-independent suppression of the amplitude of the matter power spectrum (together with a very small shift in the BAO scale). Second, at the low redshifts of relevance to DESI, massive neutrinos are non-relativistic ( $\\sum m_{\\nu}\\gg T\\simeq 10^{-3}{\\,\\rm eV}$) and therefore contribute to the total non-relativistic matter density $\\omega_{m}=\\omega_{b}+\\omega_{c}+\\omega_{\\nu}$, where $\\Omega_{\\nu}=\\sum m_{\\nu}/(93.14{\\,\\rm eV}h^{2})$, see e.g.. $\\sum m_{\\nu}$ thus affects the background evolution and in particular the redshift of matter- $\\Lambda$ equality. Forthcoming DESI analyses of the full shape of the galaxy power spectrum are sensitive to neutrino masses through the first effect, and constraints from them will be described in. The BAO data used in this paper only distinguish the background geometry. However, BAO constraints on the expansion history, when combined with the CMB and CMB lensing, are very helpful in improving neutrino mass constraints. This is because the CMB is sensitive to the neutrino mass via the angular diameter distance to recombination and via the effects of $\\sum m_{\\nu}$ on the CMB lensing, and both of these effects can be mimicked in the CMB by varying other cosmological parameters such as $H_{0}$ and $\\omega_{\\mathrm{m}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p4",
+     "text": "Thus while BAO data are not directly sensitive to the suppression effects of neutrinos on the power spectrum, by determining the background geometry at low redshifts they help to break the CMB degeneracy and constrain $H_{0}$, thus greatly tightening the upper limit on $\\sum m_{\\nu}$. This effect is illustrated in the right panel of Figure 12. In extensions of flat $\\Lambda$ CDM, the power of BAO to pin down the late-time expansion history diminishes, resulting in notably weaker $\\sum m_{\\nu}$ constraints.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p5",
+     "text": "For the Planck CMB alone, and assuming flat $\\Lambda$ CDM, the constraints are $\\left.\\sum m_{\\nu}<0.21{\\,\\rm eV}\\quad\\mbox{\\text{\\parbox{85.35826pt}{\\begin{flushleft}(95\\,\\%,~CMB), \\end{flushleft}}}}\\right.$ (39) when including CMB lensing from the combination of Planck and ACT, while adding the DESI BAO data sharply reduces this to $\\left.\\sum m_{\\nu}<0.072{\\,\\rm eV}\\quad\\mbox{\\text{\\parbox{113.81102pt}{\\begin{flushleft}(95\\,\\%,~DESI~BAO+CMB). \\end{flushleft}}}}\\right.$ (40) The left panel of Figure 12 shows the corresponding 1D marginalised posteriors. The posterior peaks at $\\sum m_{\\nu}=0{\\,\\rm eV}$, which is excluded by terrestrial oscillation experiments, but the minimal mass $\\sum m_{\\nu}=0.059{\\,\\rm eV}$ is not excluded by the cosmological fits. We find a $\\Delta\\chi_{\\mathrm{MAP}}^{2}$ of $3.8$ for the scenario with $\\sum m_{\\nu}=0.059{\\,\\rm eV}$ compared to $\\sum m_{\\nu}=0{\\,\\rm eV}$ from DESI BAO and CMB.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p6",
+     "text": "The result in Eq. 40 represents a substantial tightening of the upper bound compared to previous state-of-the-art results, of which the previous tightest reported upper bound was $\\sum m_{\\nu}<0.082{\\,\\rm eV}$. As can be seen from the right panel of Figure 12,the improvement relative to CMB-only constraints is driven primarily by the tighter constraints on $H_{0}$ (and consequently $\\Omega_{\\mathrm{m}}$) obtained from BAO. The shift relative to the previous tightest upper bounds is instead a consequence of both the preference of DESI data for slightly higher $r_{\\mathrm{d}}h$ and thus higher $H_{0}$ (which is itself coupled to lower $\\Omega_{\\mathrm{m}}$), together with the improved lensing constraint from including the latest ACT (DR6) lensing data. Should the addition of more data in the future pull towards lower $H_{0}$, we may expect the neutrino mass limit to relax, even if the data achieve a higher precision. For the same reason, as discussed in Appendix A, the upper bound obtained using the combined BAO data from DESI and SDSS ( Section 3.3) instead of DESI alone is also slightly looser, $\\sum m_{\\nu}<0.082{\\,\\rm eV}$, due to the slightly lower $r_{\\mathrm{d}}h$ and $H_{0}$ values seen in Figures 2 and 10.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p7",
+     "text": "We also caution that the upper bound obtained is strongly dependent on the choice of prior for $\\sum m_{\\nu}$. While we have deliberately chosen to use $\\sum m_{\\nu}>0{\\,\\rm eV}$ for our primary analysis, one can also impose physically motivated priors corresponding specifically to the NH ( $\\sum m_{\\nu}>0.059{\\,\\rm eV}$) and IH ( $\\sum m_{\\nu}>0.1{\\,\\rm eV}$) scenarios. Applying these alternative priors we find the following upper limit for NH: $\\left.\\sum m_{\\nu}<0.113{\\,\\rm eV}\\quad\\mbox{\\text{\\parbox{113.81102pt}{\\begin{flushleft}(95\\,\\%,~DESI~BAO+CMB; $\\sum m_{\\nu}>0.059{\\,\\rm eV}$), \\end{flushleft}}}}\\right.$ (41) and for IH: $\\left.\\sum m_{\\nu}<0.145{\\,\\rm eV}\\quad\\mbox{\\text{\\parbox{113.81102pt}{\\begin{flushleft}(95\\,\\%,~DESI~BAO+CMB; $\\sum m_{\\nu}>0.10$~eV). \\end{flushleft}}}}\\right.$ (42) Cosmological results alone do not yet strongly favour the NH over the IH: through comparing the best fits to the data obtained with $\\sum m_{\\nu}=0.059$ eV and $\\sum m_{\\nu}=0.10$ eV, we find $\\Delta\\chi^{2}_{\\mathrm{MAP}}\\simeq 2$ in favour of the NH.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p8",
+     "text": "It is possible to combine the cosmology result for $\\sum m_{\\nu}$ with constraints from oscillation and $\\beta$ -decay experiments to compute the Bayesian evidence in favour of one hierarchy over the other, although the results depend strongly on the choice of prior for the individual masses. A full calculation is beyond the scope of this paper, but even with a minimally informative objective Bayesian prior the cosmological constraints we find—assuming the flat $\\Lambda$ CDM background cosmology—when combined with terrestrial data give the Bayes factor for the normal hierarchy over the inverted one above 100.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS1.p9",
+     "text": "However, we repeat the caveat that the limits are substantially relaxed in more extended dark energy models that affect the background geometry, such as those in Section 5. Table 4 shows the corresponding upper bounds for $\\sum m_{\\nu}$ when allowing for a $w$ CDM or $w_{0}w_{a}$ CDM background; as expected, these are significantly weaker: for instance, in a $w_{0}w_{a}$ CDM background, the upper limit from DESI BAO and CMB relaxes to $\\sum m_{\\nu}<0.195$ eV (for the $\\sum m_{\\nu}>0$ eV prior). Importantly though, while allowing a time-varying DE equation of state parameter significantly loosens the upper bound on $\\sum m_{\\nu}$, allowing $\\sum m_{\\nu}$ to vary freely only marginally affects the constraints on $w_{0}$ and $w_{a}$ reported in Section 5.2 and therefore does not substantially change the conclusions of that section. For example, when allowing $\\sum m_{\\nu}$ to vary freely, we find $\\left.\\begin{aligned} w_{0}&=-0.725^{+0.068}_{-0.076},\\\\ w_{a}&=-1.07^{+0.39}_{-0.29},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI+CMB+DESY5, free~$\\sum m_{\\nu}$ \\end{flushleft}}}}$ (43) which can be compared with Eq. 32. Combinations with the other two SN Ia datasets are similarly close to the results in Eqs. 30 and 31 obtained with fixed $\\sum m_{\\nu}=0.06$ eV.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "7.2 Number of effective relativistic species",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S7.SS2.p1",
+     "text": "Under the standard assumption that three active neutrinos thermalise in the early universe, additional dark relativistic degrees of freedom can be parametrised in terms of a change to the effective number of neutrino species, $N_{\\mathrm{eff}}$. This is defined such that the total relativistic energy density, after the annihilation of electrons with positrons, is given by $\\rho_{\\nu}=N_{\\mathrm{eff}}\\,\\frac{7}{8}\\left(\\frac{4}{11}\\right)^{4/3}\\rho_{\\gamma},$ (44) where $\\rho_{\\gamma}$ is the photon energy density. In the standard cosmological model with three massive species of neutrinos and no other particles that are relativistic at recombination (other than photons), $N_{\\mathrm{eff}}=3.044$. Extended models with light sterile neutrinos or other dark relics (such as “dark radiation”) that are generated well before recombination produce effects very similar to that of active neutrinos and so can be usefully explored in terms of constraints on $N_{\\mathrm{eff}}$ in a $\\Lambda$ CDM+ $N_{\\mathrm{eff}}$ model.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS2.p2",
+     "text": "Similar to the case of $\\sum m_{\\nu}$, constraints on $N_{\\mathrm{eff}}$ from the CMB alone exhibit a geometrical degeneracy because changing the relativistic energy density before recombination shifts the sound horizon, and this effect can be absorbed through changes to $H_{0}$ (or $\\Omega_{\\mathrm{m}}$), such that increasing $N_{\\mathrm{eff}}$ corresponds to higher $H_{0}$ or lower $\\Omega_{\\mathrm{m}}$. Therefore the DESI BAO measurements at lower redshifts again contribute by breaking the geometric degeneracy through their ability to constrain $\\Omega_{\\mathrm{m}}$.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS2.p3",
+     "text": "In particular, while the combination of CMB anisotropies and lensing power spectra from Planck and ACT give $\\left.N_{\\mathrm{eff}}=2.98\\pm 0.20\\quad\\mbox{\\text{\\parbox{56.9055pt}{\\begin{flushleft}(CMB), \\end{flushleft}}}}\\right.$ (45) the addition of DESI BAO changes this to $\\left.N_{\\mathrm{eff}}=3.10\\pm 0.17\\quad\\mbox{\\text{\\parbox{99.58464pt}{\\begin{flushleft}(CMB+DESI~BAO), \\end{flushleft}}}}\\right.$ (46) i.e., a small shift of the central value due to the DESI preference for lower $\\Omega_{\\mathrm{m}}$, and a $\\sim 15\\%$ reduction in the uncertainty. As shown in Table 4, despite the additional freedom allowed in the neutrino sector, the recovered value of $H_{0}$ remains compatible with that from Planck. This remains true even when allowing the temporal variation of the dark energy equation of state.",
+     "kind": "body"
+    },
+    {
+     "id": "S7.SS2.p4",
+     "text": "Note that changes in $N_{\\mathrm{eff}}$ can also produce damping of the BAO amplitude and shifts to the scale and phase of the BAO oscillations due to the neutrino dragging effect. In principle these effects could introduce biases in the BAO measurements, if the template used for the fitting is drawn from a cosmological model that does not contain the same physical effects. The implications of this for BAO measurements are studied in, where it is found that even for large values $N_{\\mathrm{eff}}\\simeq 3.70$ that are excluded at high significance by the joint constraints above, the systematic offset in the recovered BAO scale $D_{\\mathrm{V}}/r_{\\mathrm{d}}$ is, at most, $\\sim 0.1\\%$.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "8 Conclusions",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S8.p1",
+     "text": "In this paper we have presented the first cosmological results from DESI, the first Stage-IV galaxy survey in operation, marking the start of a new era of dark energy experiments. These results are based on samples of bright galaxies, LRGs, ELGs, quasars and Ly $\\alpha$ forest tracers in the redshift range $0.1<z<4.2$. These data include a total of over 6 million unique extragalactic spectroscopic redshifts from the first year of DESI observations alone (out of the full five-year survey program), already representing an increase of more than a factor of two over the number of tracers used in the previous largest such dataset assembled, which was the culmination of two decades of observations with SDSS. This remarkable achievement is made possible by the speed and quality of the DESI instrument, whose increased spectral resolution also delivers significantly improved redshift accuracy.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p2",
+     "text": "The results in this paper are based on the measurement of the BAO scale using different DESI tracers of the matter density (galaxies, quasars, and the Lyman- $\\alpha$ forest) in seven redshift bins, presented in detail in. The observed data were analysed using a state-of-the-art blind analysis pipeline to protect against confirmation bias and included end-to-end validation. This methodology enabled us to unleash the potential of the BAO method to, in conjunction with other probes, powerfully constrain cosmological parameters.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p3",
+     "text": "Having demonstrated the internal consistency of the DESI BAO measurements over the full redshift range of observations and shown that the results are in agreement with previous measurements from SDSS, we proceeded to examine the constraints and implications of these data for a range of cosmological models.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p4",
+     "text": "In the standard flat $\\Lambda$ CDM cosmology, we determine the matter density parameter $\\Omega_{\\mathrm{m}}=0.295\\pm 0.015$, and the product of the drag-epoch sound horizon and the scaled Hubble constant of $r_{\\mathrm{d}}h=(101.8\\pm 1.3)\\,\\text{Mpc}$. These values are slightly different from those measured from the combination of CMB anisotropies from Planck plus CMB lensing from Planck and ACT, giving a somewhat lower value of $\\Omega_{\\mathrm{m}}$ and a higher $r_{\\mathrm{d}}h$, although the discrepancy is not statistically significant. In combination with a conservative prior on the baryon abundance from BBN, DESI BAO data determine the Hubble constant value to be $H_{0}=(68.53\\pm 0.80)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$, the most precise measurement to date that does not rely on information from CMB anisotropies. Combining the conservative BBN prior with an equally conservative prior on the extremely precise and model-independent measurement of the acoustic angular scale $\\theta_{\\ast}$ gives $H_{0}=(68.52\\pm 0.62)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$, approaching the precision from Planck. Each of these two $H_{0}$ constraints is in a $>3\\sigma$ tension with the SH0ES Cepheid-based distance-ladder result. In combination with the full CMB information, DESI results give $H_{0}=(67.97\\pm 0.38)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}$ —a $0.6\\%$ precision measurement.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p5",
+     "text": "BAO distance measurements are particularly important in constraining model extensions to $\\Lambda$ CDM, where they help break geometric degeneracies that limit the power of the CMB. We have examined several models of dark energy, allowing spatial curvature to vary. Together with CMB information, DESI BAO data provide extremely tight limits on the spatial curvature in all scenarios, with $\\Omega_{\\mathrm{K}}=-0.0024\\pm 0.0016$ in the simplest single-parameter extension of $\\Lambda$ CDM and almost equally tight constraints in more extended model variations.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p6",
+     "text": "The measurement of the dark energy equation of state $w$ is a key science goal of DESI. Assuming the $w$ CDM model where the equation-of-state parameter is constant in time, we find $w=-0.99^{+0.15}_{-0.13}$ from DESI alone, and $w=-0.997\\pm 0.025$ from the combination of DESI BAO, CMB, and SN Ia results from the Pantheon+ compilation, in good consistency with $\\Lambda$ CDM. This result does not appreciably change when the Pantheon+ data are replaced by those from other recent SN Ia releases from Union3 and the Dark Energy Survey (DES-SN5YR).",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p7",
+     "text": "However, when the equation of state is allowed to vary with time, $w(a)=w_{0}+(1-a)w_{a}$, DESI data favour solutions with $w_{0}>-1$ and $w_{a}<0$. The combination of DESI and CMB gives $w_{0}=-0.45^{+0.34}_{-0.21}$ and $w_{a}=-1.79^{+0.48}_{-1.00}$, and indicates a $\\sim 2.2\\sigma$ difference to $\\Lambda$ CDM. When adding information from SN Ia, all combinations prefer $w_{0}>-1$ and $w_{a}<0$, with the level of the tension with $\\Lambda$ CDM remaining at the $\\sim 2.5\\sigma$ level for combining DESI and CMB information with Pantheon+, but increasing to $3.5\\sigma$ and $3.9\\sigma$ levels for the Union3 and DESY5SN SN Ia datasets respectively. All three of the primary BAO, CMB and SN Ia probes contribute partially to this tension and the results including the 3 SN Ia datasets are mutually consistent with each other. Moreover, combining any two of the DESI BAO, CMB or SN data sets shows some level of departure from the $\\Lambda$ CDM model. Relaxing the assumption of a spatially flat geometry through varying $\\Omega_{\\mathrm{K}}$ marginally increases the uncertainties but does not change the overall picture. It remains important to thoroughly examine unaccounted-for sources of systematic uncertainties or inconsistencies between the different datasets that might be contributing to these results. Nevertheless, these findings provide a tantalizing suggestion of deviations from the standard cosmological model that motivate continued study and highlight the potential of DESI and other Stage-IV surveys to pin down the nature of dark energy.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p8",
+     "text": "Neutrinos are the only particles of the Standard Model of particle physics whose mass parameters are unknown. DESI, and Stage-IV surveys more generally, will improve cosmological constraints on neutrino mass parameters and provide key insights into their mass hierarchy. Allowing the sum of the neutrino masses to vary, the combination of DESI BAO and CMB information breaks a geometric degeneracy (in CMB constraints) between the Hubble constant $H_{0}$ and the amplitude of matter fluctuations and thus places an extremely tight upper bound on the total mass, $\\sum m_{\\nu}<0.072{\\,\\rm eV}$ (95% CL). We however caution that this substantial tightening of the upper bound compared to the previous state-of-the-art measurements is partly driven by the preference of DESI data for a higher value of $H_{0}$. Moreover, the upper bound obtained depends on the priors chosen for $\\sum m_{\\nu}$ and, because DESI contributes through breaking a geometrical degeneracy, the upper limit is relaxed in extended models that alter the background geometry. We examined this point explicitly in the paper by considering changes to the upper bound on $\\sum m_{\\nu}$ in models with a varying dark energy equation of state. Finally, we have also reported an updated constraint $N_{\\mathrm{eff}}=3.10\\pm 0.17$ on the effective number of extra relativistic degrees of freedom from the combination of DESI BAO and CMB data, and showed that this constraint only marginally shifts to $N_{\\mathrm{eff}}=2.89\\pm 0.17$ even when varying the dark energy equation of state.",
+     "kind": "body"
+    },
+    {
+     "id": "S8.p9",
+     "text": "As the first set of cosmological results from DESI, this paper, together with the accompanying results in, demonstrates the enormous power of the DESI instrument and survey. Subsequent papers will examine the implications of measurement of the full clustering broadband shape of DESI and constraints on primordial non-Gaussianity. With data quality and the speed of survey completion continuing to match or exceed expectations, future data releases will soon be able to provide even better insights into the hints of the exciting cosmological findings presented here.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "9 Data Availability",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S9.p1",
+     "text": "The data used in this analysis will be made public along the Data Release 1 (details in https://data.desi.lbl.gov/doc/releases/).",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": [
+  "Appendix A Comparison of results from DESI and combined DESI+SDSS BAO data",
+  "Appendix B Comparison to Planck PR4 likelihoods",
+  "Appendix C Author Affiliations"
+ ]
+}

@@ -1,0 +1,459 @@
+{
+ "arxiv_id": "2406.03686",
+ "title": "BindGPT: A Scalable Framework for 3D Molecular Design via Language Modeling and Reinforcement Learning",
+ "abstract": "Generating novel active molecules for a given protein is an extremely challenging task for generative models that requires an understanding of the complex physical interactions between the molecule and its environment. In this paper, we present a novel generative model, BindGPT which uses a conceptually simple but powerful approach to create 3D molecules within the protein’s binding site. Our model produces molecular graphs and conformations jointly, eliminating the need for an extra graph reconstruction step. We pretrain BindGPT on a large-scale dataset and fine-tune it with reinforcement learning using scores from external simulation software. We demonstrate how a single pretrained language model can serve at the same time as a 3D molecular generative model, conformer generator conditioned on the molecular graph, and a pocket-conditioned 3D molecule generator. Notably, the model does not make any representational equivariance assumptions about the domain of generation. We show how such simple conceptual approach combined with pretraining and scaling can perform on par or better than the current best specialized diffusion models, language models, and graph neural networks while being two orders of magnitude cheaper to sample.",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "The landscape of drug discovery presents immense challenges and risks, demanding substantial investments of time and resources to design, test, and deliver new medicines to the market. Within this context, Computer-Aided Drug Design (CADD) stands as a pivotal methodology, harnessing software screenings and physical simulations to facilitate a more efficient exploration of the vast space of drug-like molecules, estimated to be around $10^{60}$ in size. Deep learning advancements have revolutionized this exploration by leveraging neural generative models trained on extensive compound datasets. Notably, the textual representation of molecular structures using SMILES and SELFIES has enabled the utilization of Language Models for the generation of novel, drug-like molecular compounds. † † Correspondence to: artem.zholus@mila.quebec, r.schutski@insilicomedicine.com",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "Recent research has demonstrated the capability of deep generative models to generate novel molecular compounds directly in 3D, with the flexibility to incorporate protein pocket and ligand subfragment conditions. Among these, diffusion models such as EDM and DiffDock initiate the generation process with an arbitrary spatial distribution of atoms and progressively refine their positions to yield physically viable molecular structures. Meanwhile, autoregressive models like Pocket2Mol sequentially predict the type and location of each successive atom, building upon the existing molecular framework. Additionally, work by has highlighted the proficiency of language models in handling spatial representations of molecular and protein structures through formats like XYZ, CIF, and PDB. However, it’s noteworthy that most spatial molecular generators focus exclusively on atom types and locations. They depend on supplementary tools, such as OpenBabel, for the critical task of bond reconstruction. This reliance can introduce vulnerabilities, as the precision required for atom placement means that minor positional adjustments can significantly alter reconstructed molecular bonds or even make the molecular graph disconnected.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.F1",
+     "text": "Figure 1: The pipeline of our 3D molecule pretraining-finetuning paradigm. During pretraining the model is trained on a mix of molecules and pockets in isolation. But at finetuning, we simply concatenate the pocket text representation and the molecule text representation for each pocket-ligand pair.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.p3",
+     "text": "In this work, we introduce a novel framework that applies language modeling to the domain of 3D molecular data represented by textual tokens. This entirely data-driven approach, devoid of any inductive biases at both the model and representation levels, capitalizes on the established GPT paradigm, integrating cutting-edge techniques to enhance the scalability of model training and inference. By adopting the language model pretraining paradigm, our framework showcases the ability to foster a powerful causal language model adept at navigating the complex space of 3D molecules. This proficiency is demonstrated through successful applications in downstream tasks, including learning the distribution of 3D molecules, generating 3D conformations and the generation of molecules with targeted binding affinity to specific proteins.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p4",
+     "text": "Our main contributions are the following:",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p5",
+     "text": "• We introduce BindGPT, a Language Model for handling spatial molecular structures in text format. It uses structural SMILES and spatial XYZ formats to describe molecular graphs and atom locations, eliminating the dependency on external software for graph reconstruction. • We propose scalable pretraining-finetuning method for drug discovery in 3D that covers several 3D molecular generation tasks in a single paradigm. • We show how BindGPT can create accurate and realistic 3D molecular structures both zero-shot and after finetuning, with the option to include molecular graphs or protein pocket descriptions as prompts. The method offers comparable generation quality to leading approaches with the speedup of up to $100$ x. • Finally, we demonstrate the effectiveness of the Reinforcement Learning framework to finetune BindGPT with an external feedback from docking software. We show that the resulting model can find structures with high binding scores for any given protein as a result for the RL finetuning.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Background",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.p1",
+     "text": "Molecule Generation Small drug-like molecules can be represented as 2D or 3D graphs with node and edge attributes. However, one of the most popular molecular representation in the machine learning community is SMILES, which can be seen as a compressed textual encoding of the Depth-First-Search applied to the molecular graph. It’s simplicity and expressivity made it work very well with language models - even a simple LSTM model can outperform graph-neural networks for the molecule generation task. In addition, SELFIES, is a modification of SMILES which is a robust string representation such that every SELFIES token sequence is a valid molecule and vice versa.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p2",
+     "text": "The biological function of small molecules arises through their binding to specific protein pockets. The spatial structure of the protein pocket is an essential domain knowledge to increase the efficiency of molecular generation in drug design tasks. With the increase of molecular structure datasets sizes a plethora of pocket-conditioned generators emerged. The challenge with pocket-conditioned molecular generation arises from a relatively small size of existing 3D binding poses datasets, which motivated a heavy use of specialized architectures, like SE(3) equivariant neural networks.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p3",
+     "text": "Molecular Generative Models in 3D. Apart from Language Models, there exist other types of generative models that approach molecule generation, including 3D-aware ones. The first group of works uses Diffusion Models, which employ the denoising diffusion process to learn to recover the data from noise. The second group of works relies on Graph Neural Networks (GNNs) to autoregressively build 2D or 3D molecular graphs. These approaches can be combined as GNNs can serve as efficient backbones for diffusion process once they are node-equivariant (to generate 2D graphs) or SE(3)-equivariant (to generate 3D graphs). SBDD model uses autoregressive graph generation for pocket-conditioned molecule generation. TargetDiff generalizes this model to use a diffusion-GNN for the same task. Pocket2Mol uses an informed autoregressive sampling mechanism for efficient pocket-conditioned molecule generation. Another batch of works use the aforementioned methods for the unconditional molecule generation. EDM proposes an E(3) equivariant diffusion model for molecule generation. MolDiff is a diffusion model that addresses the inconsistency problem between generated atoms and bonds connecting them.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p4",
+     "text": "Language Models for Drug Discovery. The language models show outstanding results in drug discovery domain. The molecular structures can be easily represented in a textual formats like SMILES or SELFIES, enabling the effective training of well-known language model architectures on large datasets of chemical entities. Recent studies reveals the potential of applying language models to address various challenges in drug discovery. For instance, LigGPT leverages the GPT architecture to generate molecular structures given the conditions of molecular descriptors. MoLFormer incorporates billion-size chemical entities database to perform large-scale pretrain and further finetune to predict molecular properties. BARTSmiles is developed atop of BART architecture, training a meaningful chemical representation and refining it for tasks such as chemical property prediction, chemical reaction prediction, and retrosynthesis.",
+     "kind": "body"
+    },
+    {
+     "id": "S2.p5",
+     "text": "However, the challenge of 3D molecule generation has received limited attention in language model approach. Three notable studies in this area include the XYZ-transformer, Uni-Mol, and Lingo3DMol. The XYZ-transformer leverages GPT for generating atom-wise description of molecular and protein structures. Uni-Mol modifies BERT for large-scale pretraining on a large 3D structures dataset. In particular, Uni-Mol formulates molecular tasks as coordinates-to-coordinates mapping given molecular graph. To the best of our knowledge, we propose the first approach that applies the modern decoder-only language modeling paradigm to the 3D drug discovery problem with several downstream applications.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Method",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.p1",
+     "text": "The key idea of our method is utilizing an autoregressive token generation model, influenced by GPT-based models, to solve several 3D small molecule generation tasks in one simple yet flexible paradigm. The main principle in our approach is to formulate several 3D molecular design task as prompted generation of text. To achieve that, we layout the tokens of a condition before the tokens of the object to generate. For instance, a prompt can be the protein pocket for the pocket-conditioned generation task or the 2D molecular structure for the conformation generation task.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.1 Architecture and text format",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.F2",
+     "text": "Figure 2: Data layout during the pretraining. Arrows show the tokens sequence order. Nodes such as <POCKET> show special tokens. Training is done on a mixture of pocket and ligand datasets. Concrete examples are shown in Appendix A.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.SS1.p1",
+     "text": "In our work we follow the decoder-only paradigm in Language Models and use the GPT-NeoX 1 1 1 Despite other architectures existing today (such as LLaMa2), our main focus was building a general framework of working with 3D molecules that can work with any Language Model architecture. architecture that utilizes rotary position embeddings. This technique allows for the length generalization, which is required since the sequence lengths may vary significantly between the pretraining, and fine-tuning stages.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p2",
+     "text": "Similarly to, we use the XYZ representation as a base format to describe the spatial atom allocation. The idea of XYZ format is to represent the atom type and its 3D coordinates within every line on text. The main drawback of this format is the lack of charge and connectivity information. One should use external software like RDKit or OpenBabel to reconstruct the molecular graph. It introduces an instability since even small noise in atom positions can drastically change the reconstructed graph or even break it down. To alleviate that, we propose to couple the XYZ format with the SMILES format. The latter can efficiently represent the molecular structure, while the former allows describing atom positions. To align these two formats we enforce to have the same atom ordering in both. We also remove the atom symbol from the XYZ representation as it already was shown in SMILES. For proteins, there is no need to describe their connectivity, therefore we simply write atom names grouped by aminoacids.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p3",
+     "text": "A schematic example of the two kind of the model input is shown in Figure 2 and the very detailed example of concrete input sequences (including its tokenization) is shown in Figure 6 in Appendix A. In particular, the sequence starts with the <LIGAND> token followed by a SMILES string, tokenized at the character level. Next, there goes the <XYZ> special token marking the end of SMILES and the beginning of the coordinate part of the string. The tokenization strategy uses 6 tokens per 3D position: we use one token for the integer part and one token for the fractional part of the number. When working with protein pockets, we use a similar strategy. Specifically, the sequence begins with the <POCKET> token followed by the sequence of atoms where each atom is a separate token. Since pockets can be hundreds of atoms large, we follow the AlphaFold’s approach and retain only the 3D coordinates of the Alpha-carbon atoms in the corresponding aminoacids. An example of the final representation of pockets is shown in Figure 8.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.2 Pretraining",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.p1",
+     "text": "In this work, we aim to leverage insights accumulated by the NLP community in the paradigm of Large Language Models: pretraining-finetuning, prompting, scaling, finetuning with Reinforcement Learning, tool use, etc.. Since our model covers only a specialized domain of molecular tasks, it does not require trillion-scale diverse datasets for good performance as NLP tasks do. Thus, we use a large-scale but specialized dataset of 3D molecules and protein pockets. During pretraining, we use the model with 108M parameters consisting of 15 layers, 12 heads, and a hidden size of 768. We found this size of the model to be enough for the tasks we care about - generating molecules in 3D (See Appendix C for a justification of the size). Every sequence in the training batch is either a ligand sequence of tokens or a pocket sequence of tokens following the scheme described earlier. Since the dataset has much fewer pockets than ligands, for one epoch of training on ligands, we do 5 epochs of training on proteins, that is, around 8% of all tokens seen by the model are pocket tokens. To speedup and stabilize pretraining, we use large batch training with 1.6M tokens per one training step. We found this many tokens per batch to be important for stable training in this task even with smaller learning rates. The detailed description of the training implementation is provided in Appendix G. Despite the wide use of transformers in drug discovery, the majority of current works in this space do not use recent advancements of efficient Language Models pretraining: neither technical ones, such as Flash-attention or DeepSpeed, nor the algorithimic ones, such as learning rate scaling. Our work aims to fill this gap by demonstrating the effectiveness of the pretraining for 3D drug discovery.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.3 Finetuning",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 3,
+   "title": "3.3.1 Supervised finetuning",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.F3",
+     "text": "Figure 3: Data layout during the finetuning. Arrows show the tokens sequence order. Nodes such as <POCKET> show special tokens. Concrete examples are shown in Appendix A.",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.SS3.SSS1.p1",
+     "text": "As a result of the pretraining, BindGPT gains an understanding of a broad chemical space. This comprehensive understanding enables us to efficiently narrow it down through the supervised fine-tuning on a specialized dataset. During the supervised fine-tuning phase, we continue model training on CrossDocked 2020, which is a high-quality dataset containing aligned pocket-ligand pairs. Most of the prior methods subsample less than $1\\%$ of the best pocket-ligand pairs and they don’t benefit from it’s diversity and scale. To obtain a bigger version of CrossDocked, we extract all intermediate ligand poses (with respect to the docking process), including the lower quality ones. Despite quite large size, CrossDocked was created by docking $14$ k unique molecules into $3$ k pockets. This is why we observed an dramatic overfitting when training on the $1\\%$ version of CrossDocked and even on the full one. To alleviate that, we resort to two standard augmentation techniques used in drug discovery. First, we employ SMILES randomization, which can heavily randomize one molecule by yielding 100-1000 different SMILES strings (all corresponding to that molecule). Second, we randomly rotate the 3D coordinates of the protein pocket and of the ligand (with the same rotation matrix). This way our model learns to understand structural and spatial properties of molecular binding beyond just token sequences.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.SSS1.p2",
+     "text": "Since the pretrained BindGPT is trained on both ligands (starting from the <LIGAND> token) and pockets (starting from the <POCKET> token), the information about the structure of both is learned by the model. In our finetuning setup, we represent each pocket-ligand pair as a string starting with the pocket string representation followed by the string representation of the ligand (See Section 3.1 for their description). Therefore, having learned them separately during pretraining, the finetuning exploits the independent knowledge of both pockets and ligands to learn a conditional dependency between them. In addition to that, since our version of CrossDocked contains both high and low score conformations, we test another version of context where we condition on the pocket and binding energy score obtained from the CrossDocked dataset (which is originally computed through the docking software). This way we can perform a variant of contrastive learning by learning the structure of good and bad examples. During evaluation of the model, we can sample molecules conditioned on some desired value of the binding affinity. The input layout for both versions is shown in Figure 3.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "3.3.2 Reinforcement Learning",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS3.SSS2.p1",
+     "text": "Despite the ubiquitous use of Reinforcement Learning (RL) for language models in Drug Discovery (see Section 2 and Appendix G), we did not find it been used within the pre-training paradigm of modern LLMs. Our main motivation to use RL after the pretraining/finetuning stages is to use the knowledge distilled into the model from massive amounts of less structured data. We believe, this is the first work performing reinforcement learning on molecules that utilizes knowledge from pretraining and supervised finetuning. Despite there are dozens of works doing RL with LMs on molecules, none of them do that within the LLM paradigm and none of them consider target-conditioned RL problem. In our opinion, the latter is primarily due to pocket-conditioned generation is not possible without large-scale pretraining as we show in the experimental section.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.SSS2.p2",
+     "text": "We apply the REINFORCE algorithm for further model finetuning. It allows using the feedback (called reward) from an external oracle to train model to generate even better structures compared to the ones it generates after the SFT stage. The resulting RL-finetuned model can generalize model and produce high affinity molecules even for the new pockets. In our procedure, on each training step we generate 3D structure of ligands for a batch of random protein pockets. Then we compute the reward using an external docking software that estimates the binding energy between the pocket and the generated ligand. The final step involves updating the language model with the batch of prompts (pockets), responses (ligands), and rewards (binding energies). We initially tested PPO and REINVENT, but found REINFORCE to be more stable for our project, which aligns with another recent finding in the field of RL applied to language models in NLP. Also, it’s important to mention, that we apply the KL-penalty between the model’s initialized and current state to stabilize the procedure. Further details such as hyperparameters can be found in the Appendix B.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Results",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.F4",
+     "text": "Figure 4: (left) Sampled conformations for reference molecules from the Platinum dataset (See Appendix E for a higher resolution image) (right) RMSD Coverage metric calculated on the Platinum dataset for the 3D conformation generation task.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.p1",
+     "text": "In this section, we describe our experimental results. We start with a brief data description followed by the description of the three 3D molecular generative tasks: the 3D generative modeling of molecules and conformation generation given molecular graph (in Section 4.1) and then pocket-conditioned generation (in Section 4.2).",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p2",
+     "text": "For pretraining, we use a large 3D molecular dataset proposed by the authors of the Uni-Mol model. The dataset contains 208M conformations for 12M molecules and 3.2M spatial structures of protein pockets. For finetuning in the pocket-conditioned generation task, we use the aforementioned CrossDocked dataset which contains aligned pocket-molecule pairs. Our filtration of the dataset has around 27M pocket-ligand pairs covering a cross product of 14k molecules with 3k pockets (not all of the pairs are present, and for some of them, there is more than one pose, each with different score). We also hold out a set of 100 pockets from the training data for evaluating the model performance. For the tasks of 3D molecule and 3D conformer generation (Section 4.1), to make comparisons with baselines more fair, we also finetune the model on the GEOM-DRUGS dataset, with drug-like molecules having high-quality 3D molecular conformations. This dataset contains 27M conformations for 300k molecules, and it serves as a standard benchmark for the machine learning-based 3D molecular generators. Finally, we use the Platinum dataset as a hold-out evaluation dataset to test our model and baselines on zero-shot conformer generation. Platinum dataset contains the best-in-class experimentally validated conformations for testing conformer generation software.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.1 Generative Modeling of 3D molecules",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.T1",
+     "text": "Table 1: Generative metrics for the molecule generation task after the pretraining. (H) is explicit hydrogens are generated with molecules. For XYZ-TF, the RMSD calculation algorithm failed to converge.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.T2",
+     "text": "Table 2: The qualities of the generated 3D molecules after finetuning on GEOM-DRUGS.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.SS1.p1",
+     "text": "Metrics. We provide the validity ( $\\uparrow$) of generated molecules and druglikeness metrics - SA ( $\\uparrow$), QED ( $\\uparrow$), and Lipinski ( $\\uparrow$) that are agnostic to 3D but measure how likely the molecule to be a drug. Also, we adopt a range of distribution metrics that were used for the MolDiff method. Those metrics measure the discrepancy between true and modelled molecular distributions by computing the Jensen–Shannon divergences on the set of molecular properties and features distributions. We compute RMSD (Root-Mean-Squared-Distance) ( $\\downarrow$) - which measures the quality of 3D structures by aligning the generated one with the one from RDkit (i.e., we regenerate conformer via RDkit) and computing the atomwise distance. Finally, we measure the time needed to generate 1K valid 3D molecules on one GPU. Note that this choice of metrics is standard for this task (see for a more detailed description of them). For the 3D conformation generation given molecule task, we compute the RMSD-coverage ( $\\uparrow$) metric. This is a standard performance metric for 3D conformer generation models (see e.g.). It is represented by the cumulative distribution function of RMSD between generated and reference conformers. The metric is a function of the threshold $x$: $P(\\text{RMSD}<x)$. An ideal model should have as high metric value as possible for as low thresholds as possible.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p2",
+     "text": "Baselines. For the molecule generation task, we consider the current best 3D generative models. EDM and MolDiff are task-specialized diffusion models for 3D molecule generation. XYZ-Transformer is another 3D molecular transformer that was proposed for small-scale data. Note that XYZ-TF is the only model capable of large scale pretraining besides our model, so we pretrain only XYZ-TF and BindGPT on the Uni-Mol data. We also do the GEOM-DRUGS evaluation, where we report MolDiff and EDM trained on the full dataset and for BindGPT finetuned on the same version of it. For conformer generation, we compare BindGPT with the current state-of-the-art methods, Torsional Diffusion and the Uni-Mol model. The former is a specialized SE(3)-equivariant diffusion model capable of conformation generation only. The latter is a modified BERT. As a coordinate-level encoder LM, the Uni-Mol model needs input coordinates to generate a conformation, which is why this model uses RDKit as a tool for initializing coordinates.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS1.p3",
+     "text": "Results. The molecular generative modeling results are shown in Tables 2 and 1. First, the pretrained BindGPT model consistently outperforms the XYZ-TF baseline both without and with explicit hydrogens. The latter is a much more challenging task and almost no baseline methods can do that (except EDM, which is not scalable) since reconstructing hydrogens can be done on a post-processing step but explicit modeling of them makes the molecule size several times larger. BindGPT is the first model capable of modeling hydrogen explicitly at such large scale. Also, XYZ-TF has a very low validity rate due to the need of graph reconstruction. Next, for the methods trained on the GEOM-DRUGS dataset, BindGPT (being finetuned on this data) shows state-of-the-art performance scores for nearly all distributional evaluation metrics. Even though BindGPT does not outperform MolDiff in Druglikeness, that could be explained by a smaller vocabulary of the, containing only frequent atoms. For the conformation generation task, the current best baseline is Torsional Diffusion (TD). We use the Platinum dataset to compare TD trained on GEOM-DRUGS with Uni-Mol-BERT and BindGPT, both of which are pretrained and finetuned on the same data. Figure 4 shows the results for zero-shot evaluations on Platinum. Surprisingly, Uni-Mol fails to generalize to this new dataset (even assisted by RDKit), which we think is because of its structural diversity. BindGPT, in contrast, is capable of matching the performance of TD when assisted by the RDKit tool and having a small gap when not. All the above results demonstrate the generalisability of our model - none of the baselines is able to solve this wide range of task at this level of quality.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "4.2 Pocket-conditioned Molecule Generation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.F5",
+     "text": "Figure 5: Examples of binding poses and Vina scores ( $\\downarrow$) for 2gns and 4d7o pockets.",
+     "kind": "caption"
+    },
+    {
+     "id": "S4.SS2.p1",
+     "text": "Metrics. The main metrics for this task include the measure of ligand-pocket affinity; and druglikeness of the ligand. The first one is represented via the binding energy ( $\\downarrow$) computed by the QVINA docking software, while the second one comprises the aforementioned druglikeness metrics (SA ( $\\uparrow$), QED ( $\\uparrow$), and Lipinsky ( $\\uparrow$)). For each baseline we report the time required to generate $100$ valid molecules for one pocket.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p2",
+     "text": "Baselines. Apart from the BindGPT model, we include the baselines such as 3D diffusion model (TargetDiff) and autoregressive Graph Neural Network (Pocket2Mol). Note that none of the baselines perform large-scale pretraining. Instead, they resort to heavy inductive biases to efficiently learn from small-scale data.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.SS2.p3",
+     "text": "Results. Performance of our approach is summarized in Table 3. We depict the performance of three version of BindGPT. First, BindGPT-FT is a model finetuned on the complete CrossDocked data (the data layout as described in Figure 3, top), i.e. both good and bad binding pairs. This model serves as an initialization for the reinforcement learning model. Second, BindGPT-RFT is the model finetuned on CrossDocked with the reward in the context. To get higher affinity molecules from that model, we condition the model on random binding energy values within $[-12,-10]$, which are the best scores observed by the model (in around $0.1\\%$ of examples). Finally, the BindGPT-RL model is trained with RL (see Section 3.3.2 and Appendix B.3) from the BindGPT-FT initialization. Our main conclusion is that the RL finetuned model can learn to search the space of binding molecules much more efficiently and significantly outperforms all the previous best baselines in terms of the binding energy.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.T3",
+     "text": "Table 3: Generative metrics for the pocket-conditioned generation task.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Discussion and Conclusion",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "In this work, we presented BindGPT, a scalable framework for training capable language models that can generate 3D molecules as text. Through a series of studies on a range of different 3D molecular generative tasks, we demonstrate the generality of our approach as it can solve each of them by matching or surpassing the baselines. Notably, our method does not have any inductive biases about the generative domain acting as a general and data-driven approach. Unlike all the baselines which have strong inductive biases, our method solves each downstream task without any such assumptions. The task of a particular interest in our work is the pocket-based molecule generation where our model outperforms all the baselines with a large margin. We show that the large-scale pretraining paradigm can be efficiently transfered from NLP to the 3D drug discovery.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "Acknowledgments",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.SS0.SSSx1.p1",
+     "text": "Sarath Chandar is supported by the Canada CIFAR AI Chairs program, the Canada Research Chair in Lifelong Machine Learning, and the NSERC Discovery Grant.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix A Tokenization and Data Representation",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A1.F6",
+     "text": "Figure 6: An example of a 3D molecule encoded as text that the model trains to predict. The sequence starts with a special token indicating the beginning of a small molecule: <LIGAND> followed by a SMILES string, tokenized character-level. Next follows the <XYZ> special token marking the end of SMILES and the beginning of the coordinate part of the output. The coordinate part of the output starts with the number of atoms in the molecule followed by a series of 3D coordinates for each atom. Unlike the standard XYZ format, our representation doesn’t include atom types before each coordinate due to the preceding SMILES string, which already provides atom sequence and connectivity. In our case, the order of 3D coordinates correspond to the order of atoms as they appear in the SMILES string. Each coordinate triplet is encoded with six tokens: one token specifies the integer part with a sign and another one defines a fractional part of the floating point number.",
+     "kind": "caption"
+    },
+    {
+     "id": "A1.F7",
+     "text": "Figure 7: The visualization of the tokenization scheme for molecules in our language model. We use the same text as in Figure 6. Text is colored according to how tokenization is performed. Note that untokenized symbols (e.g. white spaces and new line separators) are not passed to the model since they don’t carry any useful information. Also note that the coloring is made only for visualization purposes.",
+     "kind": "caption"
+    },
+    {
+     "id": "A1.F8",
+     "text": "Figure 8: An example of the protein pocket encoded as text that the model trains to predict during pretraining. Sequence starts with a special token <POCKET> marking the beginning of the protein pocket sequence. After that, we write a sequence of heavy atoms ignoring the edge structure of the pocket part of the protein molecule. After that, we write 3D coordinates of Alpha-Carbon atoms, each of which appears only once per aminoacid. The tokenization of the 2D part of the pocket is character level (except for CA) and for the 3D part it is two tokens per real number like in the ligand tokenization.",
+     "kind": "caption"
+    },
+    {
+     "id": "A1.F9",
+     "text": "Figure 9: The visualization of the tokenization for pockets in our language model. We use the same example as in Figure 8.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix B Technical Description of the Training Pipeline",
+   "kind": "appendix",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "B.1 Pretraining",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.F10",
+     "text": "Figure 10: Pretraining loss curves for different model sizes for the representation without explicit hydrogens.",
+     "kind": "caption"
+    },
+    {
+     "id": "A2.SS1.p1",
+     "text": "To achieve efficient pretraining, we use large batch training with 1.6M tokens per batch. We set microbatch size to the maximal that fits to the GPU memory and we do gradient accumulation to get large enough batch size (to eventually have 1.6M tokens per batch). Since training sequences have variable length (which comes from the fact that molecules have different sizes), only a part of tokens contribute to the loss so we make sure we have at least 1.6M such “enabled” tokens. We use learning rate warmup of 2000 steps, followed by cosine annealing of the learning rate. The maximal learning rate during pre-training is $10^{-3}$ regardless of the model size. We found this many tokens per batch to be important for stable training in this task even with smaller learning rates, especially for models larger than 100M parameters. We use AdamW optimizer with a weight decay factor of $10^{-2}$. We use gradient clipping with the maximal grad norm of $1.0$. The pretraining takes around 55k optimization steps over 36 hours on one compute node with 8 A6000 GPUs. We employ Flash-Attention2 and DeepSpeed optimization accelerator. To use more performant tensor cores, we train with mixed precision where computation is done within the bfloat16 datatype. As the distributed optimizer, we use DeepSpeed ZeRO Stage-3 optimizer. We train the model for $1$ epoch only. The amount of tokens in the dataset is $42$ B for the version without explicit hydrogens and $90$ B tokens for the version with explicit hydrogens. The total size of the Uni-Mol pretraining dataset is around 150GB.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "B.2 Supervised Finetuning",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS2.p1",
+     "text": "We use the public CrossDocked version v1.3 and for each molecule (except the ones optimized by the Gnina model as it yields too many bad itermediate samples) we take its “minimized” and “docked” formats and extract all intermediate molecules from their files. For each such molecule we cut the pocket with the ProDy tool. As a result of this process we obtain around 27M pocket-ligand pairs. The size of the CrossDocked that we use is around 50GB.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS2.p2",
+     "text": "We use the same recipe for finetuning as for the pretraining with a few changes in hyperparameters. In particular, we use maximal learning rate of $5\\times 10^{-4}$ and only $100$ warump steps. The learning rate schedule, weight decay, optimizer, maximal gradient norm are the same as for the pretraining. The only substantial difference from the pretraining stage is the weighted loss which we use for the CrossDocked finetuning. Specifically, we weight tokens that correspond to different parts of the output, differently. For example, the SMILES tokens have the weight of $1$ while tokens that correspond to the XYZ coordinates placed after SMILES have the weight of $5$. The tokens corresponding to the pocket have the weight of $0$ since they are used as the context only and we don’t intend to generate them. As it was described in the Section 3.3.1, we do SMILES randomization (see for implementation details) and rotate pocket it’s ligand randomly - first we sample a random 3D rotation vector, we convert it to a rotation matrix and apply it to the coordinates of both. Also, we enforce the origin of their coordinates to be the same, namely, the coordinate center of the ligand (i.e. we guarantee that the model will generate coordinates around the origin). We train the model on the CrossDocked dataset for $1$ epoch. As it was mentioned in Section 3.3.1, we extract the full version of the CrossDocked data.",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS2.p3",
+     "text": "For the finetuning on the GEOM-DRUGS dataset, we use the same hyperparameters as in the SFT stage for CrossDocked with only two differences. First, we weight the loss for all tokens with the same weight of $1$. Second, we don’t rotate 3D coordinates of the molecule but only do SMILES randomization.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "B.3 Reinforcement Learning Funetuning description",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A2.SS3.p1",
+     "text": "The last stage of our pipeline is Reinforcement Learning. We use a distributed Reinforcement Learning algorithm based on the TRL training loop. That is, we launch multiple GPU-workers, where each repeatedly samples experiences, computes rewards, computes the update for the policy (i.e. the transformer language model), synchronizes them, and then performs the gradient update. We use $8$ gpu workers, each with the local batch size of $16$. At every step, we sample a batch of pockets, sample molecules for them, then we compute the rewards via docking tool and perform only one gradient update. We found this to be crucial for our task as otherwise the training might diverge. Even algorithms that are believed to be more powerful, such as PPO, experience instabilities when the policy lag is bigger. Our surrogate loss for Reinforcement Learning has the following form:",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS3.p2",
+     "text": "$\\displaystyle L(\\theta)=\\mathbb{E}_{s\\sim\\mathcal{D},a\\sim p_{\\theta}(a\\mid s)}L(\\theta,s,a)$ $\\displaystyle L(\\theta,s,a)=-R(s,a)\\frac{1}{|a|}\\log p_{\\theta}(a\\mid s)+\\alpha\\text{KL}(p_{\\theta_{0}}(\\cdot\\mid s)\\|p_{\\theta}(\\cdot\\mid s))$",
+     "kind": "body"
+    },
+    {
+     "id": "A2.SS3.p3",
+     "text": "Here $s$ is the tokenized representation of the pocket and $a$ is the tokenized representation of the generated molecule. $p_{\\theta}$ is the current version of the language model being finetuned while $p_{\\theta_{0}}$ is the result of the SFT stage. $\\log p_{\\theta}(a\\mid s)$ is the sum of generated token log-probabilities. $\\mathcal{D}$ is the dataset of prompts (i.e. the pockets-only subset of CrossDocked). $R(s,a)$ is the vina score computed for the corresponding pocket-molecule pair. Finally, we compute the distillation style KL since we want to keep the output distribution of the RL model wide. The KL weight $\\alpha$ in our experiments is $\\alpha=0.05$. We use a flat learning rate of $1.4\\times 10^{-5}$ and no weight decay. Like before, we clip the gradient norm at $1.0$. In our surrogate loss function, the loglikelihood of the token sequence is averaged (instead of being summed). We found this crucial for training stability.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix C Evaluating Pretraining at Different Scales",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A3.F11",
+     "text": "Figure 11: Test perplexity on the hold-out Zinc-250k dataset with 3D conformations from RDKit. BindGPT is the first model capable of this type of evaluation.",
+     "kind": "caption"
+    },
+    {
+     "id": "A3.p1",
+     "text": "As described in the Section 3.2, we pretrain the model on 208M 3D conformations of molecules. By experiment with different models size, we observed that the model scales well up until the size of 300M parameters, where its perplexity shows overfitting. We, therefore, stick to the 100M model in our later experiments as we found it yielding the best results. Figure 11 shows the hold-out test set perplexity on ZINC-250k 2 2 2 The same procedure was conducted for collecting 3D conformations for ZINC-250k as for the original pretraining data. for sizes 11M, 58M, 108M, 304M. Note that high value of perplexity is dictated by the highly stochastic nature of 3D molecule coordinates. We believe the model quality can be improved further by increasing the amount of the data for pretraining and the current 108M model obtains the best performance given the pretraining dataset.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix D RL finetuning Training Curves",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A4.F12",
+     "text": "Figure 12: Ligand-pocket affinity objectives averaged over several runs for RL finetuning stage: (top left) Vina Score (top right) Ligand connectivity (bottom) Synthetic Accessibility",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix E More Samples From the BindGPT Model",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A5.F13",
+     "text": "Figure 13: 3D conformations generated by BindGPT with explicit hydrogens for a fixed molecule graph. No assistance tools are used. Also, no manual cherry-picking is used here.",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.F14",
+     "text": "Figure 14: Generated molecules sampled from the model without condition.",
+     "kind": "caption"
+    },
+    {
+     "id": "A5.F15",
+     "text": "Figure 15: Generated molecules for 4d7o pocket after the RL-finetuning. Note that no cherry-picking (or other filtering) was performed and these are just the first $35$ model samples.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix F Augmenting BindGPT with an External Tool for Assisted Generation",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A6.p1",
+     "text": "For the unconditional molecule generation tasks and the conformation generation tasks, we enhance the 3D generative abilities of the BindGPT model though the use of the RDKit tool. However, we use it only as a scoring mechanism while our model still acts as the proposal distribution. The scoring happens in the following way: first, we generate SMILES string only (we skip this step if we need to do the conformation generation task). Then, we generate $N$ different conformations from our model and score each with the MMFF energy from RDKit. After that, we select the generated conformation with minimal energy and return it as a sample. It’s important to note that we don’t use MMFF to optimize the conformation, and also we don’t provide the model with any information about the 3D structure. That is, for example, the BindGPT, finetuned on the GEOM-DRUGS will still generate samples within the GEOM conformation distribution (which is different from the distribution produced by MMFF) as can be seen in Table 2. In addition, when comparing with even higher quality, real world-like conformations, such as the ones of the Platinum dataset, the assisted generation boosts the performance of the model (as can be seen in Figure 4), making it’s distribution more close to the read world conformations, despite MMFF being just a theoretical approximation. This confirms that such a selection process describes above does not bias the distribution of models outputs, but rather helps it to eliminate generation errors (e.g. atom misplacements). Notably, we don’t use the assisted generation for the protein-ligand binding task. In our experiments we use $N=10$.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "Appendix G Efficient Training and Inference",
+   "kind": "appendix",
+   "paragraphs": [
+    {
+     "id": "A7.p1",
+     "text": "Despite the wide use of transformers in drug discovery, the majority of current works in this space do not use recent technical advancements that make Large Language Models efficient (for example, Flash Attention). The reason is simply that the pretraining paradigm is still coming to drug discovery, with perhaps only one example of the Uni-Mol model being a multi-task pre-trained transformer model, which unlike this work uses an Encoder-only model that follows the BERT architecture. Therefore, small models are simply trained directly on downstream datasets for which training time optimizations are not crucial. For the case of pretraining, even for a small model, the pretraining over 90B tokens can take a significant time but it obtains a speedup of almost $3\\times$ as a result of just using a combination of Flash Attention and DeepSpeed.",
+     "kind": "body"
+    },
+    {
+     "id": "A7.p2",
+     "text": "To facilitate efficient training and inference, we use the transformers library from Hugginface with the PyTorch framework. We use Flash Attention 2 implementation of self-attention, and the DeepSpeed distributed training framework. During autoregressive sampling, we use Key-Value caching and Flash Attention 2 to speed up decoding. Despite being just implementation optimization tricks, these two techniques can make a big difference for sampling as they speed up decoding by two orders of magnitude compared to the naive approach, making sampling with transformer decoders significantly faster compared to the sampling from diffusion models. For example, KV-caching reuses past attention keys and values resulting in $\\mathcal{O}(1)$ MLP forward passes instead of $\\mathcal{O}(L)$ at each decoding step, where $L$ is the prefix length. Thus, the total number of forward passes with decoding length $L$ is $\\mathcal{O}(L)$ instead of $\\mathcal{O}(L^{2})$. We hope that our work will promote a more wide use of the transformers best practices within the drug discovery ML community.",
+     "kind": "body"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

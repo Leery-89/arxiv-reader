@@ -1,0 +1,664 @@
+{
+ "arxiv_id": "2405.03370",
+ "title": "AntiFold: Improved antibody structure-based design using inverse folding",
+ "abstract": "Summary: The design and optimization of antibodies requires an intricate balance across multiple properties. Protein inverse folding models, capable of generating diverse sequences folding into the same structure, are promising tools for maintaining structural integrity during antibody design. Here, we present AntiFold, an antibody-specific inverse folding model, fine-tuned from ESM-IF1 on solved and predicted antibody structures. AntiFold outperforms existing inverse folding tools on sequence recovery across complementarity-determining regions, with designed sequences showing high structural similarity to their solved counterpart. It additionally achieves stronger correlations when predicting antibody-antigen binding affinity in a zero-shot manner, while performance is augmented further when including antigen information. AntiFold assigns low probabilities to mutations that disrupt antigen binding, synergizing with protein language model residue probabilities, and demonstrates promise for guiding antibody optimization while retaining structure-related properties. Availability and implementation: AntiFold is freely available under the BSD 3-Clause as a web server ( https://opig.stats.ox.ac.uk/webapps/antifold/ ) and pip installable package at: https://github.com/oxpig/AntiFold .",
+ "sections": [
+  {
+   "level": 1,
+   "title": "1 Introduction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.p1",
+     "text": "Antibodies are one of the largest classes of therapeutics, used to treat diseases including cancers, autoimmune conditions and viral infections. Therapeutic antibody design is complex, requiring the optimization of numerous properties related to efficacy, manufacturability and safety.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p2",
+     "text": "Machine learning-based methods have shown promise in accelerating multiple steps in the antibody development pipeline, by reducing liabilities such as immunogenicity and aggregation, or rationally optimizing for desirable properties such as binding affinity and developability.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p3",
+     "text": "A guiding consideration in antibody optimization is selecting mutations that maintain the structure and therefore structure-mediated properties, such as stability and antigen binding mode. Protein inverse folding models are trained to predict sequence given structure, and can therefore be used to design novel sequences without altering the antibody backbone structure. Backbone-constrained design could enable the optimization of individual properties without disrupting others.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p4",
+     "text": "Antibodies demonstrate distinct structure and sequence properties as compared to general proteins (Figure S1). While the framework (FR) regions are germline-encoded and relatively conserved, the complementarity-determining region (CDR) loops are hypervariable and form most of the antigen-binding contacts. Over two thirds of CDRH3 loops have distinct structures not found in other general protein structures.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p5",
+     "text": "Mutiple tools for antibody inverse folding design have recently been released, including AbMPNN and IgMPNN, based on the ProteinMPNN architecture. Furthermore, recent work has shown the promise of protein language and inverse folding models for guiding antibody affinity maturation through the identification of high-fitness, structurally-constrained regions of the mutational landscape. However, the sequence recovery of existing tools for the CDR regions has been limited. Additionally, ProteinMPNN-based tools have features such as the occasional re-ordering of antibody chains or CDRH3 position 112 insertions, or the introduction of gaps into IMGT numbered antibodies, incompatible with antibody structures.",
+     "kind": "body"
+    },
+    {
+     "id": "S1.p6",
+     "text": "Here, we present AntiFold, an antibody-specific inverse folding model fine-tuned from ESM-IF1, which significantly improves upon CDR sequence recovery and zero-shot affinity prediction. AntiFold accepts an input solved or predicted antibody variable domain structure (Figure 1). For each residue position, the tool outputs the overall tolerance to mutations without altering the backbone structure (perplexity) and individual amino acid probabilities. Optionally, the user may specify regions to sample new sequences for, and a temperature parameter to control sequence diversity. Designed sequences show high structural similarity to the original structure when re-folded. The use of AntiFold in tandem with other property prediction tools could therefore guide antibody optimization campaigns by prioritizing experimental validation to a smaller search space.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "2 Methods",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.F1",
+     "text": "Figure 1: Structure-constrained antibody design with AntiFold. The user inputs an antibody variable domain PDB structure (heavy and light chain) and specifies an IMGT region to design. AntiFold outputs for each residue position in the PDB: i) structural tolerance to mutations without altering the backbone structure, ii) residue probabilities and iii) a number of designed sequences (default 10) for the selected region, predicted to maintain its structural fold. The diversity of the generated sequences may be controlled with a temperature parameter.",
+     "kind": "caption"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.1 Data",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS1.p1",
+     "text": "AntiFold leverages ESM-IF1’s pre-training on $>$ 12M structures by fine-tuning the model further on solved and predicted antibody structures. To enable a direct comparison with AbMPNN, we trained, validated and tested our model on the same data: 2,074 solved complexes from the Structural Antibody Database (SAbDab), and 147,458 structures of sequences from the Observed Antibody Space (OAS) paired database modeled with ABodyBuilder2. Each dataset was split using a 90% concatenated CDR sequence identity cutoff (80/10/10 train/validation/test). We did not directly compare against IgMPNN as the model weights and training data were not available.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "2.2 Training AntiFold",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S2.SS2.p1",
+     "text": "During fine-tuning, we applied several strategies to improve performance on the validation set, specifically amino acid recovery (AAR) of the heavy chain CDR3 loop (CDRH3), which forms most of the antigen binding site interactions. CDRH3 AAR was improved through use of a span-masking scheme (36.4%), additional masking of random residues (53.2%), weighting masking towards CDR residues with a 3:1 weight (53.3%), layer-wise learning-rate decay (54.4%) and including predicted structures from OAS (58.4%) (Tables S1 -3). These augmentations were all included in the final AntiFold model. Training AntiFold without the ESM-IF1 pre-training yielded a CDRH3 AAR of 31.5% on the validation set (Table S4), highlighting the value of ESM-IF1’s large pre-training dataset. For more details on these results and our fine-tuning strategy see the Supplementary Information.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "3 Results",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "3.1 Fine-tuning improves amino acid recovery on antibody sequences",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.T1",
+     "text": "Table 1: Summary of AntiFold performance on sequence design and binding affinity prediction. For detailed methods and results, see the Supplementary Materials. Arrows indicate where higher/lower values are better: the best results are shown in bold. Evaluations from top to bottom; AbMPNN test-set amino acid recovery (Figure S2), sequence design of CDR loops backbone RMSD (Figure S5), antibody-antigen deep mutational scan (Figure S8), separation of affinity maturation-improved AbAg variants (fold-change >1.25) (Figure S11).",
+     "kind": "caption"
+    },
+    {
+     "id": "S3.SS1.p1",
+     "text": "AntiFold demonstrated a substantial improvement in AAR on the experimental structure test set as compared to the original ESM-IF1 model (60 vs 43% AAR for CDRH3, p $<$ 0.005; Table 1, Figure S2. AntiFold also outperformed AbMPNN for CDRH3 (60% vs 56%), all remaining CDR regions (75-84% vs 63-76%), and most FR regions (87-94% vs 85-89%, Figure S3).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS1.p2",
+     "text": "We confirmed that AntiFold can be accurately applied to modelled structure inputs by testing it on the test set structures predicted with ABodyBuilder2. AntiFold achieved similar AAR for solved and predicted structures ( $\\Delta$ AAR c-0.5%), unlike AbMPNN which performed slightly worse on experimental structures ( $\\Delta$ AAR -2.7%, Figure S2 C). AntiFold also maintained performance when applied to an antibody structure predicted with AlphaFold (PDB 7M3N, Table S5).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.2 Predicted sequences show high structural agreement with experimental structures",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS2.p1",
+     "text": "To assess whether mutations suggested by AntiFold preserve the backbone structure, we sampled and refolded CDR sequences for a set of high-quality structures. We identified 56 antibody structures in the test set that were solved using X-ray crystallography with a resolution below 2.5 Å. Next, we sampled 20 sequences for each antibody using ProteinMPNN, ESM-IF1, AbMPNN and AntiFold using a residue sampling temperature of 0.20 (for more details, see Supplementary Methods).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS2.p2",
+     "text": "We modeled these sequences using ABodyBuilder2, aligned them with the FR backbone of their experimentally solved counterpart, then calculated the root-mean-square deviation (RMSD) over the CDR residues (for more details, see Supplementary Methods). As a baseline, we modeled the true sequences with ABodyBuilder2 (native, Figure S5). AntiFold generated sequences with high structural similarity to the original backbone, with a mean CDR region RMSD of 0.95, versus AbMPNN 0.98, ESM-IF1 1.01, ProteinMPNN 1.03 and native RMSD of 0.63.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.3 Inverse folding predicts antibody-antigen binding affinity",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS3.p1",
+     "text": "We assessed the ability of AntiFold and other inverse folding models to predict antibody-antigen binding affinity by applying them to a deep mutational scan of an anti-lysozyme antibody. We calculated the log-likelihoods of the 2209 variable domain variants of Fab D44.1 (PDB 1MLC) (Figure S6). As a sequence-only baseline, we included the sequence-based ESM-2 model (650M parameters). AntiFold significantly outperformed the other models with a Spearman’s rank correlation of 0.418, versus ESM-IF1 (0.334), AbMPNN (0.322), ProteinMPNN (0.301) and ESM-2 (0.264), assessed by Mann-Whitney one-tailed U tests.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p2",
+     "text": "Next, we investigated whether adding the antigen chain(s) when calculating inverse folding probabilities would improve prediction of the experimental binding affinity (Figures S9, S10). With this additional context, AntiFold’s performance improves in the case of all CDR regions, in particular the CDR2 ( $S_{r}$ 42.7 to 47.3%, p $<$ 0.005) and CDR3 ( $S_{r}$ 29.8 to 32.0%, p $<$ 0.005), but not for framework residues. Contrary to this, ProteinMPNN and AbMPNN lose performance for most CDR regions when including the antigen chain, while performance on framework residues is largely unchanged.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p3",
+     "text": "To further explore the ability of AntiFold to guide antibody design by predicting antibody-antigen binding affinity, we applied the model to 124 variants across 7 antibodies generated in protein language model-guided affinity maturation experiments.",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p4",
+     "text": "We first rank-normalized across all possible single amino acid variant scores for each antibody and each model. To assess the rankings of the 124 experimentally measured variants, we rank-normalized again across this set. Using the experimental binding affinity values, variants were separated into lower (fold-change $<$ 0.75), maintained (0.75-1.25) and improved ( $>$ 1.25) binding affinity groups (Figure S11).",
+     "kind": "body"
+    },
+    {
+     "id": "S3.SS3.p5",
+     "text": "AntiFold achieved significantly improved separation of these groups, scoring the improved variants with a median rank score of 80% (p $<$ 0.005) versus 73 % for ProteinMPNN, 57 % for ESM-IF1 and 55 % for AbMPNN.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "3.4 Availability and Implementation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S3.SS4.p1",
+     "text": "AntiFold can be accessed as a web server or freely downloaded as a pip-installable package. • Web server: https://opig.stats.ox.ac.uk/webapps/antifold/ • Code repository: https://github.com/oxpig/AntiFold",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "4 Discussion",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S4.p1",
+     "text": "AntiFold, fine-tuned from the general protein inverse folding ESM-IF1, achieves state-of-the-art performance on antibody sequence recovery and refolding of designed sequences. The use of pre-trained weights substantially improves AntiFold’s performance versus training from scratch, while including predicted structures and weighting masking towards individual CDR residues improved performance further.",
+     "kind": "body"
+    },
+    {
+     "id": "S4.p2",
+     "text": "AntiFold’s inverse folding probabilities correlate with antibody-antigen binding affinity across multiple independent experiments. Including antigen information augments performance further, in the case of CDR residues close to the antigen binding site. These probabilities also synergize with protein language model-suggested variants, indicating the models learn orthogonal information. We find this performance is primarily driven by the de-selection of loss-of-binding variants. Consistent with previous results, our findings indicate that AntiFold identifies structurally-constrained, high fitness regions of the mutational landscape, likely to preserve binding.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "5 Competing interests",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S5.p1",
+     "text": "No competing interest is declared.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "6 Funding",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S6.p1",
+     "text": "This work was supported by the Sino-Danish Center [2021, awarded to M.H.H], the Medical Research Council [grant number: MR/N013468/1 awarded to A.M.H], the Engineering and Physical Sciences Research Council [grant number: EP/S024093/1 awarded to T.H.O.] and GlaxoSmithKline plc.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "7 Supplementary information",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 2,
+   "title": "0.1 Supplementary Methods",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 3,
+   "title": "0.1.1 Experimental antibody structures from SAbDab",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS1.p1",
+     "text": "The AbMPNN dataset contains 2,074 structures of antibodies in complex with a protein antigen, after filtering for redundancy and experimental resolution $<$ 5 Å. We obtained structures of the corresponding variable fragment domains (Figure S1), numbered with the IMGT antibody numbering scheme from SAbDab. We modeled structures of the validation and test set using ABodyBuilder2 to evaluate AntiFold performance on predicted structures. One and three structures were removed from the validation and test datasets, respectively, as these could not be modeled with ABodyBuilder2.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.2 Predicted antibody structures from ABodyBuilder2",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS2.p1",
+     "text": "The structures of 148,832 paired antibody sequences from OAS modeled using ABodyBuilder2 were released as part of ABodyBuilder2. Filtering out structures with identical concatenated CDRs, as in AbMPNN, resulted in a dataset of 147,458 structures.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.3 Fine-tuning strategy",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS3.p1",
+     "text": "We trained AntiFold by fine-tuning the ESM-IF1 inverse folding architecture (Figure S1) on antibody structures. The inverse folding problem can be formalized as learning the conditional probability distribution, $p(Y|X)$, of the protein sequence, $Y$, consisting of amino acids $(y_{1},\\ldots,y_{i},\\ldots,y_{n})$, given the structure, $X$, with spatial coordinates of the backbone atoms (N, C α and C) $(x_{1},\\ldots,x_{i},\\ldots,x_{3n})$ (Equation (1)).",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS3.p2",
+     "text": "$p(Y|X)=\\prod_{i=1}^{n}p(y_{i}|y_{i-1},\\ldots,y_{1};X)$ (1)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS3.p3",
+     "text": "The ESM-IF1 architecture consists of 4 Graph Neural Network Geometric Vector Perceptron (GVP-GNN) layers, 8 generic Transformer encoder layers and 8 decoder layers. The architecture is invariant to rotation and translation of the input coordinates.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS3.p4",
+     "text": "The ESM-IF1 model is trained only on single chain structures. In order to represent complexes of antibody heavy and light chains, we concatenated the backbone coordinates of the light chain to the end of the heavy chain, with a 10 position padding of “gap” tokens, represented as missing coordinates in the input structure.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.4 Fine-tuning parameter evaluation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS4.p1",
+     "text": "We evaluated the effect of the parameters described below on model performance, as applied to the validation dataset.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Layer-wise learning rate decay",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS4.Px1.p1",
+     "text": "We decayed the learning rate for each previous layer in the ESM-IF1 architecture by an alpha factor:",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS4.Px1.p2",
+     "text": "$LR_{i}=LR\\times\\alpha^{i}$ (2)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS4.Px1.p3",
+     "text": "where $i$ ranges from zero to the number of layers in the model (20), and alpha is set to 0.85.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Masking",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS4.Px2.p1",
+     "text": "We masked portions of the input antibody structure for model training and calculated loss over model predictions for the masked positions. The coordinates of masked positions were hidden for input to the model.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS4.Px2.p2",
+     "text": "We evaluated three different masking schemes: • Shotgun masking: individual positions for masking were randomly selected • Span masking: spans (consecutive stretches of positions) were masked by randomly selecting starting positions and sampling the span length from a geometric distribution where p = 0.05, with a maximum span length of 30 positions • Shotgun plus span masking: 7.5% of the structure was first masked using span masking and a further 7.5% was subsequently masked using the shotgun approach",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS4.Px2.p3",
+     "text": "Antibody sequence/structure can be separated into FR and CDR regions (Figure S1 A), with the former being more conserved and typically easier to predict. As our model loss is calculated over masked positions, we explored whether performance could be improved by biasing the selection of masked positions towards CDR residues (IMGT-weighted masking). There are more than 2.5 times as many FR as CDR positions in the sequence. For shotgun masking, we implemented a 3:1 weighting for the selection of CDR vs FR positions. For span masking, we biased selection to be low (weight = 1) for most FR positions, high (weight = 3) for most CDR positions, and medium (weight = 2) for FR positions immediately preceding CDRs as well as CDR positions immediately preceding FRs.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 4,
+   "title": "Gaussian noise",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS4.Px3.p1",
+     "text": "For predicted structures, we add noise to the backbone (N, C α and C) 3D-coordinates, sampled from a Gaussian distribution with a scale of 0.1 Å, following the approach taken in ESM-IF1.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.5 Early stopping",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS5.p1",
+     "text": "Model training was stopped when validation loss did not decrease after 10 epochs. The model with the lowest validation loss was carried forward.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.6 Model performance evaluation",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS6.p1",
+     "text": "Amino acid recovery (AAR) is calculated as the percent of positions for which the top predicted amino acid is identical to the observed amino acid in the PDB.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p2",
+     "text": "$\\text{AAR}=\\left(\\frac{\\sum_{i=1}^{N}\\mathbf{1}[\\text{argmax}(probs(i))=\\text{obs. AA}(i)]}{N}\\right)\\times 100\\%$ (3)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p3",
+     "text": "where N is the total number of positions, and argmax(probabilities(i)) is a function that selects the amino acid with the highest probability at position i.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p4",
+     "text": "Model output probabilities are given by:",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p5",
+     "text": "$logits=raw\\ model\\ outputs$ (4)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p6",
+     "text": "$probabilities(i)=\\frac{e^{\\text{logits}(i)}}{\\sum_{j=1}^{20}e^{\\text{logits}(j)}}$ (5)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p7",
+     "text": "Perplexity for each position is given by:",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p8",
+     "text": "$perplexities=2^{-\\sum_{i=1}^{20}probabilities(i)\\times log_{2}(probabilities(i))}$ (6)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p9",
+     "text": "During sequence sampling, we sampled residues for each position in the CDRs proportional to their probability, using a temperature of 0.20. Here, a value of 1.00 represents sampling directly according to the model output distribution, while a value of $\\sim$ 0.00 acts like an argmax function, ensuring only the top probability amino acid for each position is selected. We used the same method as ProteinMPNN of applying temperature directly to the logits before converting to probabilities:",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p10",
+     "text": "$scaled\\ logits=\\frac{logits}{t}$ (7)",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p11",
+     "text": "ProteinMPNN and AbMPNN were run with default settings and the flags –conditional_probs_only, –sampling_temp 0.20, –num_seq_per_target 20 and –seed 37. Sampled sequences were then predicted with ABodyBuilder2 at default settings. We corrected for ProteinMPNN reordered chains, reversal of insertions in IMGT positions 112 and invalid gaps.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS6.p12",
+     "text": "We calculated RMSD using Pymol’s rms_cur method between the solved and predicted backbone (N, C α, and C atoms) for each region, after aligning on the framework.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.7 Binding affinity prediction",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS7.p1",
+     "text": "Inverse folding log-likelihoods were predicted for antibody variants in the deep mutational scan for each of the inverse folding models by inputting the PDB 1MLC, heavy and light variable domains (IMGT positions 1-128). For ESM-2 (750M), we extracted and generated log-likelihoods for the corresponding antibody sequence. Experimental scores were mapped to a $log_{2}$ fold-change and correlated with inverse folding scores directly using scipy.stats.spearmanr.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS7.p2",
+     "text": "Structures of antibody variants in the study were identified by searching the PDB for the extracted antibody sequence and selecting the highest sequence identity match. The X-ray structure with the highest resolutionw as selected.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.8 Rank normalization",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS8.p1",
+     "text": "When assessing model ranking of improved amino acid variants, we first first rank-normalized all single amino variant scores ( $N=L\\times 20$) for each antibody separately. Next, we selected the 124 experimentally measured variants ( $N=124$) and calculated their ranks using the same formula.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS8.p2",
+     "text": "Rank normalization of scores was calculated as $\\text{Normalized Rank}=\\frac{\\text{Rank}-1}{N-1}$",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS1.SSS8.p3",
+     "text": "Where Rank is the variant’s score rank and N is the total number of variants.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.9 Bootstrapping",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS9.p1",
+     "text": "For bootstrapping, we resampled with replacement 1000 times, with the bootstrapped values used to calculate means and confidence intervals.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.1.10 Statistical tests",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS1.SSS10.p1",
+     "text": "All reported p-values were calculated using the Mann-Whitney one-tailed U test unless otherwise stated.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 2,
+   "title": "0.2 Supplementary results",
+   "kind": "body",
+   "paragraphs": []
+  },
+  {
+   "level": 3,
+   "title": "0.2.1 Fine-tuning strategy",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS2.SSS1.p1",
+     "text": "Fine-tuning from a general protein inverse folding model enabled us to benefit from existing knowledge learned by ESM-IF1, which was trained on millions of structures. We explored the effect of multiple parameters on fine-tuning ESM-IF1 on antibody structures.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS2.SSS1.p2",
+     "text": "When fine-tuning on a new task or domain, there is a risk of “catastrophically forgetting” previously learned knowledge. We therefore applied a strategy of layer-wise learning rate decay, successfully used to fine-tune BERT models. We evaluated exponentially decaying the learning rate from the last to the first layer, preserving the weights of earlier parts of the model during training (see Figure S1 and Methods). Layer-wise learning rate decay did not further improve sequence recovery (Supplementary Table A1-3), but we retained it for subsequent training to reduce the risk of overfitting and to maintain generalization towards untested properties.",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS2.SSS1.p3",
+     "text": "We also investigated different masking schemes in training. Shotgun masking hides the coordinates of randomly selected single positions, while span masking is applied to a consecutive stretch of positions. As FR and CDR regions in the antibody structure have different levels of variability, we tested biasing the selection of masked positions towards the more variable CDR residues (3x weight, IMGT-weighted masking). In total, 15% of the backbone residues were masked during training (for more details on the masking parameters, see Supplementary Methods). As previously reported, we found stronger performance for shotgun than span masking on test structures. However, span masking improved CDR sequence recovery for test cases with masked CDR loops, a realistic design use case (Supplementary Table A1-3). IMGT-weighted masking further improved performance on CDR loops, while only slightly reducing sequence recovery on FR regions (Supplementary Table A1-2).",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS2.SSS1.p4",
+     "text": "To improve performance by training on more diverse antibodies, we included a large dataset of 147,458 predicted structures from OAS modelled with ABodyBuilder2, in our fine-tuning strategy. We tested the effects of adding Gaussian noise at a scale of 0.1 Å to the modeled protein backbone, previously found to improve performance. We found no substantial effect, but have included it in our final model for robustness towards minor variations in input structures (Supplementary Table A3).",
+     "kind": "body"
+    },
+    {
+     "id": "S0.SS2.SSS1.p5",
+     "text": "Based on these results, we chose to train the final AntiFold model with IMGT-weighted shotgun and span masking, layer-wise learning rate decay and added Gaussian noise on predicted structures. We note that these augmentations, along with the use of the larger pre-trained ESM-IF1 architecture (142M parameters) instead of ProteinMPNN (1.7M parameters), comprise the main differences with AbMPNN. We split the training of AntiFold into two phases. First we fine-tuned ESM-IF1 on one pass of the training dataset of predicted structures from OAS. Next we fine-tuned the model on the solved training dataset, stopping training when there was no further improvement in validation loss for 10 epochs. This model, termed AntiFold, was used for all subsequent analysis.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.2.2 Observed variability (perplexity)",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS2.SSS2.p1",
+     "text": "We calculated the observed perplexity, a measure reflecting the number of amino acids observed in true antibody sequences, for each CDRH3 position in the test-set. Here, a value of 1 means only one amino acid is ever observed, while 20 represents all twenty amino acids being observed at equal probability. AntiFold constrains the observed perplexity ( $\\sim$ 10-14 observed amino acids, IMGT positions 107-114) down to 4-8 amino acids which are predicted to preserve the backbone structure of the loop, versus $\\sim$ 6-10 for AbMPNN (Figure S2 C). This, combined with the improved sequence recovery, reflects AntiFold’s greater confidence and accuracy in designing structurally-maintained antibody sequences.",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.2.3 Performance by CDRH3 length",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS2.SSS3.p1",
+     "text": "AntiFold’s recovery performance is lower for antibodies with longer CDRH3 loops (Figure S7), with a median AAR of 71% for shorter loops (6-9 residues) and 48% for longer loops (16-28 residues).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.2.4 De-selection of lower binding affinity variants",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS2.SSS4.p1",
+     "text": "Applying AntiFold to an anti-lysozyme deep mutational scan, we find that AntiFold effectively separated antibody variants with lower ( $log_{2}$ fold-change $<$ 0) versus improved ( $log_{2}$ fold-change $>$ 0) binding affinity (Fig S8), likely by identifying structurally disruptive mutations which are also likely to disrupt antigen binding. For example, choosing a score threshold where $\\sim$ 50% of variants are discarded, AntiFold de-selects $\\sim$ 40% of lower while maintaining $>$ 95% of improved binding affinity variants (Figure S8 B, score threshold -11).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 3,
+   "title": "0.2.5 AntiFold CDRH3 substitution matrix",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S0.SS2.SSS5.p1",
+     "text": "We investigated AntiFold’s trends in substituting residues in the test set CDRH3 positions, by calculating a 20x20 matrix of AntiFold’s median inverse folding probabilities. Antifold CDRH3 log probabilities loosely resemble BLOSUM62 substitution trends, while distinctly disfavoring mutations from alanine, or to proline and cysteine (Fig S12).",
+     "kind": "body"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "title": "1 Supplementary Tables and Figures",
+   "kind": "body",
+   "paragraphs": [
+    {
+     "id": "S1.F1",
+     "text": "Figure S1: Overview of the AntiFold training strategy. (A) AntiFold was trained and evaluated on solved antibody structures from SAbDab and structures of antibody sequences from OAS modeled with ABodyBuilder2. Antibodies consist of heavy (blue) and light (purple) chains. Target binding is primarily mediated by complementarity-determining regions (CDRs) in the variable region. Examples of heavy (VH) and light (VL) variable domain sequences are shown. (B) AntiFold is initialized with weights from ESM-IF1, then fine-tuned on antibody variable domain structures. AntiFold can generate diverse sequences maintaining the fold of the input structure. Figure adapted from. Structure from PDB 3W2D.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F2",
+     "text": "Figure S2: AntiFold demonstrates improved amino acid recovery and perplexity. (A) Mean amino acid recovery (AAR) across CDRs for antibody heavy and light chains. Error bars indicate 95% confidence intervals after bootstrapping 100 times with replacement. (B) Perplexity across the CDRH3 loop. (C) Percent change in AAR when swapping predicted structures for experimental structures (same sequences). For details on these performance evaluations, see Supplementary Methods.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F3",
+     "text": "Figure S3: Framework sequence recovery. Framework amino acid sequence recovery, for solved (top) and predicted (bottom) structures in the test set.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F4",
+     "text": "Figure S4: CDR sequence recovery. Complementarity determining region (CDR) amino acid sequence recovery for solved (top) and predicted (bottom) structures in the test set.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F5",
+     "text": "Figure S5: AntiFold-designed sequences maintain the backbone structure. CDR RMSDs between ABodyBuilder2-predicted and experimental structure backbones, for sequences sampled with ProteinMPNN, ESM-IF1, AntiFold and AbMPNN (temperature 0.20, see Supplementary Methods). CDR RMSDs between the AbodyBuilder2 model of the native sequence and the experimental structures are shown in gray. Mean CDR region RMSD values are shown in parentheses in the legend. We note that the RMSD calculation here only considers the modelling accuracy of the backbone and not side-chain atoms.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F6",
+     "text": "Figure S6: Inverse folding probabilities correlate with antibody-antigen binding affinity. Spearman’s rank correlation between log-likelihood scores of the 2209 variants of the D44.1 anti-lysozyme antibody and the $log_{2}$ fold-change in binding affinity. Error bars show 5-95th percentile range for the Spearman’s rank correlation after bootstrapping 1000 times. The statistical significance from Mann-Whitney one-tailed U tests are shown (**** = p $<$ 0.00005).",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F7",
+     "text": "Figure S7: AntiFold amino acid recovery is higher for shorter CDRH3 loops. Test-set amino acid recovery by CDR3 heavy chain length.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F8",
+     "text": "Figure S8: AntiFold de-selection of lower binding affinity variants (anti-lysozyme deep mutational scan). A) Scatterplot of AntiFold variant log-likelihood versus experimental binding affinity values from. Spearman’s rank correlation and fitted ordinary least squares model shown. Variants with improved binding affinity ( $log_{2}$ fold-change $>$ 0) are shown in orange (positives). B) Cumulatively de-selected positive/negative variants at a given score threshold. At a minimum variant log-likelihood threshold of -11, ca 40% of negatives and 5% of positives were de-selected.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F9",
+     "text": "Figure S9: AntiFold binding affinity prediction improves with antigen information. Increase in Spearman’s rank correlation between inverse folding model scores and experimental affinity values in the deep mutational scan, excluding and including the antigen chain. Values bootstrapped 1000 times. Mann-Whitney one-tailed (less) U test shown (**** = p $<$ 0.00005).",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F10",
+     "text": "Figure S10: Model antibody-antigen binding affinity prediction Change in Spearman’s rank correlation between inverse folding model scores and experimental affinity values in the deep mutational scan, excluding and including the antigen chain and split by regions. Values bootstrapped 1000 times. Mann-Whitney one-tailed (less) U test shown (**** = p $<$ 0.00005).",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F11",
+     "text": "Figure S11: AntiFold enables de-selection of protein language model-suggested variants. Model rank-scoring performance across 124 variants of 7 antibodies from protein language model-guided affinity maturation experiments by. Variants are separated into lower (fold-change $<$ 0.75), maintained (fold-change 0.75-1.25) and higher (fold-change $>$ 1.25) binding affinity groups (see Supplementary Methods for details). Boxplot shows 5-95th percentile of variant scores (rank-normalized across the 124 variants), with median values and Mann-Whitney one-tailed (less) U test shown (** = p $<$ 0.005).",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.F12",
+     "text": "Figure S12: AntiFold CDRH3 inverse folding probabilities capture physiochemical patterns. Substitution matrix with median residue inverse folding probabilities (log) for mutations in the solved test-set CDR3 heavy chain regions.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.T1",
+     "text": "Table S1: Fine-tuning parameter evaluation, applied to validation dataset (experimental, “Exp”, structures). The training (layer-wise learning rate decay, train masking) and testing (test masking) parameters are indicated. The values in the right side of the table represent amino acid recovery for a particular IMGT-region (FR: framework, CDR: complementarity-determining region). The highest value is shown in bold, the second-highest in italics.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.T2",
+     "text": "Table S2: Fine-tuning parameter evaluation, applied to validation dataset (predicted, “Pred”, structures). The training (layer decay, train masking) and testing (test masking) parameters are indicated. The values in the right side of the table represent amino acid recovery for a particular IMGT-region (FR: framework, CDR: complementarity-determining region). The highest value is shown in bold, the second-highest in italics.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.T3",
+     "text": "Table S3: Final model parameter evaluation, applied to validation dataset (experimental, “Exp”, and predicted, “Pred”, structures). Each model was trained with IMGT-weighted shotgun plus span masking for 1 epoch on the large predicted OAS structure dataset, followed by training on the experimental SAbDab dataset. The other training parameters (layer-wise learning rate decay and application of Gaussian noise to the predicted OAS structures) are indicated. The values in the right side of the table represent amino acid recovery for a particular IMGT-region (FR: framework, CDR: complementarity-determining region). The highest value is shown in bold, the second-highest in italics.",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.T4",
+     "text": "Table S4: The model when developed without ESM-IF1 pretraining (i.e. with weights not initialised from ESM-IF1), with final parameters (layer-wise learning rate decay, IMGT-weighted shotgun plus span masking and application of Gaussian noise to the predicted OAS structures). The values in the right side of the table represent amino acid recovery for a particular IMGT-region (FR: framework, CDR: complementarity-determining region).",
+     "kind": "caption"
+    },
+    {
+     "id": "S1.T5",
+     "text": "Table S5: AntiFold performance in the case of an AlphaFold predicted antibody structure of median CDRH3 length ( $\\sim$ 15 residues).",
+     "kind": "caption"
+    }
+   ]
+  }
+ ],
+ "references": [],
+ "source": "html",
+ "truncated_sections": []
+}

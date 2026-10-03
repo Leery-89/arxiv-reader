@@ -1,0 +1,9 @@
+{
+ "arxiv_id": "2107.00002",
+ "title": "Cascade Decoders-Based Autoencoders for Image Reconstruction",
+ "abstract": "Autoencoders are composed of coding and decoding units, hence they hold the inherent potential of high-performance data compression and signal compressed sensing. The main disadvantages of current autoencoders comprise the following several aspects: the research objective is not data reconstruction but feature representation; the performance evaluation of data recovery is neglected; it is hard to achieve lossless data reconstruction by pure autoencoders, even by pure deep learning. This paper aims for image reconstruction of autoencoders, employs cascade decoders-based autoencoders, perfects the performance of image reconstruction, approaches gradually lossless image recovery, and provides solid theory and application basis for autoencoders-based image compression and compressed sensing. The proposed serial decoders-based autoencoders include the architectures of multi-level decoders and the related optimization algorithms. The cascade decoders consist of general decoders, residual decoders, adversarial decoders and their combinations. It is evaluated by the experimental results that the proposed autoencoders outperform the classical autoencoders in the performance of image reconstruction.",
+ "sections": [],
+ "references": [],
+ "source": "abstract_only",
+ "truncated_sections": []
+}

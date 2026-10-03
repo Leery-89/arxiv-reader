@@ -29,6 +29,7 @@ from pathlib import Path
 from fetcher import fetch_paper
 from llm import analyze
 from serialize import paper_to_text
+from snapshot import save_snapshot
 from verify import FIELDS, check
 
 EVAL_DIR = Path(__file__).parent / "eval"
@@ -61,6 +62,7 @@ def load_papers(path: Path) -> list[tuple[str, str]]:
 
 def run_one(arxiv_id: str) -> dict:
     paper = fetch_paper(arxiv_id)
+    save_snapshot(paper)            # harness 离线检查要用段落全文（D17）
     text = paper_to_text(paper)
     result = analyze(text)
     verify = check(paper, result)
