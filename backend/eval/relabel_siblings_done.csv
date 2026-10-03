@@ -1,0 +1,94 @@
+no,paper_id,category,field,evidence_id,claim,quotes_in_this_id,old_label,label,notes
+1,id_2010.11929,standard,limitations,S1.p4,作者指出，ViT 在中等规模数据集（如 ImageNet）上无强正则时精度比同规模 ResNet 低几个百分点，因为 Transformer 缺少 CNN 的平移等变性和局部性等归纳偏置，数据不足时泛化不佳 [S1.p4]。,"(1) Transformers lack some of the inductive biases inherent to CNNs, such as translation equivariance and locality
+(2) When trained on mid-sized datasets such as ImageNet without strong regularization, these models yield modest accuracies of a few percentage points below ResNets of comparable size.",P,Y,
+2,id_2005.11401,standard,research_question,abstract,论文要解决的问题是：预训练语言模型虽在参数中存储事实知识，但难以访问和精确操作知识，在知识密集型任务上落后于任务专用架构，且难以提供决策来源和更新世界知识 [abstract]。,"(1) Additionally, providing provenance for their decisions and updating their world knowledge remain open research problems.
+(2) However, their ability to access and precisely manipulate knowledge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task-specific architectures.",P/P,Y,
+3,id_2005.11401,standard,research_question,S1.p1,已有结合参数与非参数记忆的模型（如 REALM、ORQA）仅探索了开放域抽取式问答，本文希望将这种混合记忆引入序列到序列模型 [S1.p1]。,"(1) REALM and ORQA, two recently introduced models that combine masked language models with a differentiable retriever, have shown promising results, but have only explored open-domain extractive question answering.
+(2) Here, we bring hybrid parametric and non-parametric memory to the “workhorse of NLP,” i.e. sequence-to-sequence (seq2seq) models.",P,Y,
+4,id_1512.03385,standard,findings,S4.SS1.p16,152 层 ResNet 单模型 top-5 验证误差为 4.49%，六模型集成在测试集上取得 3.57% top-5 误差，赢得 ILSVRC 2015 第一名 [S4.SS1.p16]。,"(1) This leads to 3.57% top-5 error on the test set
+(2) Our 152-layer ResNet has a single-model top-5 validation error of 4.49%",P,P,
+5,id_1512.03385,standard,limitations,S4.SS2.p9,作者指出，1202 层网络虽然训练误差低于 0.1%，但测试结果差于 110 层网络，作者认为这是由于过拟合，该网络对此小数据集可能不必要地大 [S4.SS2.p9]。,"(1) The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error
+(2) The 1202-layer network may be unnecessarily large (19.4M) for this small dataset
+(3) we use no maxout/dropout and just simply impose regularization via deep and thin architectures by design",P,N,
+6,id_1512.03385,standard,research_question,S1.p3,论文要解决的问题是：当网络能够开始收敛后，随着深度增加会出现精度饱和并迅速退化的退化问题，且这种退化并非由过拟合引起 [S1.p3]。,"(1) When deeper networks are able to start converging, a degradation problem has been exposed: with the network depth increasing, accuracy gets saturated
+(2) such degradation is not caused by overfitting, and adding more layers to a suitably deep model leads to higher training error",P,Y,
+7,id_2501.12948,standard,limitations,S6.p3,作者承认 DeepSeek-R1 在结构化输出和工具使用方面仍不理想，无法利用搜索引擎或计算器等工具 [S6.p3]。,"(1) DeepSeek-R1 cannot leverage tools, such as search engines and calculators, to improve the performance of output
+(2) the structural output capabilities of DeepSeek-R1 remain suboptimal compared to existing models",P,Y,
+8,id_2501.12948,standard,findings,S2.SS3.p2,DeepSeek-R1-Zero 在 AIME 2024 上的平均 pass@1 从初始的 15.6% 提升到 77.9%，结合自一致性解码可达 86.7% [S2.SS3.p2]。,"(1) the average pass@1 score on AIME 2024 shows a significant increase, jumping from an initial 15.6% to 77.9%
+(2) by leveraging the self-consistency decoding, the model’s performance can be further improved, achieving an accuracy of 86.7%",P,Y,
+9,id_2501.19393,standard,experiments,S4.SS1.SSS0.Px2.p1,在三个推理基准上评估：AIME24（30 题）、MATH500（500 题）和 GPQA Diamond（198 题），使用 lm-evaluation-harness，温度设为 0 [S4.SS1.SSS0.Px2.p1]。,"(1) GPQA Diamond consists of 198 PhD-level science questions from Biology, Chemistry and Physics.
+(2) We select three representative reasoning benchmarks widely used in the field: AIME24 has 30 problems
+(3) MATH500 is a benchmark of competition math problems of varying difficulty.",N,P,
+10,id_2501.19393,standard,research_question,S1.p1,论文要解决的问题是：在 OpenAI o1 未公开方法、众多复现尝试均未公开复现出清晰测试时扩展行为的情况下，找到同时实现测试时扩展和强推理性能的最简单方法 [S1.p1]。,"(1) Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?
+(2) despite the large number of o1 replication attempts, none have openly replicated a clear test-time scaling behavior.",P,Y,
+11,id_2501.19393,standard,method,S3.SS1.SSS0.Px1.p1,提出 budget forcing：通过强制插入思考结束符提前终止思考，或抑制结束符并追加“Wait”来延长思考，从而控制测试时计算量 [S1.p2][S3.SS1.SSS0.Px1.p1]。,"(1) we suppress the generation of the end-of-thinking token delimiter and optionally append the string “Wait” to the model’s current reasoning trace
+(2) We propose a simple decoding-time intervention by forcing a maximum and/or minimum number of thinking tokens.",Y,Y,
+12,id_2502.03387,standard,findings,S6.SS2.SSS0.Px1.p1,LIMO 在域内任务上取得最佳结果：AIME24 准确率 63.3%，MATH500 准确率 95.6%，AMC23 准确率 96.3%，均超过 QwQ-32B-Preview 和 OpenAI-o1-preview [S6.SS2.SSS0.Px1.p1]。,"(1) The performance gap is even more pronounced on AMC23, where LIMO reaches 96.3% accuracy compared to QwQ-32B-Preview’s 83.6%.
+(2) On in-domain tasks, LIMO achieves the best results across all benchmarks.
+(3) For AIME24, LIMO achieves 63.3% accuracy, outperforming QwQ-32B-Preview (50.0%) and OpenAI-o1-preview (44.6%) by significant margins.
+(4) On MATH500, LIMO achieves a notable 95.6% accuracy, surpassing QwQ-32B-Preview (89.8%) and OpenAI-o1-preview (85.5%).",P,Y,
+13,id_2502.03387,standard,experiments,S5.SS0.SSS0.Px2.p1,分布外评估包括 OlympiadBench、中文多语言基准 CHMath、Gaokao、Kaoyan、GradeSchool，以及多学科基准 Minerva 和 GPQA [S5.SS0.SSS0.Px2.p1]。,"(1) Third, we incorporate multi-disciplinary benchmarks including Minerva (undergraduate-level STEM) and GPQA
+(2) First, we include diverse mathematical competitions like OlympiadBench to test performance on different mathematical challenges.
+(3) we construct novel multilingual benchmarks using recent examination problems: CHMath (2024 Chinese High School Mathematics League), Gaokao (China’s 2024 College Entrance Exam), Kaoyan (Chinese Graduate School Entrance Exams), and GradeSchool (our new elementary mathematics benchmark).",P,Y,
+14,id_2502.03387,standard,method,S1.p4,方法上，作者构建了一个多层筛选的数据 curation 流程：先进行粗粒度难度过滤，再进行细粒度难度评估，并进行知识点多样化，同时根据逻辑连贯性、步骤清晰度和解答准确性筛选推理链，最终得到 800 条训练样本 [S1.p4]。,"(1) With simple supervised fine-tuning (SFT) using only this curated dataset based on Qwen2.5-32B-Instruct
+(2) first conducting coarse difficulty filtering to eliminate trivial problems, then fine-grained difficulty assessment to identify challenging questions, followed by knowledge point diversification to ensure comprehensive coverage.
+(3) This meticulous process yields a compact yet potent dataset of just 800 training samples.",N,P,
+15,id_2405.15793,standard,experiments,S4.p1,论文主要在 SWE-bench 数据集上评估，该数据集包含来自 12 个流行 Python 包的 2294 个任务实例；消融和分析在 SWE-bench Lite（300 个实例）上进行 [S4.p1]。,"(1) We primarily evaluate on the SWE-bench dataset, which includes $2true294$ task instances from $12$ different repositories of popular Python packages.
+(2) SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench
+(3) We also test SWE-agent’s basic code editing abilities with HumanEvalFix",P,P,
+16,id_2405.15793,standard,research_question,S1.p2,作者指出，现有接口（如 Linux shell）是为人类用户设计的，LM agent 在使用时容易遇到困难，例如无法可靠地编辑小段文件、无效编辑时没有反馈 [S1.p2]。,"(1) These deficits substantially hamper performance, motivating the need for an agent-computer interface (ACI)
+(2) In practice, we find that LM agents can struggle to reliably take actions in this environment.",N,N,
+17,id_2403.09629,standard,experiments,S5.SS3.p1,此外还进行了链式思考实验，使用零样本提示“Let’s think step by step.”，在 128 个 GSM8K 测试样本上评估 [S5.SS3.p1]。,"(1) we used a zero-shot prompt (“Let’s think step by step.”) without in-context examples
+(2) as evaluated on a sample of 128 GSM8K test items",P,Y,
+18,id_2005.14165,long,limitations,S5.p2,作者承认 GPT-3 在文本合成和若干 NLP 任务上仍有明显弱点，例如长段落中失去连贯性、自相矛盾，以及在“比较”类任务上单样本甚至少样本仅略好于随机 [S5.p2]。,"(1) it still has notable weaknesses in text synthesis and several NLP tasks
+(2) it does little better than chance when evaluated one-shot or even few-shot on some “comparison” tasks",P,P,
+19,id_2502.13923,long,limitations,S2.SS3.SSS3.p4,论文在讨论拒绝采样中的思维链推理时指出，视觉语言模型依赖文本和视觉两种模态，中间推理步骤可能无法充分整合视觉信息，要么忽略相关视觉线索，要么误解它们；尽管采取了过滤策略，实现最优的模态对齐仍是一个持续存在的挑战，需要进一步改进 [S2.SS3.SSS3.p4]。,"(1) achieving optimal modality alignment remains an ongoing challenge that requires further advancements.
+(2) Intermediate reasoning steps may fail to adequately integrate visual information, either by ignoring relevant visual cues or misinterpreting them.",P,P,
+20,id_2412.19437,long,limitations,S6.p2,作者承认 DeepSeek-V3 在部署方面存在局限：为保证高效推理，推荐部署单元相对较大，可能给小型团队带来负担 [S6.p2]。,"(1) there still remains potential for further enhancement
+(2) these limitations are expected to be naturally addressed with the development of more advanced hardware
+(3) the recommended deployment unit for DeepSeek-V3 is relatively large, which might pose a burden for small-sized teams",N/N,P,
+21,id_2412.19437,long,method,S1.p3,训练方面支持 FP8 混合精度训练，并设计 DualPipe 算法实现高效流水线并行和计算-通信重叠 [S1.p3]。,"(1) we introduce an FP8 mixed precision training framework
+(2) we design the DualPipe algorithm for efficient pipeline parallelism",P/P,Y,
+22,id_2405.21060,odd,method,S6.p4,基于此，作者提出了 SSD 算法，通过对半可分矩阵进行分块分解，对角块使用二次注意力模式计算，非对角块利用低秩结构归约为较小的循环，从而结合线性 SSM 循环和二次对偶形式的优势 [S6.p4]。,"(1) the off-diagonal blocks can be factored by the rank-structure of semiseparable matrices and reduced to a smaller recurrence.
+(2) we perform a block decomposition of the matrix. The diagonal blocks can be computed using the dual attention mode",P,P,
+23,id_2405.07987,odd,limitations,S6.SS0.SSS0.Px6.p1,此外，对齐度量本身存在争议，作者只重点使用互最近邻一种度量 [S6.SS0.SSS0.Px5.p1]；并且实验中对齐分数仅达到0.16（理论上限为1），这一差距是噪声还是重大差异仍未解决 [S6.SS0.SSS0.Px6.p1]。,"(1) alignment clearly increases but only reaches a score of $0.16$, according to our mutual nearest-neighbor metric. The maximum theoretical value for this metric is $1$.
+(2) We leave this as an open question.",Y,P,
+24,id_2411.04330,odd,limitations,S6.p2,作者承认分析存在局限：全程使用固定架构来考察精度、参数和 token 的影响，而低精度训练常涉及架构调整，可缩小与全精度模型的差距 [S6.p2]。,"(1) Third, we only consider loss scaling without downstream model evaluations.
+(2) First, we use a fixed architecture throughout to examine the effects of precision, parameters, and tokens in a controlled manner.
+(3) In contrast, low precision training often involves architectural tweaks that can close much of the gap from a vanilla full precision model.
+(4) Second, while compute costs do scale linearly with precision, the gains from halving precision are usually less than 2x due to systems overhead.
+(5) We emphasize that the trends we find aim to be suggestive rather than prescriptive, and hope future work can more comprehensively examine these effects at larger model scale.",N,Y,
+25,id_2411.04330,odd,findings,S4.SS3.SSS3.p2,当 N、D、P 联合优化时，计算最优预训练精度与计算预算无关，约为 7-8 比特；但当 N 固定时，计算最优精度随计算量对数增长 [S4.SS3.SSS3.p2]。,"(1) When $N,D,P$ are optimized jointly, compute-optimal pretraining precision is independent of compute.
+(2) In contrast, when $N$ is fixed in advance, such as when training a model family on similar data, $P^{*}(C)\propto\log C$.",P,P,
+26,id_2411.04330,odd,experiments,S2.SS3.p1,作者在 Dolma V1.7 数据集上训练和评估了一系列 OLMo 风格的模型，使用标准 Transformer++ 实现 [S2.SS3.p1]。,"(1) We train and evaluate a suite of OLMo-style models on the Dolma V1.7 dataset, using a standard Transformer++ implementation
+(2) Our experiments consist of a sweep of language model pretraining runs over $N\in[30,60,110,220]$ million parameters (non-embedding) and $D\in[1.5,3,6,13,26]$ billion tokens.",Y,Y,
+27,id_2405.03370,science,findings,S3.SS1.p1,AntiFold 在实验结构测试集上的 CDRH3 氨基酸恢复率显著优于原始 ESM-IF1（60% vs 43%），也优于 AbMPNN 的 CDRH3（60% vs 56%）、其余 CDR 区域（75-84% vs 63-76%）和多数 FR 区域（87-94% vs 85-89%）[S3.SS1.p1]。,"(1) AntiFold also outperformed AbMPNN for CDRH3 (60% vs 56%), all remaining CDR regions (75-84% vs 63-76%), and most FR regions (87-94% vs 85-89%
+(2) AntiFold demonstrated a substantial improvement in AAR on the experimental structure test set as compared to the original ESM-IF1 model (60 vs 43% AAR for CDRH3, p $<$ 0.005",Y/Y,Y,
+28,id_2405.03370,science,research_question,S1.p3,其动机在于，抗体优化需要选择能维持结构和结构介导性质（如稳定性与抗原结合模式）的突变，而逆折叠模型可在不改变抗体骨架结构的前提下设计新序列 [S1.p3]。,"(1) Protein inverse folding models are trained to predict sequence given structure, and can therefore be used to design novel sequences without altering the antibody backbone structure.
+(2) Backbone-constrained design could enable the optimization of individual properties without disrupting others.",P,P,
+29,id_2406.03686,science,experiments,S4.SS1.p1,评估指标包括有效性、类药性指标 SA/QED/Lipinski、分布度量、RMSD、生成 1K 个有效 3D 分子的时间，以及构象生成的 RMSD-coverage [S4.SS1.p1]；口袋条件任务使用 QVINA 计算的结合能和类药性指标 [S4.SS2.p1]。,"(1) For the 3D conformation generation given molecule task, we compute the RMSD-coverage ( $\uparrow$) metric.
+(2) We provide the validity ( $\uparrow$) of generated molecules and druglikeness metrics - SA ( $\uparrow$), QED ( $\uparrow$), and Lipinski ( $\uparrow$)
+(3) we measure the time needed to generate 1K valid 3D molecules on one GPU",P,P,
+30,id_2406.03686,science,findings,S4.SS1.p3,预训练的 BindGPT 在不使用和显式使用氢原子的设置下都持续优于 XYZ-TF 基线，并且是首个能在如此大规模下显式建模氢原子的模型 [S4.SS1.p3]。,"(1) Even though BindGPT does not outperform MolDiff in Druglikeness
+(2) the pretrained BindGPT model consistently outperforms the XYZ-TF baseline both without and with explicit hydrogens
+(3) BindGPT is the first model capable of modeling hydrogen explicitly at such large scale
+(4) BindGPT (being finetuned on this data) shows state-of-the-art performance scores for nearly all distributional evaluation metrics
+(5) BindGPT, in contrast, is capable of matching the performance of TD when assisted by the RDKit tool and having a small gap when not.
+(6) Surprisingly, Uni-Mol fails to generalize to this new dataset",N,Y,
+31,id_2406.03686,science,findings,S5.p1,作者总结称，该方法在多个 3D 分子生成任务上匹配或超越基线，且不依赖生成域的归纳偏置 [S5.p1]。,"(1) we demonstrate the generality of our approach as it can solve each of them by matching or surpassing the baselines
+(2) our method does not have any inductive biases about the generative domain acting as a general and data-driven approach",P,Y,
+32,id_2406.03686,science,experiments,S4.p2,预训练使用 Uni-Mol 提出的大规模 3D 分子数据集，包含 208M 个构象、12M 个分子和 3.2M 个蛋白质口袋空间结构 [S4.p2]。,"(1) we use the aforementioned CrossDocked dataset which contains aligned pocket-molecule pairs
+(2) The dataset contains 208M conformations for 12M molecules and 3.2M spatial structures of protein pockets.
+(3) Our filtration of the dataset has around 27M pocket-ligand pairs covering a cross product of 14k molecules with 3k pockets
+(4) We also hold out a set of 100 pockets from the training data for evaluating the model performance.
+(5) we also finetune the model on the GEOM-DRUGS dataset
+(6) This dataset contains 27M conformations for 300k molecules
+(7) we use the Platinum dataset as a hold-out evaluation dataset to test our model and baselines on zero-shot conformer generation",N,Y,数字全在 (2)；'Uni-Mol''预训练'靠 The dataset 指代；其余为其他数据集，无关
+33,id_2406.03686,science,limitations,A3.p1,作者在附录中说明，模型规模实验显示模型在 300M 参数之前扩展良好，但到该规模时困惑度出现过拟合，因此后续实验采用 100M 模型 [A3.p1]。,"(1) we observed that the model scales well up until the size of 300M parameters, where its perplexity shows overfitting
+(2) We believe the model quality can be improved further by increasing the amount of the data for pretraining and the current 108M model obtains the best performance given the pretraining dataset.",P,Y,
+34,id_2405.04967,science,limitations,S3.p3,作者指出，MatterSim 目前采用半局域原子相互作用描述，在长程相互作用主导的场景（如聚合物和多相体系）中表现不佳 [S3.p3]。,"(1) the current model is trained only on homogeneous bulk systems, without explicit inclusion of surface and interface data that are crucial for applications such as catalysis
+(2) it doesn’t perform effectively in scenarios where long-range interactions dominate the properties, such as polymeric and heterogeneous systems
+(3) the model currently only naively supports inferences with DFT-PBE level of theory, limiting its use for systems involving complex interactions, such as polymers and organic liquids
+(4) Currently, the model only supports the native prediction of energy, forces, and stresses.",N,P,
+35,id_2405.04967,science,method,S2.SS1.p1,MatterSim 采用主动学习方法探索广阔材料空间，整合深度图神经网络、材料探索器、第一性原理监督器和集成不确定性监测器 [S2.SS1.p1]。,"(1) MatterSim employs an active learning approach to explore the extensive materials space, integrating a deep graph neural network, a materials explorer, a first-principles supervisor, and an ensemble uncertainty monitor
+(2) the first-principles supervisor offers the deep learning model supervision signals relating to energies, forces, and stresses on the given structures at the generalized gradient approximation (GGA) Perdew–Burke–Ernzerhof (PBE) level of theory",Y,Y,

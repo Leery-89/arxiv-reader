@@ -104,10 +104,18 @@ def fetch_abstract_only(arxiv_id: str) -> Paper:
 
     return Paper(arxiv_id=arxiv_id, title=title, abstract=abstract, source="abstract_only")
 
+THOUSANDS_BUG = re.compile(r"\d{1,3}(?:true\d{3})+(?:\.\d+)?")
+
+
 def para_text(div) -> str:
     """把一个段落元素转成干净文本：公式换成 LaTeX，引用标记删掉。"""
     for m in div.find_all("math"):
         latex = m.get("alttext", "")
+        # arXiv 的 LaTeXML 处理 siunitx 的 \num{2294} 时会把千分位写成 "true"：
+        # alttext 和显示出来的 MathML 都是 "2true294"（D17 harness 首轮抓到）。
+        # 只在整个公式完全是"数字 true 三位数字"时才修，不误伤真的含 true 的公式。
+        if THOUSANDS_BUG.fullmatch(latex):
+            latex = latex.replace("true", ",")
         m.replace_with(f"${latex}$")       # 用 $ 包起来，模型一眼认出是公式
 
     for c in div.find_all("cite"):
