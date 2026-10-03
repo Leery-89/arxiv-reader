@@ -1,0 +1,174 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结门定义纳米线中实现了对费米子宇称的单次干涉测量，作为迈向基于测量的拓扑量子计算的一步 [abstract]。器件由三量子点干涉仪与邻近化纳米线隧穿耦合构成，通过色散栅极传感读取量子电容 [S2.p3]。测量显示量子电容随磁通呈 h/2e 周期性双峰分布，在最优磁通下 3.7 µs 内信噪比为 1 [abstract]，并观察到随机电报信号，其驻留时间在约 2 T 面内磁场下长于 1 ms [abstract]。作者将这些结果解释为与一对相距约 3 µm 的 Majorana 零能模所编码的费米子宇称测量一致，且非平衡准粒子中毒率低 [abstract]，并给出 1% 的宇称测量错误概率 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是实现对 Majorana 零能模所共享费米子宇称的单次投影测量，这是测量型拓扑量子计算的基本操作 [S1.p1][S1.p2]。作者指出，一维拓扑超导体中量子信息存储在位于超导线两端的 MZMs 的费米子宇称中，而投影测量费米子宇称可用于处理量子信息和读取量子比特状态 [S1.p2]。本文的目标是展示对一维纳米线中近零能态宇称的干涉测量，从而验证拓扑量子计算的一个必要要素 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Protocols for measurement-only topological quantum computation simplify these operations, reducing them to fusion alone."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Quantum information is stored in the fermion parity of Majorana zero modes (MZMs) localized at the ends of superconducting wires, and projective measurements of the fermion parity are used to process quantum information and perform qubit state readout."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we demonstrate an interferometric measurement of the parity of a near-zero-energy state in a 1D nanowire, thereby validating a necessary ingredient of topological quantum computation."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出并实现了一种基于色散栅极传感的三量子点干涉仪（TQDI）读出方案：三个量子点与一维拓扑超导体段构成一个被磁通穿过的回路，其中长量子点（dot 2）的量子电容通过片外谐振电路反射测量读出 [S2.p3]。器件采用门控超导体-半导体异质结，包含 9.1 nm 厚 InAs 量子阱和 60 nm 宽、6.5 nm 厚的 Al 条 [S2.p1]。作者通过调节面外磁场控制回路磁通，并利用 rf 基 QD-MZM 调谐协议平衡干涉仪两臂 [S2.p3][S2.p6]。为解释测量结果，作者建立了包含 MZM、量子点和环境耦合的有效模型，并进行了量子动力学模拟 [S3.p4][S3.p6]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "Our readout circuit is based on dispersive gate sensing of a triple quantum dot interferometer (TQDI): three electrostatically defined quantum dots that together with the 1DTS form a loop threaded by a flux, $\\Phi$ ( Fig. 1 a,c)."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The active region of the semiconductor consists of a $9.1\\text{\\,}\\mathrm{nm}$ thick InAs quantum well with a $6\\text{\\,}\\mathrm{nm}$ thick In 0.88 Al 0.12 As top barrier and $25\\text{\\,}\\mathrm{nm}$ thick In 0.845 Al 0.155 As lower barrier, depicted schematically in Fig. 1 c."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "Our device permits both dc and rf measurements, enabling the development of an rf-based QD-MZM tuning protocol that we use to balance the arms of the interferometer."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "We support this interpretation by reproducing our results with quantum dynamics simulations that incorporate rf drive power, charge noise, and temperature."
+        },
+        {
+          "id": "S3.p6",
+          "quote": "For detailed comparison with experiments, we simulate a more complete model of our interferometer, expanded to include the full triple-dot system, incoherent coupling to the environment, and backaction from the measurement."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 InAs-Al 异质结门定义纳米线器件（device A 和 device B）上进行，通过色散栅极传感测量量子电容 [S2.p1][S3.p11]。作者对 dot 2 进行约 1.5×10^4 次连续测量，每次积分时间 4.5 µs，记录总长 67 ms 的时间轨迹，并扫描面外磁场（步长 0.14 mT）和 V_QD2 [S3.p1]。在 device A 中，相关参数区域位于 B_∥ ≈ 1.8 T 和 V_WP1 ≈ -1.832 V 附近 [S3.p2]。作者还进行了对照实验：注入准粒子、将量子点与纳米线断开、以及在 0.8 T 低场下重复测量 [S3.p12][S3.p13][S3.p14]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "To measure a time record of the fermion parity, we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We sweep the out-of-plane magnetic field $B_{\\perp}$ in steps of $0.14\\text{\\,}\\mathrm{mT}$ to study the dependence on the external flux $\\Phi$ through the interferometer loop and sweep $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ to find charge transitions in dot 2."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "For device A, the relevant regime is in the neighborhood of $B_{\\parallel}=$1.8\\text{\\,}\\mathrm{T}$$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}=$-1.832\\text{\\,}\\mathrm{V}$$."
+        },
+        {
+          "id": "S3.p11",
+          "quote": "The reproducibility of the observed phenomena is demonstrated in Sec. S6.1, where we discuss a second measurement (A2) on device A ( Fig. S8) and a measurement of device B ( Fig. S9)."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a (similar to the approach used in Ref.)."
+        },
+        {
+          "id": "S3.p13",
+          "quote": "Our second control experiment is to completely disconnect the dots from the wire."
+        },
+        {
+          "id": "S3.p14",
+          "quote": "Finally, we repeat the interferometry measurement at a low field ( $0.8\\text{\\,}\\mathrm{T}$), where the device is well within the trivial phase, and the induced gap in the nanowire has not closed yet."
+        }
+      ]
+    },
+    "findings": {
+      "text": "量子电容测量显示随磁通呈 h/2e 周期性双峰分布，在最优磁通值下 3.7 µs 内信噪比为 1 [abstract]。时间轨迹中观察到随机电报信号，其驻留时间在约 2 T 面内磁场下长于 1 ms [abstract]，拟合得到特征时间 τ_RTS ≈ 2 ms [S3.p3]。作者将这些结果解释为与一对相距约 3 µm 的 Majorana 零能模所编码的费米子宇称测量一致，且非平衡准粒子中毒率低 [abstract]。模拟得到的最大 ΔC_Q ≈ 1 fF，与测量值接近 [S3.p7]。作者还通过准粒子注入使 τ_RTS 减小、断开量子点后 RTS 消失、以及低场下无 h/e 周期性等对照实验支持该解释 [S3.p12][S3.p13][S3.p14]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Our quantum capacitance measurements show flux h / 2 ​ e h/2e -periodic bimodality with a signal-to-noise ratio of 1 1 in 3.7 µ ​ s 3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s} at optimal flux values."
+        },
+        {
+          "id": "abstract",
+          "quote": "From the time traces of the quantum capacitance measurements, we extract a dwell time in the two associated states that is longer than 1 ms 1\\text{\\,}\\mathrm{ms} at in-plane magnetic fields of approximately 2 T 2\\text{\\,}\\mathrm{T} ."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "As demonstrated in Fig. 3 i, the intervals between switches follow an exponential distribution with a characteristic time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}\\approx$2\\text{\\,}\\mathrm{ms}$$."
+        },
+        {
+          "id": "abstract",
+          "quote": "These results are consistent with a measurement of the fermion parity encoded in a pair of Majorana zero modes that are separated by approximately 3 µ ​ m 3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m} and subjected to a low rate of poisoning by non-equilibrium quasiparticles."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "our simulations yield an estimated maximum value as a function of flux $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}\\approx$1\\text{\\,}\\mathrm{fF}$$, which is close to the measured value shown in Fig. 3 f-h."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "As can be seen in Fig. 5 b (measured on device B), $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ decreases to half of its value as the bias voltage is increased from $0$ to $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$, while $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits weak dependence on bias voltage."
+        },
+        {
+          "id": "S3.p13",
+          "quote": "In devices A and B, we do not observe any RTS, as discussed in Sec. S6.2."
+        },
+        {
+          "id": "S3.p14",
+          "quote": "As shown in Sec. S6.3, we do not observe any $h/e$ flux periodicity as expected for a gapped wire, corroborating the expectation that the observed phenomena summarized in Fig. 3 is due to a low-energy state in the nanowire and that two-electron processes are negligible."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，该测量本身不能明确区分拓扑相中的 MZMs 和 trivial 相中精细调节的低能 Andreev 束缚态 [S1.p3]。作者也承认，这些测量本身不能确定干涉测量探测到的低能态是否是拓扑的 [S5.p1]。此外，作者指出在准 MZM 情景中，当隐藏 Majorana 模之间及其与 MZMs 的耦合较弱时，量子电容信号会被显著抑制，与测量值不一致 [S3.p15]。作者还提到，在当前器件中，由于有限尺寸效应，预期 E_M 会有显著变化，且拓扑能隙和相干长度并非显著小于器件长度 [S4.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase, but it does require the low-energy state to be supported at both ends of the wire and very weakly coupled to other low-energy states."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S3.p15",
+          "quote": "We find that when these “hidden” Majorana modes are weakly coupled to each other and to other MZMs, the quantum capacitance signal is significantly suppressed, to a degree that is inconsistent with the measured values."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Indeed, in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 37706,
+      "completion_tokens": 2913,
+      "elapsed_s": 11.72
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 28,
+    "inline_total": 29,
+    "inline_rate": 0.966,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S2.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

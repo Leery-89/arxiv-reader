@@ -1,0 +1,86 @@
+{
+  "paper": {
+    "arxiv_id": "2107.00002",
+    "title": "Cascade Decoders-Based Autoencoders for Image Reconstruction",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 1208,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "这篇论文针对当前自编码器研究目标偏向特征表示、忽视数据恢复性能评估、纯自编码器难以实现无损数据重建等问题，提出基于级联解码器的自编码器用于图像重建 [abstract]。所提架构包含多级解码器及相关优化算法，级联解码器由通用解码器、残差解码器、对抗解码器及其组合构成 [abstract]。实验结果表明，所提自编码器在图像重建性能上优于经典自编码器 [abstract]。",
+    "research_question": {
+      "text": "论文旨在解决自编码器的图像重建问题，以完善图像重建性能并逐步逼近无损图像恢复 [abstract]。其动机在于当前自编码器存在若干不足：研究目标不是数据重建而是特征表示，数据恢复的性能评估被忽视，且纯自编码器甚至纯深度学习都难以实现无损数据重建 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "This paper aims for image reconstruction of autoencoders, employs cascade decoders-based autoencoders, perfects the performance of image reconstruction, approaches gradually lossless image recovery"
+        },
+        {
+          "id": "abstract",
+          "quote": "the research objective is not data reconstruction but feature representation; the performance evaluation of data recovery is neglected"
+        },
+        {
+          "id": "abstract",
+          "quote": "it is hard to achieve lossless data reconstruction by pure autoencoders, even by pure deep learning"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用基于级联解码器的自编码器，所提串行解码器自编码器包括多级解码器架构及相关优化算法 [abstract]。级联解码器由通用解码器、残差解码器、对抗解码器及其组合构成 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "employs cascade decoders-based autoencoders"
+        },
+        {
+          "id": "abstract",
+          "quote": "The proposed serial decoders-based autoencoders include the architectures of multi-level decoders and the related optimization algorithms."
+        },
+        {
+          "id": "abstract",
+          "quote": "The cascade decoders consist of general decoders, residual decoders, adversarial decoders and their combinations."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "原文未明确提及。",
+      "evidence": []
+    },
+    "findings": {
+      "text": "实验结果表明，所提自编码器在图像重建性能上优于经典自编码器 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "It is evaluated by the experimental results that the proposed autoencoders outperform the classical autoencoders in the performance of image reconstruction."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及。",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1445,
+      "completion_tokens": 600,
+      "elapsed_s": 2.53
+    }
+  },
+  "verify": {
+    "quote_hits": 7,
+    "quote_total": 7,
+    "quote_rate": 1.0,
+    "inline_hits": 5,
+    "inline_total": 5,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 2,
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3_no_cover",
+    "hash": "a5238a9a"
+  }
+}

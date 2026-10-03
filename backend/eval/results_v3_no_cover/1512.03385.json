@@ -1,0 +1,176 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文提出残差学习框架以缓解深层神经网络训练困难的问题，将堆叠层显式地重新表述为学习相对于层输入的残差函数 [S1.p5]。在ImageNet上评估了深度达152层的残差网络，其复杂度仍低于VGG网络 [abstract]，集成模型在ImageNet测试集上取得3.57%的错误率并赢得ILSVRC 2015分类任务第一名 [S1.p9]。在CIFAR-10上还分析了100层和1000层以上的网络 [abstract]，并观察到残差网络比对应的普通网络响应更小 [S4.SS2.p7]。",
+    "research_question": {
+      "text": "论文要解决的问题是：当更深的网络能够开始收敛时，出现的退化问题——随着网络深度增加，准确率饱和并迅速下降，且这种退化并非由过拟合引起，向适当深的模型添加更多层反而导致更高的训练误差 [S1.p3]。作者指出，按照构造，更深模型不应比其较浅对应模型产生更高的训练误差，但实验表明当前求解器无法找到与构造解相当或更好的解 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "When deeper networks are able to start converging, a degradation problem has been exposed: with the network depth increasing, accuracy gets saturated (which might be unsurprising) and then degrades rapidly."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Unexpectedly, such degradation is not caused by overfitting, and adding more layers to a suitably deep model leads to higher training error, as reported in and thoroughly verified by our experiments."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "The existence of this constructed solution indicates that a deeper model should produce no higher training error than its shallower counterpart."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "But experiments show that our current solvers on hand are unable to find solutions that are comparably good or better than the constructed solution (or unable to do so in feasible time)."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出深度残差学习框架，让堆叠的非线性层拟合残差映射 F(x):=H(x)-x，而不是直接拟合期望的底层映射 H(x)，原始映射被重新表述为 F(x)+x [S1.p5]。该表述通过前馈神经网络的“捷径连接”实现，捷径连接执行恒等映射，其输出与堆叠层的输出相加，不增加额外参数或计算复杂度 [S1.p6]。当输入输出维度相同时直接使用恒等捷径，维度增加时可用零填充或投影捷径匹配维度 [S3.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a residual mapping."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "The original mapping is recast into $\\mathcal{F}(\\mathbf{x})+\\mathbf{x}$."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "The formulation of $\\mathcal{F}(\\mathbf{x})+\\mathbf{x}$ can be realized by feedforward neural networks with “shortcut connections” (Fig. 2)."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Identity shortcut connections add neither extra parameter nor computational complexity."
+        },
+        {
+          "id": "S3.SS2.p3",
+          "quote": "If this is not the case ( e.g., when changing the input/output channels), we can perform a linear projection $W_{s}$ by the shortcut connections to match the dimensions"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在ImageNet 2012分类数据集上评估方法，该数据集包含1000类，模型在128万张训练图像上训练，在5万张验证图像上评估，并报告top-1和top-5错误率 [S4.SS1.p1]。在CIFAR-10数据集上进行了更多研究，该数据集包含5万张训练图像和1万张测试图像，共10类 [S4.SS2.p1]。此外，还在PASCAL VOC 2007/2012和MS COCO上采用Faster R-CNN进行目标检测基线实验 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We evaluate our method on the ImageNet 2012 classification dataset that consists of 1000 classes."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The models are trained on the 1.28 million training images, and evaluated on the 50k validation images."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We conducted more studies on the CIFAR-10 dataset, which consists of 50k training images and 10k testing images in 10 classes."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We adopt Faster R-CNN as the detection method."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在ImageNet上，34层普通网络比18层普通网络具有更高的验证误差，且34层普通网络在整个训练过程中训练误差都更高 [S4.SS1.p3]。使用残差学习后情况反转：34层ResNet优于18层ResNet（约2.8%），且34层ResNet相比其普通对应网络将top-1误差降低约3.5% [S4.SS1.p6][S4.SS1.p7]。50/101/152层ResNet比34层ResNet准确率更高，未观察到退化问题，并从深度增加中获得显著准确率提升 [S4.SS1.p15]。在CIFAR-10上，深层普通网络同样随深度增加训练误差更高，而ResNet克服了优化困难并在深度增加时表现出准确率提升 [S4.SS2.p4][S4.SS2.p5]。1202层网络训练误差低于0.1%，但测试误差为7.93%，差于110层网络 [S4.SS2.p8][S4.SS2.p9]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p3",
+          "quote": "The results in Table 2 show that the deeper 34-layer plain net has higher validation error than the shallower 18-layer plain net."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "We have observed the degradation problem - the 34-layer plain net has higher training error throughout the whole training procedure"
+        },
+        {
+          "id": "S4.SS1.p6",
+          "quote": "First, the situation is reversed with residual learning – the 34-layer ResNet is better than the 18-layer ResNet (by 2.8%)."
+        },
+        {
+          "id": "S4.SS1.p7",
+          "quote": "Second, compared to its plain counterpart, the 34-layer ResNet reduces the top-1 error by 3.5% (Table 2), resulting from the successfully reduced training error"
+        },
+        {
+          "id": "S4.SS1.p15",
+          "quote": "The 50/101/152-layer ResNets are more accurate than the 34-layer ones by considerable margins (Table 3 and 5)."
+        },
+        {
+          "id": "S4.SS1.p15",
+          "quote": "We do not observe the degradation problem and thus enjoy significant accuracy gains from considerably increased depth."
+        },
+        {
+          "id": "S4.SS2.p4",
+          "quote": "The deep plain nets suffer from increased depth, and exhibit higher training error when going deeper."
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases."
+        },
+        {
+          "id": "S4.SS2.p8",
+          "quote": "this $10^{3}$ -layer network is able to achieve training error $<$ 0.1% (Fig. 6, right). Its test error is still fairly good (7.93%, Table 6)."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，1202层网络测试结果差于110层网络，认为这是因为过拟合，该网络对此小数据集可能不必要地大，本文未使用maxout/dropout，仅通过深而窄的架构施加正则化，结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。作者还指出，深层普通网络优化困难的原因将在未来研究 [S4.SS1.p4]。此外，作者提到多尺度训练因时间有限未进行，多尺度测试也仅用于Fast R-CNN步骤而未用于RPN步骤 [A2.p5]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "We argue that this is because of overfitting. The 1202-layer network may be unnecessarily large (19.4M) for this small dataset."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "In this paper, we use no maxout/dropout and just simply impose regularization via deep and thin architectures by design"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "But combining with stronger regularization may improve results, which we will study in the future."
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "The reason for such optimization difficulties will be studied in the future."
+        },
+        {
+          "id": "A2.p5",
+          "quote": "we have not performed multi-scale training because of limited time."
+        },
+        {
+          "id": "A2.p5",
+          "quote": "In addition, we have performed multi-scale testing only for the Fast R-CNN step (but not yet for the RPN step)."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12121,
+      "completion_tokens": 2218,
+      "elapsed_s": 7.92
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 29,
+    "quote_rate": 1.0,
+    "inline_hits": 19,
+    "inline_total": 19,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_cover",
+    "hash": "a5238a9a"
+  }
+}

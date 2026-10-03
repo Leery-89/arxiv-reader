@@ -1,0 +1,120 @@
+{
+  "paper": {
+    "arxiv_id": "2502.13923",
+    "title": "Qwen2.5-VL Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 51134,
+    "n_sections": 33,
+    "n_paragraphs": 95
+  },
+  "result": {
+    "summary": "Qwen2.5-VL 是 Qwen 视觉语言系列的最新旗舰模型，在视觉识别、目标定位、文档解析和长视频理解等方面取得显著进展 [abstract]。该模型通过从头训练原生动态分辨率 ViT 并引入窗口注意力来降低计算开销，同时采用动态分辨率处理和绝对时间编码以处理不同尺寸图像和长达数小时的视频 [abstract]。模型提供 72B、7B 和 3B 三种规模，旗舰 72B 模型在文档和图表理解上可与 GPT-4o 和 Claude 3.5 Sonnet 匹敌，较小模型也优于同类竞品 [abstract]。",
+    "research_question": {
+      "text": "论文旨在探索细粒度感知能力，为 LVLM 建立坚实基础，并打造面向真实应用的智能体放大器 [S1.p1]。当前视觉语言模型面临计算复杂度、上下文理解有限、细粒度视觉感知差以及不同序列长度下性能不一致等发展瓶颈 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "In this iteration of Qwen2.5-VL, we are committed to exploring fine-grained perception capabilities, aiming to establish a robust foundation for LVLMs and create an agentic amplifier for real-world applications."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "vision-language models currently face developmental bottlenecks, including computational complexity, limited contextual understanding, poor fine-grained visual perception, and inconsistent performance across varied sequence length."
+        }
+      ]
+    },
+    "method": {
+      "text": "Qwen2.5-VL 的架构由视觉编码器、基于 MLP 的视觉-语言合并器和大型语言模型三部分组成 [S2.SS1.p1]。视觉编码器采用重新设计的 ViT，引入 2D-RoPE 和窗口注意力以支持原生输入分辨率并加速计算 [S2.SS1.p3]。模型将 MRoPE 的时间分量与绝对时间对齐，使模型能够学习不同 FPS 采样率视频间一致的时间对齐 [S2.SS1.SSS3.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The overall model architecture of Qwen2.5-VL consists of three components:"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "we incorporate 2D-RoPE and window attention to support native input resolutions while accelerating the computation of the entire visual encoder."
+        },
+        {
+          "id": "S2.SS1.SSS3.p3",
+          "quote": "Qwen2.5-VL introduces a key improvement: aligning the temporal component of MRoPE with absolute time."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验将 Qwen2.5-VL 与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 以及不同规模的 Qwen2-VL 等最先进模型进行对比 [S3.SS1.p1]。评估覆盖通用视觉问答、文档理解与 OCR、空间理解、视频理解与定位以及智能体等多个子能力 [S3.p1]。在视频基准评估中，每个视频分析的最大帧数被限制为 768 帧，视频 token 总数不超过 24,576 [S3.SS3.SSS4.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "comparing it with state-of-the-art models such as Claude-3.5-Sonnet-0620, GPT-4o-0513, InternVL2.5, and different sizes of Qwen2-VL."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "Then, we evaluate the model’s performance across various sub-capabilities."
+        },
+        {
+          "id": "S3.SS3.SSS4.p2",
+          "quote": "we capped the maximum number of frames analyzed per video at 768, with the total number of video tokens not exceeding 24,576."
+        }
+      ]
+    },
+    "findings": {
+      "text": "Qwen2.5-VL-72B 在 MMMU 上取得 70.2 分，在 MMMU-Pro 上取得 51.1 分，超越此前开源最先进模型并与 GPT-4o 相当 [S3.SS1.p1]。在 MathVista 上取得 74.8 分，超过此前开源最先进分数 72.3 [S3.SS1.p2]。在 OCRBench_v2 上，Qwen2.5-VL 模型在英文和中文赛道上分别大幅超过最佳模型 Gemini 1.5-Pro 达 9.6% 和 20.6% [S3.SS3.SSS2.p4]。在 Charades-STA 数据集上，Qwen2.5-VL-72B 取得 50.9 的 mIoU 分数，超过 GPT-4o [S3.SS3.SSS4.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "Qwen2.5-VL-72B achieves a score of 70.2 on MMMU."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "For MMMU-Pro, Qwen2.5-VL-72B scores 51.1, surpassing the previous open-source state-of-the-art models and achieving performance comparable to GPT-4o."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "On MathVista, it achieves a score of 74.8, outperforming the previous open-source state-of-the-art score of 72.3."
+        },
+        {
+          "id": "S3.SS3.SSS2.p4",
+          "quote": "largely exceeding best model Gemini 1.5-Pro by 9.6% and 20.6% for English and Chinese track respectively."
+        },
+        {
+          "id": "S3.SS3.SSS4.p2",
+          "quote": "Qwen2.5-VL-72B achieves an impressive mIoU score of 50.9, thereby surpassing the performance of GPT-4o."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "论文指出，在将思维链推理应用于视觉语言模型时，中间推理步骤可能无法充分整合视觉信息，要么忽略相关视觉线索，要么误解它们；尽管开发了基于规则和模型驱动的过滤策略来验证中间推理步骤的准确性，实现最优的模态对齐仍是一个持续存在的挑战，需要进一步改进 [S2.SS3.SSS3.p4]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "Intermediate reasoning steps may fail to adequately integrate visual information, either by ignoring relevant visual cues or misinterpreting them."
+        },
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "Despite these efforts, achieving optimal modality alignment remains an ongoing challenge that requires further advancements."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12649,
+      "completion_tokens": 1552,
+      "elapsed_s": 5.83
+    }
+  },
+  "verify": {
+    "quote_hits": 15,
+    "quote_total": 15,
+    "quote_rate": 1.0,
+    "inline_hits": 13,
+    "inline_total": 13,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "long",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "paper": {
+    "arxiv_id": "2407.06858",
+    "title": "Accurate and Robust Stellar Rotation Periods catalog for 82771 Kepler stars using deep learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75869,
+    "n_sections": 28,
+    "n_paragraphs": 82
+  },
+  "result": {
+    "summary": "本文提出了 LightPred，一个从 Kepler 光变曲线中提取恒星自转周期的深度学习模型，采用 LSTM 与 Transformer 双分支架构，并先以自监督对比学习在 Kepler 数据上预训练、再用模拟光变曲线做监督训练 [abstract][S1.p3][S4.SS2.p1]。在模拟数据上，LightPred 在准确率和平均误差上优于 ACF 等经典方法，并能给出置信度 [abstract][S5.SS1.p2]。作者将其应用于 Kepler 数据，生成了迄今最大的自转周期星表，最终给出 82771 条可靠预测 [abstract][S5.SS3.p2]。分析还确认了轨道周期短于 10 天的食双星存在潮汐同步，并表明深度学习可用于从光变曲线中提取恒星基本属性 [abstract][S6.p3]。",
+    "research_question": {
+      "text": "论文要解决的是如何从 Kepler 光变曲线中准确、稳健地测量恒星自转周期，尤其是面向大样本主序星 [S1.p1][S1.p3]。经典方法如 Lomb-Scargle 周期图和自相关函数虽然成功，但耗时、难以应用于大数据集，且常难以处理具有多个周期或演化黑子图案的复杂光变曲线 [S1.p2]。作者指出经典方法的一个缺点是难以给出预测的不确定度，而这对评估结果可靠性至关重要 [S1.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "The study of stellar rotation periods has become increasingly important in our understanding of stellar evolution, activity cycles, and exoplanet detection."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Classical methods for measuring rotation periods, such as Lomb-Scargle periodograms and autocorrelation functions, have been successful"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "but can be time-consuming and challenging to apply to large datasets."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Furthermore, these methods often struggle with complex light curves that exhibit multiple periodicities or evolving spot patterns."
+        },
+        {
+          "id": "S1.SS1.p1",
+          "quote": "One shortcoming of classical methods is their inability to provide uncertainty estimates for predictions, which are essential for evaluating the reliability of the results."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we present a novel deep-learning approach for measuring stellar rotation periods using Kepler light curves."
+        }
+      ]
+    },
+    "method": {
+      "text": "LightPred 采用双分支架构：时间分支以 Diff-ACF 为输入，包含卷积嵌入块、双向 LSTM 和自注意力块；全局分支以 Diff-Lc 为输入，基于修改后的 AstroConformer（Conformer）结构 [S3.SS1.p2][S3.SS1.p3]。两个分支的特征拼接后送入预测头，输出四个数值：自转周期、倾角、周期置信度和倾角置信度 [S3.SS1.p4]。训练采用两步流程：先用 Kepler 样本进行自监督对比学习（SSL），再以模拟数据集进行基于模拟的监督学习（SBSL） [S4.SS2.p1]。预处理包括截取 720 天片段、注入 Kepler 噪声、Savitzky-Golay 滤波、计算差分光变曲线（Diff-Lc）及其自相关（Diff-ACF），并归一化为双通道时间序列 [S2.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p2",
+          "quote": "Temporal branch - consists of an ”embedding” convolution block with max pool, dropout, batch normalization, skip connection, a bi-directional LSTM block, and a non-learnable self-attention block."
+        },
+        {
+          "id": "S3.SS1.p3",
+          "quote": "Global branch - here we follow the recent work of called Astroconformer."
+        },
+        {
+          "id": "S3.SS1.p4",
+          "quote": "The output of the model is four numbers: rotation period, inclination, period confidence score, and inclination confidence score."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "To train the model, we used a 2-step pipeline; First, we trained the model, without the prediction head, in a self-supervised fashion, with Kepler samples."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "Next, we used the weights from the SSL Step as an initialization for supervised training with the mock dataset."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "We then applied a Savitzky-Golay filter with a window of 13 time-points ( $6h$) and created a time series of differences between consecutive time stamps to reduce long-term variations."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "The result is a two-channel time series which is the input for the model."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者使用 Butterpy 生成的模拟光变曲线构建监督训练数据集，共 50000 个样本，按 81%/9%/10% 划分为训练、验证和测试集 [S2.SS1.p1][S4.SS2.p1]。为与 Tel-Aviv 团队比较，另生成 50000 个采用相同先验分布的样本，并使用 acc10p、acc20p 和平均绝对误差（mean_err）作为指标 [S5.SS1.p1]。在 Kepler 数据上，作者下载 Data Release 25 长节奏数据，经预处理后保留 130868 个样本用于 SSL 和推断 [S2.SS3.p1][S5.SS2.p1]。推断时筛选 Teff<7000K 并剔除已知污染源，得到 108096 个样本 [S5.SS2.SSS1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To create a dataset for supervised training we used simulated light curves using Butterpy, a python package described in."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "This was done on a dataset of 50000 simulated samples of 1000 days that were generated as explained in II.1 and II.2."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We then split the dataset into training ( $81\\%$), validation ( $9\\%$), and test sets ( $10\\%$)."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "To compare our results with we created another 50000 samples dataset, this time with the same prior distributions as in."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We also adopted the same metrics - the percentage of samples that lie within 10% error ( acc10p) and the percentage of samples that lie within 20% error ( acc20p)."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "First, we downloaded the long cadence Kepler dataset Data Release 25."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "This left us with 130868 which serves both for the SSL step and the inference."
+        },
+        {
+          "id": "S5.SS2.SSS1.p1",
+          "quote": "Out of the 130868 predictions we filtered out stars with $Teff<7000K$ which gave us 126029 samples."
+        },
+        {
+          "id": "S5.SS2.SSS1.p1",
+          "quote": "this leaves us with 108096 samples."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在模拟数据上，LightPred 在噪声和无噪声样本上的表现均优于 Tel-Aviv 团队报告的 ACF 结果 [S5.SS1.p2]。与作者自己实现的 ACF 和 GPS 相比，LightPred 能预测全部样本，而 ACF 和 GPS 仅有效预测约 85% 的数据；在 ACF 可预测的子集上，两者 acc10p 和 acc20p 相当，但 LightPred 平均误差显著更低 [S5.SS1.p2]。模型输出的置信度与绝对误差呈高置信度、低误差的趋势 [S5.SS1.p3]。在 Kepler 数据上，LightPred 的观测误差分布比 ACF 更集中，在全部样本上误差更低，在 ACF 有效子集上误差略低 [S5.SS2.SSS2.p2]。自监督预训练显著改善 Kepler 数据上的观测误差（约低 3 倍） [S5.SS2.SSS2.p3]。分析确认了轨道周期短于 10 天的食双星存在潮汐同步 [abstract][S6.p3]。最终星表包含 82771 条可靠预测 [S5.SS3.p2]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.p2",
+          "quote": "It can be seen that our results are better for both noisy and noiseless samples."
+        },
+        {
+          "id": "S5.SS1.p2",
+          "quote": "It can be seen that both ACF and GPS predicted effectively $\\sim 85\\%$ of the dataset while our model predicted the entire dataset."
+        },
+        {
+          "id": "S5.SS1.p2",
+          "quote": "For a subset of valid predictions, we see that the performance of ACF is comparable to our model in terms of acc10p and acc20p but our model shows significantly lower average error."
+        },
+        {
+          "id": "S5.SS1.p3",
+          "quote": "The trend of high confidence and low error, which can be easily seen in the figure, implies that the model was able to infer which samples are ”harder” for it to determine the stellar properties."
+        },
+        {
+          "id": "S5.SS2.SSS2.p2",
+          "quote": "Our model shows more concentrated distributions and when considering the entire samples (left panel), our model has much lower error."
+        },
+        {
+          "id": "S5.SS2.SSS2.p2",
+          "quote": "When considering only ACF-valid samples (right panel), The errors are comparable, with LightPred error slightly lower than ACF error."
+        },
+        {
+          "id": "S5.SS2.SSS2.p3",
+          "quote": "While the improvement on simulation metrics is modest, the improvement on Kepler data is significant ( $\\sim 3$ times lower observational error)."
+        },
+        {
+          "id": "S6.p3",
+          "quote": "Furthermore, our analysis of eclipsing binaries confirms tidal synchronization in systems with orbital periods shorter than 10 days, further validating our approach."
+        },
+        {
+          "id": "S5.SS3.p2",
+          "quote": "This procedure left us with 82771 reliable predictions."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，模拟所基于的黑子模型存在倾角与黑子位置之间的内在简并，且模型依赖先验分布，黑子分布在模型中会对结果产生很大影响 [S2.SS1.p1]。作者承认，打乱季度（90 天）的数据增强可能移除相位信息并潜在妨碍长周期探测 [S2.SS3.p1]。对于周期大于 25 天的样本，模拟误差与观测误差的相关性不同，可能与较老恒星活动性下降有关 [S5.SS2.SSS1.p2]。作者还指出，对于 P_orb<3 天的极快自转体，模型存在局限 [S5.SS2.SSS4.p5]。此外，对于光变曲线周期性发生剧烈变化的样本，模型通常给出“平均”预测，作者认为哪种结果更好尚不明确 [S5.SS2.SSS5.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The suggested model implies an inherent degeneracy between inclination and spot location."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "This implies that the model is prior-depended: the distribution of spots in the model has a large effect on the results."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We acknowledge that shuffling quarters (90 Days) might remove phase information and potentially hinder the detection of long periods."
+        },
+        {
+          "id": "S5.SS2.SSS1.p2",
+          "quote": "For longer periods the correlation is different which might be related to a drop in the activity for older stars."
+        },
+        {
+          "id": "S5.SS2.SSS4.p5",
+          "quote": "For $P_{orb}<3$ Days and $P_{orb}>10$ Days we do not see synchronization."
+        },
+        {
+          "id": "S5.SS2.SSS4.p5",
+          "quote": "While the latter is expected, the former can be assigned to the limitations of the model with very fast rotators, exactly as we saw in Figure 9."
+        },
+        {
+          "id": "S5.SS2.SSS5.p3",
+          "quote": "It is not clear which result is better in general."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 17776,
+      "completion_tokens": 2905,
+      "elapsed_s": 11.2
+    }
+  },
+  "verify": {
+    "quote_hits": 38,
+    "quote_total": 38,
+    "quote_rate": 1.0,
+    "inline_hits": 27,
+    "inline_total": 28,
+    "inline_rate": 0.964,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

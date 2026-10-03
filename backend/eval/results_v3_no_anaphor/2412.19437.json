@@ -1,0 +1,174 @@
+{
+  "paper": {
+    "arxiv_id": "2412.19437",
+    "title": "DeepSeek-V3 Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 97112,
+    "n_sections": 89,
+    "n_paragraphs": 160
+  },
+  "result": {
+    "summary": "DeepSeek-V3 是一个总参数 671B、每 token 激活 37B 的 MoE 语言模型，采用 MLA 与 DeepSeekMoE 架构，并引入无辅助损失的负载均衡策略和多 token 预测训练目标 [abstract][S1.p2]。模型在 14.8T token 上预训练，随后经过 SFT 与 RL 阶段，完整训练仅需 2.788M H800 GPU 小时 [abstract][S1.p6]。综合评测显示其性能超过其他开源模型，并可与领先闭源模型相比 [abstract][S1.p5]。训练过程稳定，未出现不可恢复的 loss spike 或回滚 [abstract][S1.p4]。",
+    "research_question": {
+      "text": "论文旨在进一步推动开源模型能力边界，通过扩大模型规模并引入 DeepSeek-V3 来缩小与闭源模型的差距 [S1.p1]。同时，研究追求强模型性能与经济成本的兼顾，因此在架构上继续采用 MLA 和 DeepSeekMoE [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "To further push the boundaries of open-source model capabilities, we scale up our models and introduce DeepSeek-V3"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "we consistently strive for strong model performance and economical costs"
+        }
+      ]
+    },
+    "method": {
+      "text": "DeepSeek-V3 采用 MLA 进行高效推理、DeepSeekMoE 进行经济训练，并首创无辅助损失的负载均衡策略以减小负载均衡对模型性能的不利影响 [S1.p2][S2.SS1.p1]。模型还设置了多 token 预测训练目标，并采用 FP8 混合精度训练框架，首次在极大规模模型上验证其有效性 [S1.p2][S1.p3]。训练框架方面设计了 DualPipe 算法以实现高效的流水线并行，并开发跨节点 all-to-all 通信内核 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 still adopts Multi-head Latent Attention (MLA) for efficient inference and DeepSeekMoE for cost-effective training"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 pioneers an auxiliary-loss-free strategy for load balancing"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 employs a multi-token prediction training objective"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "we introduce an FP8 mixed precision training framework and, for the first time, validate its effectiveness on an extremely large-scale model"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "we design the DualPipe algorithm for efficient pipeline parallelism"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "we additionally introduce an auxiliary-loss-free load balancing strategy for DeepSeekMoE to mitigate the performance degradation"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "模型在 14.8T 高质量多语言 token 上预训练，最大序列长度 4K，随后通过两阶段 YaRN 扩展将上下文从 4K 扩展到 32K 再到 128K [S4.SS2.SSS0.Px2.p1][S4.SS3.p1]。训练使用 2048 块 NVIDIA H800 GPU 集群，采用 16 路流水线并行、64 路专家并行和 ZeRO-1 数据并行 [S3.SS1.p1][S3.SS2.p1]。评测覆盖多学科选择题、语言理解与推理、闭卷问答、阅读理解、数学、代码等基准，并采用困惑度或生成式评估 [S4.SS4.SSS1.p2][S4.SS4.SSS1.p12]。后训练阶段使用 1.5M 指令微调实例，并采用 GRPO 进行强化学习 [S5.SS1.p1][S5.SS2.SSS2.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "We set the maximum sequence length to 4K during pre-training, and pre-train DeepSeek-V3 on 14.8T tokens"
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "progressively expand the context window from 4K to 32K and then to 128K"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "DeepSeek-V3 is trained on a cluster equipped with 2048 NVIDIA H800 GPUs"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "DeepSeek-V3 applies 16-way Pipeline Parallelism (PP), 64-way Expert Parallelism (EP) spanning 8 nodes, and ZeRO-1 Data Parallelism (DP)"
+        },
+        {
+          "id": "S4.SS4.SSS1.p2",
+          "quote": "Multi-subject multiple-choice datasets include MMLU, MMLU-Redux, MMLU-Pro, MMMLU, C-Eval, and CMMLU"
+        },
+        {
+          "id": "S4.SS4.SSS1.p12",
+          "quote": "we adopt perplexity-based evaluation for datasets including HellaSwag, PIQA, WinoGrande"
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We curate our instruction-tuning datasets to include 1.5M instances spanning multiple domains"
+        },
+        {
+          "id": "S5.SS2.SSS2.p1",
+          "quote": "we adopt Group Relative Policy Optimization (GRPO)"
+        }
+      ]
+    },
+    "findings": {
+      "text": "综合评测显示 DeepSeek-V3 超过其他开源模型，并达到与领先闭源模型可比的性能 [abstract][S1.p5]。基础模型在多数基准上表现最佳，尤其在数学和代码任务上 [S4.T3]。聊天版本在 Arena-Hard 上对基线 GPT-4-0314 取得超过 86% 的胜率，成为首个在该基准上超过 85% 的开源模型 [S5.SS3.SSS3.p1]。训练过程稳定，未出现不可恢复的 loss spike 或回滚 [abstract][S1.p4]。完整训练仅需 2.788M H800 GPU 小时，成本约 5.576M 美元 [S1.p6]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "DeepSeek-V3 outperforms other open-source models and achieves performance comparable to leading closed-source models"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "DeepSeek-V3-Base has emerged as the strongest open-source base model currently available, especially in code and math"
+        },
+        {
+          "id": "S4.T3",
+          "quote": "DeepSeek-V3-Base achieves the best performance on most benchmarks, especially on math and code tasks"
+        },
+        {
+          "id": "S5.SS3.SSS3.p1",
+          "quote": "DeepSeek-V3 achieves an impressive win rate of over 86% against the baseline GPT-4-0314"
+        },
+        {
+          "id": "S5.SS3.SSS3.p1",
+          "quote": "DeepSeek-V3 achieves a groundbreaking milestone as the first open-source model to surpass 85% on the Arena-Hard benchmark"
+        },
+        {
+          "id": "abstract",
+          "quote": "we did not experience any irrecoverable loss spikes or perform any rollbacks"
+        },
+        {
+          "id": "S1.p6",
+          "quote": "DeepSeek-V3 costs only 2.788M GPU hours for its full training"
+        },
+        {
+          "id": "S1.p6",
+          "quote": "our total training costs amount to only $5.576M"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认 DeepSeek-V3 在部署方面存在局限：为保证高效推理，推荐部署单元相对较大，可能给小团队带来负担 [S6.p2]。此外，尽管端到端生成速度已超过 DeepSeek-V2 两倍，仍有进一步提升的空间 [S6.p2]。作者表示这些局限有望随更先进硬件的发展自然解决 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "the recommended deployment unit for DeepSeek-V3 is relatively large, which might pose a burden for small-sized teams"
+        },
+        {
+          "id": "S6.p2",
+          "quote": "there still remains potential for further enhancement"
+        },
+        {
+          "id": "S6.p2",
+          "quote": "these limitations are expected to be naturally addressed with the development of more advanced hardware"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 24903,
+      "completion_tokens": 1913,
+      "elapsed_s": 7.36
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 24,
+    "inline_total": 25,
+    "inline_rate": 0.96,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S1.p4",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "long",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

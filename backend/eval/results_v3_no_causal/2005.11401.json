@@ -1,0 +1,192 @@
+{
+  "paper": {
+    "arxiv_id": "2005.11401",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 40572,
+    "n_sections": 46,
+    "n_paragraphs": 61
+  },
+  "result": {
+    "summary": "本文提出检索增强生成（RAG）模型，将预训练参数记忆（BART）与非参数记忆（Wikipedia 稠密向量索引，经 DPR 检索）结合，并端到端微调 [S1.p2]。作者比较了 RAG-Sequence 与 RAG-Token 两种形式，前者对整个生成序列使用同一检索文档，后者允许每个 token 使用不同文档 [S2.p2]。在多个知识密集型任务上，RAG 在三个开放域问答任务上取得当时最优结果，并在 Jeopardy 问题生成等任务上生成比纯参数 BART 更具体、多样和事实准确的文本 [S1.p4]。作者还展示了通过替换非参数记忆索引即可更新模型知识 [S1.p4]。",
+    "research_question": {
+      "text": "论文关注预训练语言模型在知识密集型任务上的局限：它们难以扩展或修改记忆、难以提供预测依据，并可能产生“幻觉” [S1.p1]。已有结合参数与非参数记忆的模型（如 REALM 和 ORQA）仅探索了开放域抽取式问答，本文希望将这种混合记忆引入序列到序列模型 [S1.p1]。作者将知识密集型任务定义为人类在没有外部知识源时无法合理完成的任务 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "They cannot easily expand or revise their memory, can’t straightforwardly provide insight into their predictions, and may produce “hallucinations”."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "REALM and ORQA, two recently introduced models that combine masked language models with a differentiable retriever, have shown promising results, but have only explored open-domain extractive question answering."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Here, we bring hybrid parametric and non-parametric memory to the “workhorse of NLP,” i.e. sequence-to-sequence (seq2seq) models."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "tasks that humans could not reasonably be expected to perform without access to an external knowledge source."
+        }
+      ]
+    },
+    "method": {
+      "text": "RAG 模型使用输入序列检索文本文档，并将其作为生成目标序列的额外上下文 [S2.p1]。模型包含两个组件：检索器 p_η(z|x) 返回 top-K 文本段落分布，生成器 p_θ(y_i|x,z,y_{1:i-1}) 基于前 i-1 个 token、原始输入和检索段落生成当前 token [S2.p1]。检索文档被视为隐变量，作者提出 RAG-Sequence（整个序列使用同一文档）和 RAG-Token（每个 token 可使用不同文档）两种边缘化方式 [S2.p2]。检索器基于 DPR 双编码器，生成器使用 BART-large，训练时联合微调查询编码器和 BART 生成器，固定文档编码器和索引 [S2.SS2.p1][S2.SS3.p1][S2.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "We explore RAG models, which use the input sequence $x$ to retrieve text documents $z$ and use them as additional context when generating the target sequence $y$."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "a retriever $p_{\\eta}(z|x)$ with parameters $\\eta$ that returns (top-K truncated) distributions over text passages given a query $x$"
+        },
+        {
+          "id": "S2.p1",
+          "quote": "a generator $p_{\\theta}(y_{i}|x,z,y_{1:i-1})$ parametrized by $\\theta$ that generates a current token based on a context of the previous $i-1$ tokens $y_{1:i-1}$, the original input $x$ and a retrieved passage $z$."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "In one approach, RAG-Sequence, the model uses the same document to predict each target token."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "The second approach, RAG-Token, can predict each target token based on a different document."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "The retrieval component $p_{\\eta}(z|x)$ is based on DPR."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We use BART-large, a pre-trained seq2seq transformer with 400M parameters."
+        },
+        {
+          "id": "S2.SS4.p1",
+          "quote": "We do not find this step necessary for strong performance, and keep the document encoder (and index) fixed, only fine-tuning the query encoder $\\text{BERT}_{q}$ and the BART generator."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "所有实验使用 2018 年 12 月的 Wikipedia dump 作为非参数知识源，每篇文章切分为 100 词的不重叠块，共 2100 万文档，使用 FAISS 构建 MIPS 索引 [S3.p1]。训练时检索 top k 文档，k 取 5 或 10，测试时 k 由开发集确定 [S3.p1]。实验覆盖开放域问答（Natural Questions、TriviaQA、WebQuestions、CuratedTrec）、抽象问答（MSMARCO NLG）、Jeopardy 问题生成和 FEVER 事实核查 [S3.SS1.p1][S3.SS2.p1][S3.SS3.p1][S3.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "For all experiments, we use a single Wikipedia dump for our non-parametric knowledge source."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "Each Wikipedia article is split into disjoint 100-word chunks, to make a total of 21M documents."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We use the document encoder to compute an embedding for each document, and build a single MIPS index using FAISS with a Hierarchical Navigable Small World approximation for fast retrieval."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We consider $k\\in\\{5,10\\}$ for training and set $k$ for test time using dev data."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We consider four popular open-domain QA datasets: Natural Questions (NQ), TriviaQA (TQA). WebQuestions (WQ) and CuratedTrec (CT)."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "To test RAG’s natural language generation (NLG) in a knowledge-intensive setting, we use the MSMARCO NLG task v2.1."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "we propose the more demanding task of generating Jeopardy questions."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "FEVER requires classifying whether a natural language claim is supported or refuted by Wikipedia, or whether there is not enough information to decide."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在四个开放域问答任务上，RAG 均取得新的最优结果（TQA 仅在 T5 可比划分上） [S4.SS1.p1]。RAG 无需重排序器或抽取式阅读器即可达到最优性能，并且当正确答案不在任何检索文档中时，RAG 在 NQ 上仍能达到 11.8% 的准确率，而抽取式模型为 0% [S4.SS1.p1][S4.SS1.p2]。在 MS-MARCO NLG 上，RAG-Sequence 比 BART 高 2.6 Bleu 和 2.6 Rouge-L [S4.SS2.p1]。在 Jeopardy 问题生成中，RAG-Token 优于 RAG-Sequence，两者均优于 BART；人类评估中 RAG 在 42.7% 的情况下比 BART 更事实准确，而 BART 仅在 7.1% 的情况下更事实准确 [S4.SS3.p1]。在 FEVER 上，RAG 的 3 路分类结果与最优模型相差 4.3% 以内，2 路分类相差 2.7% 以内 [S4.SS4.p1]。通过替换索引，RAG 可以更新世界知识 [S4.SS5.SSS0.Px3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "On all four open-domain QA tasks, RAG sets a new state of the art (only on the T5-comparable split for TQA)."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance."
+        },
+        {
+          "id": "S4.SS1.p2",
+          "quote": "RAG can generate correct answers even when the correct answer is not in any retrieved document, achieving 11.8% accuracy in such cases for NQ, where an extractive model would score 0%."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "RAG-Sequence outperforms BART on Open MS-MARCO NLG by 2.6 Bleu points and 2.6 Rouge-L points."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "RAG-Token performs better than RAG-Sequence on Jeopardy question generation, with both models outperforming BART on Q-BLEU-1."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Evaluators indicated that BART was more factual than RAG in only 7.1% of cases, while RAG was more factual in 42.7% of cases"
+        },
+        {
+          "id": "S4.SS4.p1",
+          "quote": "For 3-way classification, RAG scores are within 4.3% of state-of-the-art models"
+        },
+        {
+          "id": "S4.SS4.p1",
+          "quote": "RAG achieves an accuracy within 2.7% of this model, despite being supplied with only the claim and retrieving its own evidence."
+        },
+        {
+          "id": "S4.SS5.SSS0.Px3.p1",
+          "quote": "This shows we can update RAG’s world knowledge by simply replacing its non-parametric memory."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，在初步实验中，对于故事生成等任务，检索组件会“崩溃”，无论输入如何都检索相同文档，此时生成器学会忽略文档，RAG 表现与 BART 相当 [A8.p1]。FEVER 的另一个子任务——从 Wikipedia 抽取支持分类的句子——由于 FEVER 使用不同的 Wikipedia dump，直接处理并不简单，作者希望在未来工作中解决 [A5.p1]。此外，作者尝试了 Null document 机制但未发现性能提升，因此在简单性考虑下省略 [A6.p1]。",
+      "evidence": [
+        {
+          "id": "A8.p1",
+          "quote": "In preliminary experiments, we observed that for some tasks such as story generation, the retrieval component would “collapse” and learn to retrieve the same documents regardless of the input."
+        },
+        {
+          "id": "A8.p1",
+          "quote": "In these cases, once retrieval had collapsed, the generator would learn to ignore the documents, and the RAG model would perform equivalently to BART."
+        },
+        {
+          "id": "A5.p1",
+          "quote": "As FEVER uses a different Wikipedia dump to us, directly tackling this task is not straightforward. We hope to address this in future work."
+        },
+        {
+          "id": "A6.p1",
+          "quote": "We did not find that these improved performance, so in the interests of simplicity, we omit them."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 10758,
+      "completion_tokens": 2670,
+      "elapsed_s": 9.5
+    }
+  },
+  "verify": {
+    "quote_hits": 33,
+    "quote_total": 33,
+    "quote_rate": 1.0,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_causal",
+    "hash": "96f21339"
+  }
+}

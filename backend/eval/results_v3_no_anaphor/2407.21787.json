@@ -1,0 +1,151 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21787",
+    "title": "Large Language Monkeys : Scaling Inference Compute with Repeated Sampling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 49608,
+    "n_sections": 29,
+    "n_paragraphs": 96
+  },
+  "result": {
+    "summary": "本文研究将推理计算作为新的扩展维度，通过重复采样提升语言模型在推理任务上的表现 [S1.p3]。作者在五个任务上系统评估了覆盖率随采样数增加的变化，发现覆盖率与采样数常呈对数线性关系，可用指数幂律建模 [S1.p7][S3.p2]。在具有自动验证器的编码和形式证明任务中，覆盖率提升直接转化为性能提升，例如在 SWE-bench Lite 上使用 DeepSeek-Coder-V2-Instruct 将解决率从单样本的 15.9% 提升到 250 个样本的 56%，超过单样本最优的 43% [S1.p8]。但在没有自动验证器的数学应用题中，常用的多数投票和奖励模型方法在数百个样本后趋于饱和，无法充分利用覆盖率提升 [S1.p10]。",
+    "research_question": {
+      "text": "本文旨在探索重复采样作为一种简单的推理计算扩展方法，以提升语言模型的推理性能 [S1.p3]。作者指出，尽管训练计算扩展已显著提升模型能力，但推理时通常只允许模型进行一次尝试，对推理计算的投入相对有限 [S1.p2]。研究动机是系统性地刻画重复采样在不同任务、模型和采样预算下的收益，并区分覆盖率与精确度两个关键属性 [S1.p3][S1.p5]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this work, we explore repeated sampling (Figure 1) as a simple approach to scaling inference compute in order to improve reasoning performance."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "However, when interacting with LLMs, users and developers often restrict models to making only one attempt when solving a problem."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "1. Coverage: As the number of samples increases, what fraction of problems can we solve using any sample that was generated? 2. Precision: How often can we identify correct samples from our collection of generations?"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用重复采样方法：对每个问题，使用正温度从语言模型独立采样多个候选解，然后使用领域特定的验证器（如代码的单元测试、Lean4 证明检查器）从生成的样本中选择最终答案 [S1.F1]。作者使用无偏估计公式计算 pass@k 作为覆盖率指标，并采用指数幂律 log(c) ≈ a k^b 对覆盖率与采样数的关系进行建模 [S2.p5][S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.F1",
+          "quote": "1) We generate many independent candidate solutions for a given problem by sampling from an LLM with a positive temperature. 2) We use a domain-specific verifier (ex. unit tests for code) to select a final answer from the generated samples."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "In coding settings, our definition of coverage is equivalent to the commonly-used pass@k metric, where $k$ denotes the number of samples per problem."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We start by adopting the same function class, but now modelling the log of coverage $c$ as a function of the number of samples $k$: $\\displaystyle\\log(c)\\approx ak^{b}$ (2)"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在五个任务上进行评估：GSM8K、MATH、MiniF2F-MATH、CodeContests 和 SWE-bench Lite [S2.p4]。对于前四个任务，使用 Llama-3-8B-Instruct 和 Llama-3-70B-Instruct 生成每个问题 10,000 个独立样本；对于 SWE-bench Lite，使用 DeepSeek-Coder-V2-Instruct 和 Moatless Tools 框架，每个问题限制 250 次尝试 [S2.SS1.p1]。此外，还在 MATH 和 CodeContests 上评估了更广泛的模型系列，包括 Llama 3、Gemma 和 Pythia（70M 到 70B 参数）[S2.SS2.p2]。",
+      "evidence": [
+        {
+          "id": "S2.p4",
+          "quote": "We consider the following five tasks: 1. GSM8K: A dataset of grade-school level math word problems."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We evaluate Llama-3-8B-Instruct and Llama-3-70B-Instruct on CodeContests, MiniF2F, GSM8K, and MATH, generating 10,000 independent samples per problem."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "For SWE-bench Lite, we use DeepSeek-Coder-V2-Instruct, as the required context length of this task exceeds the limits of the Llama-3 models."
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "• Llama 3: Llama-3-8B, Llama-3-8B-Instruct, Llama-3-70B-Instruct. • Gemma: Gemma-2B, Gemma-7B. • Pythia: Pythia-70M through Pythia-12B (eight models in total)."
+        }
+      ]
+    },
+    "findings": {
+      "text": "覆盖率随采样数增加而提升，在多个数量级上常呈对数线性关系，可用指数幂律建模 [S1.p7][S3.p2]。在具有自动验证器的任务中，覆盖率提升直接转化为性能提升：在 SWE-bench Lite 上，DeepSeek-Coder-V2-Instruct 的解决率从单样本的 15.9% 提升到 250 个样本的 56%，超过单样本最优的 43% [S1.p8]。在 MATH 上，Llama-3-8B-Instruct 的覆盖率从 100 个样本的 82.9% 提升到 10,000 个样本的 98.44%，但多数投票或奖励模型选择的最佳性能仅从 40.50% 提升到 41.41% [S1.p10]。此外，重复采样可能使较弱模型与更多样本的组合在性能或成本上优于更强模型的单次尝试 [S1.p9]。",
+      "evidence": [
+        {
+          "id": "S1.p7",
+          "quote": "Interestingly, the relationship between $\\log(\\text{coverage})$ and the number of samples often follows an approximate power law (Section 3)."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "1. The relationship between coverage and the number of samples can often be modelled with an exponentiated power law."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "When restricted to a single sample, DeepSeek-Coder-V2-Instruct solves only 15.9% of issues. By simply increasing the number of samples to 250, we increase the fraction of solved issues to 56%, exceeding the state-of-the-art by 13%."
+        },
+        {
+          "id": "S1.p10",
+          "quote": "When solving MATH problems with Llama-3-8B-Instruct, coverage increases from 82.9% with 100 samples to 98.44% with 10,000 samples."
+        },
+        {
+          "id": "S1.p10",
+          "quote": "However, when using majority voting or reward models to select final answers, the biggest performance increase is only from 40.50% to 41.41% over the same sample range."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "When holding the total number of inference FLOPs constant, we find that on some datasets (e.g. MATH), coverage is maximized with a smaller model and more samples, while on others (e.g CodeContests) it is better to sample fewer times from a larger model."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，实验仅探索了简单版本的重复采样，即所有尝试使用完全相同的提示和超参数独立生成，未探索解决方案多样性、多轮交互或从先前尝试中学习等改进方向 [S5.p2][S5.p3]。此外，在没有自动验证器的领域，常用验证方法（多数投票和奖励模型）在约 100 个样本后趋于饱和，无法充分利用覆盖率提升，因此改进样本验证方法对于将重复采样扩展到更多任务至关重要 [S5.p5]。",
+      "evidence": [
+        {
+          "id": "S5.p2",
+          "quote": "In our experiments, we explore only a simple version of repeated sampling where all attempts to a problem are generated independently of one another using the exact same prompt and hyperparameters."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "1. Solution Diversity: We currently rely on a positive sampling temperature as the sole mechanism for creating diversity among samples."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "2. Multi-Turn Interactions: Despite automatic verification tools being available when solving CodeContests and MiniF2F problems, we use only a single-turn setup where models generate a solution without any ability to iterate on it."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "3. Learning From Previous Attempts: Currently, our experiments fully isolate attempts from each other."
+        },
+        {
+          "id": "S5.p5",
+          "quote": "Our results from Section 4 highlight the importance of improving sample verification methods when tools for automatically doing so are unavailable."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 13048,
+      "completion_tokens": 2109,
+      "elapsed_s": 7.72
+    }
+  },
+  "verify": {
+    "quote_hits": 20,
+    "quote_total": 21,
+    "quote_rate": 0.952,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S2.p4",
+        "reason": "quote 不在该段落里",
+        "quote": "We consider the following five tasks: 1. GSM8K: A dataset of grade-school level "
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "paper": {
+    "arxiv_id": "1301.0001",
+    "title": "Applications of fMRI for Brain Mapping",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 855,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "本文是一篇综述，介绍脑映射技术及 fMRI 信号处理方法 [abstract]。作者指出，仅靠结构成像不足以研究许多神经系统疾病，需要研究脑的功能组织，并需要在正常和疾病条件下研究脑功能 [abstract]。脑映射技术有助于获取这些信息，可研究运动、感觉、言语和记忆等特定活动对应的脑功能与脑区 [abstract]。",
+    "research_question": {
+      "text": "论文关注的问题是：对于许多神经系统疾病，仅做结构研究并不足够，因此需要研究脑的功能组织，并需要在正常及疾病条件下研究脑功能 [abstract]。作者认为脑映射技术有助于获取这些重要信息，例如研究运动、感觉、言语和记忆等特定活动对应的脑功能与负责脑区 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However there are many neurological disorders for which only structure studies are not sufficient."
+        },
+        {
+          "id": "abstract",
+          "quote": "In such cases it is required to investigate the functional organization of the brain."
+        },
+        {
+          "id": "abstract",
+          "quote": "Further it is necessary to study the brain functions under normal as well as diseased conditions."
+        },
+        {
+          "id": "abstract",
+          "quote": "Brain functions and brain area responsible for the particular activities like motor, sensory speech and memory process could be investigated."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提供的是对多种脑映射技术以及 fMRI 信号处理方法的综述 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The authors provide an overview of various Brain Mapping techniques and fMRI signal processing methods."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "findings": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1373,
+      "completion_tokens": 427,
+      "elapsed_s": 2.23
+    }
+  },
+  "verify": {
+    "quote_hits": 5,
+    "quote_total": 5,
+    "quote_rate": 1.0,
+    "inline_hits": 3,
+    "inline_total": 3,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 3,
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3_no_cover",
+    "hash": "a5238a9a"
+  }
+}

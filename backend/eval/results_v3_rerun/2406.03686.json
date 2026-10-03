@@ -1,0 +1,204 @@
+{
+  "paper": {
+    "arxiv_id": "2406.03686",
+    "title": "BindGPT: A Scalable Framework for 3D Molecular Design via Language Modeling and Reinforcement Learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 42065,
+    "n_sections": 23,
+    "n_paragraphs": 58
+  },
+  "result": {
+    "summary": "BindGPT 是一个将 3D 分子设计表述为文本生成的语言模型框架，用结构 SMILES 加空间 XYZ 格式同时描述分子图与原子坐标，从而无需外部软件重建分子图 [S1.p5][S3.SS1.p2]。作者在大规模 3D 分子与口袋数据上预训练，再在 CrossDocked 与 GEOM-DRUGS 上监督微调，并用对接软件奖励做强化学习微调 [S3.SS2.p1][S3.SS3.SSS1.p1][S3.SS3.SSS2.p2]。实验表明该模型可同时用于 3D 分子生成、构象生成和口袋条件生成，在多个指标上与专门的扩散模型、语言模型和图神经网络相当或更好，且采样成本低约两个数量级 [abstract][S4.SS1.p3][S4.SS2.p3]。作者认为这显示大规模预训练范式可以从 NLP 迁移到 3D 药物发现 [S5.p1]。",
+    "research_question": {
+      "text": "论文要解决的是在给定蛋白质口袋内生成具有活性的 3D 分子这一挑战性任务，需要理解分子与环境的复杂物理相互作用 [abstract]。作者指出，多数空间分子生成器只关注原子类型和位置，依赖 OpenBabel 等外部工具重建化学键，而原子位置的微小偏差可能显著改变重建的键甚至使分子图断裂 [S1.p2]。因此本文提出一种无模型与表示层面归纳偏置、完全数据驱动的方法，把 3D 分子设计统一为文本生成 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Generating novel active molecules for a given protein is an extremely challenging task for generative models that requires an understanding of the complex physical interactions between the molecule and its environment."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "However, it’s noteworthy that most spatial molecular generators focus exclusively on atom types and locations."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "They depend on supplementary tools, such as OpenBabel, for the critical task of bond reconstruction."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "This reliance can introduce vulnerabilities, as the precision required for atom placement means that minor positional adjustments can significantly alter reconstructed molecular bonds or even make the molecular graph disconnected."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "This entirely data-driven approach, devoid of any inductive biases at both the model and representation levels, capitalizes on the established GPT paradigm"
+        }
+      ]
+    },
+    "method": {
+      "text": "方法核心是用自回归 token 生成模型把多种 3D 小分子设计任务表述为带提示的文本生成，将条件 token 放在待生成对象 token 之前 [S3.p1]。作者采用 decoder-only 的 GPT-NeoX 架构与旋转位置嵌入以支持长度泛化 [S3.SS1.p1]，并把 XYZ 坐标格式与 SMILES 耦合、强制两者原子顺序一致，从而无需外部软件重建分子图 [S3.SS1.p2]。训练流程包括在大规模 3D 分子与口袋数据上预训练、在 CrossDocked 与 GEOM-DRUGS 上监督微调，以及用 REINFORCE 和外部对接软件奖励进行强化学习微调 [S3.SS2.p1][S3.SS3.SSS1.p1][S3.SS3.SSS2.p2]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "The key idea of our method is utilizing an autoregressive token generation model, influenced by GPT-based models, to solve several 3D small molecule generation tasks in one simple yet flexible paradigm."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "The main principle in our approach is to formulate several 3D molecular design task as prompted generation of text."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "In our work we follow the decoder-only paradigm in Language Models and use the GPT-NeoX"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "architecture that utilizes rotary position embeddings. This technique allows for the length generalization"
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "To alleviate that, we propose to couple the XYZ format with the SMILES format."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "To align these two formats we enforce to have the same atom ordering in both."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "we use a large-scale but specialized dataset of 3D molecules and protein pockets."
+        },
+        {
+          "id": "S3.SS3.SSS1.p1",
+          "quote": "During the supervised fine-tuning phase, we continue model training on CrossDocked 2020, which is a high-quality dataset containing aligned pocket-ligand pairs."
+        },
+        {
+          "id": "S3.SS3.SSS2.p2",
+          "quote": "We apply the REINFORCE algorithm for further model finetuning."
+        },
+        {
+          "id": "S3.SS3.SSS2.p2",
+          "quote": "Then we compute the reward using an external docking software that estimates the binding energy between the pocket and the generated ligand."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "预训练使用 Uni-Mol 提出的数据集，包含 12M 分子的 208M 个构象和 3.2M 个蛋白质口袋空间结构 [S4.p2]。口袋条件生成任务在 CrossDocked 上微调，作者过滤后得到约 27M 个口袋-配体对，覆盖 14k 分子与 3k 口袋的交叉组合，并留出 100 个口袋用于评估 [S4.p2]。3D 分子与构象生成任务在 GEOM-DRUGS 上微调，该数据集包含 300k 分子的 27M 个构象，并以 Platinum 数据集作为零样本构象生成的留出评估集 [S4.p2]。评估指标包括有效性、SA、QED、Lipinski、分布度量、RMSD、RMSD-coverage 以及生成时间 [S4.SS1.p1]，口袋条件任务使用 QVINA 计算的结合能 [S4.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "S4.p2",
+          "quote": "For pretraining, we use a large 3D molecular dataset proposed by the authors of the Uni-Mol model."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "The dataset contains 208M conformations for 12M molecules and 3.2M spatial structures of protein pockets."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "Our filtration of the dataset has around 27M pocket-ligand pairs covering a cross product of 14k molecules with 3k pockets"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "We also hold out a set of 100 pockets from the training data for evaluating the model performance."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "we also finetune the model on the GEOM-DRUGS dataset, with drug-like molecules having high-quality 3D molecular conformations."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "This dataset contains 27M conformations for 300k molecules"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "Finally, we use the Platinum dataset as a hold-out evaluation dataset to test our model and baselines on zero-shot conformer generation."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We provide the validity ( $\\uparrow$) of generated molecules and druglikeness metrics - SA ( $\\uparrow$), QED ( $\\uparrow$), and Lipinski ( $\\uparrow$)"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "Finally, we measure the time needed to generate 1K valid 3D molecules on one GPU."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "The first one is represented via the binding energy ( $\\downarrow$) computed by the QVINA docking software"
+        }
+      ]
+    },
+    "findings": {
+      "text": "预训练的 BindGPT 在不含和含显式氢两种设置下都持续优于 XYZ-TF 基线，并且是首个能在如此大规模下显式建模氢的模型 [S4.SS1.p3]。在 GEOM-DRUGS 上微调后，BindGPT 在几乎所有分布评估指标上达到当前最优，但在药物相似性上未超过 MolDiff，作者认为这可能与词表较小有关 [S4.SS1.p3]。在 Platinum 零样本构象生成上，Uni-Mol 未能泛化到该数据集，而 BindGPT 在 RDKit 辅助下可匹配 Torsional Diffusion，无辅助时存在小差距 [S4.SS1.p3]。在口袋条件生成中，经 RL 微调的模型显著优于此前最优基线 [S4.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p3",
+          "quote": "First, the pretrained BindGPT model consistently outperforms the XYZ-TF baseline both without and with explicit hydrogens."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT is the first model capable of modeling hydrogen explicitly at such large scale."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT (being finetuned on this data) shows state-of-the-art performance scores for nearly all distributional evaluation metrics."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "Even though BindGPT does not outperform MolDiff in Druglikeness, that could be explained by a smaller vocabulary of the, containing only frequent atoms."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "Surprisingly, Uni-Mol fails to generalize to this new dataset (even assisted by RDKit), which we think is because of its structural diversity."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT, in contrast, is capable of matching the performance of TD when assisted by the RDKit tool and having a small gap when not."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "Our main conclusion is that the RL finetuned model can learn to search the space of binding molecules much more efficiently and significantly outperforms all the previous best baselines in terms of the binding energy."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，在药物相似性指标上 BindGPT 未超过 MolDiff，并推测这可能与词表较小、只包含常见原子有关 [S4.SS1.p3]。在 Platinum 零样本构象生成中，无 RDKit 辅助时 BindGPT 与 Torsional Diffusion 之间仍存在小差距 [S4.SS1.p3]。此外，作者在预训练规模实验中发现模型在 300M 参数时困惑度出现过拟合，因此后续实验采用 100M 模型 [A3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p3",
+          "quote": "Even though BindGPT does not outperform MolDiff in Druglikeness, that could be explained by a smaller vocabulary of the, containing only frequent atoms."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT, in contrast, is capable of matching the performance of TD when assisted by the RDKit tool and having a small gap when not."
+        },
+        {
+          "id": "A3.p1",
+          "quote": "we observed that the model scales well up until the size of 300M parameters, where its perplexity shows overfitting."
+        },
+        {
+          "id": "A3.p1",
+          "quote": "We, therefore, stick to the 100M model in our later experiments as we found it yielding the best results."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 10585,
+      "completion_tokens": 2663,
+      "elapsed_s": 10.09
+    }
+  },
+  "verify": {
+    "quote_hits": 36,
+    "quote_total": 36,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "science",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

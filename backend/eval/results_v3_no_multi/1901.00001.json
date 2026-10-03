@@ -1,0 +1,95 @@
+{
+  "paper": {
+    "arxiv_id": "1901.00001",
+    "title": "Impact of Ground Truth Annotation Quality on Performance of Semantic Image Segmentation of Traffic Conditions",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 1417,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "本文针对自动驾驶场景理解数据集标注成本高的问题，比较了精细与粗糙真值标注对语义图像分割精度的影响 [abstract]。作者使用 PSPNet 深度网络在 Cityscapes 数据集上设置了两种场景：场景1用精细 GT 图像训练和预测，场景2用精细 GT 图像训练、粗糙 GT 图像预测 [abstract]。结果表明，对最重要的类别，粗糙 GT 标注的平均分割精度高于精细 GT，而标准差则相反 [abstract]。作者据此认为，某些应用中可以排除一些不重要的类别，并在粗糙 GT 数据集上针对某些类别和特定区域进一步调优模型而不损失精度，这为使用深度神经网络准备此类粗糙 GT 数据集开辟了前景 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：为自动驾驶应用准备高质量数据集非常费力，能否在不对语义图像分割精度（以 mIoU 衡量）造成损害的前提下，使用这些数据集的粗糙真值标注来简化并加速数据集准备和模型微调 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Preparation of high-quality datasets for the urban scene understanding is a labor-intensive task, especially, for datasets designed for the autonomous driving applications."
+        },
+        {
+          "id": "abstract",
+          "quote": "The application of the coarse ground truth (GT) annotations of these datasets without detriment to the accuracy of semantic image segmentation (by the mean intersection over union - mIoU) could simplify and speedup the dataset preparation and model fine tuning before its practical application."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用 PSPNet 深度学习架构，对 Cityscapes 数据集中的精细标注图像和粗糙标注图像进行语义分割精度的对比分析 [abstract]。研究设置了两种场景：场景1使用精细 GT 图像进行训练和预测，场景2使用精细 GT 图像训练、粗糙 GT 图像预测 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Here the results of the comparative analysis for semantic segmentation accuracy obtained by PSPNet deep learning architecture are presented for fine and coarse annotated images from Cityscapes dataset."
+        },
+        {
+          "id": "abstract",
+          "quote": "Two scenarios were investigated: scenario 1 - the fine GT images for training and prediction, and scenario 2 - the fine GT images for training and the coarse GT images for prediction."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 Cityscapes 数据集上进行，使用 PSPNet 架构，比较了两种场景下的语义分割精度：场景1为精细 GT 图像用于训练和预测，场景2为精细 GT 图像用于训练、粗糙 GT 图像用于预测 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Here the results of the comparative analysis for semantic segmentation accuracy obtained by PSPNet deep learning architecture are presented for fine and coarse annotated images from Cityscapes dataset."
+        },
+        {
+          "id": "abstract",
+          "quote": "Two scenarios were investigated: scenario 1 - the fine GT images for training and prediction, and scenario 2 - the fine GT images for training and the coarse GT images for prediction."
+        }
+      ]
+    },
+    "findings": {
+      "text": "结果表明，对最重要的类别，粗糙 GT 标注的语义图像分割平均精度值高于精细 GT 标注，而标准差则相反 [abstract]。这意味着某些应用中可以排除一些不重要的类别，并可在粗糙 GT 数据集上针对某些类别和特定区域进一步调优模型，甚至不损失精度 [abstract]。此外，这为使用深度神经网络准备此类粗糙 GT 数据集开辟了前景 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The obtained results demonstrated that for the most important classes the mean accuracy values of semantic image segmentation for coarse GT annotations are higher than for the fine GT ones, and the standard deviation values are vice versa."
+        },
+        {
+          "id": "abstract",
+          "quote": "It means that for some applications some unimportant classes can be excluded and the model can be tuned further for some classes and specific regions on the coarse GT dataset without loss of the accuracy even."
+        },
+        {
+          "id": "abstract",
+          "quote": "Moreover, this opens the perspectives to use deep neural networks for the preparation of such coarse GT datasets."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1591,
+      "completion_tokens": 939,
+      "elapsed_s": 4.2
+    }
+  },
+  "verify": {
+    "quote_hits": 9,
+    "quote_total": 9,
+    "quote_rate": 1.0,
+    "inline_hits": 7,
+    "inline_total": 7,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3_no_multi",
+    "hash": "a604ce17"
+  }
+}

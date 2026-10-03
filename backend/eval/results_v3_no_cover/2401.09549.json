@@ -1,0 +1,162 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结中实现了对栅极定义纳米线与量子点构成的干涉环中费米子宇称的单次干涉测量 [abstract][S1.p3]。作者通过色散栅极传感测量量子点量子电容，观察到 h/2e 周期的双模分布和随机电报信号，并提取出约 2 ms 的驻留时间 [S3.p3]。这些结果与一对相距约 3 µm 的 Majorana 零能模所编码的费米子宇称测量一致，且非平衡准粒子中毒率较低 [abstract][S3.p9]。作者指出，该测量本身不能唯一区分拓扑相中的 MZMs 与平庸相中精细调节的低能 Andreev 束缚态，但强烈约束了低能态的性质 [S1.p3]。",
+    "research_question": {
+      "text": "论文旨在实现拓扑量子计算中测量-only 方案所需的费米子宇称投影测量，即确定一对 Majorana 零能模共享的费米子宇称 [S1.p1][S1.p2]。作者指出，一维拓扑超导体是构建拓扑量子比特的有前景平台，量子信息存储在 MZMs 的费米子宇称中，而投影测量用于处理量子信息和读取量子比特状态 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Protocols for measurement-only topological quantum computation simplify these operations, reducing them to fusion alone."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "One-dimensional topological superconductors (1DTSs) are a promising platform for building topological qubits."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The fermion parity shared by a pair of MZMs can be determined through an interferometric measurement."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we demonstrate an interferometric measurement of the parity of a near-zero-energy state in a 1D nanowire, thereby validating a necessary ingredient of topological quantum computation."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者设计了一个由三个量子点与栅极定义纳米线构成的干涉环（TQDI），通过色散栅极传感测量中间量子点的量子电容来探测费米子宇称 [S2.p3]。该测量基于量子电容对干涉环中磁通和量子点-MZM 系统总费米子宇称的敏感性，可在单次测量中确定宇称 [S1.p3][S2.p3]。作者还建立了包含 MZMs、量子点和环境耦合的有效模型，并用量子动力学模拟复现实验结果 [S3.p4][S3.p6]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "Our readout circuit is based on dispersive gate sensing of a triple quantum dot interferometer (TQDI): three electrostatically defined quantum dots that together with the 1DTS form a loop threaded by a flux, $\\Phi$ ( Fig. 1 a,c)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The measurement technique is based on probing the quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$ of a quantum dot coupled to the nanowire and allows determination of the parity in a single shot ( Fig. 1), with a probability of assignment errors of $1\\%$ for optimal measurement time."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "We support this interpretation by reproducing our results with quantum dynamics simulations that incorporate rf drive power, charge noise, and temperature."
+        },
+        {
+          "id": "S3.p6",
+          "quote": "For detailed comparison with experiments, we simulate a more complete model of our interferometer, expanded to include the full triple-dot system, incoherent coupling to the environment, and backaction from the measurement."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 InAs-Al 异质结器件上进行，作者对器件 A 进行了测量 A1 和 A2，并在不同稀释制冷机中测量了器件 B [S3.p11][A6.SS1.p2]。测量中扫描面外磁场 B⊥ 和量子点栅压，记录约 1.5×10^4 次连续测量、总长 67 ms 的时间轨迹，并用峰度检测双模分布 [S3.p1]。作者还进行了准粒子注入、断开量子点与纳米线连接、以及低场（0.8 T）对照实验 [S3.p12][S3.p13][S3.p14]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "To measure a time record of the fermion parity, we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$."
+        },
+        {
+          "id": "S3.p11",
+          "quote": "The reproducibility of the observed phenomena is demonstrated in Sec. S6.1, where we discuss a second measurement (A2) on device A ( Fig. S8) and a measurement of device B ( Fig. S9)."
+        },
+        {
+          "id": "A6.SS1.p2",
+          "quote": "Fig. S9 shows data from device B (measurement B1) made in a different dilution refrigerator with the same wiring configuration."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a (similar to the approach used in Ref.)."
+        },
+        {
+          "id": "S3.p13",
+          "quote": "Our second control experiment is to completely disconnect the dots from the wire."
+        },
+        {
+          "id": "S3.p14",
+          "quote": "Finally, we repeat the interferometry measurement at a low field ( $0.8\\text{\\,}\\mathrm{T}$), where the device is well within the trivial phase, and the induced gap in the nanowire has not closed yet."
+        }
+      ]
+    },
+    "findings": {
+      "text": "作者观察到量子电容随磁通呈现 h/2e 周期的双模分布和随机电报信号，在最优磁通值下信噪比为 1 所需积分时间约 3.7 µs [abstract][S3.p3]。从时间轨迹中提取的驻留时间约 2 ms，对应非平衡准粒子密度约 1 µm⁻³，与 Cooper 对盒器件独立测量的约 0.6 µm⁻³ 在数量级内一致 [S3.p9][S3.p10]。准粒子注入实验显示驻留时间随偏压增加而减半，而断开量子点与纳米线连接后随机电报信号消失 [S3.p12][S3.p13]。作者还观察到三种干涉区域，分别对应平衡干涉仪、具有 h/e 周期锯齿图案的平衡干涉仪以及极不平衡干涉仪 [S4.p3]。",
+      "evidence": [
+        {
+          "id": "S3.p3",
+          "quote": "The time evolution of ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits a random telegraph signal (RTS) at flux values where there is negative kurtosis, as in Fig. 3 f, but no telegraph signal when the kurtosis is near zero, as in Fig. 3 c."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "From the histograms, we extract an achieved SNR of $4.9$ in $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ ( Fig. 3 g,h) or, equivalently, an SNR of $1$ in $3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ (see Sec. S4.3)."
+        },
+        {
+          "id": "S3.p9",
+          "quote": "Within this model, poisoning time scales of $\\tau_{\\mathrm{qpp}}\\sim$2\\text{\\,}\\mathrm{ms}$$ arise from a non-equilibrium quasiparticle density $n_{\\mathrm{qp}}\\sim$1\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$^{-3}$."
+        },
+        {
+          "id": "S3.p10",
+          "quote": "This estimate is within an order of magnitude of the inferred value from $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ and is comparable to the densities measured in prior studies."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "As can be seen in Fig. 5 b (measured on device B), $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ decreases to half of its value as the bias voltage is increased from $0$ to $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$, while $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}$ exhibits weak dependence on bias voltage."
+        },
+        {
+          "id": "S3.p13",
+          "quote": "In devices A and B, we do not observe any RTS, as discussed in Sec. S6.2."
+        },
+        {
+          "id": "S4.p3",
+          "quote": "We now classify the various types of oscillations that we have observed according to the following scenarios: (a) The kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ is flux-dependent with a period of $h/2e$, as illustrated in Fig. 6 c."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，该测量本身不能唯一区分拓扑相中的 MZMs 与平庸相中精细调节的低能 Andreev 束缚态 [S1.p3]。作者还指出，要完全解决低能态是否拓扑的问题，需要在另一篇论文中讨论器件的相图和观测到的磁通依赖 RTS 的稳定性 [S5.p1]。此外，作者提到在当前器件中，由于有限尺寸效应，预期 E_M 会有显著变化，且当前器件的拓扑能隙和相干长度并未显著小于器件长度 [S4.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase, but it does require the low-energy state to be supported at both ends of the wire and very weakly coupled to other low-energy states."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "To fully resolve this issue, we will discuss the device’s phase diagram and the stability of the observed flux-dependent RTS in a separate publication."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Indeed, in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 37583,
+      "completion_tokens": 2420,
+      "elapsed_s": 10.04
+    }
+  },
+  "verify": {
+    "quote_hits": 24,
+    "quote_total": 24,
+    "quote_rate": 1.0,
+    "inline_hits": 23,
+    "inline_total": 24,
+    "inline_rate": 0.958,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3_no_cover",
+    "hash": "a5238a9a"
+  }
+}

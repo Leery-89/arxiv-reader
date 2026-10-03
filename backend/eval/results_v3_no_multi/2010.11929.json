@@ -1,0 +1,186 @@
+{
+  "paper": {
+    "arxiv_id": "2010.11929",
+    "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 46967,
+    "n_sections": 34,
+    "n_paragraphs": 91
+  },
+  "result": {
+    "summary": "本文提出 Vision Transformer（ViT），将图像切分为固定大小的 patch 序列，直接送入标准 Transformer 编码器进行图像分类，几乎不引入图像特有的归纳偏置 [S1.p3][S5.p1]。作者在 ImageNet、ImageNet-21k、JFT-300M 等不同规模数据集上预训练，并迁移到 ImageNet、CIFAR-100、VTAB 等多个基准 [S4.SS1.p1][S4.SS1.p2]。结果显示，在中小数据集上 ViT 略逊于同规模 ResNet，但在大规模数据预训练后 ViT 可达到或超过当时最优卷积网络，且预训练所需计算资源更少 [S1.p4][S1.p5][S4.SS2.p2]。作者认为这表明对 CNN 的依赖并非必要，纯 Transformer 直接处理图像 patch 序列即可在图像分类上表现良好 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在计算机视觉中卷积架构仍占主导，能否将标准 Transformer 直接应用于图像，而不依赖卷积网络或专门的注意力近似 [S1.p2][S1.p3]。作者指出，此前将自注意力用于图像的工作要么与 CNN 结合，要么替换 CNN 的某些组件但保留整体结构，而纯注意力模型因使用专门注意力模式尚未在现代硬件上有效扩展 [S1.p2]。其动机来自 Transformer 在 NLP 中的成功与可扩展性，希望以尽可能少的修改把标准 Transformer 用于图像 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "In computer vision, however, convolutional architectures remain dominant."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The latter models, while theoretically efficient, have not yet been scaled effectively on modern hardware accelerators due to the use of specialized attention patterns."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Inspired by the Transformer scaling successes in NLP, we experiment with applying a standard Transformer directly to images, with the fewest possible modifications."
+        },
+        {
+          "id": "abstract",
+          "quote": "In vision, attention is either applied in conjunction with convolutional networks, or used to replace certain components of convolutional networks while keeping their overall structure in place."
+        }
+      ]
+    },
+    "method": {
+      "text": "方法上，ViT 将图像 \\(\\mathbf{x}\\in\\mathbb{R}^{H\\times W\\times C}\\) 切分为 \\(N=HW/P^{2}\\) 个 \\(P\\times P\\) 的 patch，展平后经可训练线性投影映射到维度 \\(D\\)，得到 patch embeddings [S3.SS1.p1]。与 BERT 类似，在序列前加入可学习的 [class] token，其编码器输出作为图像表示用于分类 [S3.SS1.p2]。位置信息通过标准可学习 1D 位置嵌入加入，编码器由多头自注意力和 MLP 交替组成，每个 block 前用 LayerNorm、后接残差连接 [S3.SS1.p3][S3.SS1.p4]。微调时移除预训练预测头，接零初始化 \\(D\\times K\\) 前馈层，并可在更高分辨率下对预训练位置嵌入做 2D 插值 [S3.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "we reshape the image $\\mathbf{x}\\in\\mathbb{R}^{H\\times W\\times C}$ into a sequence of flattened 2D patches $\\mathbf{x}_{p}\\in\\mathbb{R}^{N\\times(P^{2}\\cdot C)}$"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "we flatten the patches and map to $D$ dimensions with a trainable linear projection (Eq. 1)."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "Similar to BERT’s [class] token, we prepend a learnable embedding to the sequence of embedded patches"
+        },
+        {
+          "id": "S3.SS1.p3",
+          "quote": "Position embeddings are added to the patch embeddings to retain positional information."
+        },
+        {
+          "id": "S3.SS1.p4",
+          "quote": "The Transformer encoder consists of alternating layers of multiheaded self-attention (MSA, see Appendix A) and MLP blocks"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "we remove the pre-trained prediction head and attach a zero-initialized $D\\times K$ feedforward layer"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "We therefore perform 2D interpolation of the pre-trained position embeddings, according to their location in the original image."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 ILSVRC-2012 ImageNet（1k 类、1.3M 图像）、ImageNet-21k（21k 类、14M 图像）和 JFT（18k 类、303M 图像）上预训练，并迁移到 ImageNet、ImageNet-ReaL、CIFAR-10/100、Oxford-IIIT Pets、Oxford Flowers-102 以及 19 任务 VTAB 分类套件 [S4.SS1.p1][S4.SS1.p2]。模型变体基于 BERT 配置，包括 Base、Large 和新增的 Huge，并用 ViT-L/16 等记号表示模型大小与 patch 大小 [S4.SS1.p3]。基线 CNN 使用将 BatchNorm 替换为 GroupNorm 的 ResNet（ResNet (BiT)），混合模型则把 CNN 特征图作为 ViT 输入 [S4.SS1.p4]。训练使用 Adam、batch size 4096、权重衰减 0.1，微调使用 SGD with momentum、batch size 512 [S4.SS1.p5]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "we use the ILSVRC-2012 ImageNet dataset with 1k classes and 1.3M images"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "its superset ImageNet-21k with 21k classes and 14M images, and JFT with 18k classes and 303M high-resolution images."
+        },
+        {
+          "id": "S4.SS1.p2",
+          "quote": "We also evaluate on the 19-task VTAB classification suite."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "We base ViT configurations on those used for BERT, as summarized in Table 1."
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "For the baseline CNNs, we use ResNet, but replace the Batch Normalization layers with Group Normalization"
+        },
+        {
+          "id": "S4.SS1.p5",
+          "quote": "We train all models, including ResNets, using Adam with $\\beta_{1}=0.9$, $\\beta_{2}=0.999$, a batch size of 4096 and apply a high weight decay of $0.1$"
+        }
+      ]
+    },
+    "findings": {
+      "text": "在中小数据集上，ViT 在 ImageNet 上比同规模 ResNet 低几个百分点，作者认为这可能是因为 Transformer 缺少 CNN 的平移等变性和局部性等归纳偏置，数据不足时泛化不佳 [S1.p4]。但在更大数据集（14M–300M 图像）上，大规模训练胜过归纳偏置：ViT 在 ImageNet-21k 或 JFT-300M 预训练后接近或超过多个基准的最优结果，最佳模型达到 ImageNet 88.55%、ImageNet-ReaL 90.72%、CIFAR-100 94.55%、VTAB 19 任务 77.63% [S1.p5]。在 JFT-300M 上预训练的 ViT-L/16 在所有任务上超过同样预训练的 BiT-L，且所需计算资源显著更少；ViT-H/14 进一步提升，尤其在 ImageNet、CIFAR-100 和 VTAB 上 [S4.SS2.p2]。缩放研究中，ViT 在性能/计算权衡上优于 ResNet，约用 2–4 倍更少计算达到相同性能，混合模型在小计算预算下略优于纯 ViT，但差距随模型增大消失 [S4.SS4.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "these models yield modest accuracies of a few percentage points below ResNets of comparable size."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Transformers lack some of the inductive biases inherent to CNNs, such as translation equivariance and locality, and therefore do not generalize well when trained on insufficient amounts of data."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We find that large scale training trumps inductive bias."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "the best model reaches the accuracy of $88.55\\%$ on ImageNet, $90.72\\%$ on ImageNet-ReaL, $94.55\\%$ on CIFAR-100, and $77.63\\%$ on the VTAB suite of 19 tasks."
+        },
+        {
+          "id": "S4.SS2.p2",
+          "quote": "The smaller ViT-L/16 model pre-trained on JFT-300M outperforms BiT-L (which is pre-trained on the same dataset) on all tasks, while requiring substantially less computational resources to train."
+        },
+        {
+          "id": "S4.SS4.p2",
+          "quote": "ViT uses approximately $2-4\\times$ less compute to attain the same performance (average over 5 datasets)."
+        },
+        {
+          "id": "S4.SS4.p2",
+          "quote": "hybrids slightly outperform ViT at small computational budgets, but the difference vanishes for larger models."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认仍有许多挑战：一是将 ViT 应用到检测、分割等其他视觉任务；二是继续探索自监督预训练方法，其初步实验显示自监督预训练有提升，但与大规模监督预训练之间仍有较大差距 [S5.p2]。此外，作者指出预训练效率可能不仅受架构选择影响，还受训练计划、优化器、权重衰减等其他参数影响 [S4.SS2.p2]。在自监督部分，作者也说明其初步探索中 ViT-B/16 自监督预训练达到 79.9% ImageNet 准确率，比从头训练提升 2%，但仍落后监督预训练 4%，并将对比式预训练留作未来工作 [S4.SS6.p1]。",
+      "evidence": [
+        {
+          "id": "S5.p2",
+          "quote": "One is to apply ViT to other computer vision tasks, such as detection and segmentation."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "Another challenge is to continue exploring self-supervised pre-training methods."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "Our initial experiments show improvement from self-supervised pre-training, but there is still large gap between self-supervised and large-scale supervised pre-training."
+        },
+        {
+          "id": "S4.SS2.p2",
+          "quote": "we note that pre-training efficiency may be affected not only by the architecture choice, but also other parameters, such as training schedule, optimizer, weight decay, etc."
+        },
+        {
+          "id": "S4.SS6.p1",
+          "quote": "our smaller ViT-B/16 model achieves 79.9% accuracy on ImageNet, a significant improvement of 2% to training from scratch, but still 4% behind supervised pre-training."
+        },
+        {
+          "id": "S4.SS6.p1",
+          "quote": "We leave exploration of contrastive pre-training to future work."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12275,
+      "completion_tokens": 2653,
+      "elapsed_s": 9.82
+    }
+  },
+  "verify": {
+    "quote_hits": 30,
+    "quote_total": 30,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 22,
+    "inline_rate": 0.955,
+    "issues": [
+      {
+        "field": "method",
+        "id": "class",
+        "reason": "内嵌 ID 不存在"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_multi",
+    "hash": "a604ce17"
+  }
+}

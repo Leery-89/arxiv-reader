@@ -1,0 +1,152 @@
+{
+  "paper": {
+    "arxiv_id": "2502.13923",
+    "title": "Qwen2.5-VL Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 51134,
+    "n_sections": 33,
+    "n_paragraphs": 95
+  },
+  "result": {
+    "summary": "Qwen2.5-VL 是 Qwen 视觉语言系列的最新旗舰模型，在视觉识别、目标定位、文档解析和长视频理解等方面取得进展 [abstract]。模型采用原生动态分辨率 ViT 与 Window Attention 降低计算开销，并引入动态 FPS 采样与对齐绝对时间的 MRoPE 以处理图像和长视频 [abstract][S1.p4]。Qwen2.5-VL 提供 72B、7B、3B 三种规模，旗舰 72B 在文档和图表理解上可与 GPT-4o、Claude 3.5 Sonnet 匹敌，较小模型也优于同类竞品 [abstract]。",
+    "research_question": {
+      "text": "论文指出当前视觉语言模型面临计算复杂度、上下文理解有限、细粒度视觉感知不足以及不同序列长度下性能不一致等发展瓶颈 [S1.p3]。Qwen2.5-VL 旨在探索细粒度感知能力，为 LVLMs 建立坚实基础，并打造面向真实应用的智能体放大器 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "vision-language models currently face developmental bottlenecks, including computational complexity, limited contextual understanding, poor fine-grained visual perception, and inconsistent performance across varied sequence length."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "we are committed to exploring fine-grained perception capabilities, aiming to establish a robust foundation for LVLMs and create an agentic amplifier for real-world applications."
+        }
+      ]
+    },
+    "method": {
+      "text": "Qwen2.5-VL 的架构由大语言模型、视觉编码器和基于 MLP 的视觉-语言合并器三部分组成 [S2.SS1.p1]。视觉编码器重新设计 ViT，采用 2D-RoPE 和窗口注意力以支持原生输入分辨率并加速计算，仅四层使用全自注意力 [S2.SS1.p3][S2.SS1.SSS1.p1]。模型在空间上动态将不同尺寸图像转换为相应长度的 token 序列，在时间上引入动态帧率训练和绝对时间编码，将 MRoPE 的时间 ID 与绝对时间对齐 [S2.SS1.SSS2.p2][S2.SS1.SSS2.p3][S2.SS1.SSS3.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The overall model architecture of Qwen2.5-VL consists of three components:"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "we incorporate 2D-RoPE and window attention to support native input resolutions while accelerating the computation of the entire visual encoder."
+        },
+        {
+          "id": "S2.SS1.SSS1.p1",
+          "quote": "only four layers employ full self-attention, while the remaining layers utilize windowed attention with a maximum window size of 112×112"
+        },
+        {
+          "id": "S2.SS1.SSS2.p2",
+          "quote": "Qwen2.5-VL dynamically converts images of varying sizes into sequences of tokens with corresponding lengths."
+        },
+        {
+          "id": "S2.SS1.SSS2.p3",
+          "quote": "Qwen2.5-VL incorporates dynamic frame rate (FPS) training and absolute time encoding."
+        },
+        {
+          "id": "S2.SS1.SSS3.p3",
+          "quote": "Qwen2.5-VL introduces a key improvement: aligning the temporal component of MRoPE with absolute time."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验将 Qwen2.5-VL 与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 以及不同规模的 Qwen2-VL 等模型进行比较 [S3.SS1.p1]。评估覆盖通用视觉问答、文档理解与 OCR、空间理解、视频理解与定位以及智能体等多个基准 [S3.SS3.SSS1.p1][S3.SS3.SSS2.p1][S3.SS3.SSS3.p1][S3.SS3.SSS4.p1][S3.SS3.SSS5.p1]。视频评估中每个视频最多分析 768 帧，视频 token 总数不超过 24,576 [S3.SS3.SSS4.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "comparing it with state-of-the-art models such as Claude-3.5-Sonnet-0620, GPT-4o-0513, InternVL2.5, and different sizes of Qwen2-VL."
+        },
+        {
+          "id": "S3.SS3.SSS1.p1",
+          "quote": "we conducted extensive experiments across a diverse range of datasets."
+        },
+        {
+          "id": "S3.SS3.SSS2.p1",
+          "quote": "We evaluated our models across a diverse range of OCR, chart, and document understanding benchmarks."
+        },
+        {
+          "id": "S3.SS3.SSS3.p1",
+          "quote": "We evaluated Qwen2.5-VL’s grounding capabilities on the referring expression comprehension benchmarks, object detection in the wild, self-curated point grounding benchmark, and CountBench."
+        },
+        {
+          "id": "S3.SS3.SSS4.p1",
+          "quote": "We assessed our models across a diverse range of video understanding and grounding tasks"
+        },
+        {
+          "id": "S3.SS3.SSS5.p1",
+          "quote": "We assess the agent capabilities of Qwen2.5-VL through various aspects."
+        },
+        {
+          "id": "S3.SS3.SSS4.p2",
+          "quote": "we capped the maximum number of frames analyzed per video at 768, with the total number of video tokens not exceeding 24,576."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 MMMU 上 Qwen2.5-VL-72B 取得 70.2 分，MMMU-Pro 得 51.1 分，超过此前开源最优模型并与 GPT-4o 相当 [S3.SS1.p1]。在 MathVista 上取得 74.8 分，超过此前开源最优的 72.3 分 [S3.SS1.p2]。在 OCRBench_v2 上，Qwen2.5-VL 在英文和中文赛道分别超过最佳模型 Gemini 1.5-Pro 9.6% 和 20.6% [S3.SS3.SSS2.p4]。在视频定位的 Charades-STA 上，Qwen2.5-VL-72B 取得 50.9 的 mIoU，超过 GPT-4o [S3.SS3.SSS4.p2]。在 ScreenSpot Pro 上取得 43.6% 准确率，远超 Aguvis-72B 的 23.6% 和 Qwen2-VL-72B 的 1.6% [S3.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "Qwen2.5-VL-72B achieves a score of 70.2 on MMMU."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "For MMMU-Pro, Qwen2.5-VL-72B scores 51.1, surpassing the previous open-source state-of-the-art models and achieving performance comparable to GPT-4o."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "On MathVista, it achieves a score of 74.8, outperforming the previous open-source state-of-the-art score of 72.3."
+        },
+        {
+          "id": "S3.SS3.SSS2.p4",
+          "quote": "largely exceeding best model Gemini 1.5-Pro by 9.6% and 20.6% for English and Chinese track respectively."
+        },
+        {
+          "id": "S3.SS3.SSS4.p2",
+          "quote": "Qwen2.5-VL-72B achieves an impressive mIoU score of 50.9, thereby surpassing the performance of GPT-4o."
+        },
+        {
+          "id": "S3.SS3.SSS5.p2",
+          "quote": "setting a new standard on ScreenSpot Pro with 43.6% accuracy - far surpassing both Aguvis-72B (23.6%) and its foundation Qwen2-VL-72B (1.6%)."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，在将思维链推理应用于视觉语言模型时，中间推理步骤可能无法充分整合视觉信息，要么忽略相关视觉线索，要么误解它们；尽管开发了基于规则和模型驱动的过滤策略来验证中间推理步骤，实现最优的模态对齐仍是一个持续存在的挑战，需要进一步改进 [S2.SS3.SSS3.p4]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "Intermediate reasoning steps may fail to adequately integrate visual information, either by ignoring relevant visual cues or misinterpreting them."
+        },
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "achieving optimal modality alignment remains an ongoing challenge that requires further advancements."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12681,
+      "completion_tokens": 2063,
+      "elapsed_s": 7.48
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "long",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "paper": {
+    "arxiv_id": "2501.19393",
+    "title": "s1 : Simple test-time scaling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44775,
+    "n_sections": 55,
+    "n_paragraphs": 75
+  },
+  "result": {
+    "summary": "本文旨在寻找最简单的测试时扩展方法并实现强推理性能 [S1.p1]。作者构建了包含 1,000 个问题的数据集 s1K，并提出预算强制（budget forcing）来控制测试时计算量 [S1.p2]。在 Qwen2.5-32B-Instruct 上微调后，s1-32B 在竞赛数学问题上超过 o1-preview 最高达 27%，并通过预算强制将 AIME24 性能从 50% 外推至 57% [abstract]。作者开源了模型、数据和代码 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在 OpenAI o1 未公开方法、众多复现尝试均未公开复现出清晰测试时扩展行为的情况下，最简单的实现测试时扩展和强推理性能的方法是什么 [S1.p1]。其动机在于测试时扩展这一新范式已被 o1 验证有效，但缺乏公开的简单方法 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "the viability of this paradigm was recently validated by OpenAI o1"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "none have openly replicated a clear test-time scaling behavior"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出两个简单方法：一是通过质量、难度、多样性三个准则筛选出 1,000 个问题及推理轨迹构成 s1K 数据集 [S1.p2][S2.SS2.p1]；二是预算强制（budget forcing），在解码时通过强制插入思考结束符或追加“Wait”来控制思考 token 数量 [S1.p2][S3.SS1.SSS0.Px1.p1]。核心思想是用极少量样本进行监督微调，并在测试时通过简单干预控制计算量 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "We show that training on only 1,000 samples with next-token prediction and controlling thinking duration via a simple test-time technique we refer to as budget forcing leads to a strong reasoning model"
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "we go through three stages of filtering to arrive at a minimal set of 1,000 samples relying on our three guiding data principles: Quality, Difficulty, and Diversity."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "We propose a simple decoding-time intervention by forcing a maximum and/or minimum number of thinking tokens."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "If the model generates more thinking tokens than a desired limit, we forcefully end the thinking process by appending an end-of-thinking token delimiter."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "we suppress the generation of the end-of-thinking token delimiter and instead append “Wait” to the model’s current reasoning trace to encourage more exploration."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 Qwen2.5-32B-Instruct 上使用 s1K 进行监督微调，训练在 16 块 H100 GPU 上耗时 26 分钟 [S4.SS1.SSS0.Px1.p1]。评估使用三个推理基准：AIME24（30 题）、MATH500（500 题）和 GPQA Diamond（198 题），采用温度 0 的贪婪解码，测量准确率 [S4.SS1.SSS0.Px2.p1]。此外还进行了数据消融（比较随机选择、仅多样性、仅难度、全量 59K 等）和测试时扩展方法消融（预算强制、条件控制、拒绝采样等） [S5.SS1.p1][S5.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.SSS0.Px1.p1",
+          "quote": "We perform supervised finetuning on Qwen2.5-32B-Instruct using s1K to obtain our model s1-32B"
+        },
+        {
+          "id": "S4.SS1.SSS0.Px1.p1",
+          "quote": "Finetuning took 26 minutes on 16 NVIDIA H100 GPUs with PyTorch FSDP."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "We select three representative reasoning benchmarks widely used in the field: AIME24 has 30 problems"
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "MATH500 is a benchmark of competition math problems of varying difficulty."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "GPQA Diamond consists of 198 PhD-level science questions from Biology, Chemistry and Physics."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "we evaluate with a temperature of 0 (greedy) and measure accuracy (equivalent to pass@1)."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "Here we test the importance of combining them and the overall efficacy of our selection."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "In Table 3 we compare the test-time scaling methods we have introduced in §3."
+        }
+      ]
+    },
+    "findings": {
+      "text": "s1-32B 在竞赛数学问题上超过 o1-preview 最高达 27%（MATH 和 AIME24） [abstract]。通过预算强制，s1-32B 在 AIME24 上从 50% 外推至 57% [abstract]。数据消融表明，联合使用质量、难度、多样性准则至关重要，随机选择、仅选最长推理轨迹或仅选最大多样性均导致性能显著下降（AIME24 平均约 -30%），而训练全量 59K 样本相比 1K 选择并未带来实质提升 [S1.p3]。在测试时扩展方法中，预算强制提供了完美的控制性、良好的扩展斜率和最佳 AIME24 分数 [S5.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)"
+        },
+        {
+          "id": "abstract",
+          "quote": "scaling s1-32B with budget forcing allows extrapolating beyond its performance without test-time intervention: from 50% to 57% on AIME24"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "we find that budget forcing provides perfect control, good scaling, and leads to our best AIME24 score."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出预算强制在进一步扩展时有两个关键限制：性能最终会趋于平缓，且受底层语言模型的上下文窗口约束 [S6.SS2.SSS0.Px2.p1]。此外，抑制思考结束符过于频繁可能导致模型陷入重复循环而非继续推理 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Suppressing the end-of-thinking token delimiter too often can lead the model into repetitive loops instead of continued reasoning."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12005,
+      "completion_tokens": 1864,
+      "elapsed_s": 6.87
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 17,
+    "inline_total": 17,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_causal",
+    "hash": "96f21339"
+  }
+}

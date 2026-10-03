@@ -1,0 +1,163 @@
+{
+  "paper": {
+    "arxiv_id": "2411.04330",
+    "title": "Scaling Laws for Precision",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 69719,
+    "n_sections": 43,
+    "n_paragraphs": 114
+  },
+  "result": {
+    "summary": "本文提出了“精度感知”的缩放定律，用于预测语言模型在低精度训练和后训练量化下的损失 [abstract]。作者提出低精度训练会降低模型的有效参数量，并据此预测训练和量化带来的额外损失 [abstract]。对于推理，后训练量化带来的退化随训练数据增加而增大，最终使额外的预训练数据变得有害 [abstract]。作者在超过 465 次预训练运行上拟合，并在高达 1.7B 参数、26B token 的模型上验证了预测 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的核心问题是：精度、参数量和数据量之间存在怎样的权衡，以及这些权衡在预训练和推理时有何不同 [S1.p1]。作者指出，精度是影响成本和性能的第三个重要因素，但当前的缩放定律并未考虑这一点 [S1.p1]。研究动机在于深度学习正趋向更低精度，如 Llama-3 系列使用 BF16 训练，且业界正努力将预训练范式推向 FP8 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, the precision in which models are trained and served is an important third factor that contributes to both cost and performance."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Specifically, we ask: What are the tradeoffs between precision, parameters, and data? How do they compare for pretraining and inference?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "current frontier models like the Llama-3 series are trained in BF16, and there is widespread effort to move the pretraining paradigm to FP8."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出用“有效参数量” N_eff 来统一建模精度与参数量的权衡，即比特精度和参数量可互换地贡献于有效参数量 [S1.p2]。对于训练，作者将 Chinchilla 缩放定律中的 N 替换为 N_eff(N, P_w) = N(1 - e^{-P_w/γ_w})，并进一步将权重、激活和 KV 缓存的量化效应建模为独立且可乘的 [S4.SS1.p2][S4.SS2.p5]。对于后训练量化，作者将退化建模为随 token/参数比 D/N 增长的幂律，并乘以随量化精度指数衰减的项 [S3.SS1.p1]。最终，作者将训练和推理的缩放定律统一为单一函数形式，同时包含训练时效应和后训练量化效应 [S5.p8]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This functional form that posits bit precision and parameter count interchangeably contribute to a model’s “effective parameter count,” $N_{\\text{eff}}$"
+        },
+        {
+          "id": "S4.SS1.p2",
+          "quote": "we find the best fit for the tradeoff between weight precision and parameters is $N_{\\text{eff}}(N,P_{\\text{w}})=N(1-e^{-P_{\\text{w}}/\\gamma_{\\text{w}}})$"
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "The effects of quantizing the weights, activations, and KV cache during training are well modeled as independent and multiplicative"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "$\\delta_{\\text{PTQ}}(N,D,P_{\\text{post}})=C_{T}\\left(\\frac{D^{\\gamma_{D}}}{N^{\\gamma_{N}}}\\right)e^{-P_{\\text{post}}/\\gamma_{\\text{post}}}$"
+        },
+        {
+          "id": "S5.p8",
+          "quote": "the predicted loss for a language model with $N$ parameters, trained on $D$ tokens, with training precision $P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}}$ to end-time weight-precision $P_{\\text{post}}$, can be predicted as $L(N,D,P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}},P_{\\text{post}})=AN_{\\text{eff}}^{-\\alpha}+BD^{-\\beta}+E+\\delta_{\\text{PTQ}}$"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在 Dolma V1.7 数据集上训练和评估了一系列 OLMo 风格的模型，使用标准 Transformer++ 实现 [S2.SS3.p1]。实验扫描了 N ∈ [30, 60, 110, 220] 百万参数（非嵌入）和 D ∈ [1.5, 3, 6, 13, 26] 十亿 token，并对每个 (N, D) 组合启动超过 20 次运行，扫描 8 个精度值 [S2.SS3.p1]。作者在超过 465 次预训练运行上拟合，并在高达 1.7B 参数、26B token 的模型上验证预测 [abstract]。此外，作者还使用 AWQ 和 round-to-nearest 量化方法复现了后训练量化的缩放结果 [A6.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We train and evaluate a suite of OLMo-style models on the Dolma V1.7 dataset, using a standard Transformer++ implementation"
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "Our experiments consist of a sweep of language model pretraining runs over $N\\in[30,60,110,220]$ million parameters (non-embedding) and $D\\in[1.5,3,6,13,26]$ billion tokens."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "we train up to a very high $D/N\\approx 10^{3}$ to study data scaling and set off over 20 runs at every $(N,D)$: we sweep 8 values of precision"
+        },
+        {
+          "id": "abstract",
+          "quote": "We fit on over 465 pretraining runs and validate our predictions on model sizes up to 1.7B parameters trained on up to 26B tokens."
+        },
+        {
+          "id": "A6.p1",
+          "quote": "We replicate on AWQ and round-to-nearest quantization."
+        }
+      ]
+    },
+    "findings": {
+      "text": "后训练量化的损失退化随训练数据量增加而增大，对于固定模型，当 D/N 足够大或量化精度足够低时，额外的预训练数据可能反而增加量化后的损失 [S3.SS1.p3]。训练时量化权重、激活和 KV 缓存的效果可建模为独立且可乘的，统一为有效参数量 N_eff [S4.SS2.p5]。当联合优化 N、D、P 时，计算最优的预训练精度与计算预算无关，拟合结果约为 7-8 比特 [S4.SS3.SSS2.p1]。当模型大小 N 固定时，计算最优精度随计算预算对数增长，即 P*(C) ∝ log C [S4.SS3.SSS3.p2]。统一缩放定律在超过 1000 个数据点上拟合得到 R² = 0.90 [S5.p6]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p3",
+          "quote": "This implies that when $D/N$ is sufficiently large, or $P_{\\text{post}}$ sufficiently small, loss after quantization can increase as models are pretrained for longer"
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "The effects of quantizing the weights, activations, and KV cache during training are well modeled as independent and multiplicative"
+        },
+        {
+          "id": "S4.SS3.SSS2.p1",
+          "quote": "which reveals that in general the optimal pretraining precision is independent of compute budget."
+        },
+        {
+          "id": "S4.SS3.SSS2.p1",
+          "quote": "We find this $P^{*}$ to be around 7-8 bits when fitting our scaling law on runs with quantization done to integer type."
+        },
+        {
+          "id": "S4.SS3.SSS3.p2",
+          "quote": "when $N$ is fixed in advance, such as when training a model family on similar data, $P^{*}(C)\\propto\\log C$"
+        },
+        {
+          "id": "S5.p6",
+          "quote": "we find a strong fit with $R^{2}=0.90$ on over 1000 data points"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，研究全程使用固定架构来受控地考察精度、参数量和 token 的影响，而低精度训练通常涉及架构调整，这些调整可以缩小与普通全精度模型的大部分差距 [S6.p2]。其次，虽然计算成本确实随精度线性缩放，但由于系统开销，将精度减半带来的收益通常不到 2 倍 [S6.p2]。第三，作者只考虑了损失缩放，没有进行下游模型评估 [S6.p2]。作者强调所发现的趋势旨在提供启示而非规定性结论，并希望未来工作能在更大模型规模上更全面地检验这些效应 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "First, we use a fixed architecture throughout to examine the effects of precision, parameters, and tokens in a controlled manner."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "In contrast, low precision training often involves architectural tweaks that can close much of the gap from a vanilla full precision model."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Second, while compute costs do scale linearly with precision, the gains from halving precision are usually less than 2x due to systems overhead."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Third, we only consider loss scaling without downstream model evaluations."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "We emphasize that the trends we find aim to be suggestive rather than prescriptive, and hope future work can more comprehensively examine these effects at larger model scale."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 18452,
+      "completion_tokens": 2238,
+      "elapsed_s": 8.85
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 24,
+    "quote_rate": 0.958,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S5.p6",
+        "reason": "quote 不在该段落里",
+        "quote": "we find a strong fit with $R^{2}=0.90$ on over 1000 data points"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "odd",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "paper": {
+    "arxiv_id": "2501.19393",
+    "title": "s1 : Simple test-time scaling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44775,
+    "n_sections": 55,
+    "n_paragraphs": 75
+  },
+  "result": {
+    "summary": "本文研究如何以最简单的方法实现测试时扩展（test-time scaling）并取得强推理性能 [S1.p1]。作者构建了仅含 1,000 个问题的数据集 s1K，并提出 budget forcing 在解码时控制思考 token 数量 [S1.p2]。在 Qwen2.5-32B-Instruct 上微调后，s1-32B 在竞赛数学题上超过 o1-preview 最多 27%，并可将 AIME24 成绩从 50% 外推到 57% [abstract]。作者开源了模型、数据和代码 [S1.p4]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在 OpenAI o1 未公开方法、众多复现尝试均未公开复现出清晰测试时扩展行为的情况下，实现测试时扩展和强推理性能的最简单方法是什么 [S1.p1]。其动机在于测试时扩展这一新范式已被 o1 验证有效，但现有复现依赖大规模强化学习或海量数据 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, despite the large number of o1 replication attempts, none have openly replicated a clear test-time scaling behavior."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "OpenAI describes their approach as using large-scale reinforcement learning (RL) implying the use of sizable amounts of data."
+        }
+      ]
+    },
+    "method": {
+      "text": "方法包含两部分：一是数据构建，从 16 个来源收集 59,029 个问题，经质量、难度、多样性三阶段筛选得到 1,000 个样本的 s1K，推理轨迹由 Gemini Thinking Experimental 蒸馏 [S2.SS1.p1][S2.SS2.p1]。二是测试时扩展方法 budget forcing，通过强制追加思考结束符来限制最大思考 token，或抑制结束符并追加“Wait”来延长思考 [S3.SS1.SSS0.Px1.p1]。作者将测试时扩展方法分为顺序式与并行式，并聚焦顺序式 [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We collect an initial 59,029 questions from 16 sources following three guiding principles."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "Thus, we go through three stages of filtering to arrive at a minimal set of 1,000 samples relying on our three guiding data principles: Quality, Difficulty, and Diversity."
+        },
+        {
+          "id": "S2.SS1.SSS0.Px2.p2",
+          "quote": "For each question, we generate a reasoning trace and solution using the Google Gemini Flash Thinking API extracting its reasoning trace and response."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "We propose a simple decoding-time intervention by forcing a maximum and/or minimum number of thinking tokens."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "To enforce a minimum, we suppress the generation of the end-of-thinking token delimiter and optionally append the string “Wait” to the model’s current reasoning trace"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We classify test-time scaling methods into 1) Sequential, where later computations depend on earlier ones (e.g., a long reasoning trace), and 2) Parallel, where computations run independently (e.g., majority voting)."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "训练方面，作者在 Qwen2.5-32B-Instruct 上用 s1K 做监督微调，使用 16 张 NVIDIA H100 GPU 训练 26 分钟 [S4.SS1.SSS0.Px1.p1]。评估使用三个基准：AIME24（30 题）、MATH500（500 题）和 GPQA Diamond（198 题），温度设为 0，指标为准确率 [S4.SS1.SSS0.Px2.p1]。对比模型包括 OpenAI o1 系列、DeepSeek r1 系列、QwQ-32B-preview、Sky-T1-32B-Preview、Bespoke-32B 和 Gemini 2.0 Flash Thinking Experimental [S4.SS1.SSS0.Px3.p1]。消融实验覆盖数据选择（随机、仅多样性、仅最长、全量 59K）和测试时扩展方法（budget forcing、token/step/class-conditional control、rejection sampling）[S5.SS1.p1][S5.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.SSS0.Px1.p1",
+          "quote": "We perform supervised finetuning on Qwen2.5-32B-Instruct using s1K to obtain our model s1-32B using basic hyperparameters outlined in §D."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px1.p1",
+          "quote": "Finetuning took 26 minutes on 16 NVIDIA H100 GPUs with PyTorch FSDP."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "We select three representative reasoning benchmarks widely used in the field: AIME24 has 30 problems"
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "MATH500 is a benchmark of competition math problems of varying difficulty."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "GPQA Diamond consists of 198 PhD-level science questions from Biology, Chemistry and Physics."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "Unless otherwise specified, we evaluate with a temperature of 0 (greedy) and measure accuracy (equivalent to pass@1)."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px3.p1",
+          "quote": "We benchmark s1-32B against: OpenAI o1 series, closed-source models that popularized test-time scaling; DeepSeek r1 series, open-weight reasoning models with up to o1-level performance; Qwen’s QwQ-32B-preview"
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "Only Quality (1K-random): After obtaining our high-quality reasoning chains from Gemini, we select 1,000 samples at random"
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "In Table 3 we compare the test-time scaling methods we have introduced in §3."
+        }
+      ]
+    },
+    "findings": {
+      "text": "s1-32B 在竞赛数学题上超过 o1-preview 最多 27%（MATH 和 AIME24）[abstract]。budget forcing 使 AIME24 成绩从 50% 外推到 57%，但最终在六倍处趋于平缓 [abstract][S4.SS2.SSS0.Px1.p1]。s1-32B 是最样本高效的开源数据推理模型，仅用 1,000 个样本就显著优于基座模型 [S4.SS2.SSS0.Px2.p1]。数据消融表明，随机选择、仅选最长推理轨迹或仅选最大多样性均导致显著更差性能（AIME24 平均约 -30%），而训练全量 59K 样本相比 1K 选择并无实质提升 [S1.p3]。测试时扩展方法消融中，budget forcing 提供完美控制、良好扩展斜率并取得最佳 AIME24 分数 [S5.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)"
+        },
+        {
+          "id": "abstract",
+          "quote": "from 50% to 57% on AIME24"
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "it does eventually flatten out at six times"
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "We find that s1-32B is the most sample-efficient open data reasoning model."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "It performs significantly better than our base model (Qwen2.5-32B-Instruct) despite just training it on an additional 1,000 samples."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "Overall, we find that budget forcing provides perfect control, good scaling, and leads to our best AIME24 score."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确承认 budget forcing 在进一步扩展时有两个关键限制：最终会趋于平缓，且受底层语言模型上下文窗口约束 [S6.SS2.SSS0.Px2.p1]。此外，抑制思考结束符过于频繁可能导致模型陷入重复循环而非继续推理 [S4.SS2.SSS0.Px1.p1]。作者还指出，能否仅用 1,000 个样本达到 r1-32B 的性能仍是一个开放问题 [S4.SS2.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "However, it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Suppressing the end-of-thinking token delimiter too often can lead the model into repetitive loops instead of continued reasoning."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "It is an open question whether one can achieve their performance with just 1,000 samples."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 11987,
+      "completion_tokens": 2407,
+      "elapsed_s": 8.42
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 29,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

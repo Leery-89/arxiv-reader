@@ -1,0 +1,150 @@
+{
+  "paper": {
+    "arxiv_id": "2311.07288",
+    "title": "Observation of quantum entanglement with top quarks at the ATLAS detector",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 72517,
+    "n_sections": 19,
+    "n_paragraphs": 84
+  },
+  "result": {
+    "summary": "本文报告了在大型强子对撞机上利用 ATLAS 探测器收集的质心能量 13 TeV、积分亮度 140 fb⁻¹ 的质子-质子碰撞数据，在顶夸克-反顶夸克对中观测到自旋纠缠 [abstract]。研究通过测量由带电轻子在各自母顶夸克静止系中夹角推断的单一观测量 D 来探测纠缠，并在顶夸克对产生阈值附近的窄区间内进行测量 [abstract]。在 340 < m_{t\\bar{t}} < 380 GeV 区间，纠缠标记测量值为 D = −0.537 ± 0.002 (stat.) ± 0.019 (syst.) [abstract]。观测结果与无纠缠情景相差超过五个标准差，构成首次在夸克对中观测到纠缠，也是迄今最高能量的纠缠观测 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是在最高可及能量尺度上探测量子纠缠，因为纠缠在最高能量尺度上仍基本未被探索 [abstract]。作者指出，对撞机提供真正的相对论环境和丰富的相互作用，可用于检验对量子力学的基本理解，并探索相对论效应等在量子信息中预期起关键作用的问题 [S1.p1]。近期最重的基本粒子顶夸克被提出作为研究量子纠缠和量子信息的新实验室 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However, entanglement remains largely unexplored at the highest accessible energy scales."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "this observation demonstrates the potential of using high-energy colliders, such as the LHC, as tools for testing our fundamental understanding of quantum mechanics."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Relativistic effects are expected to play a critical role in quantum information"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "the heaviest fundamental particle known to exist, the top quark, was proposed as a new laboratory to study quantum entanglement and quantum information."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文利用顶夸克与反顶夸克之间的自旋关联来探测量子纠缠效应 [S1.p2]。由于顶夸克寿命极短，其自旋信息传递给衰变产物，因此可通过测量带电轻子在母顶夸克静止系中的夹角来提取自旋关联 [S1.p7]。作者定义纠缠标记 D = tr[C]/3，可实验测量为 D = −3·⟨cos φ⟩，其中 ⟨cos φ⟩ 是带电轻子方向经洛伦兹变换到 t\\bar{t} 静止系及各自母顶夸克静止系后夹角余弦的平均值 [S1.p9]。当 D < −1/3 时表明存在纠缠态 [S1.p9]。测量在粒子级定义的基准相空间中进行，以减小蒙特卡洛事件产生器和部分子簇射模型建模顶夸克对产生的不确定性 [abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "the spin correlation between the top quark and antitop quark is used to probe the effects of quantum entanglement"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "the information about the polarizations and spin correlations of the short-lived top quarks is transferred to the decay leptons"
+        },
+        {
+          "id": "S1.p9",
+          "quote": "It is more convenient to define an entanglement marker by using $D=\\textrm{tr}[\\mathbf{C}]/3$"
+        },
+        {
+          "id": "S1.p9",
+          "quote": "The existence of an entangled state is demonstrated if the measurement satisfies $D<-1/3$"
+        },
+        {
+          "id": "abstract",
+          "quote": "It is reported in a fiducial phase space defined with stable particles to minimize the uncertainties"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "分析使用 ATLAS 实验在 2015–2018 年收集的质心能量 √s = 13 TeV、积分亮度 140 fb⁻¹ 的完整质子-质子碰撞数据集 [S1.SS1.p1]。事件选择要求恰好一个电子和一个缪子且电荷相反，至少两个喷注且至少一个被标记为源自 b 强子 [S1.SS2.p1]。信号区确定为 340 < m_{t\\bar{t}} < 380 GeV，并定义了两个验证区 380 < m_{t\\bar{t}} < 500 GeV 和 m_{t\\bar{t}} > 500 GeV [S1.SS2.p4]。每个区域的 t\\bar{t} 事件纯度超过 90% [S1.SS2.p4]。",
+      "evidence": [
+        {
+          "id": "S1.SS1.p1",
+          "quote": "The complete data set of $pp$ collision events at a center-of-mass energy of $\\sqrt{s}=$13\\text{\\,}\\mathrm{TeV}$$ collected with the ATLAS experiment during 2015–2018 is used, corresponding to an integrated luminosity of 140 fb -1."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "events must have exactly one electron and one muon with opposite-sign electric charges."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "A minimum of two jets is required, and at least one of them must be identified to originate from a $b$ -hadron"
+        },
+        {
+          "id": "S1.SS2.p4",
+          "quote": "The optimal mass window for the signal region was determined to be $340<m_{t\\bar{t}}<380$ GeV."
+        },
+        {
+          "id": "S1.SS2.p4",
+          "quote": "Each of the regions has a $t\\bar{t}$ -event purity of more than 90%."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在信号区 340 < m_{t\\bar{t}} < 380 GeV，观测结果为 D = −0.537 ± 0.002 (stat.) ± 0.019 (syst.)，期望值为 −0.470 ± 0.002 (stat.) ± 0.017 (syst.) [S1.SS3.p1]。在两个验证区，测量结果与不同蒙特卡洛设置的预言在不确定度范围内一致，作为方法的一致性检验 [S1.SS4.p1]。在信号区，相对于纠缠极限的观测和期望显著性均远超五个标准差，且不依赖于用于将纠缠极限修正到基准相空间的蒙特卡洛模型 [S1.SS4.p4]。该结果确立了纠缠 t\\bar{t} 态的形成，构成首次在夸克-反夸克对中观测到纠缠 [S1.SS4.p4]。",
+      "evidence": [
+        {
+          "id": "S1.SS3.p1",
+          "quote": "The observed (expected) results are: $D=-0.537\\penalty\\ \\pm 0.002\\penalty\\ \\text{[stat.]}\\pm 0.019\\penalty\\ \\text{[syst.]}\\penalty\\ (-0.470\\pm 0.002\\penalty\\ \\text{[stat.]}\\pm 0.017\\penalty\\ \\text{[syst.])\\penalty\\,}$ in the signal region of $340<m_{t\\bar{t}}<380$ GeV"
+        },
+        {
+          "id": "S1.SS4.p1",
+          "quote": "In both of the validation regions, with no entanglement signal, the measurements are found to agree with the predictions from different MC setups within the uncertainties."
+        },
+        {
+          "id": "S1.SS4.p4",
+          "quote": "the observed and expected significances with respect to the entanglement limit are well beyond five standard deviations"
+        },
+        {
+          "id": "S1.SS4.p4",
+          "quote": "This constitutes the first observation of entanglement in a quark–antiquark pair."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，当前验证区的测量精度不足以排除所使用的任何蒙特卡洛设置 [S1.SS4.p2]。在阈值附近，非相对论 QCD 过程如库仑束缚态效应会影响 t\\bar{t} 事件产生，而蒙特卡洛产生器未考虑这些效应 [S1.SS4.p2]。此外，蒙特卡洛事件产生器将矩阵元与部分子簇射算法结合的过程需要在未来更高精度的 LHC 量子信息研究中特别关注 [Ax1.SS10.p7]。",
+      "evidence": [
+        {
+          "id": "S1.SS4.p2",
+          "quote": "the current precision of the measurements in the validation regions does not allow us to rule out any of the MC setups that were used."
+        },
+        {
+          "id": "S1.SS4.p2",
+          "quote": "non-relativistic QCD processes, such as Coulomb bound state effects, affect the production of $t\\bar{t}$ events and are not accounted for in the MC generators."
+        },
+        {
+          "id": "Ax1.SS10.p7",
+          "quote": "The procedure used in MC event generators to combine the matrix element with a parton-shower algorithm requires special attention in future higher-precision quantum information studies at the LHC."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 18547,
+      "completion_tokens": 2009,
+      "elapsed_s": 8.14
+    }
+  },
+  "verify": {
+    "quote_hits": 21,
+    "quote_total": 21,
+    "quote_rate": 1.0,
+    "inline_hits": 19,
+    "inline_total": 20,
+    "inline_rate": 0.95,
+    "issues": [
+      {
+        "field": "method",
+        "id": "C",
+        "reason": "内嵌 ID 不存在"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3_no_causal",
+    "hash": "96f21339"
+  }
+}

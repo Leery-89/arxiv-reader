@@ -1,0 +1,176 @@
+{
+  "paper": {
+    "arxiv_id": "2408.13687",
+    "title": "Quantum error correction below the surface code threshold",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 88505,
+    "n_sections": 41,
+    "n_paragraphs": 134
+  },
+  "result": {
+    "summary": "本文在超导量子处理器上实现了低于阈值的表面码量子纠错。作者在105量子比特处理器上运行距离-7表面码，在72量子比特处理器上运行距离-5表面码并集成实时解码器，观测到逻辑错误率随码距增加而指数抑制，距离-7码的逻辑寿命超过其最佳物理量子比特寿命的2.4倍 [S2.p5][S2.p7]。作者还通过距离-29重复码探测超低错误率区域，发现逻辑性能受约每小时发生一次的罕见关联错误事件限制，形成约10^-10的错误地板 [S4.p3][S4.p4]。实时解码在距离-5下保持低于阈值性能，平均解码延迟约63微秒 [S5.p3][S5.p4]。作者指出，这些结果表明若可扩展，或能满足大规模容错量子算法的运行需求 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是实现并验证表面码量子纠错在物理错误率低于阈值条件下的运行，从而获得随码距增加而指数抑制的逻辑错误率 [S1.p1]。原文指出，尽管许多平台展示了量子纠错的不同特征，但尚无量子处理器明确展示低于阈值的性能 [S1.p1]。此外，容错量子计算还要求系统在数小时时间尺度上保持稳定，并实时解码综合征信息 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "While many platforms have demonstrated different features of quantum error correction, no quantum processor has definitively shown below-threshold performance."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "If the physical operations are below a critical noise threshold, the logical error should be suppressed exponentially as we increase the number of physical qubits per logical qubit."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "These include features like stability over the hours-long timescales of quantum algorithms and the active removal of correlated error sources like leakage."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "the syndrome information produced by the quantum device must be decoded as fast as it is generated."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者在105量子比特处理器上实现距离-7表面码，在72量子比特处理器上实现距离-5表面码，并采用数据量子比特泄漏移除（DQLR）来抑制泄漏 [S2.p3][S3.p4]。解码方面使用两类离线高精度解码器：神经网络解码器和增强匹配合成的关联最小权重完美匹配解码器集成，并针对器件噪声进行微调 [S2.p2]。实时解码采用基于Sparse Blossom算法的多线程流式解码器，使用恒定大小的图缓冲区和分块并行化 [S5.p2]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "We operate a distance-7 surface code memory comprising 49 data qubits, 48 measure qubits, and 4 additional leakage removal qubits"
+        },
+        {
+          "id": "S2.p2",
+          "quote": "One is a neural network decoder, and the other is a harmonized ensemble of correlated minimum-weight perfect matching decoders augmented with matching synthesis."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "For data qubits, DQLR swaps leakage excitations to measure qubits (or additional leakage removal qubits)."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "We employ a specialized version of the Sparse Blossom algorithm optimized to quickly resolve local configurations of errors common in surface code decoding"
+        },
+        {
+          "id": "S5.p2",
+          "quote": "The decoder operates on a constant-sized graph buffer which emulates the section of the error graph being decoded at any instant"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在105量子比特和72量子比特超导transmon处理器上进行，运行距离-3、-5、-7表面码以及距离-29重复码 [S2.p1][S4.p2]。表面码逻辑性能通过拟合最多250个纠错周期的逻辑错误率来表征，并平均9个距离-3子网格和4个距离-5子网格 [S2.p5]。作者还进行了相干错误注入实验，以及15小时内重复16次的稳定性测试 [S3.p1][S3.p5]。重复码实验运行1000个纠错周期、共2×10^10个周期，耗时5.5小时 [S4.p2]。实时解码实验在距离-5下测试最多10^6个周期 [S5.p3]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "We begin with results from our 105-qubit processor depicted in Fig. 1 a."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "We characterize our surface code logical performance by fitting the logical error per cycle $\\varepsilon_{d}$ up to 250 cycles"
+        },
+        {
+          "id": "S2.p5",
+          "quote": "We average the performance of 9 different distance-3 subgrids and 4 different distance-5 subgrids to compare to the distance-7 code."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "we inject coherent errors with variable strength on both data and measure qubits"
+        },
+        {
+          "id": "S3.p5",
+          "quote": "we measure logical performance of one distance-5 and four distance-3 codes 16 times over 15 hours"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "we run a distance-29 repetition code for 1000 cycles of error correction over $2\\times 10^{7}$ shots"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "In total, we execute $2\\times 10^{10}$ cycles of error correction comprising 5.5 hours of processor execution time."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "For our distance-5 surface code, we test different problem sizes by increasing the number of error correction cycles up to $10^{6}$."
+        }
+      ]
+    },
+    "findings": {
+      "text": "距离-7表面码的逻辑错误率随码距增加而指数抑制，神经网络解码器给出Λ=2.14±0.02，每周期逻辑错误率ε7=(1.43±0.03)×10^-3 [S2.p5]。距离-7逻辑量子比特寿命为291±6微秒，超过其最佳组成物理量子比特寿命的2.4±0.3倍 [S2.p7]。实时解码在距离-5下保持低于阈值性能，平均延迟约63±17微秒，且不随实验长度增加而增长 [S5.p3][S5.p4]。距离-29重复码在d=5到11之间给出Λ=8.4±0.1，但在d≥15时偏离指数抑制，出现约10^-10的逻辑错误地板，由约每小时发生一次的关联错误爆发导致 [S4.p3][S4.p4]。",
+      "evidence": [
+        {
+          "id": "S2.p5",
+          "quote": "With our neural network decoder, we observe $\\Lambda=2.14\\pm 0.02$ and $\\varepsilon_{7}$ = $(1.43\\pm 0.03)\\times 10^{-3}$"
+        },
+        {
+          "id": "S2.p7",
+          "quote": "The distance-7 logical qubit lifetime is $291\\pm 6$ µs, exceeding the lifetimes of all the constituent physical qubits (median $85\\pm 7$ µs, best $119\\pm 13$ µs) by a factor of $2.4\\pm 0.3$."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "We observe that the average latency remains roughly constant at a net average of $63\\pm 17$ µs independent of the length of the experiment"
+        },
+        {
+          "id": "S5.p4",
+          "quote": "we are able to maintain below-threshold performance even under the strict timing requirements imposed by real-time decoding."
+        },
+        {
+          "id": "S4.p3",
+          "quote": "we obtain an error suppression factor $\\Lambda=8.4\\pm 0.1$ when fitting logical error per cycle versus code distance between $d=5$ and 11"
+        },
+        {
+          "id": "S4.p3",
+          "quote": "at code distances $d\\geq 15$, we observe a deviation from exponential error suppression at high distances culminating in an apparent logical error floor of $10^{-10}$."
+        },
+        {
+          "id": "S4.p4",
+          "quote": "They occur approximately once an hour, rather than once every few seconds"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，尽管原则上可以通过扩大当前处理器规模来降低逻辑错误率，但在实践中资源消耗巨大；外推预测显示，达到10^-6错误率需要距离-27逻辑量子比特，使用1457个物理量子比特 [S6.p3]。重复码实验识别出约10^-10的噪声地板，由关联错误爆发导致，其机制尚未被理解，识别并缓解该机制对运行更大规模量子算法至关重要 [S6.p3][S4.p4]。此外，实时解码的延迟尚未包含对逻辑电路的反馈，且随着码距增加，每周期综合征测量数呈二次增长，将带来额外挑战 [S5.p3][S6.p3]。",
+      "evidence": [
+        {
+          "id": "S6.p3",
+          "quote": "Extrapolating the projections in Fig. 1 d, achieving a $10^{-6}$ error rate would require a distance-27 logical qubit using 1457 physical qubits."
+        },
+        {
+          "id": "S6.p3",
+          "quote": "Our repetition code experiments also identify a noise floor at an error rate of $10^{-10}$ caused by correlated bursts of errors."
+        },
+        {
+          "id": "S4.p4",
+          "quote": "We do not yet understand the cause of these events, but mitigating them remains vital to building a fault-tolerant quantum computer."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "This latency will eventually determine the reaction time of the logical processor when enacting non-Clifford gates, but does not yet include feedback into the logical circuit."
+        },
+        {
+          "id": "S6.p3",
+          "quote": "Scaling up will also bring additional challenges in real-time decoding as the syndrome measurements per cycle increase quadratically with code distance."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 22020,
+      "completion_tokens": 2289,
+      "elapsed_s": 9.17
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 29,
+    "quote_rate": 1.0,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3_no_multi",
+    "hash": "a604ce17"
+  }
+}

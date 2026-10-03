@@ -1,0 +1,268 @@
+{
+  "paper": {
+    "arxiv_id": "2502.03387",
+    "title": "LIMO: Less is More for Reasoning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 29931,
+    "n_sections": 29,
+    "n_paragraphs": 54
+  },
+  "result": {
+    "summary": "本文挑战了复杂推理需要海量训练数据的假设，提出 Less-Is-More Reasoning (LIMO) 假说：在预训练已编码丰富领域知识的基础模型中，复杂推理可通过少量但精心设计的认知过程示范被激发 [abstract][S1.p3]。作者通过多层过滤从海量数学题中筛选出 800 个高质量样本，并对 Qwen2.5-32B-Instruct 进行简单 SFT [S1.p4]。LIMO 在 AIME24 上达到 63.3%、MATH500 上达到 95.6%，仅使用先前方法 1% 的训练数据，并在分布外基准上取得 45.8% 的绝对提升 [abstract]。作者认为这表明复杂推理的激发阈值取决于预训练知识库的完整性和后训练示例作为认知模板的有效性 [abstract]。",
+    "research_question": {
+      "text": "本文要解决的问题是：复杂推理是否真的需要海量训练数据，还是可以通过少量高质量示例激发。原文指出，传统范式基于两个假设——掌握复杂认知过程需要大量监督示范，且监督微调主要导致记忆而非真正泛化 [S1.p1]。作者认为这种数据密集型范式可能不再必要，因为现代基础模型已在预训练中编码大量数学知识，挑战从知识获取转变为知识激发 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Complex reasoning has long been considered one of the most challenging capabilities to instill in large language models (LLMs)."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "first, that mastering such complex cognitive processes requires extensive supervised demonstrations, and second, that supervised fine-tuning leads primarily to memorization rather than true generalization."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We argue this data-intensive paradigm may no longer be necessary."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Contemporary LLMs may already possess rich mathematical knowledge, transforming the challenge from knowledge acquisition to knowledge elicitation."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提出 LIMO 假说，认为在预训练已全面编码领域知识的基础模型中，复杂推理可通过少量但精确编排的认知过程示范涌现，其两个前提是模型参数中潜在存在前置知识，以及推理链能将复杂问题分解为详细逻辑步骤 [S3.p1]。方法上，作者构建了一个多层过滤的数据筛选流程：先用 Qwen2.5-Math-7B-Instruct 做粗难度过滤，再用 DeepSeek-R1-Distill-Qwen-32B 采样 32 次保留仅解出 1–3 次的问题，得到 2,125 个问题的 LIMO-Pool [S3.SS1.SSS1.p3]。随后用 DeepSeek R1、DeepSeek-R1-Distill-Qwen-32B 和 QwQ-32B 生成推理链，并基于规则评分系统按详细推理、自我验证、探索性方法和自适应粒度四个维度打分，选出最高分的 800 个样本构成 LIMO 数据集 [S3.SS1.SSS2.p1][S3.SS1.SSS2.p6][S3.SS1.SSS2.p7]。训练上，作者对 Qwen2.5-32B-Instruct 进行全参数监督微调，使用 DeepSpeed ZeRO-3 和 FlashAttention-2，学习率 5.0e-6，余弦衰减，省略 warmup，训练 15 个 epoch，batch size 为 64 [S4.p2]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "In foundation models where domain knowledge has been comprehensively encoded during pre-training, sophisticated reasoning capabilities can emerge through minimal but precisely orchestrated demonstrations of cognitive processes."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "(I) The latent presence of prerequisite knowledge within the model’s parameter space (II) The quality of reasoning chains that precisely decompose complex problems into detailed, logical steps"
+        },
+        {
+          "id": "S3.SS1.SSS1.p3",
+          "quote": "we first applied a baseline difficulty filter using a short-CoT mathematical model, Qwen2.5-Math-7B-Instruct."
+        },
+        {
+          "id": "S3.SS1.SSS1.p3",
+          "quote": "Problems that were successfully solved in only 1–3 out of 32 attempts were retained, yielding a refined dataset of 2,125 problems"
+        },
+        {
+          "id": "S3.SS1.SSS2.p1",
+          "quote": "we employed three state-of-the-art reasoning models—DeepSeek R1, DeepSeek-R1-Distill-Qwen-32B, and QwQ-32B —sampling multiple solutions from each to generate diverse reasoning approaches."
+        },
+        {
+          "id": "S3.SS1.SSS2.p6",
+          "quote": "we implemented a rule-based scoring system that calculated weighted metrics for each dimension."
+        },
+        {
+          "id": "S3.SS1.SSS2.p7",
+          "quote": "we selected the highest-scoring solution for each problem, ranked these pairs by quality score, and extracted the top 800 to form the LIMO Dataset."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "We fine-tune Qwen2.5-32B-Instruct using supervised fine-tuning on our LIMO dataset."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "The training process employs full-parameter fine-tuning with DeepSpeed ZeRO-3 optimization and FlashAttention-2."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "we utilize a learning rate of 5.0e-6 with a cosine decay schedule."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "The model is trained for 15 epochs with a batch size of 64 examples"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "评估框架包含域内和分布外两部分：域内使用 AIME24、MATH500 和 AMC23 [S5.SS0.SSS0.Px1.p1]；分布外使用 OlympiadBench、CHMath、Gaokao、Kaoyan、GradeSchool、Minerva 和 GPQA [S5.SS0.SSS0.Px2.p1]。所有基准采用零样本思维链下的 pass@1 指标，较大基准用贪心解码单样本，小于 50 题的基准生成 4 个样本（temperature=0.6）计算无偏 pass@1，最大输出长度 32,768 token [S5.SS0.SSS0.Px3.p1]。对比基线包括 OpenAI-o1-preview、QwQ-32B-Preview 和 Qwen2.5-32B-Instruct，以及用 OpenThoughts-114k 和 NuminaMath-100k 微调的模型 [S6.SS1.p1][S6.SS1.p2]。此外还进行了推理链质量（L1–L5）、问题难度（Simple-500、Complex-500、Advanced-500）、预训练骨干（Qwen1.5-32B-Chat vs Qwen2.5-32B-Instruct）、模型规模（3B 到 72B）和样本效率（400 到 2,000 样本）的消融分析 [S6.SS3.SSS1.p2][S6.SS3.SSS2.p1][S6.SS3.SSS3.p1][S6.SS3.SSS3.p3][S6.SS3.SSS5.p1]。",
+      "evidence": [
+        {
+          "id": "S5.SS0.SSS0.Px1.p1",
+          "quote": "the American Invitational Mathematics Examination (AIME24), MATH500, and the American Mathematics Competitions (AMC23)."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px2.p1",
+          "quote": "we include diverse mathematical competitions like OlympiadBench to test performance on different mathematical challenges."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px2.p1",
+          "quote": "CHMath (2024 Chinese High School Mathematics League), Gaokao (China’s 2024 College Entrance Exam), Kaoyan (Chinese Graduate School Entrance Exams), and GradeSchool (our new elementary mathematics benchmark)."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px2.p1",
+          "quote": "we incorporate multi-disciplinary benchmarks including Minerva (undergraduate-level STEM) and GPQA"
+        },
+        {
+          "id": "S5.SS0.SSS0.Px3.p1",
+          "quote": "We evaluate performance using the pass@1 metric in a zero-shot chain-of-thought setting across all benchmarks."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px3.p1",
+          "quote": "For smaller benchmarks (less than 50 problems: AIME24, AMC23, and CHMath), we generate 4 samples (temperature=0.6) and calculate the unbiased pass@1 metric."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px3.p1",
+          "quote": "All evaluations maintain a 32,768 token maximum output length."
+        },
+        {
+          "id": "S6.SS1.p1",
+          "quote": "These include OpenAI-o1-preview, a large language model that has demonstrated advanced mathematical reasoning abilities across various complex tasks; QwQ-32B-Preview, a model specifically designed for mathematical problem-solving with strong reasoning capabilities; and Qwen2.5-32B-Instruct, which serves as our base model for comparative analysis."
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "These comparative datasets include OpenThoughts-114k, a synthetic reasoning dataset containing 114k examples covering mathematics, science, coding, and puzzles"
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "and NuminaMath-100k, a randomly selected 100k subset of NuminaMath-CoT"
+        },
+        {
+          "id": "S6.SS3.SSS1.p2",
+          "quote": "We collect and categorize these solutions into five distinct quality levels (L1-L5, with L5 being the highest)"
+        },
+        {
+          "id": "S6.SS3.SSS2.p1",
+          "quote": "We select three sets of 500 problems with increasing difficulty: Simple-500 (MATH levels 1-2), Complex-500 (MATH levels 3-5), and Advanced-500 (AIME problems)."
+        },
+        {
+          "id": "S6.SS3.SSS3.p1",
+          "quote": "we compare two 32B-parameter models: Qwen1.5-32B-Chat and Qwen2.5-32B-Instruct (LIMO’s base model)."
+        },
+        {
+          "id": "S6.SS3.SSS3.p3",
+          "quote": "we fine-tune models from the Qwen2.5-Instruct series of varying sizes—3B, 7B, 14B, 32B, and 72B—using the LIMO dataset with 800 high-quality samples."
+        },
+        {
+          "id": "S6.SS3.SSS5.p1",
+          "quote": "we select top-ranked subsets of varying sizes—400, 800, 1,200, 1,600, and 2,000 questions—to construct five datasets (LIMO-400 through LIMO-2k)."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在域内任务上，LIMO 在 AIME24 达到 63.3%，优于 QwQ-32B-Preview 的 50.0% 和 OpenAI-o1-preview 的 44.6%；在 MATH500 达到 95.6%，优于 QwQ-32B-Preview 的 89.8% 和 OpenAI-o1-preview 的 85.5%；在 AMC23 达到 96.3%，高于 QwQ-32B-Preview 的 83.6% [S6.SS2.SSS0.Px1.p1]。在分布外任务上，LIMO 在 OlympiadBench 达到 67.6%，优于 QwQ-32B-Preview 的 58.5% 和基座的 45.3%；在 CHMath 达到 84.2% 对 68.5%，在 GradeSchool 达到 76.2% 对 63.8%；在 GPQA 达到 70.7%，接近 OpenAI-o1-preview 的 73.3% [S6.SS2.SSS0.Px2.p1]。与更大数据集相比，NuminaMath-100k 出现显著退化（32.3% 对基座 49.9%），OpenThoughts-114k 为 58.3%，而 LIMO 的 800 题达到 78.1% [S6.SS2.SSS0.Px3.p1]。LIMO 在所有基准上平均性能最高，为 78.1% [S6.SS2.SSS0.Px4.p1]。消融分析显示，推理链质量越高模型性能越好，L5 在 AIME24 和 MATH500 上最高 [S6.SS3.SSS1.p3]；仅改变问题选择即可在 AIME2024 上带来 16% 准确率提升，达到 51.5%，Advanced-500 训练的模型在 MATH500 上达到 91.2% [S6.SS3.SSS2.p1]；预训练骨干影响显著，LIMO（基于 Qwen2.5）在 AIME2024 上比 Qwen1.5 高 54.1 个百分点（63.3% 对 9.2%），在 MATH500 上高 30.4 个百分点 [S6.SS3.SSS3.p2]；模型规模增大时 AIME24 从 3B 的 2.5 升至 72B 的 68.3，但 32B 与 72B 在 MATH500 上差异微小（95.6% 对 94.8%），AIME24 上为 63.3% 对 68.3%，可能存在饱和点 [S6.SS3.SSS4.p1]；仅 400 样本即可将 AIME24 从 16.5 提升至 57.5、MATH500 从 79.4 提升至 94.8，超过 800 样本后收益递减，2k 最佳（AIME24 69.6，MATH500 95.8）但相对 1.6k 提升很小 [S6.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "For AIME24, LIMO achieves 63.3% accuracy, outperforming QwQ-32B-Preview (50.0%) and OpenAI-o1-preview (44.6%) by significant margins."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "On MATH500, LIMO achieves a notable 95.6% accuracy, surpassing QwQ-32B-Preview (89.8%) and OpenAI-o1-preview (85.5%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "The performance gap is even more pronounced on AMC23, where LIMO reaches 96.3% accuracy compared to QwQ-32B-Preview’s 83.6%."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "On OlympiadBench, LIMO achieves 67.6% accuracy, significantly outperforming QwQ-32B-Preview (58.5%) and the base model (45.3%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "Similar improvements are observed on other challenging benchmarks such as CHMath (84.2% vs 68.5%) and GradeSchool (76.2% vs 63.8%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "Notably, LIMO maintains competitive performance even on GPQA, where it achieves 70.7% accuracy, close to OpenAI-o1-preview’s leading score of 73.3%."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "NuminaMath-100k shows significant degradation (32.3% vs. base model’s 49.9%) due to uncurated reasoning chains, while OpenThoughts-114k achieves suboptimal results (58.3%) probably due to unfocused problem selection."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "In contrast, LIMO’s carefully curated 800 problems yield superior performance (78.1%)"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px4.p1",
+          "quote": "LIMO achieves the highest average performance of 78.1% across all benchmarks"
+        },
+        {
+          "id": "S6.SS3.SSS1.p3",
+          "quote": "L5-trained models achieve highest results on both AIME24 and MATH500, with performance decreasing consistently with each quality level."
+        },
+        {
+          "id": "S6.SS3.SSS2.p1",
+          "quote": "Results in Figure 4 show that modifying problem selection alone leads to 16% accuracy improvement on AIME2024, reaching 51.5%."
+        },
+        {
+          "id": "S6.SS3.SSS2.p1",
+          "quote": "Notably, the model fine-tuned on Advanced-500 achieves 91.2% on MATH500 despite no in-domain training data"
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "LIMO (built on Qwen2.5) achieves 63.3% accuracy on AIME2024, a 54.1 percentage point improvement over Qwen1.5’s 9.2%."
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "On MATH500, LIMO reaches 95.6% accuracy, surpassing Qwen1.5 by 30.4 percentage points."
+        },
+        {
+          "id": "S6.SS3.SSS4.p1",
+          "quote": "The performance on AIME24 shows a marked increase with model size, rising from 2.5 for the 3B model to 68.3 for the 72B model."
+        },
+        {
+          "id": "S6.SS3.SSS4.p1",
+          "quote": "The difference in performance between the 32B and 72B models is marginal on MATH500 (95.6% vs. 94.8%) and slightly less pronounced on AIME24 (63.3% vs. 68.3%)."
+        },
+        {
+          "id": "S6.SS3.SSS4.p1",
+          "quote": "This indicates a potential saturation point, where increasing the number of parameters further may yield diminishing returns in fine-tuning performance for these benchmarks."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "Fine-tuning with just 400 samples yields dramatic improvement over the base model, increasing AIME24 accuracy from 16.5 to 57.5 and MATH500 accuracy from 79.4 to 94.8."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "we observe diminishing returns beyond 800 samples, with only marginal increases between LIMO-800 and LIMO-1k2 (+0.9 on AIME24, -0.2 on MATH500)"
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "The highest dataset size (2k) provides the best overall performance (69.6 on AIME24, 95.8 on MATH500), but with minimal improvement over 1.6k"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，维持有效性能所需的最小样本量下界仍是一个开放问题 [S6.SS3.SSS5.p1]。此外，作者提出未来工作可探索主动学习策略以进一步优化样本效率 [S6.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS3.SSS5.p1",
+          "quote": "though the lower bound for maintaining effective performance remains an open question."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "Future work could explore active learning strategies to further optimize sample efficiency."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 7759,
+      "completion_tokens": 4563,
+      "elapsed_s": 14.41
+    }
+  },
+  "verify": {
+    "quote_hits": 52,
+    "quote_total": 52,
+    "quote_rate": 1.0,
+    "inline_hits": 29,
+    "inline_total": 29,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_causal",
+    "hash": "96f21339"
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "paper": {
+    "arxiv_id": "2309.14316",
+    "title": "Physics of Language Models: Part 3.1, Knowledge Storage and Extraction Thanks: Project page: https://physics.allen-zhu.com/part-3-knowledge/part-3-1 . An extended video of this paper is available at https://youtu.be/YSHzKmEianc .\nV1 was circulated internally at Meta on Sep 18, 2023, and appeared on arXiv on Sep 25, 2023.\nV2 is nearly identical to V1, with minor corrections to author names and writing.\nV3 includes additional Llama experiments and further writing improvements. We would like to thank Lin Xiao, Chunting Zhou, Tianyi Peng, Xiaodong Liu, and Zhijie Zhou for many helpful conversations. We would like to extend special thanks to Nabib Ahmed, Giri Anantharaman, Lucca Bertoncini, Henry Estela, Liao Hu, Caleb Ho, Wil Johnson, Apostolos Kokolis, and Shubho Sengupta from Meta FAIR, as well as Ian Clark, Gourab De, Anmol Mann, and Max Pfeifer from W&B ; without their invaluable support, the experiments in this paper would not have been possible.",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75682,
+    "n_sections": 29,
+    "n_paragraphs": 134
+  },
+  "result": {
+    "summary": "这篇论文研究语言模型如何在预训练中记忆知识、并在推理时提取知识，区分了“逐字记忆”与“可提取的知识”。作者构建了合成的传记数据集 bioS 和由 Llama 生成的接近真实的 bioR，并通过混合训练、预训练加指令微调、以及 P-probing 和 Q-probing 探针进行受控实验 [S1.p6][S2.p1][S5.p1]。主要结论是：仅在传记上预训练后微调，模型难以对未见个体进行知识提取，而知识增强（如多版本、句子置换、重复全名）能显著提升提取能力 [S1.p8][S4.SS2.p3]。探针结果表明，知识增强使属性几乎线性地编码在人物姓名 token 的隐藏状态中，这与 QA 微调准确率高度相关 [S5.SS2.p4]。作者据此建议在预训练阶段对关键但稀疏的数据进行改写增强，并更早引入类 QA 数据 [S1.p9]。",
+    "research_question": {
+      "text": "论文要回答的核心问题是：语言模型回答“Abraham Lincoln 的生日是什么”这类问题时，是基于训练中见过相似问题（即作弊/数据污染），还是真正从 Wikipedia 等来源中学会了提取知识 [abstract][S1.p5]。作者指出，以往研究使用互联网预训练模型，无法区分这两种可能，因此需要受控实验来研究模型如何在训练中记忆知识、并在推理时提取知识 [S1.p5][S1.p6]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "do they answer such questions based on exposure to similar questions during training (i.e., cheating), or by genuinely learning to extract knowledge from sources like Wikipedia?"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "leaving it unclear whether the model answers questions like “Which city was Abraham Lincoln born in?” by extracting knowledge from Lincoln’s biography ( our focus) or if it encountered a similar (or same!) question during training and memorized the answer"
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Given the challenges of conducting controlled experiments with internet data, we propose studying this question using well-controlled, synthetically generated data"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了受控的合成传记数据集 bioS（10 万个体，每人六句、每句对应一个属性）以及由 Llama 生成的接近真实的 bioR 数据集，并配套六类属性的 QA 数据 [S2.p2][S2.p3][S2.p4][S2.p6]。训练方式包括混合训练（BIO 数据加一半个体的 QA 一起训练）和预训练加指令微调（先在 BIO 上预训练，再用一半个体的 QA 微调），并在测试集个体上评估 OOD 泛化 [S2.SS1.p3][S2.SS1.p4]。为解释现象，作者提出 P-probing（在传记特定 token 位置用近线性分类器预测属性）和 Q-probing（仅输入人名，从最后一层隐藏状态线性预测属性）两种探针方法 [S5.SS1.p1][S5.SS2.p2]。",
+      "evidence": [
+        {
+          "id": "S2.p2",
+          "quote": "The synthetic dataset, bioS, generates profiles for $N=100,000$ individuals."
+        },
+        {
+          "id": "S2.p3",
+          "quote": "We generate a six-sentence biographical text entry for each individual, highlighting six distinct aspects."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We examine a “close-to-real” dataset produced by Llama."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "For each individual, we pose six questions targeting their six unique attributes"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "Here, we pre-train the language model from scratch on the BIO data"
+        },
+        {
+          "id": "S2.SS1.p4",
+          "quote": "In mixed training, we train the model from scratch on all BIO data and half of the QA data."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "In P-probing, we feed biography entries into a pretrained model, and finetune an additional linear classifier on the model’s final hidden layer"
+        },
+        {
+          "id": "S5.SS2.p2",
+          "quote": "We evaluate sentences containing only the person’s full name and train a linear classifier on the last layer’s hidden states to predict the person’s six attributes."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 bioS 和 bioR 数据集上进行，使用 GPT2/Llama 架构（bioS 用 124M，bioR 用 302M），并在部分负结果中使用 682M 模型 [S2.SS1.p1]。评估方式为：在未见个体（P_test）的 QA 上测量生成准确率，同时用 P-probing 和 Q-probing 探针分析知识编码位置 [S3.p1][S5.SS1.p1][S5.SS2.p2]。此外还进行了知识增强实验（multi M、permute、fullname）、celebrity 帮助 minority 实验，以及双向模型 GBERT 的 MLM 实验 [S4.SS2.p1][S6.p2][S7.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We use a 12-layer, 12-head, 768-dim GPT2 (124M) or Llama architecture for pre-training on the bioS data, but a larger 12-layer, 20-head, 1280-dim GPT2 (302M) or Llama for the bioR data"
+        },
+        {
+          "id": "S3.p1",
+          "quote": "The model’s generative accuracy is then tested on the QAs from the remaining individuals ( ${\\mathcal{P}_{\\mathsf{test}}}$) to assess its out-of-distribution (OOD) generalization capability."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We focus on three augmentations: adding multiplicity, introducing permutations, and repeating full names"
+        },
+        {
+          "id": "S6.p2",
+          "quote": "We test both synthetic bioS and more realistic bioR data."
+        },
+        {
+          "id": "S7.p2",
+          "quote": "We call this modified model GBERT."
+        }
+      ]
+    },
+    "findings": {
+      "text": "混合训练能让模型学会提取知识，在 bioS single 上 OOD 准确率为 86.6%，bioR single 上为 77.7%，但模型表现出类似“为考试而学习”的行为 [S3.p2][S3.SS1.p2]。仅在 BIO 上预训练再 QA 微调时，模型对未见个体的 QA 准确率几乎为零，即使模型规模远大于 N、个体被暴露上千次 [S4.SS1.p2]。知识增强能大幅提升提取能力，例如每人 5 个多样化传记条目将 QA 微调准确率从 9.7% 提升到 96.6% [S4.SS2.p3]。P-probing 和 Q-probing 表明，知识增强使属性几乎线性地编码在人物姓名 token 的隐藏状态中，且 Q-probing 准确率与 QA 微调准确率高度相关 [S5.SS1.p4][S5.SS2.p4]。此外，加入 celebrity 数据可将 minority 的 QA 准确率从 4.4% 提升到 86.8%（bioS），从 10.0% 提升到 76.3%（bioR）[S6.p4][S6.p5]。双向模型 GBERT 在 MLM 预训练后，除非知识是独立单词（如月、日、年），否则难以提取知识 [S7.p8]。",
+      "evidence": [
+        {
+          "id": "S3.p2",
+          "quote": "the OOD generalization accuracies are $86.6\\%$ when mixed-trained on bioS single and $77.7\\%$ for bioR single."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "This is akin to the “study to pass the test” approach in schools"
+        },
+        {
+          "id": "S4.SS1.p2",
+          "quote": "the model exhibits zero-zero QA accuracy on ${\\mathcal{P}_{\\mathsf{test}}}$ for all finetuning parameters"
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "boosts the QA fine-tune accuracy (on ${\\mathcal{P}_{\\mathsf{test}}}$) from 9.7% to 96.6%."
+        },
+        {
+          "id": "S5.SS1.p4",
+          "quote": "the P-probing accuracy for all six attributes rises to nearly 100% from the first special position"
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "The QA finetune accuracy correlates closely with Q-probing accuracy"
+        },
+        {
+          "id": "S6.p4",
+          "quote": "Introducing celebrity data boosts the minority group’s QA accuracy (e.g., from 4.4% to 86.8% for the bioS data)."
+        },
+        {
+          "id": "S6.p5",
+          "quote": "introducing celebrity data increases the minority’s accuracy from 10.0% to 76.3%."
+        },
+        {
+          "id": "S7.p8",
+          "quote": "Unless the knowledge is a standalone word or of independent words (like month, day, year), extracting knowledge after MLM pretraining might prove challenging, if not totally impossible."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，本文主要使用合成和 Llama 生成的受控数据，而非真实互联网数据，因此结论在真实场景中的适用性需要进一步验证 [S1.p6][S2.p1]。作者也承认，翻译增强（如英译法）虽有益但未在正文中详细展开 [S4.SS2.p2]。此外，P-probing 的某些扩展（如对主模型加 LoRA 更新）未带来显著提升，因此被省略 [S5.SS1.SSS2.p1]。对于双向模型，作者仅用 GBERT 在 bioS 上展示负结果，未覆盖更多设置 [S7.p1][A8.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "Given the challenges of conducting controlled experiments with internet data, we propose studying this question using well-controlled, synthetically generated data"
+        },
+        {
+          "id": "S2.p1",
+          "quote": "we introduce synthetic human biography datasets and near-real datasets generated by LLaMa."
+        },
+        {
+          "id": "S4.SS2.p2",
+          "quote": "we also experimented with translation (e.g., English to French) to increase sentence diversity, which proved beneficial for the model’s knowledge extraction, but we have not included these details in this paper for clarity."
+        },
+        {
+          "id": "S5.SS1.SSS2.p1",
+          "quote": "our experiments showed no significant increase in P-probing accuracies, so we omit the details."
+        },
+        {
+          "id": "S7.p1",
+          "quote": "This paper primarily explores knowledge storage and extraction in auto-regressive language models."
+        },
+        {
+          "id": "A8.p1",
+          "quote": "Since we only apply GBERT to the bioS data family to demonstrate a negative result"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 19033,
+      "completion_tokens": 2545,
+      "elapsed_s": 10.0
+    }
+  },
+  "verify": {
+    "quote_hits": 30,
+    "quote_total": 31,
+    "quote_rate": 0.968,
+    "inline_hits": 32,
+    "inline_total": 34,
+    "inline_rate": 0.941,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S5.SS1.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "S5.SS2.p2",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "findings",
+        "id": "S3.SS1.p2",
+        "reason": "quote 不在该段落里",
+        "quote": "This is akin to the “study to pass the test” approach in schools"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "odd",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

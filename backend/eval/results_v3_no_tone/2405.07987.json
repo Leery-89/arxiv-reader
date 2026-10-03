@@ -1,0 +1,252 @@
+{
+  "paper": {
+    "arxiv_id": "2405.07987",
+    "title": "The Platonic Representation Hypothesis",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 78065,
+    "n_sections": 45,
+    "n_paragraphs": 108
+  },
+  "result": {
+    "summary": "这篇论文提出并论证了“柏拉图表示假说”：不同神经网络（跨架构、目标、甚至模态）对数据的表示正在收敛，并趋向于一个反映现实世界联合分布的共享统计模型 [abstract][S1.p2][S1.p4]。作者综述了文献中表示收敛的证据，并通过实验测量了78个视觉模型之间、以及视觉与语言模型之间的表示对齐，发现对齐随模型能力和规模提升而增强 [S2.SS2.p2][S2.SS3.p5]。论文进一步提出任务通用性、模型容量和简单性偏置三种机制来解释收敛 [S3.SS1.p2][S3.SS2.p2][S3.SS3.p2]，并给出一个理想化世界中对比学习收敛到PMI核的形式化分析 [S4.SS2.p4][S4.SS2.p6]。作者还讨论了收敛在跨模态数据共享、翻译适应、减少幻觉与偏见等方面的潜在意义 [S5.SS0.SSS0.Px2.p1][S5.SS0.SSS0.Px3.p1][S5.SS0.SSS0.Px4.p1]，并明确列出了若干反例与局限 [S6.SS0.SSS0.Px1.p1][S6.SS0.SSS0.Px2.p1][S6.SS0.SSS0.Px6.p1]。",
+    "research_question": {
+      "text": "论文要探讨的核心问题是：不同神经网络模型对数据的表示是否正在收敛，这种收敛是否会持续，以及最终会收敛到什么表示 [S1.p2][S1.p3]。作者提出的中心假说是，这种收敛存在一个终点和驱动原则：不同模型都在试图获得对现实的表示，即对生成观测数据的世界事件联合分布的表示 [S1.p4]。作者将这一收敛的假想表示称为“柏拉图表示”，并指出其与科学哲学中的“收敛实在论”以及表示学习文献中的相关论点有关 [S1.p5]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This paper explores one aspect of this trend: representational convergence."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We argue that there is a growing similarity in how datapoints are represented in different neural network models."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "What has led to this convergence? Will it continue? And ultimately, where does it end?"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "different models are all trying to arrive at a representation of reality, meaning a representation of the joint distribution over events in the world that generate the data we observe."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We call this converged hypothetical representation the “platonic representation” in reference to Plato’s Allegory of the Cave"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "our hypothesis is also related to the notion of “convergent realism” in the philosophy of science"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文将表示定义为向量嵌入，并用其诱导的核（相似性结构）来刻画，将表示对齐定义为两个核之间相似性的度量 [S2.SS0.SSS0.Px1.p1]。实验中作者采用互最近邻度量，即两个核诱导的k近邻集合的平均交集除以k [S2.SS0.SSS0.Px1.p2]。为测量跨模态对齐，作者使用配对数据集（如Wikipedia图像-标题数据集WIT）作为桥梁，分别计算图像核与文本核之间的对齐 [S2.SS3.p5]。此外，论文提出任务通用性、模型容量和简单性偏置三种假说来解释收敛 [S3.SS1.p2][S3.SS2.p2][S3.SS3.p2]，并在理想化世界模型下形式化分析对比学习收敛到PMI核 [S4.SS2.p4][S4.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "We restrict our attention to representations that are vector embeddings."
+        },
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "we define representational alignment as a measure of the similarity of the similarity structures induced by two representations"
+        },
+        {
+          "id": "S2.SS0.SSS0.Px1.p2",
+          "quote": "we use a mutual nearest-neighbor metric that measures the mean intersection of the $k$ -nearest neighbor sets induced by two kernels"
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "To measure cross-modal alignment, we use paired datasets to bridge the two modalities."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "we use the Wikipedia captions dataset $\\{(x_{i},y_{i})\\}_{i}$, composed of images from Wikipedia ( $x_{i}$) and their corresponding captions ( $y_{i}$)."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "The Multitask Scaling Hypothesis There are fewer representations that are competent for $N$ tasks than there are for $M<N$ tasks."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "The Capacity Hypothesis Bigger models are more likely to converge to a shared representation than smaller models."
+        },
+        {
+          "id": "S3.SS3.p2",
+          "quote": "The Simplicity Bias Hypothesis Deep networks are biased toward finding simple fits to the data, and the bigger the model, the stronger the bias."
+        },
+        {
+          "id": "S4.SS2.p4",
+          "quote": "the contrastive learners we consider are minimized by a representation $f_{X}$ whose kernel is $K_{\\mathsf{PMI}}$ (up to a constant offset)."
+        },
+        {
+          "id": "S4.SS2.p6",
+          "quote": "for any modality in our idealized world, we observe representational convergence to the same kernel, which represents certain pairwise statistics of $\\mathbb{P}(\\mathbf{Z})$."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "在视觉-视觉对齐方面，作者评估了78个视觉模型，包括17个不同规模的ViT、1个随机初始化ResNet-50、11个在ImageNet-1k、Places-365及9个合成数据集上对比学习的ResNet-50，以及49个在ImageNet-100、Places-365及47个数据集上训练的ResNet-18 [A3.SS1.p1]。表示质量用VTAB全部19个分类任务的线性探测评估，训练和验证集最多子采样10000个样本，任务被视为解决的标准是性能达到78个模型中最佳性能的80%以上 [A3.SS1.p2]。对齐度量使用Places-365验证集上1000个图像表示的k=10最近邻 [A3.SS1.p3]。在跨模态对齐方面，作者比较了BLOOM、OpenLLaMA、LLaMA等语言模型家族与ImageNet-21K分类、MAE、DINOv2、CLIP等视觉模型，使用WIT数据集1024个样本、k=10最近邻，并对特征做L2归一化及截断95百分位以上的元素 [A3.SS2.p1][A3.SS2.p2][A3.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "A3.SS1.p1",
+          "quote": "We consider 78 vision models in total"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "$17$ ViT models ranging from ViT-tiny to ViT-giant, trained on tasks including ImageNet-21k classification, Masked Autoencoders, DINO, and CLIP"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "$11$ ResNet-50 models trained with contrastive learning on ImageNet-1k, Places-365, and $9$ synthetic image datasets"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "$49$ ResNet-18 models trained with Alignment and Uniformity contrastive loss on ImageNet-100, Places-365, and $47$ realistic and synthetic image datasets"
+        },
+        {
+          "id": "A3.SS1.p2",
+          "quote": "we evaluate linear probing performance on all 19 VTAB classification tasks"
+        },
+        {
+          "id": "A3.SS1.p2",
+          "quote": "We consider a representation solves a task if its performance is $\\geq 80\\%$ of the best performance on that task across all 78 models."
+        },
+        {
+          "id": "A3.SS1.p3",
+          "quote": "we use $k=10$ nearest neighbors over $1000$ image representations computed on Places-365’s validation dataset."
+        },
+        {
+          "id": "A3.SS2.p1",
+          "quote": "The language model families we consider are BLOOM, OpenLLaMA, and LLaMA."
+        },
+        {
+          "id": "A3.SS2.p2",
+          "quote": "We mainly consider the popular vision models: classification on ImageNet-21K, MAE, DINOv2, CLIP, and CLIP finetuned on ImageNet-12K."
+        },
+        {
+          "id": "A3.SS2.p3",
+          "quote": "we use $k=10$ nearest neighbors over 1024 samples from WIT (Wikipedia-based Image Text;)."
+        },
+        {
+          "id": "A3.SS2.p3",
+          "quote": "We apply $l_{2}$ normalization to the features before measuring the distance."
+        },
+        {
+          "id": "A3.SS2.p3",
+          "quote": "we truncate the elements in the features that are above the $95$ -th percentile."
+        }
+      ]
+    },
+    "findings": {
+      "text": "视觉模型的对齐随能力提升而增强：在VTAB上解决更多任务的模型彼此更对齐，高迁移性能的模型形成紧密聚集的表示，而弱性能模型的表示更分散 [S2.SS2.p2]。跨模态方面，语言模型的语言建模能力越强，越倾向于与视觉模型对齐，反之亦然；CLIP模型因显式语言监督表现出更高对齐，但在ImageNet分类微调后对齐下降 [S2.SS3.p5]。对齐还能预测下游性能：与DINOv2对齐更好的LLM在Hellaswag和GSM8K上表现更好 [S2.SS5.p1]。在理想化分析中，对比学习者的核收敛到PMI核，且由于双射观测保持概率，不同模态收敛到同一核 [S4.SS2.p4][S4.SS2.p6]。颜色案例研究显示，从图像共现和语言共现学到的颜色表示大致恢复相同的感知表示 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS2.p2",
+          "quote": "models with high transfer performance form a tightly clustered set of representations, while models with weak performance have more variable representations."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "the better an LLM is at language modeling, the more it tends to aligns with vision models"
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "The converse effect also holds: the better a vision models is, the more it tends to align with LLMs."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We find that CLIP models, which are trained with explicit language supervision, exhibit a higher level of alignment. However, this alignment decreases after being fine-tuned on ImageNet classification"
+        },
+        {
+          "id": "S2.SS5.p1",
+          "quote": "Figure 4 supports this hypothesis by demonstrating improved performance on commonsense reasoning (Hellaswag;) and mathematical problem solving (GSM8K;) as alignment improves."
+        },
+        {
+          "id": "S4.SS2.p4",
+          "quote": "the contrastive learners we consider are minimized by a representation $f_{X}$ whose kernel is $K_{\\mathsf{PMI}}$ (up to a constant offset)."
+        },
+        {
+          "id": "S4.SS2.p6",
+          "quote": "for any modality in our idealized world, we observe representational convergence to the same kernel, which represents certain pairwise statistics of $\\mathbb{P}(\\mathbf{Z})$."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "learning cooccurrence statistics in either domain recovers roughly the same perceptual representation."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，不同模态可能包含不同信息，两个模型若访问根本不同的信息就无法收敛到相同表示；其数学论证仅严格适用于Z的双射投影，对损失性或随机观测函数不成立 [S6.SS0.SSS0.Px1.p1][S6.SS0.SSS0.Px1.p2]。并非所有表示目前都在收敛，例如机器人领域尚无标准化的世界状态表示方式，硬件昂贵缓慢造成训练数据数量与多样性的瓶颈 [S6.SS0.SSS0.Px2.p1]。AI社区的研究者偏见和集体偏好、以及“硬件彩票”可能推动模型向类人表示收敛 [S6.SS0.SSS0.Px3.p1]。专用智能可能不会收敛，论文的论证只适用于被优化以在许多任务上表现良好的智能 [S6.SS0.SSS0.Px4.p1]。对齐度量本身存在争议，作者只重点使用互最近邻一种度量 [S6.SS0.SSS0.Px5.p1]。此外，实验中对齐分数仅达到0.16（理论最大值为1），这是强对齐加噪声还是存在重大差异尚属开放问题 [S6.SS0.SSS0.Px6.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS0.SSS0.Px1.p1",
+          "quote": "Two different models cannot converge to the same representation if they have access to fundamentally different information."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p2",
+          "quote": "our mathematical argument in Section 4 only strictly holds for bijective projections of $\\mathbf{Z}$"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p2",
+          "quote": "This will not hold true for either lossy or stochastic observation functions."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "in robotics there is not yet a standardized approach to representing world states in the same way as there is for representing images and text."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "One limitation lies in the hardware used in robotics, which is often expensive and slow. This creates a bottleneck in the quantity and diversity of training data."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px3.p1",
+          "quote": "Researcher bias and collective preferences within the AI community have shaped the trajectory of model development."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px3.p1",
+          "quote": "the “hardware lottery” suggests that the success of AI models can also depend on the compatibility of their design with available computational architectures"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px4.p1",
+          "quote": "Our argument only holds for intelligences that are optimized to perform well on many tasks."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px5.p1",
+          "quote": "We focused on one particular alignment measure, mutual nearest-neighbor, in our experiments"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px5.p1",
+          "quote": "there is active debate on the merits and deficiencies of all these ways of measuring alignment."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "alignment clearly increases but only reaches a score of $0.16$, according to our mutual nearest-neighbor metric. The maximum theoretical value for this metric is $1$."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "We leave this as an open question."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 24178,
+      "completion_tokens": 3582,
+      "elapsed_s": 13.43
+    }
+  },
+  "verify": {
+    "quote_hits": 48,
+    "quote_total": 48,
+    "quote_rate": 1.0,
+    "inline_hits": 31,
+    "inline_total": 31,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "odd",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

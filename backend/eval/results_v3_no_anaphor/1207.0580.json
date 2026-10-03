@@ -1,0 +1,145 @@
+{
+  "paper": {
+    "arxiv_id": "1207.0580",
+    "title": "Improving neural networks by preventing co-adaptation of feature detectors",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 41183,
+    "n_sections": 21,
+    "n_paragraphs": 55
+  },
+  "result": {
+    "summary": "这篇论文提出了一种名为 dropout 的方法，在每次训练样本呈现时以 0.5 的概率随机省略隐藏单元，以防止特征检测器之间复杂的共适应 [p3]。作者在 MNIST、TIMIT、CIFAR-10、ImageNet 和 Reuters 等多个基准任务上验证了该方法 [p6][p9][p10][p11][p13]。结果显示 dropout 在这些任务上均带来改进，并在语音和物体识别上创造了不使用先验知识或增强训练集时的记录 [p1][p7][p9][p11]。作者还指出 dropout 可被视为一种极端的 bagging 形式，比标准参数收缩是更好的正则化方法 [p16]。",
+    "research_question": {
+      "text": "论文要解决的问题是：当大型前馈神经网络在小训练集上训练时，通常在留出测试数据上表现很差，这种过拟合需要被减少 [p1]。作者指出，过拟合的原因在于特征检测器被调谐为在训练数据上协同工作，而在测试数据上不能 [p2]。",
+      "evidence": [
+        {
+          "id": "p1",
+          "quote": "When a large feedforward neural network is trained on a small training set, it typically performs poorly on held-out test data."
+        },
+        {
+          "id": "p1",
+          "quote": "This “overfitting” is greatly reduced by randomly omitting half of the feature detectors on each training case."
+        },
+        {
+          "id": "p2",
+          "quote": "the feature detectors have been tuned to work well together on the training data but not on the test data."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出 dropout：在每次呈现每个训练样本时，每个隐藏单元以 0.5 的概率被随机从网络中省略，使隐藏单元不能依赖其他隐藏单元的存在 [p3]。训练使用标准随机梯度下降，但将通常的权重惩罚改为对每个隐藏单元输入权重向量的 L2 范数设置上界，若权重更新违反该约束则通过除法重新归一化 [p4]。测试时使用包含所有隐藏单元但输出权重减半的“mean network” [p5]。",
+      "evidence": [
+        {
+          "id": "p3",
+          "quote": "On each presentation of each training case, each hidden unit is randomly omitted from the network with a probability of 0.5, so a hidden unit cannot rely on other hidden units being present."
+        },
+        {
+          "id": "p4",
+          "quote": "we set an upper bound on the L2 norm of the incoming weight vector for each individual hidden unit."
+        },
+        {
+          "id": "p4",
+          "quote": "If a weight-update violates this constraint, we renormalize the weights of the hidden unit by division."
+        },
+        {
+          "id": "p5",
+          "quote": "At test time, we use the “mean network” that contains all of the hidden units but with their outgoing weights halved"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在多个基准数据集上评估 dropout：MNIST（60,000 张 28x28 训练图像和 10,000 张测试图像）[p6]、TIMIT 语音识别基准 [p8][p9]、CIFAR-10 物体识别基准（50,000 训练和 10,000 测试图像）[p10]、ImageNet 物体识别数据集 [p11] 以及 Reuters 文档分类数据集（201,369 篇文档，50 个互斥类别）[p13]。在 TIMIT 上，网络有 4 个全连接隐藏层、每层 4000 个单元和 185 个 softmax 输出单元，输入为 21 个相邻帧 [p9]。在 CIFAR-10 和 ImageNet 上使用卷积神经网络，并在部分层使用 dropout [p10][p11]。",
+      "evidence": [
+        {
+          "id": "p6",
+          "quote": "It contains 60,000 28x28 training images of individual hand written digits and 10,000 test images."
+        },
+        {
+          "id": "p9",
+          "quote": "The neural net has 4 fully-connected hidden layers of 4000 units per layer and 185 “softmax” output units"
+        },
+        {
+          "id": "p10",
+          "quote": "These images were labeled by hand to produce 50,000 training images and 10,000 test images"
+        },
+        {
+          "id": "p11",
+          "quote": "ImageNet is an extremely challenging object recognition dataset consisting of thousands of high-resolution images of thousands of classes of object."
+        },
+        {
+          "id": "p13",
+          "quote": "We created training and test sets each containing 201,369 documents from 50 mutually exclusive classes."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 MNIST 上，不使用任何技巧的标准前馈神经网络最佳已发表结果为 160 个测试错误，使用 50% dropout 和每个隐藏单元输入权重的独立 L2 约束可降至约 130 个错误，再随机丢弃 20% 像素可进一步降至约 110 个错误 [p6]。在 TIMIT 上，无 dropout 时识别率为 22.7%，使用 dropout 后提升至 19.7%，这是不使用说话人身份信息的方法中的记录 [p9]。在 CIFAR-10 上，最佳已发表无变换数据错误率为 18.5%，作者达到 16.6%，在最后隐藏层使用 dropout 后达到 15.6% [p10]。在 ImageNet 上，作者使用单个神经网络达到 48.6% 错误，在第六隐藏层使用 50% dropout 后降至创纪录的 42.4% [p11]。在 Reuters 上，标准反向传播错误率为 31.05%，使用 50% dropout 后降至 29.62% [p13]。",
+      "evidence": [
+        {
+          "id": "p6",
+          "quote": "the best published result for a standard feedforward neural network is 160 errors on the test set."
+        },
+        {
+          "id": "p6",
+          "quote": "This can be reduced to about 130 errors by using 50% dropout with separate L2 constraints on the incoming weights of each hidden unit and further reduced to about 110 errors by also dropping out a random 20% of the pixels"
+        },
+        {
+          "id": "p9",
+          "quote": "Without dropout, the recognition rate is $22.7$ % and with dropout this improves to $19.7$ %, which is a record for methods that do not use any information about speaker identity."
+        },
+        {
+          "id": "p10",
+          "quote": "The best published error rate on the test set, without using transformed data, is 18.5%. We achieved an error rate of 16.6%"
+        },
+        {
+          "id": "p10",
+          "quote": "Using dropout in the last hidden layer gives an error rate of 15.6%."
+        },
+        {
+          "id": "p11",
+          "quote": "We achieved comparable performance of 48.6% error using a single neural network"
+        },
+        {
+          "id": "p11",
+          "quote": "Using 50% dropout in the sixth hidden layer reduces this to a record 42.4%"
+        },
+        {
+          "id": "p13",
+          "quote": "A feedforward neural network with 2 fully connected layers of 2000 hidden units trained with backpropagation gets 31.05% error on the test set. This is reduced to 29.62% by using 50% dropout"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 10350,
+      "completion_tokens": 1660,
+      "elapsed_s": 6.79
+    }
+  },
+  "verify": {
+    "quote_hits": 20,
+    "quote_total": 20,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 19,
+    "inline_rate": 0.947,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "p8",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 1,
+  "category": "odd",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "paper": {
+    "arxiv_id": "1701.00001",
+    "title": "Digital Advertising Traffic Operation: Machine Learning for Process Discovery",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 830,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "本文针对数字广告流量运营中客户服务流程投诉增多的问题，提出一种基于机器学习的流程发现方法，用于自动发现流程变体并识别流程中的问题 [abstract]。论文利用CRM数据进行流程挖掘，以识别流程中不期望出现的循环和延迟 [abstract]。作者认为该方法能够帮助一眼看出问题所在并采取纠正措施 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在Web广告流量运营中，客户服务流程的投诉不断增加，需要识别流程本身的弱点并将其传达给相关部门 [abstract]。原文指出，借助对CRM数据的流程挖掘，可以识别流程中不期望出现的循环和延迟 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "In order to solve a growing number of complaints in the customer service process, the weaknesses in the process itself must be identified and communicated to the department."
+        },
+        {
+          "id": "abstract",
+          "quote": "With the help of Process Mining for the CRM data it is possible to identify unwanted loops and delays in the process."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出一种基于机器学习技术的流程发现方法，用于自动发现流程变体，并让人一眼看出问题所在，进而采取纠正措施 [abstract]。该方法以CRM数据为基础进行流程挖掘 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "With this paper we propose a process discovery based on Machine Learning technique to automatically discover variations and detect at first glance what the problem is, and undertake corrective measures."
+        },
+        {
+          "id": "abstract",
+          "quote": "With the help of Process Mining for the CRM data it is possible to identify unwanted loops and delays in the process."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "findings": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1381,
+      "completion_tokens": 444,
+      "elapsed_s": 2.17
+    }
+  },
+  "verify": {
+    "quote_hits": 4,
+    "quote_total": 4,
+    "quote_rate": 1.0,
+    "inline_hits": 4,
+    "inline_total": 4,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 3,
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3_no_cover",
+    "hash": "a5238a9a"
+  }
+}

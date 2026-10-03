@@ -1,0 +1,203 @@
+{
+  "paper": {
+    "arxiv_id": "2405.04967",
+    "title": "MatterSim: A Deep Learning Atomistic Model Across Elements, Temperatures and Pressures",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 129440,
+    "n_sections": 56,
+    "n_paragraphs": 167
+  },
+  "result": {
+    "summary": "MatterSim 是一个基于深度图神经网络、主动学习和大规模第一性原理计算训练的原子尺度模型，旨在跨元素、温度和压力条件下高效准确地预测材料性质 [S1.p3][S3.p1]。模型在 0–5000 K 和 0–1000 GPa 范围内作为零样本机器学习力场，预测能量、力和应力的精度相比此前最优模型提升最高达十倍 [S2.SS1.p3][S2.SS2.p1]。它还能以接近第一性原理的精度计算声子、力学性质、自由能和相图，并在 MatBench Discovery 等任务上取得领先结果 [S2.SS2.p2][S2.SS2.p5]。此外，MatterSim 可作为主动学习和微调平台，以极少数据适配复杂体系或更高理论水平，并支持直接结构到性质的预测 [S2.SS3.p1][S2.SS4.p2][S2.SS5.p2]。",
+    "research_question": {
+      "text": "论文要解决的问题是：如何准确且高效地预测任意材料在实际合成与工作条件（包括有限温度和压力）下的性质 [S1.p1]。作者指出，材料性质不仅取决于化学组成和近平衡原子结构，还取决于温度和压力等热力学条件，这要求模型在远超当前数据库所覆盖的基态或局部极小结构的巨大构型空间上具有高预测精度，而这一要求从根本上限制了现有模型的适用性 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "At the core of this paradigm shift is the ability to accurately and efficiently predict the properties of arbitrary materials under practical synthesis and working conditions."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "However, the property of a potential candidate material not only depends on its chemical composition and corresponding near-equilibrium atomic structure, but also on thermodynamic conditions including temperature and pressure."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "This results in a requirement of high predictive accuracy over an enormous configuration space well beyond the ground states or local minima of crystal structures typically captured by current databases and models, which fundamentally limits their applicability for materials design."
+        }
+      ]
+    },
+    "method": {
+      "text": "MatterSim 采用主动学习框架，整合深度图神经网络、材料探索器、第一性原理监督器和集成不确定性监测器 [S2.SS1.p1]。第一性原理监督器在 GGA-PBE 水平（对部分材料加 Hubbard U 修正）提供能量、力和应力监督信号，训练后的模型作为代理引导探索器采样最不确定的区域，形成主动学习循环 [S2.SS1.p1]。模型骨干采用 M3GNet 和 Graphormer 两种架构，其中 Graphormer 被加入平移不变性、周期性边界条件和显式等变特征等改造 [S2.SS1.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "MatterSim employs an active learning approach to explore the extensive materials space, integrating a deep graph neural network, a materials explorer, a first-principles supervisor, and an ensemble uncertainty monitor"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "the first-principles supervisor offers the deep learning model supervision signals relating to energies, forces, and stresses on the given structures at the generalized gradient approximation (GGA) Perdew–Burke–Ernzerhof (PBE) level of theory with Hubbard U correction for select materials"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "This trained model then functions as an effective surrogate to the first-principles method, guiding the materials explorer to gather more structures, thereby exploring the most uncertain regions of materials space"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "In this work, we opt to use two primary architectures, M3GNet and Graphormer as the backbones for MatterSim."
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "In particular, we baked in several additional attributes including invariance to translation and periodic boundary conditions and explicit equivariant features to better accommodate materials-related tasks"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "训练数据由材料探索器生成，包含来自公开数据集和内部生成的基态/近平衡结构，以及通过分子动力学在 0、500、800、1000 GPa 下从 0 升温至 5000 K 采样的非平衡结构 [S2a.p2]。截至发表时训练集包含约 1700 万个第一性原理标注结构，覆盖 0–5000 K 和 0–1000 GPa [S2.SS1.p2]。零样本性能在 MPtrj-1k、Alexandria-1k、MPtrj-highest-stress-1k、MPF-Alkali-TP、MPF-TP、Random-TP 等基准上评估，并与 M3GNet、CHGNet、MACE-MP-0 等通用力场比较 [S6.p1][S6.p2][S6.p3]。此外还在 MatBench Discovery、PhononDB、MatBench 回归任务以及 118 个体系的分子动力学模拟中进行了验证 [S2.SS2.p2][S2.SS2.p3][S2.SS2.p6][S2.SS5.p2]。",
+      "evidence": [
+        {
+          "id": "S2a.p2",
+          "quote": "It conducts molecular dynamics (MD) simulations under a wide range of pressures, including 0, 500, 800, and $1000\\text{\\,}\\mathrm{GPa}$. Under each pressure, we incrementally increase the temperature from 0 to $5000\\text{\\,}\\mathrm{K}$ within $200\\text{\\,}\\mathrm{ps}$."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "As of the date of publication, the training dataset contains $\\sim$ 17M structures labeled with first-principles computations."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "As shown in Fig. 2 (b), the curated dataset is representative of materials at temperatures and pressures covering 0– $5000\\text{\\,}\\mathrm{K}$ and 0– $1000\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S6.p1",
+          "quote": "MPtrj-1k and Alexandria-1k are collected by sampling randomly one thousand materials from the MPtrj and Alexandria dataset, respectively."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "The MPF-Alkali-TP, MPF-TP, Random-TP benchmark sets are created with increasing complexity to evaluate the models’ performance on materials under finite temperature and pressure conditions with far from equilibrium atomic positions."
+        },
+        {
+          "id": "S6.p3",
+          "quote": "the comparison is carried out between MatterSim and a few open-source universal MLFFs, including M3GNet, CHGNet, MACE-MP-0."
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "MatterSim shows a strong capability in predicting stability of new materials, with an F1 score of 0.83 and a mean absolute energy error of the formation energy of $25\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ benchmarked on MatBench Discovery"
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "Fig. 4 (a) shows the benchmark results on the materials from the PhononDB, using maximum phonon frequency as an indicator, and a good agreement is achieved with a mean absolute error (MAE) of $0.87\\text{\\,}\\mathrm{THz}$."
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "we randomly selected 118 systems including bulk inorganic materials, metal organic frameworks, two-dimensional materials, interfaces, molecular crystals, polymers and surfaces"
+        },
+        {
+          "id": "S2.SS5.p2",
+          "quote": "MatterSim’s capability to directly predict materials properties from structures is benchmarked on a few regression tasks from MatBench, including prediction of computed band gaps, shear moduli, dielectric constants, max phonon frequency of bulk crystalline materials, and the exfoliation energies of two-dimensional materials."
+        }
+      ]
+    },
+    "findings": {
+      "text": "MatterSim 在 MPF-TP 和 Random-TP 等高温高压基准上相比此前最优通用力场精度提升最高达十倍 [S2.SS1.p3][S2.SS2.p1]。在 MatBench Discovery 上取得 F1 分数 0.83、形成能平均绝对误差 25 meV/atom 的领先结果 [S2.SS2.p2]。声子最大频率 MAE 为 0.87 THz，0 K 体模量 MAE 为 2.47 GPa，与实验比较的自由能 MAE 为 15 meV/atom（温度至 1000 K）[S2.SS2.p3][S2.SS2.p4][S2.SS2.p5]。在 118 个体系的分子动力学测试中，所有材料家族的成功率超过 90%，压力测试平均完成率也超过 90% [S2.SS2.p6]。微调后仅用 30 个构型即可达到用 900 个构型从头训练的水结构性质精度，数据效率提升 30 倍 [S2.SS4.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p3",
+          "quote": "with a mean absolute error (MAE) of 36 meV/atom (43 meV/atom as chemical accuracy) on MPF-TP (a dataset covering wide ranges of materials structure sampled under finite temperature between 0-5000 K and pressures between 0–1000 GPa), marking a ten-fold increase in accuracy compared with previous efforts."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "MatterSim outperforms force fields trained on open relaxation trajectory databases with a substantial increase in accuracy by an order of magnitude compared to previous best-in-class"
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "MatterSim shows a strong capability in predicting stability of new materials, with an F1 score of 0.83 and a mean absolute energy error of the formation energy of $25\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ benchmarked on MatBench Discovery"
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "a good agreement is achieved with a mean absolute error (MAE) of $0.87\\text{\\,}\\mathrm{THz}$."
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "A remarkable agreement is achieved with an MAE of only $2.47\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S2.SS2.p5",
+          "quote": "it achieves an MAE of $15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ (see Section S11.1), lower than dedicated models directly trained on experimental data."
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "MatterSim achieved more than 90% success rate for all the material families tested, exhibiting robustness over wide temperature ranges."
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "the vast majority of systems have completed the entire simulation process and the average finished rate is above 90% as well."
+        },
+        {
+          "id": "S2.SS4.p2",
+          "quote": "with only 30 configurations sampled from an ab initio molecular dynamics (AIMD) trajectory with rev-PBE0-D3 level of theory, MatterSim can be efficiently fine-tuned and the resultant model (indicated as finetune-30 model) reaches the same performance as the model trained from scratch with all 900 configurations from the AIMD trajectory"
+        },
+        {
+          "id": "S2.SS4.p2",
+          "quote": "by finetuning MatterSim, we were able to obtain the similar accuracy of the scratch-900 model on this task while using only 1/30 of the training data"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确承认，MatterSim 目前使用半局域原子相互作用描述，在长程相互作用主导的场景（如聚合物和非均相体系）中表现不佳 [S3.p3]。当前模型仅在均匀体相体系上训练，未显式包含对催化等应用至关重要的表面和界面数据 [S3.p3]。模型目前仅原生支持 DFT-PBE 水平的推断，限制了其在涉及复杂相互作用的体系（如聚合物和有机液体）中的使用 [S3.p3]。此外，模型目前仅支持能量、力和应力的原生预测，纳入电荷、自旋、磁矩等更多数据模态可能进一步提升精度和适用性 [S3.p3]。",
+      "evidence": [
+        {
+          "id": "S3.p3",
+          "quote": "it currently utilizes a semi-local description of atomic interactions, where long-range interactions majorly leverages message passing or updates on attention weights through graph nodes."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "it doesn’t perform effectively in scenarios where long-range interactions dominate the properties, such as polymeric and heterogeneous systems."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the current model is trained only on homogeneous bulk systems, without explicit inclusion of surface and interface data that are crucial for applications such as catalysis."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the model currently only naively supports inferences with DFT-PBE level of theory, limiting its use for systems involving complex interactions, such as polymers and organic liquids."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "Currently, the model only supports the native prediction of energy, forces, and stresses."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "Including more data modalities, such as charge, spin, magnetic moments, and even more complex electronic structure features, could further enhance the model’s accuracy and applicability."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 31167,
+      "completion_tokens": 3158,
+      "elapsed_s": 11.55
+    }
+  },
+  "verify": {
+    "quote_hits": 33,
+    "quote_total": 34,
+    "quote_rate": 0.971,
+    "inline_hits": 26,
+    "inline_total": 26,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S2.SS1.p3",
+        "reason": "quote 不在该段落里",
+        "quote": "with a mean absolute error (MAE) of 36 meV/atom (43 meV/atom as chemical accurac"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "science",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

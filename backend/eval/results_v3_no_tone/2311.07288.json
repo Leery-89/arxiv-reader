@@ -1,0 +1,197 @@
+{
+  "paper": {
+    "arxiv_id": "2311.07288",
+    "title": "Observation of quantum entanglement with top quarks at the ATLAS detector",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 72517,
+    "n_sections": 19,
+    "n_paragraphs": 84
+  },
+  "result": {
+    "summary": "本文报告了在大型强子对撞机上利用 ATLAS 探测器收集的质心能量 13 TeV、积分亮度 140 fb⁻¹ 的质子-质子碰撞数据，在顶夸克-反顶夸克对中观测到自旋纠缠 [abstract]。研究通过测量由母顶夸克静止系中带电轻子间夹角推断的单一观测量 D 来探测自旋纠缠，并在顶夸克对产生阈值附近的窄区间内进行测量 [abstract]。在 340 < m_{t\\bar{t}} < 380 GeV 区间，纠缠标记测量值为 D = −0.537 ± 0.002 (stat.) ± 0.019 (syst.) [abstract]。该结果偏离无纠缠情景超过五个标准差，构成首次在夸克对中观测到纠缠，也是迄今最高能量的纠缠观测 [abstract]。",
+    "research_question": {
+      "text": "论文旨在探索最高可及能标下的量子纠缠，此前纠缠在从微观到宏观的广泛系统中已被观测，但在最高能量尺度上仍基本未被探索 [abstract]。顶夸克被提出作为研究量子纠缠和量子信息的新实验室，本文利用顶夸克与反顶夸克之间的自旋关联来探测量子纠缠效应 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However, entanglement remains largely unexplored at the highest accessible energy scales."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Recently, the heaviest fundamental particle known to exist, the top quark, was proposed as a new laboratory to study quantum entanglement and quantum information."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "In this Article, the spin correlation between the top quark and antitop quark is used to probe the effects of quantum entanglement"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文通过测量单一观测量 D 来探测自旋纠缠，D 由母顶夸克和反顶夸克静止系中带电轻子之间的夹角推断，定义为 D = −3·⟨cos φ⟩ [abstract][S1.p9]。当测量满足 D < −1/3 时，表明存在纠缠态 [S1.p9]。测量在顶夸克对产生阈值附近的窄区间内进行，并在用稳定粒子定义的基准相空间内报告，以最小化蒙特卡洛事件产生器和部分子簇射模型在模拟顶夸克对产生时的局限所导致的不确定性 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Spin entanglement is detected from the measurement of a single observable D, inferred from the angle between the charged leptons in their parent top- and antitop-quark rest frames."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "It is more convenient to define an entanglement marker by using D=tr[C]/3, which can be experimentally measured as: D= -3·⟨cos φ⟩"
+        },
+        {
+          "id": "S1.p9",
+          "quote": "The existence of an entangled state is demonstrated if the measurement satisfies D<-1/3"
+        },
+        {
+          "id": "abstract",
+          "quote": "It is reported in a fiducial phase space defined with stable particles to minimize the uncertainties that stem from limitations of the Monte Carlo event generators and the parton shower model in modeling top-quark pair production."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "分析使用 ATLAS 实验在 2015–2018 年收集的质心能量 √s = 13 TeV 的质子-质子碰撞完整数据集，对应积分亮度 140 fb⁻¹ [S1.SS1.p1]。事件选择要求恰好一个电子和一个缪子且电荷相反，至少两个喷注且至少一个被 b 标记 [S1.SS2.p1]。信号区确定为 340 < m_{t\\bar{t}} < 380 GeV，并定义了两个验证区：380 < m_{t\\bar{t}} < 500 GeV 和 m_{t\\bar{t}} > 500 GeV [S1.SS2.p4]。",
+      "evidence": [
+        {
+          "id": "S1.SS1.p1",
+          "quote": "The complete data set of pp collision events at a center-of-mass energy of √s=13 TeV collected with the ATLAS experiment during 2015–2018 is used, corresponding to an integrated luminosity of 140 fb -1."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "To be selected, events must have exactly one electron and one muon with opposite-sign electric charges."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "A minimum of two jets is required, and at least one of them must be identified to originate from a b -hadron ( b -tagged)."
+        },
+        {
+          "id": "S1.SS2.p4",
+          "quote": "The optimal mass window for the signal region was determined to be 340<m_{t\\bar{t}}<380 GeV."
+        },
+        {
+          "id": "S1.SS2.p4",
+          "quote": "by requiring 380<m_{t\\bar{t}}<500 GeV. Secondly, a region in which no signal of entanglement is expected is defined with m_{t\\bar{t}}>500 GeV."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在信号区 340 < m_{t\\bar{t}} < 380 GeV，观测结果为 D = −0.537 ± 0.002 (stat.) ± 0.019 (syst.)，预期值为 −0.470 ± 0.002 (stat.) ± 0.017 (syst.) [S1.SS3.p1]。在信号区，相对于纠缠极限的观测和预期显著性均远超五个标准差，且不依赖于用于将纠缠极限修正到基准相空间的蒙特卡洛模型 [S1.SS4.p4]。该结果确立了纠缠 t\\bar{t} 态的形成，构成首次在夸克-反夸克对中观测到纠缠 [S1.SS4.p4]。在两个无纠缠信号的验证区，测量结果与不同蒙特卡洛设置的预期在不确定度范围内一致 [S1.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S1.SS3.p1",
+          "quote": "The observed (expected) results are: D=-0.537 ± 0.002 [stat.]± 0.019 [syst.] (-0.470± 0.002 [stat.]± 0.017 [syst.]) in the signal region of 340<m_{t\\bar{t}}<380 GeV"
+        },
+        {
+          "id": "S1.SS4.p4",
+          "quote": "In the signal region, the observed and expected significances with respect to the entanglement limit are well beyond five standard deviations, independently of the MC model used to correct the entanglement limit"
+        },
+        {
+          "id": "S1.SS4.p4",
+          "quote": "The observed result in the region with 340<m_{t\\bar{t}}<380 GeV establishes the formation of entangled t\\bar{t} states. This constitutes the first observation of entanglement in a quark–antiquark pair."
+        },
+        {
+          "id": "S1.SS4.p1",
+          "quote": "In both of the validation regions, with no entanglement signal, the measurements are found to agree with the predictions from different MC setups within the uncertainties."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，在阈值附近，非相对论 QCD 过程（如库仑束缚态效应）会影响 t\\bar{t} 事件产生，而蒙特卡洛产生器未考虑这些效应 [S1.SS4.p2]。作者还指出，当前验证区的测量精度不允许排除所使用的任何蒙特卡洛设置 [S1.SS4.p2]。此外，蒙特卡洛事件产生器将矩阵元与部分子簇射算法结合的程序需要在未来更高精度的 LHC 量子信息研究中给予特别关注 [Ax1.SS10.p7]。",
+      "evidence": [
+        {
+          "id": "S1.SS4.p2",
+          "quote": "It is important to note that close to the threshold, non-relativistic QCD processes, such as Coulomb bound state effects, affect the production of t\\bar{t} events and are not accounted for in the MC generators."
+        },
+        {
+          "id": "S1.SS4.p2",
+          "quote": "Even though the different models yield different predictions, the current precision of the measurements in the validation regions does not allow us to rule out any of the MC setups that were used."
+        },
+        {
+          "id": "Ax1.SS10.p7",
+          "quote": "The procedure used in MC event generators to combine the matrix element with a parton-shower algorithm requires special attention in future higher-precision quantum information studies at the LHC."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 18529,
+      "completion_tokens": 1921,
+      "elapsed_s": 8.09
+    }
+  },
+  "verify": {
+    "quote_hits": 9,
+    "quote_total": 19,
+    "quote_rate": 0.474,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "Spin entanglement is detected from the measurement of a single observable D, inf"
+      },
+      {
+        "field": "method",
+        "id": "S1.p9",
+        "reason": "quote 不在该段落里",
+        "quote": "It is more convenient to define an entanglement marker by using D=tr[C]/3, which"
+      },
+      {
+        "field": "method",
+        "id": "S1.p9",
+        "reason": "quote 不在该段落里",
+        "quote": "The existence of an entangled state is demonstrated if the measurement satisfies"
+      },
+      {
+        "field": "experiments",
+        "id": "S1.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The complete data set of pp collision events at a center-of-mass energy of √s=13"
+      },
+      {
+        "field": "experiments",
+        "id": "S1.SS2.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "A minimum of two jets is required, and at least one of them must be identified t"
+      },
+      {
+        "field": "experiments",
+        "id": "S1.SS2.p4",
+        "reason": "quote 不在该段落里",
+        "quote": "The optimal mass window for the signal region was determined to be 340<m_{t\\bar{"
+      },
+      {
+        "field": "experiments",
+        "id": "S1.SS2.p4",
+        "reason": "quote 不在该段落里",
+        "quote": "by requiring 380<m_{t\\bar{t}}<500 GeV. Secondly, a region in which no signal of "
+      },
+      {
+        "field": "findings",
+        "id": "S1.SS3.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The observed (expected) results are: D=-0.537 ± 0.002 [stat.]± 0.019 [syst.] (-0"
+      },
+      {
+        "field": "findings",
+        "id": "S1.SS4.p4",
+        "reason": "quote 不在该段落里",
+        "quote": "The observed result in the region with 340<m_{t\\bar{t}}<380 GeV establishes the "
+      },
+      {
+        "field": "limitations",
+        "id": "S1.SS4.p2",
+        "reason": "quote 不在该段落里",
+        "quote": "It is important to note that close to the threshold, non-relativistic QCD proces"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

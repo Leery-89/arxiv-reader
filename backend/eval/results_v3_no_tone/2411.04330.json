@@ -1,0 +1,168 @@
+{
+  "paper": {
+    "arxiv_id": "2411.04330",
+    "title": "Scaling Laws for Precision",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 69719,
+    "n_sections": 43,
+    "n_paragraphs": 114
+  },
+  "result": {
+    "summary": "本文提出了“精度感知”的缩放定律，用于预测语言模型在低精度训练和训练后量化下的损失 [abstract]。作者将训练精度与参数量统一为“有效参数量”N_eff，并发现训练后量化的退化随数据量增加而增大，最终可能使额外预训练数据变得有害 [S1.p1][S3.SS1.p2]。对于训练，缩放定律预测在联合优化时计算最优精度约为7-8比特，且与计算预算无关；但当模型大小固定时，计算最优精度随计算量对数增长 [S4.SS3.SSS2.p1][S4.SS3.SSS3.p1]。作者在超过465次预训练运行上拟合，并在高达1.7B参数、26B token的模型上验证了预测 [abstract]。",
+    "research_question": {
+      "text": "本文要解决的核心问题是：精度、参数量和数据量之间存在怎样的权衡，以及这些权衡在预训练和推理时有何不同 [S1.p1]。研究动机在于，当前缩放定律未考虑训练和推理精度对模型质量和成本的影响，而深度学习正趋势向更低精度发展 [abstract][S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "What are the tradeoffs between precision, parameters, and data? How do they compare for pretraining and inference?"
+        },
+        {
+          "id": "abstract",
+          "quote": "Low precision training and inference affect both the quality and cost of language models, but current scaling laws do not account for this."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Deep learning is trending towards lower precision: current frontier models like the Llama-3 series are trained in BF16, and there is widespread effort to move the pretraining paradigm to FP8."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提出了“精度感知”的缩放定律，核心思想是将比特精度和参数量统一为“有效参数量”N_eff，即 N_eff = N(1-e^{-P_w/γ_w})(1-e^{-P_a/γ_a})(1-e^{-P_kv/γ_kv})，并假设权重、激活和KV缓存的量化效应独立且可乘 [S1.p2][S4.SS2.p4][S4.SS2.p5]。对于训练后量化，退化被建模为 δ_PTQ = C_T (D^{γ_D}/N^{γ_N}) e^{-P_post/γ_post}，并进一步修改以纳入训练精度的影响 [S3.SS1.p1][S5.p4]。最终统一缩放定律形式为 L = A N_eff^{-α} + B D^{-β} + E + δ_PTQ [S5.p8]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This functional form that posits bit precision and parameter count interchangeably contribute to a model’s “effective parameter count,” $N_{\\text{eff}}$, and implementation details like which parts of a model are quantized to what precision, interact with loss scaling only through their effect on this quantity."
+        },
+        {
+          "id": "S4.SS2.p4",
+          "quote": "$N_{\\text{eff}}(P)=N(1-e^{-P_{\\text{w}}/\\gamma_{\\text{w}}})(1-e^{-P_{\\text{a}}/\\gamma_{\\text{a}}})(1-e^{-P_{\\text{kv}}/\\gamma_{\\text{kv}}})$"
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "The effects of quantizing the weights, activations, and KV cache during training are well modeled as independent and multiplicative"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "$\\delta_{\\text{PTQ}}(N,D,P_{\\text{post}})=C_{T}\\left(\\frac{D^{\\gamma_{D}}}{N^{\\gamma_{N}}}\\right)e^{-P_{\\text{post}}/\\gamma_{\\text{post}}}$"
+        },
+        {
+          "id": "S5.p4",
+          "quote": "$\\delta_{\\text{PTQ}}(N,D,P_{\\text{w}},P_{\\text{post}})=C_{T}e^{-P_{\\text{post}}/\\gamma_{\\text{post}}}\\underbrace{\\left(\\frac{D^{\\gamma_{D}}}{N_{\\text{eff}}^{\\gamma_{N}}}\\right)}_{\\text{Overtraining effect}}\\underbrace{[1-e^{-C_{\\text{w}}(P_{\\text{w}}-P_{\\text{post}})}]}_{\\text{Robustification effect}}$"
+        },
+        {
+          "id": "S5.p8",
+          "quote": "$L(N,D,P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}},P_{\\text{post}})=AN_{\\text{eff}}^{-\\alpha}+BD^{-\\beta}+E+\\delta_{\\text{PTQ}}$"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在Dolma V1.7数据集上训练和评估了一系列OLMo风格的模型，模型大小N在30M到220M参数之间，数据量D在1.5B到26B token之间，并扫描了权重、激活和KV缓存的8种精度值 [S2.SS3.p1]。总共进行了超过465次预训练运行，并在高达1.7B参数、26B token的模型上验证了预测 [abstract]。此外，还使用GPTQ、AWQ和RTN等量化方法进行了训练后量化实验 [S3.p1][A6.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We train and evaluate a suite of OLMo-style models on the Dolma V1.7 dataset, using a standard Transformer++ implementation"
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "Our experiments consist of a sweep of language model pretraining runs over $N\\in[30,60,110,220]$ million parameters (non-embedding) and $D\\in[1.5,3,6,13,26]$ billion tokens."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "we sweep 8 values of precision for each of the (weights, activations, attention)."
+        },
+        {
+          "id": "abstract",
+          "quote": "We fit on over 465 pretraining runs and validate our predictions on model sizes up to 1.7B parameters trained on up to 26B tokens."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "we consider models trained in BF16 and use GPTQ to post-train quantize them, replicating our findings with two other methods in Appendix F."
+        },
+        {
+          "id": "A6.p1",
+          "quote": "We replicate on AWQ and round-to-nearest quantization."
+        }
+      ]
+    },
+    "findings": {
+      "text": "主要发现包括：训练后量化的退化随数据量增加而增大，对于过度训练的模型，额外预训练数据可能有害 [S3.SS1.p2][S3.SS1.p3]。在训练中，权重、激活和KV缓存的量化效应可建模为独立且可乘，统一为有效参数量 [S4.SS2.p5]。当联合优化N、D、P时，计算最优预训练精度与计算预算无关，约为7-8比特；但当模型大小固定时，计算最优精度随计算量对数增长 [S4.SS3.SSS2.p1][S4.SS3.SSS3.p1]。统一缩放定律在超过1000个数据点上达到R²=0.90 [S5.p6]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p2",
+          "quote": "This finding implies that for models that will be post-train quantized, there exists an amount of pretraining data beyond which additional data is actively harmful to performance at inference-time"
+        },
+        {
+          "id": "S3.SS1.p3",
+          "quote": "Overtrained language models are more sensitive to post-training quantization."
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "The effects of quantizing the weights, activations, and KV cache during training are well modeled as independent and multiplicative"
+        },
+        {
+          "id": "S4.SS3.SSS2.p1",
+          "quote": "which reveals that in general the optimal pretraining precision is independent of compute budget."
+        },
+        {
+          "id": "S4.SS3.SSS2.p1",
+          "quote": "We find this $P^{*}$ to be around 7-8 bits when fitting our scaling law on runs with quantization done to integer type."
+        },
+        {
+          "id": "S4.SS3.SSS3.p1",
+          "quote": "compute-optimal precision scales as $P^{*}(C)\\propto\\log C$."
+        },
+        {
+          "id": "S5.p6",
+          "quote": "We measure the fit to the data of such a functional form in Figure 7, and find a strong fit with $R^{2}=0.90$ on over 1000 data points"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确承认的局限包括：使用固定架构来研究精度、参数和token的影响，而低精度训练常涉及架构调整以缩小与全精度模型的差距 [S6.p2]。计算成本虽与精度线性缩放，但由于系统开销，减半精度的收益通常小于2倍 [S6.p2]。仅考虑损失缩放，未进行下游模型评估 [S6.p2]。此外，作者强调趋势是提示性的而非规定性的，希望未来工作在更大模型规模上更全面地检验这些效应 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "First, we use a fixed architecture throughout to examine the effects of precision, parameters, and tokens in a controlled manner."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "In contrast, low precision training often involves architectural tweaks that can close much of the gap from a vanilla full precision model."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Second, while compute costs do scale linearly with precision, the gains from halving precision are usually less than 2x due to systems overhead."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Third, we only consider loss scaling without downstream model evaluations."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "We emphasize that the trends we find aim to be suggestive rather than prescriptive, and hope future work can more comprehensively examine these effects at larger model scale."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 18420,
+      "completion_tokens": 2352,
+      "elapsed_s": 9.14
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 23,
+    "inline_total": 23,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "odd",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

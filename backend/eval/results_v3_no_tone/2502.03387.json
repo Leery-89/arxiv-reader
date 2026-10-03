@@ -1,0 +1,180 @@
+{
+  "paper": {
+    "arxiv_id": "2502.03387",
+    "title": "LIMO: Less is More for Reasoning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 29931,
+    "n_sections": 29,
+    "n_paragraphs": 54
+  },
+  "result": {
+    "summary": "本文挑战了复杂推理需要海量训练数据的假设，提出 Less-Is-More Reasoning (LIMO) 假说：在预训练已编码丰富领域知识的基础模型中，复杂推理可通过少量精心设计的认知过程示范被激发 [abstract][S1.p3]。作者通过多层筛选构建了仅 800 条样本的 LIMO 数据集，并对 Qwen2.5-32B-Instruct 进行简单监督微调 [S1.p4]。LIMO 在 AIME24 上达到 63.3%、MATH500 上达到 95.6%，超过此前微调模型，且仅使用其 1% 的训练数据 [abstract]。模型在分布外基准上平均提升 45.8%，优于使用 100 倍数据训练的模型 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：复杂推理是否真的需要海量训练数据，还是可以通过少量高质量样本激发。传统观点认为数学和编程等推理任务需要数万到数十万示例，并假设监督微调主要导致记忆而非泛化 [S1.p1]。作者认为这种数据密集范式可能不再必要，因为现代基础模型已在预训练中编码大量数学知识，挑战从知识获取转变为知识激发 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Complex reasoning has long been considered one of the most challenging capabilities to instill in large language models (LLMs)."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "The resulting paradigm typically involves training on tens or hundreds of thousands of examples"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We argue this data-intensive paradigm may no longer be necessary."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Contemporary LLMs may already possess rich mathematical knowledge, transforming the challenge from knowledge acquisition to knowledge elicitation."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出 LIMO 假说，认为复杂推理的激发阈值取决于模型预训练知识库的完整性和后训练示例作为认知模板的有效性 [abstract]。方法包括严格的数据筛选流程：从大规模 QA 池中先做粗难度过滤，再做细粒度难度评估，并进行知识点多样化，同时按逻辑连贯性、步骤清晰度和解答正确性筛选推理链，最终得到 800 条训练样本 [S1.p4]。作者使用 Qwen2.5-32B-Instruct 进行简单监督微调 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "the threshold for eliciting complex reasoning is not dictated by task complexity but rather by two key factors"
+        },
+        {
+          "id": "abstract",
+          "quote": "the completeness of the model’s pre-trained knowledge base and (2) the effectiveness of post-training examples"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "we implement a multi-layered filtering system: first conducting coarse difficulty filtering to eliminate trivial problems"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "This meticulous process yields a compact yet potent dataset of just 800 training samples."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "With simple supervised fine-tuning (SFT) using only this curated dataset based on Qwen2.5-32B-Instruct"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在域内基准 AIME24、MATH500 和 AMC23 上评估模型 [S5.SS0.SSS0.Px1.p1]。分布外评估包括 OlympiadBench、中文新基准 CHMath、Gaokao、Kaoyan、GradeSchool，以及多学科基准 Minerva 和 GPQA [S5.SS0.SSS0.Px2.p1]。评估采用零样本思维链下的 pass@1 指标，大基准使用贪心解码单样本，小于 50 题的基准生成 4 个样本并计算无偏 pass@1 [S5.SS0.SSS0.Px3.p1]。对比基线包括 OpenAI-o1-preview、QwQ-32B-Preview、Qwen2.5-32B-Instruct，以及用 OpenThoughts-114k 和 NuminaMath-100k 微调的模型 [S6.SS1.p1][S6.SS1.p2]。",
+      "evidence": [
+        {
+          "id": "S5.SS0.SSS0.Px1.p1",
+          "quote": "the American Invitational Mathematics Examination (AIME24), MATH500, and the American Mathematics Competitions (AMC23)."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px2.p1",
+          "quote": "we include diverse mathematical competitions like OlympiadBench to test performance on different mathematical challenges."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px2.p1",
+          "quote": "CHMath (2024 Chinese High School Mathematics League), Gaokao (China’s 2024 College Entrance Exam), Kaoyan (Chinese Graduate School Entrance Exams), and GradeSchool"
+        },
+        {
+          "id": "S5.SS0.SSS0.Px2.p1",
+          "quote": "we incorporate multi-disciplinary benchmarks including Minerva (undergraduate-level STEM) and GPQA"
+        },
+        {
+          "id": "S5.SS0.SSS0.Px3.p1",
+          "quote": "We evaluate performance using the pass@1 metric in a zero-shot chain-of-thought setting across all benchmarks."
+        },
+        {
+          "id": "S5.SS0.SSS0.Px3.p1",
+          "quote": "For smaller benchmarks (less than 50 problems: AIME24, AMC23, and CHMath), we generate 4 samples (temperature=0.6)"
+        },
+        {
+          "id": "S6.SS1.p1",
+          "quote": "These include OpenAI-o1-preview, a large language model that has demonstrated advanced mathematical reasoning abilities"
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "These comparative datasets include OpenThoughts-114k, a synthetic reasoning dataset containing 114k examples"
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "NuminaMath-100k, a randomly selected 100k subset of NuminaMath-CoT"
+        }
+      ]
+    },
+    "findings": {
+      "text": "在域内任务上，LIMO 在 AIME24 达到 63.3%，超过 QwQ-32B-Preview 的 50.0% 和 OpenAI-o1-preview 的 44.6%；在 MATH500 达到 95.6%，超过 QwQ-32B-Preview 的 89.8% 和 OpenAI-o1-preview 的 85.5%；在 AMC23 达到 96.3%，超过 QwQ-32B-Preview 的 83.6% [S6.SS2.SSS0.Px1.p1]。在分布外任务上，LIMO 在 OlympiadBench 达到 67.6%，超过 QwQ-32B-Preview 的 58.5% 和基模型的 45.3%；在 CHMath 达到 84.2% 对 68.5%，在 GradeSchool 达到 76.2% 对 63.8%；在 GPQA 达到 70.7%，接近 OpenAI-o1-preview 的 73.3% [S6.SS2.SSS0.Px2.p1]。与更大数据集相比，NuminaMath-100k 显著退化（32.3% 对基模型 49.9%），OpenThoughts-114k 为 58.3%，而 LIMO 的 800 题达到 78.1% [S6.SS2.SSS0.Px3.p1]。LIMO 在所有基准上平均性能最高，为 78.1% [S6.SS2.SSS0.Px4.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "For AIME24, LIMO achieves 63.3% accuracy, outperforming QwQ-32B-Preview (50.0%) and OpenAI-o1-preview (44.6%)"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "On MATH500, LIMO achieves a notable 95.6% accuracy, surpassing QwQ-32B-Preview (89.8%) and OpenAI-o1-preview (85.5%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "LIMO reaches 96.3% accuracy compared to QwQ-32B-Preview’s 83.6%."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "On OlympiadBench, LIMO achieves 67.6% accuracy, significantly outperforming QwQ-32B-Preview (58.5%) and the base model (45.3%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "Similar improvements are observed on other challenging benchmarks such as CHMath (84.2% vs 68.5%) and GradeSchool (76.2% vs 63.8%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "LIMO maintains competitive performance even on GPQA, where it achieves 70.7% accuracy, close to OpenAI-o1-preview’s leading score of 73.3%."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "NuminaMath-100k shows significant degradation (32.3% vs. base model’s 49.9%) due to uncurated reasoning chains"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "OpenThoughts-114k achieves suboptimal results (58.3%) probably due to unfocused problem selection."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "LIMO’s carefully curated 800 problems yield superior performance (78.1%)"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px4.p1",
+          "quote": "LIMO achieves the highest average performance of 78.1% across all benchmarks"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，维持有效性能的最低样本量下界仍是一个开放问题 [S6.SS3.SSS5.p1]。此外，作者提出未来工作可探索主动学习策略以进一步优化样本效率 [S6.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS3.SSS5.p1",
+          "quote": "though the lower bound for maintaining effective performance remains an open question."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "Future work could explore active learning strategies to further optimize sample efficiency."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 7741,
+      "completion_tokens": 2434,
+      "elapsed_s": 8.21
+    }
+  },
+  "verify": {
+    "quote_hits": 30,
+    "quote_total": 30,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

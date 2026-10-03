@@ -1,0 +1,191 @@
+{
+  "paper": {
+    "arxiv_id": "2404.03002",
+    "title": "DESI 2024 VI: Cosmological Constraints from the Measurements of Baryon Acoustic Oscillations",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix A Comparison of results from DESI and combined DESI+SDSS BAO data",
+      "Appendix B Comparison to Planck PR4 likelihoods",
+      "Appendix C Author Affiliations"
+    ],
+    "char_count": 135045,
+    "n_sections": 35,
+    "n_paragraphs": 142
+  },
+  "result": {
+    "summary": "本文报告了DESI第一年观测（DR1）中星系、类星体和莱曼α森林示踪物的重子声学振荡（BAO）测量所得到的宇宙学结果，在0.1<z<4.2的七个红移区间内提供了稳健的距离和哈勃率测量 [abstract]。DESI BAO数据单独与平坦ΛCDM模型一致，得到物质密度Ωm=0.295±0.015 [abstract]。结合BBN先验和CMB声学角尺度，DESI要求H0=(68.52±0.62) km/s/Mpc [abstract]。在扩展模型中，DESI+CMB+SN Ia组合偏好w0>-1和wa<0，与ΛCDM的差异在2.5σ、3.5σ或3.9σ水平 [abstract]。这些结果展示了DESI在精确测量宇宙膨胀历史和暗能量性质方面的能力 [S8.p9]。",
+    "research_question": {
+      "text": "论文旨在利用DESI第一年观测的BAO测量，在多个红移区间内稳健地测量横向共动距离和哈勃率，以检验标准ΛCDM宇宙学模型并约束暗能量动力学、空间曲率、哈勃常数和中微子质量等参数 [abstract][S1.p3]。研究动机在于暗能量动力学尚未被严格检验，且ΛCDM模型内存在哈勃张力和σ8张力，可能暗示超出ΛCDM的新物理 [S1.p3]。BAO作为一种宇宙学探针，对宇宙膨胀历史敏感且系统误差控制良好，可用于检验暗能量动力学和空间曲率 [S1.p5]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We present cosmological results from the measurement of baryon acoustic oscillations (BAO) in galaxy, quasar and Lyman- α \\alpha forest tracers from the first year of observations from the Dark Energy Spectroscopic Instrument (DESI)"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "However, dark energy dynamics has not been stringently tested."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Such tensions, if not due to unaccounted systematics, may indicate new physics beyond $\\Lambda$ CDM."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "BAO provides a key cosmological probe sensitive to the cosmic expansion history, with well-controlled systematics."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "Using BAO we can test for dark energy dynamics and spatial curvature, and in combination with other probes constrain the Hubble constant, the sum of neutrino masses, and the number of light species."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用盲分析流程来测量BAO尺度，以减轻确认偏误 [abstract][S2.SS3.SSS1.p2]。对于离散星系和类星体样本，在目录层面移动示踪物的红移以改变BAO特征位置和红移空间畸变信号；对于Lyα样本，通过向测量的关联函数添加分量来移动BAO峰的表观位置 [S2.SS3.SSS1.p2]。使用标准 ruler 方法，通过Alcock-Paczynski效应和模板拟合提取BAO尺度，并应用密度场重构来锐化BAO特征 [S2.SS3.p2][S2.SS3.p4]。宇宙学推断使用cobaya和CAMB，采用MCMC采样 [S2.SS5.p1][S2.SS5.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "To mitigate confirmation bias, a blind analysis was implemented to measure the BAO scales."
+        },
+        {
+          "id": "S2.SS3.SSS1.p2",
+          "quote": "For the discrete galaxy and quasar samples, blinding was applied at the catalog level, according to the procedure described and validated in."
+        },
+        {
+          "id": "S2.SS3.SSS1.p2",
+          "quote": "For the Ly $\\alpha$ sample, catalog-level blinding was challenging due to sky lines and Galactic absorption features located at known observed wavelengths in the spectra."
+        },
+        {
+          "id": "S2.SS3.SSS1.p2",
+          "quote": "Instead, the apparent position of the BAO peak was shifted by directly applying an additive component to the measured correlation functions, as described in."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "The clustering pattern perpendicular and parallel to the line-of-sight changes in a predictable way between fiducial and trial cosmologies according to the Alcock-Paczynski (AP) effect, allowing a wide range of cosmological models to be tested."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "Applying these reversed displacements to tracers sharpens the BAO signature"
+        },
+        {
+          "id": "S2.SS5.p1",
+          "quote": "We included in the cosmological inference code cobaya the PantheonPlus, Union3 and DESY5 SN Ia likelihoods, as well as our new DESI BAO likelihoods."
+        },
+        {
+          "id": "S2.SS5.p2",
+          "quote": "When running cobaya, we rely on the Boltzmann code CAMB for theoretical cosmology calculations."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "分析使用了DESI DR1中超过600万个独特红移的星系、类星体和Lyα森林示踪物，覆盖0.1<z<4.2的七个红移区间 [abstract][S2.SS2.p2]。外部数据集包括BBN先验、Planck和ACT的CMB数据以及三个Ia型超新星数据集（Pantheon+、Union3、DES-SN5YR） [S2.SS4.p1][S2.SS4.SSS3.p2]。宇宙学参数推断使用cobaya和CAMB，采用MCMC采样，并应用了平坦先验 [S2.SS5.p1][S2.SS5.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "in seven redshift bins from over 6 million extragalactic objects in the redshift range 0.1 < z < 4.2"
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "Overall, this analysis of the DESI Data Release 1 relies on over $6$ million unique redshifts, more than twice the number of redshifts considered in the final SDSS cosmological analysis."
+        },
+        {
+          "id": "S2.SS4.p1",
+          "quote": "In this paper, we compare cosmological results from our data to those from a number of other recent experiments and provide joint constraints from different combinations of datasets."
+        },
+        {
+          "id": "S2.SS4.SSS3.p2",
+          "quote": "In this paper, we make use of three different SN Ia datasets."
+        },
+        {
+          "id": "S2.SS5.p1",
+          "quote": "We included in the cosmological inference code cobaya the PantheonPlus, Union3 and DESY5 SN Ia likelihoods, as well as our new DESI BAO likelihoods."
+        },
+        {
+          "id": "S2.SS5.p3",
+          "quote": "All Bayesian inference is performed using the Metropolis-Hastings MCMC sampler in cobaya."
+        }
+      ]
+    },
+    "findings": {
+      "text": "DESI BAO数据单独与平坦ΛCDM模型一致，得到Ωm=0.295±0.015 [abstract]。结合BBN先验和CMB声学角尺度，DESI要求H0=(68.52±0.62) km/s/Mpc [abstract]。在wCDM模型中，DESI BAO单独给出w=-0.99^{+0.15}_{-0.13} [abstract]。在w0waCDM模型中，DESI与CMB或SN Ia的组合偏好w0>-1和wa<0，DESI+CMB组合的偏好为2.6σ，加入SN Ia后与ΛCDM的差异在2.5σ、3.5σ或3.9σ水平 [abstract]。对于自由中微子质量的平坦ΛCDM模型，DESI和CMB结合给出∑mν<0.072 eV（95%置信度） [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "DESI BAO data alone are consistent with the standard flat Λ \\Lambda CDM cosmological model with a matter density Ω m = 0.295 ± 0.015 \\Omega_{\\mathrm{m}}=0.295\\pm 0.015 ."
+        },
+        {
+          "id": "abstract",
+          "quote": "DESI requires H 0 = ( 68.52 ± 0.62 ) ​ km ​ s − 1 ​ Mpc − 1 H_{0}=(68.52\\pm 0.62)\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}} ."
+        },
+        {
+          "id": "abstract",
+          "quote": "DESI BAO alone require w = − 0.99 − 0.13 + 0.15 w=-0.99^{+0.15}_{-0.13} ."
+        },
+        {
+          "id": "abstract",
+          "quote": "This preference is 2.6 σ \\sigma for the DESI+CMB combination, and persists or grows when SN Ia are added in, giving results discrepant with the Λ \\Lambda CDM model at the 2.5 ​ σ 2.5\\sigma , 3.5 ​ σ 3.5\\sigma or 3.9 ​ σ 3.9\\sigma levels for the addition of the Pantheon+, Union3, or DES-SN5YR supernova datasets respectively."
+        },
+        {
+          "id": "abstract",
+          "quote": "combining the DESI and CMB data yields an upper limit ∑ m ν < 0.072 \\sum m_{\\nu}<0.072 ( 0.113 ) ​ eV (0.113){\\,\\rm eV} at 95% confidence for a ∑ m ν > 0 \\sum m_{\\nu}>0 ( ∑ m ν > 0.059 ) ​ eV (\\sum m_{\\nu}>0.059){\\,\\rm eV} prior."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，中微子质量上限强烈依赖于∑mν的先验选择，且在扩展暗能量模型中显著放宽 [S7.SS1.p7][S7.SS1.p9]。对于w0waCDM模型，作者警告不要过度解释结果，因为一些偏好的模型可能映射到不违反零能量条件的精质模型 [S5.SS2.p9]。此外，DESI和SDSS在0.6<z<0.8红移区间的BAO测量存在约3σ的差异，原因尚不清楚，可能是样本方差波动 [S3.SS3.p4][S3.SS3.p5]。",
+      "evidence": [
+        {
+          "id": "S7.SS1.p7",
+          "quote": "We also caution that the upper bound obtained is strongly dependent on the choice of prior for $\\sum m_{\\nu}$."
+        },
+        {
+          "id": "S7.SS1.p9",
+          "quote": "However, we repeat the caveat that the limits are substantially relaxed in more extended dark energy models that affect the background geometry, such as those in Section 5."
+        },
+        {
+          "id": "S5.SS2.p9",
+          "quote": "However, we caution against over-interpretation of this result, since at least some of the $\\left(w_{0},w_{a}\\right)$ models preferred by our analysis could be mapped to quintessence models which reproduce the observable quantities $D_{M}/r_{d}$ and $D_{H}/r_{d}$ to high precision even though they do not violate the null energy condition at any redshift (e.g., see), and such an effective equation of state can also be obtained from models with modified gravity or multiple fields."
+        },
+        {
+          "id": "S3.SS3.p4",
+          "quote": "the discrepancy between the DESI and SDSS results in the $0.6<z<0.8$ redshift range is at roughly the $\\sim 3\\sigma$ level."
+        },
+        {
+          "id": "S3.SS3.p5",
+          "quote": "The cause of this difference is not clear."
+        },
+        {
+          "id": "S3.SS3.p5",
+          "quote": "The cause of the difference may simply an unlucky sample variance fluctuation—if so, this will soon become clear with later DESI data releases, which will have a much larger $V_{\\rm eff}$ in this redshift range."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 35893,
+      "completion_tokens": 2773,
+      "elapsed_s": 11.08
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 30,
+    "quote_rate": 0.967,
+    "inline_hits": 27,
+    "inline_total": 27,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S2.SS2.p2",
+        "reason": "quote 不在该段落里",
+        "quote": "Overall, this analysis of the DESI Data Release 1 relies on over $6$ million uni"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

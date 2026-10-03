@@ -1,0 +1,160 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文提出残差学习框架以缓解深层神经网络训练困难的问题，将网络层重新表述为学习相对于输入的残差函数 [S1.p5]。在 ImageNet 上，作者评估了深度达 152 层的残差网络，其复杂度低于 VGG 网络 [abstract]，集成模型在测试集上取得 3.57% 的 top-5 错误率并赢得 ILSVRC 2015 分类任务第一名 [S1.p9]。在 CIFAR-10 上，作者还分析了 100 层和 1000 层以上的网络 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：当网络能够开始收敛时，随着深度增加会出现退化问题——准确率饱和后迅速下降，且这种退化并非由过拟合引起，给适当深的模型增加更多层反而导致更高的训练误差 [S1.p3]。作者指出，深度对网络性能至关重要，但简单地堆叠更多层并不能轻易获得更好的网络 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "When deeper networks are able to start converging, a degradation problem has been exposed: with the network depth increasing, accuracy gets saturated (which might be unsurprising) and then degrades rapidly."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Unexpectedly, such degradation is not caused by overfitting, and adding more layers to a suitably deep model leads to higher training error"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Driven by the significance of depth, a question arises: Is learning better networks as easy as stacking more layers?"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出深度残差学习框架，让堆叠的非线性层拟合残差映射 F(x):=H(x)-x，而不是直接拟合目标映射 H(x)，原始映射被重新表述为 F(x)+x [S1.p5]。该表述通过恒等映射的捷径连接实现，捷径连接不引入额外参数或计算复杂度，整个网络仍可用 SGD 端到端训练 [S1.p6]。当输入输出维度不一致时，可用线性投影 W_s 匹配维度，但实验表明恒等映射足以解决退化问题且更经济 [S3.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a residual mapping."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "The original mapping is recast into $\\mathcal{F}(\\mathbf{x})+\\mathbf{x}$."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Identity shortcut connections add neither extra parameter nor computational complexity."
+        },
+        {
+          "id": "S3.SS2.p3",
+          "quote": "But we will show by experiments that the identity mapping is sufficient for addressing the degradation problem and is economical"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 ImageNet 2012 分类数据集（1000 类，128 万训练图像，5 万验证图像，10 万测试图像）上评估方法，报告 top-1 和 top-5 错误率 [S4.SS1.p1]。在 CIFAR-10 数据集（5 万训练图像，1 万测试图像，10 类）上进行了更多研究，聚焦极深网络的行为 [S4.SS2.p1]。此外，还在 PASCAL VOC 2007/2012 和 MS COCO 上采用 Faster R-CNN 进行目标检测评估 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We evaluate our method on the ImageNet 2012 classification dataset that consists of 1000 classes."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The models are trained on the 1.28 million training images, and evaluated on the 50k validation images."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We conducted more studies on the CIFAR-10 dataset, which consists of 50k training images and 10k testing images in 10 classes."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Table 8 and 8 show the object detection baseline results on PASCAL VOC 2007 and 2012 and COCO."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 ImageNet 上，34 层普通网络比 18 层普通网络验证误差更高，且整个训练过程中训练误差都更高 [S4.SS1.p3]；而 34 层 ResNet 优于 18 层 ResNet（提升 2.8%），且相比对应的普通网络将 top-1 误差降低 3.5% [S4.SS1.p6][S4.SS1.p7]。50/101/152 层 ResNet 比 34 层网络准确率更高，未观察到退化问题 [S4.SS1.p15]。152 层 ResNet 单模型 top-5 验证误差为 4.49%，六模型集成在测试集上取得 3.57% top-5 误差，赢得 ILSVRC 2015 第一名 [S4.SS1.p16]。在 CIFAR-10 上，ResNet 克服了优化困难并随深度增加获得准确率提升，110 层网络达到 6.43% 错误率 [S4.SS2.p5][S4.SS2.p6]。1202 层网络训练误差低于 0.1%，但测试误差为 7.93%，差于 110 层网络 [S4.SS2.p8][S4.SS2.p9]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p3",
+          "quote": "The results in Table 2 show that the deeper 34-layer plain net has higher validation error than the shallower 18-layer plain net."
+        },
+        {
+          "id": "S4.SS1.p6",
+          "quote": "First, the situation is reversed with residual learning – the 34-layer ResNet is better than the 18-layer ResNet (by 2.8%)."
+        },
+        {
+          "id": "S4.SS1.p7",
+          "quote": "Second, compared to its plain counterpart, the 34-layer ResNet reduces the top-1 error by 3.5% (Table 2)"
+        },
+        {
+          "id": "S4.SS1.p15",
+          "quote": "The 50/101/152-layer ResNets are more accurate than the 34-layer ones by considerable margins (Table 3 and 5)."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "Our 152-layer ResNet has a single-model top-5 validation error of 4.49%."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This leads to 3.57% top-5 error on the test set (Table 5). This entry won the 1st place in ILSVRC 2015."
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases."
+        },
+        {
+          "id": "S4.SS2.p6",
+          "quote": "yet is among the state-of-the-art results (6.43%, Table 6)."
+        },
+        {
+          "id": "S4.SS2.p8",
+          "quote": "this $10^{3}$ -layer network is able to achieve training error $<$ 0.1% (Fig. 6, right). Its test error is still fairly good (7.93%, Table 6)."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，1202 层网络在 CIFAR-10 上测试结果差于 110 层网络，认为这是因为过拟合，该网络对此小数据集可能不必要地大（19.4M）[S4.SS2.p9]。作者在本文中未使用 maxout/dropout，仅通过深而窄的架构施加正则化，并指出结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。此外，作者指出深层普通网络优化困难的原因尚待未来研究 [S4.SS1.p4]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "We argue that this is because of overfitting. The 1202-layer network may be unnecessarily large (19.4M) for this small dataset."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "But combining with stronger regularization may improve results, which we will study in the future."
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "The reason for such optimization difficulties will be studied in the future."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12201,
+      "completion_tokens": 2082,
+      "elapsed_s": 7.41
+    }
+  },
+  "verify": {
+    "quote_hits": 25,
+    "quote_total": 25,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_anaphor",
+    "hash": "9b0cd5e1"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结中实现了对纳米线与量子点构成的干涉环中费米宇称的单次干涉测量 [abstract][S1.p3]。作者通过色散栅极探测三量子点干涉仪的量子电容，观察到 h/2e 周期的双模分布和随机电报信号 [S3.p3]。在最优磁通下，信噪比在 3.7 µs 内达到 1，两个状态之间的驻留时间超过 1 ms [abstract]。作者将这些结果解释为相距约 3 µm 的一对马约拉纳零能模所编码的费米宇称的测量，并估计宇称测量误差概率为 1% [abstract]。作者认为这些结果代表了向基于测量操作的拓扑量子比特迈出的重要进展 [S5.p2]。",
+    "research_question": {
+      "text": "论文要解决的问题是如何对一维拓扑超导体中马约拉纳零能模所编码的费米宇称进行投影测量，这是测量型拓扑量子计算的基本操作 [S1.p1][S1.p2]。作者指出，共享费米宇称的一对 MZM 可以通过干涉测量来确定，而此前的工作虽报道了相干输运，但所处的参数区间不允许量子比特读出 [S1.p2]。作者认为，测量型拓扑量子比特的鲁棒性和控制简单性使其成为通向实用规模量子计算的有前景路径 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Protocols for measurement-only topological quantum computation simplify these operations, reducing them to fusion alone."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The fermion parity shared by a pair of MZMs can be determined through an interferometric measurement."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Progress in this direction was made in Ref., which reported coherent transport through a gate-defined nanowire island in an Aharonov-Bohm interferometer, albeit in a regime that does not allow qubit readout."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "The robustness against errors and simplicity of control offered by this approach make measurement-based topological qubits a promising path towards utility-scale quantum computation"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提出并实现了一种基于色散栅极探测的干涉测量方法，器件由门定义的 InAs-Al 纳米线与三个量子点构成三量子点干涉仪（TQDI），其中中间的长量子点（dot 2）通过两个小量子点（dot 1 和 dot 3）与纳米线两端耦合形成干涉环 [S2.p3]。通过测量 dot 2 的量子电容 C_Q，可以探测能量谱在共振处的曲率，从而对宇称进行射频读出 [S1.F1]。作者用包含射频驱动功率、电荷噪声和温度的量子动力学模拟来支持对结果的解释 [S3.p4]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "Our readout circuit is based on dispersive gate sensing of a triple quantum dot interferometer (TQDI): three electrostatically defined quantum dots that together with the 1DTS form a loop threaded by a flux, $\\Phi$"
+        },
+        {
+          "id": "S2.p3",
+          "quote": "The quantum capacitance, $C_{\\mathrm{\\scriptscriptstyle Q}}$, of dot 2 is read out through dispersive gate sensing using an off-chip resonator circuit in a reflectometry setup."
+        },
+        {
+          "id": "S1.F1",
+          "quote": "A measurement of the quantum capacitance, which probes the curvature of the energy spectrum at resonance, allows for rf readout of the parity."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "We support this interpretation by reproducing our results with quantum dynamics simulations that incorporate rf drive power, charge noise, and temperature."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在器件 A 上进行了约 1.5×10^4 次连续测量，每次积分时间 4.5 µs，记录总长 67 ms 的时间轨迹，并以 0.14 mT 步长扫描面外磁场 B_⊥、扫描 V_QD2 以寻找 dot 2 的电荷跃迁 [S3.p1]。器件 A 的相关区间在 B_∥ = 1.8 T 和 V_WP1 = -1.832 V 附近 [S3.p2]。作者还进行了三项对照实验：向超导体注入准粒子、将量子点与纳米线完全断开、以及在 0.8 T 的低场（器件处于平庸相）重复测量 [S3.p12][S3.p13][S3.p14]。此外，作者在器件 A 的第二次测量（A2）和器件 B 上验证了可重复性 [S3.p11]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$"
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We sweep the out-of-plane magnetic field $B_{\\perp}$ in steps of $0.14\\text{\\,}\\mathrm{mT}$"
+        },
+        {
+          "id": "S3.p2",
+          "quote": "For device A, the relevant regime is in the neighborhood of $B_{\\parallel}=$1.8\\text{\\,}\\mathrm{T}$$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}=$-1.832\\text{\\,}\\mathrm{V}$$."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a"
+        },
+        {
+          "id": "S3.p13",
+          "quote": "Our second control experiment is to completely disconnect the dots from the wire."
+        },
+        {
+          "id": "S3.p14",
+          "quote": "Finally, we repeat the interferometry measurement at a low field ( $0.8\\text{\\,}\\mathrm{T}$), where the device is well within the trivial phase"
+        },
+        {
+          "id": "S3.p11",
+          "quote": "we discuss a second measurement (A2) on device A ( Fig. S8) and a measurement of device B ( Fig. S9)"
+        }
+      ]
+    },
+    "findings": {
+      "text": "作者观察到量子电容的 h/2e 周期双模分布，其周期 1.7(±0.2) mT 与器件几何下产生 h/2e 磁通的预期值一致 [S3.p2]。在双模出现的磁通值处，时间演化呈现随机电报信号，切换间隔服从特征时间 τ_RTS ≈ 2 ms 的指数分布 [S3.p3]。作者从直方图提取到在 90 µs 内信噪比为 4.9，等价于在 3.7 µs 内信噪比为 1 [S3.p3]。作者将这些 h/2e 周期双模振荡和 RTS 解释为费米宇称的切换 [S3.p3]。模拟给出的最大 ΔC_Q ≈ 1 fF，与测量值接近 [S3.p7]。作者还通过准粒子注入使 τ_RTS 减小、断开量子点与纳米线后 RTS 消失、以及低场下不出现 h/e 周期性等对照实验支持该解释 [S3.p12][S3.p13][S3.p14]。",
+      "evidence": [
+        {
+          "id": "S3.p2",
+          "quote": "we observe oscillations in the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ time trace with a period of $1.7(\\pm 0.2)\\text{\\,}\\mathrm{mT}$"
+        },
+        {
+          "id": "S3.p2",
+          "quote": "This period coincides with the $1.7\\text{\\,}\\mathrm{mT}$ expected to produce a flux of $h/2e$ through the interference loop in this device geometry."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the intervals between switches follow an exponential distribution with a characteristic time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}\\approx$2\\text{\\,}\\mathrm{ms}$$"
+        },
+        {
+          "id": "S3.p3",
+          "quote": "we extract an achieved SNR of $4.9$ in $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ ( Fig. 3 g,h) or, equivalently, an SNR of $1$ in $3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$"
+        },
+        {
+          "id": "S3.p3",
+          "quote": "We interpret these $h/2e$ -periodic bimodal oscillations and RTS in ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ as originating from switches of fermion parity."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "our simulations yield an estimated maximum value as a function of flux $\\Delta C_{\\mathrm{\\scriptscriptstyle Q}}\\approx$1\\text{\\,}\\mathrm{fF}$$, which is close to the measured value shown in Fig. 3 f-h."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "$\\tau_{\\mathrm{\\scriptscriptstyle RTS}}$ decreases to half of its value as the bias voltage is increased from $0$ to $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro V}$"
+        },
+        {
+          "id": "S3.p13",
+          "quote": "In devices A and B, we do not observe any RTS, as discussed in Sec. S6.2."
+        },
+        {
+          "id": "S3.p14",
+          "quote": "we do not observe any $h/e$ flux periodicity as expected for a gapped wire"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，该测量本身不能明确区分拓扑相中的 MZM 和平庸相中精细调节的低能 Andreev 束缚态 [S1.p3]。作者也指出，这些测量本身不能确定干涉测量探测到的低能态是否是拓扑的 [S5.p1]。作者表示，要完全解决这一问题，将在另一篇论文中讨论器件的相图和所观察到的磁通依赖 RTS 的稳定性 [S5.p1]。此外，作者指出在当前器件中，由于有限尺寸效应导致的介观涨落，预期 E_M 会有显著变化，且当前器件中预期拓扑能隙 Δ_T 不大、相干长度并不显著小于器件长度 [S4.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase"
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "To fully resolve this issue, we will discuss the device’s phase diagram and the stability of the observed flux-dependent RTS in a separate publication."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "we expect a substantial variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ in our current devices, attributable to mesoscopic fluctuations due to finite-size effects."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 37649,
+      "completion_tokens": 2636,
+      "elapsed_s": 10.93
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 29,
+    "quote_rate": 1.0,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3_no_causal",
+    "hash": "96f21339"
+  }
+}

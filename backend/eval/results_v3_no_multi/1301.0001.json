@@ -1,0 +1,86 @@
+{
+  "paper": {
+    "arxiv_id": "1301.0001",
+    "title": "Applications of fMRI for Brain Mapping",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 855,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "本文是一篇综述，介绍脑图谱（brain mapping）技术及其在脑功能研究中的作用，指出仅靠结构成像不足以应对许多神经疾病，需要研究脑的功能组织 [abstract]。作者概述了多种脑图谱技术以及 fMRI 信号处理方法 [abstract]。",
+    "research_question": {
+      "text": "论文关注的问题是：许多神经疾病仅靠结构研究并不充分，因此需要研究脑的功能组织，并需要在正常与疾病状态下研究脑功能 [abstract]。作者指出，脑图谱技术有助于获取这些方面的重要信息，例如可研究与运动、感觉、言语和记忆等特定活动相关的脑功能及负责的脑区 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However there are many neurological disorders for which only structure studies are not sufficient."
+        },
+        {
+          "id": "abstract",
+          "quote": "In such cases it is required to investigate the functional organization of the brain."
+        },
+        {
+          "id": "abstract",
+          "quote": "Further it is necessary to study the brain functions under normal as well as diseased conditions."
+        },
+        {
+          "id": "abstract",
+          "quote": "Brain functions and brain area responsible for the particular activities like motor, sensory speech and memory process could be investigated."
+        }
+      ]
+    },
+    "method": {
+      "text": "本文采用综述的方式，概述多种脑图谱技术以及 fMRI 信号处理方法 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The authors provide an overview of various Brain Mapping techniques and fMRI signal processing methods."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "findings": {
+      "text": "作者指出，脑图谱技术已被证明对理解脑的分子、细胞和功能机制至关重要 [abstract]。正常解剖成像能够提供脑内某些异常的结构信息 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Brain-mapping techniques have proven to be vital in understanding the molecular, cellular, and functional mechanisms of the brain."
+        },
+        {
+          "id": "abstract",
+          "quote": "Normal anatomical imaging can provide structural information on certain abnormalities in the brain."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1475,
+      "completion_tokens": 501,
+      "elapsed_s": 2.61
+    }
+  },
+  "verify": {
+    "quote_hits": 7,
+    "quote_total": 7,
+    "quote_rate": 1.0,
+    "inline_hits": 5,
+    "inline_total": 5,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 2,
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3_no_multi",
+    "hash": "a604ce17"
+  }
+}

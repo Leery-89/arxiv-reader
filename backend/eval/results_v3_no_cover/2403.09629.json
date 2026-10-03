@@ -1,0 +1,152 @@
+{
+  "paper": {
+    "arxiv_id": "2403.09629",
+    "title": "Quiet-STaR: Language Models Can Teach Themselves to Think Before Speaking",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 59551,
+    "n_sections": 39,
+    "n_paragraphs": 76
+  },
+  "result": {
+    "summary": "本文提出 Quiet-STaR，将 STaR 从问答数据集推广到任意文本，让语言模型在每个 token 处生成内部理由以帮助预测后续文本 [S1.p2][S1.p3]。方法包含并行理由生成、混合头以及基于 REINFORCE 的理由优化三个步骤 [S4.SS1.p1]。在 Mistral 7B 上使用 OpenWebMath 和 C4 继续预训练后，模型在 GSM8K 和 CommonsenseQA 上取得零样本提升，且提升随内部思考 token 数增加而增大 [S1.p3][S5.SS1.p1]。作者认为这朝着更通用、可扩展的推理学习迈出了一步 [S7.p1]。",
+    "research_question": {
+      "text": "论文要解决的问题是：既然推理隐含在所有文本中，能否利用语言建模任务本身来教模型推理，而不是依赖精心整理的问答数据集 [S1.p1][S1.p2]。作者指出，STaR 等方法依赖人工整理的问答数据集，限制了理由的规模和泛化性 [S1.p2]。因此本文希望让语言模型从大规模互联网文本中学习生成有助于推断后续文本的推理 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "We instead ask, if reasoning is implicit in all text, why shouldn’t we leverage the task of language modeling to teach reasoning?"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Yet, training from curated QA datasets limits the scale and generalizability of the rationales."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "we train an LM to generate reasoning that helps it infer future text from a large internet text corpus"
+        }
+      ]
+    },
+    "method": {
+      "text": "Quiet-STaR 在每对观测 token 之间引入辅助的理由变量，训练模型生成中间思考以预测后续文本 [S3.p1]。方法分三步：在所有 token 位置并行生成理由并插入可学习的思考起止 token；用混合头决定后思考预测与基础预测的融合权重；用 REINFORCE 优化理由生成，并采用非近视的教师强制技巧纳入多个未来 token [S4.SS1.p1]。作者还通过缓存前向传播并拼接对角注意力掩码实现并行生成 [S4.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "we introduce an auxiliary ‘rationale’ variable between each pair of observed tokens of the sequence"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "Quiet-STaR operates with three main steps (Figure 1): 1. Parallel rationale generation (think, Subsection 4.2)"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "2. Mixing post-rationale and base predictions (talk, Subsection 4.3)"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "3. Optimizing rationale generation (learn, Subsection 4.4)"
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "we cache each forward pass and concatenate a diagonal attention mask to the previous attention mask"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验以 Mistral 7B 为基础模型 [S5.p1]。大部分实验在 OpenWebMath 上训练，该语料被认为包含更高密度的需要推理的 token [S5.p2]。作者也在 C4 上评估，使用 16 个思考 token 和 4 个真实 token 前瞻的设置 [S5.SS1.p2]。评估指标包括 CommonsenseQA 和 GSM8K 的零样本直接回答能力，以及思考 token 对预测影响的分布 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S5.p1",
+          "quote": "We conduct all of our experiments starting with the base version of Mistral 7B."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "We perform most of our experiments by training on OpenWebMath, a crawl that emphasizes more technical webpages."
+        },
+        {
+          "id": "S5.SS1.p2",
+          "quote": "for our C4 evaluation, we train Mistral 7B with 16 thought tokens and 4 true tokens ahead and otherwise the same setup"
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We evaluate 1) whether Quiet-STaR improves a language model’s ability to directly predict answers in datasets that require reasoning; and, 2) the distribution of impacts resulting from thinking tokens."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 OpenWebMath 上训练后，Quiet-STaR 在 CommonsenseQA 上比基础模型提升 10.9%，在 GSM8K 上提升 5.0%，且提升随理由 token 数增加而增大 [S5.SS1.p1]。在 C4 上训练也带来提升，但幅度较小：GSM8K 从 5.9% 到 8.1%，CommonsenseQA 从 36.3% 到 42.6% [S5.SS1.p2]。思考对多数 token 平均影响很小，但对较难 token 有不成比例的改善 [S5.SS2.p1]。此外，在零样本思维链设置下，8 样本多数投票准确率从 40.6% 提升到 47.7% [S5.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.p1",
+          "quote": "On CommonsenseQA, we find that Quiet-STaR improves performance by 10.9% compared to the base language model."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "Similarly, on GSM8K, Quiet-STaR results in a 5.0% boost over the base model"
+        },
+        {
+          "id": "S5.SS1.p2",
+          "quote": "training with Quiet-STaR on C4 also improves performance on GSM8K ( $5.9\\%\\rightarrow 8.1\\%$) and CommonsenseQA ( $36.3\\%\\rightarrow 42.6\\%$) but by a smaller margin"
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "there is a disproportionate improvement on more difficult tokens"
+        },
+        {
+          "id": "S5.SS3.p1",
+          "quote": "The majority vote accuracy over 8 samples (cot-maj@8) increases from 40.6% to 47.7% with Quiet-STaR"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，为解决问题所做的简化之一是尚未验证这些技术是否适用于从零开始训练的模型 [S6.p1]。目前只将 Quiet-STaR 应用于 70 亿参数模型 [S6.p1]。Quiet-STaR 带来显著的计算开销，在生成每个额外 token 前需生成许多 token [S6.p2]。当前实现不支持动态预测何时生成或结束理由 [S6.p2]。此外，作者在伦理声明中承认无法确认模型表达的理由是否忠实反映其内部处理，且对有害或有偏见的推理模式没有防护 [Sx1.p1]。",
+      "evidence": [
+        {
+          "id": "S6.p1",
+          "quote": "it would be valuable to understand whether these techniques work when a model is trained from scratch"
+        },
+        {
+          "id": "S6.p1",
+          "quote": "We have also only applied Quiet-STaR to a 7 billion parameter model, albeit a powerful one."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Quiet-STaR results in a substantial overhead, generating many tokens before generating every additional token."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "In the current implementation we do not support dynamically predicting when to generate, or end, a rationale."
+        },
+        {
+          "id": "Sx1.p1",
+          "quote": "it is impossible to know that the reasoning expressed by the model in language accurately represents the internal processing of the model (i.e., faithfulness)"
+        },
+        {
+          "id": "Sx1.p1",
+          "quote": "there are no safeguards against harmful or biased reasoning patterns if the model finds them useful"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 15347,
+      "completion_tokens": 1840,
+      "elapsed_s": 7.92
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_cover",
+    "hash": "a5238a9a"
+  }
+}

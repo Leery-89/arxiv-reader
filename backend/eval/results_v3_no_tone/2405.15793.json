@@ -1,0 +1,217 @@
+{
+  "paper": {
+    "arxiv_id": "2405.15793",
+    "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix",
+      "Appendix A SWE-agent Design",
+      "A.1 ACI Design",
+      "File viewer.",
+      "File editor.",
+      "Search & navigation.",
+      "A.2 Implementation",
+      "A.3 Configuration",
+      "Appendix B Extended Results",
+      "B.1 Hyperparameter Sweep",
+      "B.2 Model Performance",
+      "Performance by Repository.",
+      "Temporal Analysis.",
+      "B.3 Trajectory Analysis",
+      "B.3.1 Turns to Resolution",
+      "B.3.2 Walkthrough of Trajectory Phases",
+      "B.3.3 Breakdowns of Action Sequences",
+      "B.4 Failure Modes",
+      "B.5 Performance Variance and Pass@k Rate",
+      "B.6 Patch Generations",
+      "B.7 HumanEvalFix Evaluation",
+      "B.8 Dataset Information",
+      "B.9 Miscellaneous",
+      "Appendix C Prompts",
+      "Appendix D Qualitative Analysis",
+      "Analysis for psf/requests-2317",
+      "Analysis for pylint-dev/pylint-5859",
+      "Analysis for sympy/sympy-21614",
+      "Analysis for django/django-14411",
+      "Appendix E Statements",
+      "E.1 Ethics & Broader Impacts",
+      "E.2 Reproducibility",
+      "E.3 Limitations & Future Work"
+    ],
+    "char_count": 31242,
+    "n_sections": 12,
+    "n_paragraphs": 50
+  },
+  "result": {
+    "summary": "本文提出 SWE-agent，一个由语言模型（LM）与 agent-computer interface（ACI）组成的系统，用于自主解决软件工程任务 [S1.p3]。作者认为 LM agent 是一类新的终端用户，需要专门设计的接口，因此设计了包含搜索/导航、文件查看器、文件编辑器和上下文管理等组件的 ACI [S2.p1][S3.p1]。在 SWE-bench 和 HumanEvalFix 上，SWE-agent 分别取得 12.5% 和 87.7% 的 pass@1 成绩，超过此前非交互式 LM 的最佳结果 [abstract]。消融实验表明，ACI 设计选择对性能有显著影响，例如 SWE-agent 比仅使用 Linux shell 的基线多解决 10.7 个百分点 [S1.p4]。",
+    "research_question": {
+      "text": "论文要解决的问题是：如何设计 LM agent 与计算机交互的接口，以提升其在软件工程等复杂任务上的表现 [S1.p1]。作者指出，现有接口（如 Linux shell）是为人类用户设计的，LM agent 在使用时容易出错且缺乏有效反馈，因此需要专门为 LM 设计的 agent-computer interface [S1.p2]。作者认为 LM agent 代表一类新的终端用户，具有自身需求与能力，研究接口设计对其性能的影响具有重要性 [S2.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "we investigate whether LM agents could similarly benefit from better-designed interfaces for performing software engineering tasks."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "These deficits substantially hamper performance, motivating the need for an agent-computer interface (ACI), i.e., an abstraction layer between the LM agent and computer, to enhance the LM agent’s abilities in computer environments"
+        },
+        {
+          "id": "S2.p1",
+          "quote": "We argue that LM agents represent a new category of end user, with their own needs and abilities."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出 SWE-agent，一个由 LM 和 ACI 组成的系统，使 LM agent 能够自主使用计算机解决软件工程任务 [S1.p3]。其 ACI 包含搜索/导航、文件查看器、文件编辑器和上下文管理等组件，提供一组简单动作，并配有 guardrails 和简洁反馈 [S3.p1][S1.p3]。设计遵循四条原则：动作简单易懂、动作紧凑高效、环境反馈信息丰富但简洁、guardrails 缓解错误传播 [S2.p5]。作者通过手动检查 agent 行为和网格搜索来选择最佳 ACI 配置 [S2.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "we introduce SWE-agent, an agent composed of an LM and ACI, that can interact with a computer to solve challenging real-world software engineering problems"
+        },
+        {
+          "id": "S3.p1",
+          "quote": "The ACI comprises several principal components, including search/navigation, file viewer, file editor, and context management."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The ACI uses guardrails to prevent common mistakes, and an agent receives specific, concise feedback about a command’s effects at every turn."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "1. Actions should be simple and easy to understand for agents."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "2. Actions should be compact and efficient."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "3. Environment feedback should be informative but concise."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "4. Guardrails mitigate error propagation and hasten recovery."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We use two approaches to enhance performance on a development set: (1) manually inspect agent behavior to identify difficulties and propose improvements, and (2) run a grid search to select the best ACI configuration."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文主要在 SWE-bench 数据集上评估，该数据集包含来自 12 个 Python 仓库的 2,294 个任务实例；消融和分析在 SWE-bench Lite（300 个实例）上进行，并使用 HumanEvalFix 测试基本代码编辑能力 [S4.p1]。实验使用 GPT-4 Turbo 和 Claude 3 Opus 两个 LM [S4.p2]。基线包括非交互式检索增强生成（RAG）和仅使用 Linux shell 的 Shell-only 设置 [S4.p3][S4.p4]。主要指标为 % Resolved 或 pass@1，并报告平均 API 成本，每实例预算设为 4 美元 [S4.p5]。",
+      "evidence": [
+        {
+          "id": "S4.p1",
+          "quote": "We primarily evaluate on the SWE-bench dataset, which includes $2,294$ task instances from $12$ different repositories of popular Python packages."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench that focus on evaluating self-contained functional bug fixes."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We also test SWE-agent’s basic code editing abilities with HumanEvalFix, a short-form code debugging benchmark."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "All results, ablations, and analyses are based on two leading LMs, GPT-4 Turbo ( gpt-4-1106-preview) and Claude 3 Opus ( claude-3-opus-20240229)."
+        },
+        {
+          "id": "S4.p3",
+          "quote": "The first setting is the non-interactive, retrieval-augmented generation (RAG) baselines established in."
+        },
+        {
+          "id": "S4.p4",
+          "quote": "The second setting, called Shell-only, is adapted from the interactive coding framework introduced in."
+        },
+        {
+          "id": "S4.p5",
+          "quote": "We report % Resolved or pass $@$ $1$ as the main metric, which is the proportion of instances for which all tests pass successfully after the model generated patch is applied to the repository."
+        },
+        {
+          "id": "S4.p5",
+          "quote": "Due to budget constraints, we set the per-instance budget to $4; if a run exceeded this budget, existing edits were submitted automatically."
+        }
+      ]
+    },
+    "findings": {
+      "text": "SWE-agent 搭配 GPT-4 Turbo 在完整 SWE-bench 测试集上解决 12.47%（286/2,294），在 Lite 上解决 18.00%（54/300），在所有系统中表现最佳 [S5.p1]。相比 Shell-only，SWE-agent 相对提升 64% [S5.p1]。在 HumanEvalFix 上，SWE-agent 取得 88.3% 的 pass@1 [S5.p2]。消融实验显示，迭代搜索界面因 agent 穷举查看结果反而比无搜索工具更差（15.7% vs 12.0%）[S5.SS1.p3]；无文件编辑器时性能降至 10.3% [S5.SS1.p4]；加入 linting 干预后性能提升（无 linting 时为 15.0%）[S5.SS1.p5]。行为分析发现，agent 通常先复现或定位问题，随后进入“编辑-执行”循环 [S5.SS2.p2][S5.SS2.p3]；51.7% 的轨迹出现至少一次编辑失败，单次失败后最终成功概率从 90.5% 降至 57.2% [S5.SS2.p4]；成功运行比失败运行更早、更便宜地结束 [S5.SS2.p5]；约一半未解决实例属于错误实现或过度特定实现 [S5.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S5.p1",
+          "quote": "Across all systems, SWE-agent w/ GPT-4 Turbo achieves the best performance all-around, successfully solving $12.47$ % ( $286$ / $2,294$) of the full SWE-bench test set and $18.00$ % ( $54$ / $300$) of the Lite split."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "An LM-friendly ACI’s value is confirmed by SWE-agent’s $64$ % relative increase compared to Shell-only, both with GPT-4 Turbo."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "In Table 3, SWE-agent yields strong performance on HumanEvalFix with $88.3$ % pass@1 rate."
+        },
+        {
+          "id": "S5.SS1.p3",
+          "quote": "leading to even worse performance than the not having additional search tools at all ( $15.7$ % $\\downarrow$ 2.3 for No search vs. $12.0$ % $\\downarrow$ 6.0 with Iterative search)."
+        },
+        {
+          "id": "S5.SS1.p4",
+          "quote": "Without SWE-agent’s file editor interface, performance drops to ( $10.3$ % $\\downarrow$ 7.7)."
+        },
+        {
+          "id": "S5.SS1.p5",
+          "quote": "This intervention improves performance considerably (without linting, $15.0$ % $\\downarrow$ 3.0)."
+        },
+        {
+          "id": "S5.SS2.p2",
+          "quote": "SWE-agent usually begins with either writing reproduction code and/or localizing the issue’s cause to specific lines of code."
+        },
+        {
+          "id": "S5.SS2.p3",
+          "quote": "Remaining turns are mostly “edit, then execute\" loops."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "out of $2,294$ task instances, $1,185$ ( $51.7$ %) of SWE-agent w/ GPT-4 Turbo trajectories have $1$ + failed edits."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "Any attempt at editing has a $90.5$ % chance of eventually being successful. This probability drops off to $57.2$ % after a single failed edit."
+        },
+        {
+          "id": "S5.SS2.p5",
+          "quote": "We observe that successful runs complete earlier and at a cheaper cost than unsuccessful ones."
+        },
+        {
+          "id": "S5.SS2.p6",
+          "quote": "about half ( $52.0$ %) of unresolved instances fall into the Incorrect Implementation or Overly Specific Implementation categories"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 8206,
+      "completion_tokens": 2384,
+      "elapsed_s": 8.71
+    }
+  },
+  "verify": {
+    "quote_hits": 31,
+    "quote_total": 31,
+    "quote_rate": 1.0,
+    "inline_hits": 24,
+    "inline_total": 24,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "category": "standard",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

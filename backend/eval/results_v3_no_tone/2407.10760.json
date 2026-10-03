@@ -1,0 +1,222 @@
+{
+  "paper": {
+    "arxiv_id": "2407.10760",
+    "title": "Little Red Dots: Rapidly Growing Black Holes Reddened by Extended Dusty Flows",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 52309,
+    "n_sections": 10,
+    "n_paragraphs": 55
+  },
+  "result": {
+    "summary": "本文针对 JWST 发现的一类尘埃红化宽线活动星系核——little red dots（LRD）——提出一个从静止系紫外到红外的谱能量分布（SED）模型 [abstract][S1.p6]。模型假设一个具有典型 SED 的 AGN 入射辐射被嵌入在延展的尘埃介质中，其消光律类似猎户座星云或某些 AGN 环境，紫外-光学谱由尘埃衰减的 AGN 发射描述，无需额外的恒星发射或 AGN 散射光 [abstract][S1.p6]。在红外波段，延展的尘埃与气体分布（γ<1；ρ∝r^-γ）使较冷的尘埃温度主导辐射，从而把能量峰从近红外移到中红外 [abstract][S5.p2]。该模型不同于典型 AGN 热环模型，能够产生与 JWST MIRI 观测一致的 LRD 红外 SED 平坦化 [abstract][S5.p2]。",
+    "research_question": {
+      "text": "论文要解决的问题是 LRD 特征性 v 形 SED 的起源，尤其是其中星系与 AGN 的相对贡献难以辨别 [abstract][S1.p2]。原文指出，LRD 在宇宙体积中的丰度显著高于地面类星体巡天预期，并可为类星体光度函数的宇宙学演化、宇宙再电离以及高红移黑洞自旋测量提供线索 [S1.p1]。此外，静止系近红外到远红外观测显示多数 LRD 在 JWST/MIRI F1800W 波段未被探测到，且 MIRI SED 从静止系光学到近红外趋于平坦，这似乎与热尘埃再发射导致的极红 SED 预期相矛盾 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "The James Webb Space Telescope (JWST) has dramatically advanced the study of high-redshift ( $z>4$) active galactic nuclei (AGNs) by unveiling low-luminosity AGN populations more representative than luminous quasars."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "The abundance of these AGNs in cosmic volume is significantly higher than what is expected from ground-based quasar surveys, and provides insights on the cosmological evolution of quasar luminosity functions, the impact on cosmic reionization, and the implications to rapid spins of these high-redshift BHs through the measurement of the radiation-to-mass conversion efficiency."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Despite their significance, the properties of these newly identified LRDs remain puzzling, particularly concerning the origin of their characteristic v-shaped spectral energy distribution (SED)."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Observational studies using SED template fitting suggested that the red optical part could either be due to dust-reddened AGNs or starburst galaxies, while the blue UV component might represent light from unobscured galaxies or scattered light from embedded AGNs."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Data from the JADES, COSMOS-Web and PRIMER-COSMOS surveys show that most LRDs are not detected in the JWST/MIRI F1800W bands, and even for the detected sources, the MIRI SEDs tend to flatten from the rest-frame optical to the near-infrared (NIR) at 1–3 $\\mu$ m"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Those observations appear to contradict expectations that the SED should be very red throughout the optical to NIR spectrum due to re-emission from hot dust components heated by the AGNs."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出一个从静止系紫外到红外波段的 LRD SED 模型，假设具有典型 SED 的 AGN 入射辐射被嵌入在延展尘埃介质中，其消光律类似猎户座星云或某些 AGN 环境 [abstract][S1.p6]。紫外-光学谱由尘埃衰减的 AGN 发射描述，在 λ>4000 Å 呈红色光学连续谱，在 λ<3000 Å 通过灰消光曲线形成平坦紫外谱形，无需额外恒星发射或 AGN 散射光 [abstract][S1.p6]。红外部分采用径向密度分布 ρ=ρ0(r/rin)^-γ，通过平衡尘埃加热与热发射冷却计算尘埃温度，并进一步计算尘埃再发射光度 [S3.p3][S3.p4]。模型还考虑辐射压反馈效应，将 rin 替换为光学厚度达到 1 的光球半径 rph [S3.p5]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "We hypothesize that the incident radiation from an AGN, characterized by a typical SED, is embedded in an extended dusty medium with an extinction law similar to those seen in dense regions such as Orion Nebula or certain AGN environments."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "The UV-optical spectrum is described by dust-attenuated AGN emission, composed of a red optical continuum and a UV excess established through gray extinction."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "There is no need for additional stellar emission or AGN scattered light."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "we focus not only on a compact dust structure such as a dust torus, but rather a more extended dust structure described by a radial density profile of $\\rho=\\rho_{0}(r/r_{\\rm in})^{-\\gamma}$, where $\\rho_{0}$ is the gas density at the sublimation radius $r_{\\rm in}$, and the power-law index ranges $0<\\gamma<2$."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the temperature of dust grains, $T_{\\rm dust}(r)$, can be determined by balancing dust heating from irradiation with cooling through thermal emission"
+        },
+        {
+          "id": "S3.p4",
+          "quote": "the luminosity density of dust re-emission is calculated by $L_{\\nu,\\mathrm{dust}}=4\\pi\\Omega\\int_{r_{\\rm in}}^{r_{\\rm out}}\\kappa_{\\nu}^{\\rm abs}B_{\\nu}\\left[T_{\\mathrm{dust}}(r)\\right]\\rho{r}^{2}dr$"
+        },
+        {
+          "id": "S3.p5",
+          "quote": "In our model, feedback effects are incorporated by substituting $r_{\\rm in}$ with $r_{\\rm ph}$ in Equation ( 3)."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文将模型 SED 与 LRD 的堆叠测光数据进行比较，包括 z~5.5 和 z=7.5 的 LRD 样本，以及 JADES 和 COSMOS-Web 巡天的堆叠测光数据 [S2.p5][S3.p6]。模型采用低红移类星体复合 SED 作为入射通量，并假设 AV=3 mag，在 4000 Å 归一化 [S2.p4][S2.p5]。红外部分还叠加了 SCUBA 和 ALMA 波段非探测给出的中远红外通量密度上限，并比较了 JWST MIRI F770W 和 F1800W 的观测约束 [S3.p6][S3.p9]。模型参数空间探索了气体密度 n0 从 1 到 10^3 cm^-3 以及密度斜率 γ 的不同组合 [S3.p7][S3.p10]。",
+      "evidence": [
+        {
+          "id": "S2.p5",
+          "quote": "As reference, we overlay photometric SED data obtained from stacking LRD samples at $z\\sim 5.5$ (orange) and $z=7.5$ (blue)."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We here adopt the composite SED of low- $z$ quasars from as the incident flux."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "For all the cases, we assume a visual extinction $A_{\\mathrm{V}}=3$ mag and normalize the attenuated fluxes at $\\lambda=4000~{\\rm\\AA}$."
+        },
+        {
+          "id": "S3.p6",
+          "quote": "For comparison, we overlay the stacking photometric data of observed LRDs reported by the JADES survey and the COSMOS-Web survey."
+        },
+        {
+          "id": "S3.p6",
+          "quote": "Furthermore, the upper bounds of the mid- to far-IR flux densities due to non-detection in SCUBA and ALMA bands are shown (triangles,; see also)."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "In the left panel of Figure 4, we show the dependence of the SED shape on the gas density ( $1\\leq n_{0}/{\\rm cm}^{-3}\\leq 10^{3}$) at the sublimation radius, while the slope of its radial profile is fixed to $\\gamma=0$."
+        },
+        {
+          "id": "S3.p10",
+          "quote": "The right panel of Figure 4 presents cases for a centrally concentrated density distribution with $\\gamma=2$ and $\\gamma=1$, alongside the case of $\\gamma=0$ and $n_{0}=100~{\\rm cm}^{-3}$ (see the left panel)."
+        },
+        {
+          "id": "S3.p9",
+          "quote": "We also observe that our SED model with $\\gamma=0$ and $n_{0}<10^{3}~{\\rm cm}^{-3}$ aligns with the upper bounds of the F1800W photometry."
+        }
+      ]
+    },
+    "findings": {
+      "text": "模型发现，采用猎户座星云消光律的 SED 能够再现 LRD 特征性的 v 形 SED，在 λ≳3000-4000 Å 产生红色连续谱，并在静止紫外部分形成 β_UV~-2 的平坦谱形，而其他消光律则无法维持紫外超额 [S2.p5]。在红外波段，当密度 n0 较高（如 10^3 cm^-3）时，SED 在近红外出现过亮凸起，与 JWST MIRI 测光数据不符；而较低密度（如 n0=10 和 100 cm^-3）时，能量峰移到远红外 λ~20-50 μm，SED 形状与观测一致 [S3.p7][S3.p8]。当密度中心集中（γ=1-2）时，谱在近红外偏红，类似高密度情形 [S3.p10]。满足条件的参数空间被近似为 10^{2.9γ+0.83} ≲ n0/cm^-3 ≲ 10^3，适用于 γ<0.8 [S4.SS1.p4]。模型还表明，LRD 的尘埃质量估计与 NIRCam 图像给出的平均值一致 [S4.SS1.p6]。",
+      "evidence": [
+        {
+          "id": "S2.p5",
+          "quote": "The attenuated flux density reproduces a red continuum component at $\\lambda\\gtrsim 3000-4000~{\\rm\\AA}$ with a slope of $\\beta_{\\rm opt}\\gtrsim 0$"
+        },
+        {
+          "id": "S2.p5",
+          "quote": "Models with extinction laws observed in the Orion Nebula and AGN composite spectra flatten the SED with a UV slope of $\\beta_{\\rm UV}\\sim-2$."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "In contrast, other models result in strongly attenuated flux that fails to maintain a UV excess."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "When the density is as high as $n_{0}=10^{3}~{\\rm cm}^{-3}$, the outer edge of the obscuring material is located at $r_{\\rm out}\\gtrsim 30~r_{\\rm in}$, where the dust temperature ranges from $T_{\\rm dust}\\simeq 1500~{\\rm K}$ to $\\sim 200~{\\rm K}$."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "However, this extremely red SED color does not match the JWST MIRI photometric data for LRDs, which suggest a modest red color or even a flat spectral shape."
+        },
+        {
+          "id": "S3.p8",
+          "quote": "For the cases with $n_{0}=10$ and $100~{\\rm cm}^{-3}$, the SED shapes from the optical band to $\\lambda=2-3~\\mu{\\rm m}$ agree to the observed spectra of LRDs"
+        },
+        {
+          "id": "S3.p8",
+          "quote": "and also the peak energy is shifted to the FIR band at $\\lambda\\sim 20-50~\\mu{\\rm m}$."
+        },
+        {
+          "id": "S3.p10",
+          "quote": "When the density is centrally concentrated with $\\gamma=1-2$, a significant fraction of the obscuring material is efficiently heated by the AGN, and thus the hot dust just behind the sublimation radius is responsible for the IR emissivity."
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "Here, the density range is approximated as $10^{2.9\\gamma+0.83}\\lesssim n_{0}/({\\rm cm}^{-3})\\lesssim 10^{3},$ (5) which is valid $\\gamma<0.8$."
+        },
+        {
+          "id": "S4.SS1.p6",
+          "quote": "These results agree well to the mean value of the dust mass $\\langle M_{\\rm dust}\\rangle\\simeq 1.6^{+4.8}_{-0.9}\\times 10^{4}~M_{\\odot}$ estimated using NIRCam images of LRDs."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，LRD 为何在 z>4 出现且具有统一的 AV=3 mag 消光水平，目前没有明确答案，只能给出一些推测 [S4.SS4.p1]。模型假设全天空覆盖（C≡Ω/4π=1），但该值需在 LRD 与未遮蔽 AGN 的相对宇宙丰度以及 C 对 Eddington 比率等 AGN 性质的依赖被更好理解后才能确定 [S3.p4]。关于尘埃散射导致 AGN 变异性被抑制的讨论，作者表示更详细的定量分析将在未来工作中探索 [S4.SS3.p2]。此外，作者强调其方法并不排除 LRD 中存在宿主星系，只是表明仅关注 AGN 的 SED 模型能成功捕捉 LRD 的特征光谱性质 [S4.SS2.p5]。",
+      "evidence": [
+        {
+          "id": "S4.SS4.p1",
+          "quote": "There is a critical question: Why do LRDs emerge at $z>4$ with a uniform extinction level of $A_{\\rm V}=3$ mag? There is no clear answer to this question at this time, but some speculations are given below."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "In our calculation, we assume a full-sky covering case (i.e., $C\\equiv\\Omega/4\\pi=1$), while this value will be determined when the relative cosmic abundance between LRDs and unobscured AGNs and the dependence of $C$ on the AGN properties such as the Eddington ratio are better understood for LRDs."
+        },
+        {
+          "id": "S4.SS3.p2",
+          "quote": "A more detailed quantitative analysis of this scenario will be explored in future work."
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "Here, we emphasize that our approach does not rule out the existence of host galaxies in LRDs, but demonstrates that the SED model focusing only on AGNs successfully captures the characteristic spectral properties of LRDs"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 14267,
+      "completion_tokens": 3541,
+      "elapsed_s": 13.06
+    }
+  },
+  "verify": {
+    "quote_hits": 34,
+    "quote_total": 35,
+    "quote_rate": 0.971,
+    "inline_hits": 26,
+    "inline_total": 29,
+    "inline_rate": 0.897,
+    "issues": [
+      {
+        "field": "research_question",
+        "id": "abstract",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "method",
+        "id": "S3.p4",
+        "reason": "quote 不在该段落里",
+        "quote": "the luminosity density of dust re-emission is calculated by $L_{\\nu,\\mathrm{dust"
+      },
+      {
+        "field": "method",
+        "id": "abstract",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "method",
+        "id": "abstract",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "physics",
+  "prompt": {
+    "name": "v3_no_tone",
+    "hash": "4ddc036f"
+  }
+}

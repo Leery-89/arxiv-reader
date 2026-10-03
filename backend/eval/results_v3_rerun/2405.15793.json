@@ -1,0 +1,197 @@
+{
+  "paper": {
+    "arxiv_id": "2405.15793",
+    "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix",
+      "Appendix A SWE-agent Design",
+      "A.1 ACI Design",
+      "File viewer.",
+      "File editor.",
+      "Search & navigation.",
+      "A.2 Implementation",
+      "A.3 Configuration",
+      "Appendix B Extended Results",
+      "B.1 Hyperparameter Sweep",
+      "B.2 Model Performance",
+      "Performance by Repository.",
+      "Temporal Analysis.",
+      "B.3 Trajectory Analysis",
+      "B.3.1 Turns to Resolution",
+      "B.3.2 Walkthrough of Trajectory Phases",
+      "B.3.3 Breakdowns of Action Sequences",
+      "B.4 Failure Modes",
+      "B.5 Performance Variance and Pass@k Rate",
+      "B.6 Patch Generations",
+      "B.7 HumanEvalFix Evaluation",
+      "B.8 Dataset Information",
+      "B.9 Miscellaneous",
+      "Appendix C Prompts",
+      "Appendix D Qualitative Analysis",
+      "Analysis for psf/requests-2317",
+      "Analysis for pylint-dev/pylint-5859",
+      "Analysis for sympy/sympy-21614",
+      "Analysis for django/django-14411",
+      "Appendix E Statements",
+      "E.1 Ethics & Broader Impacts",
+      "E.2 Reproducibility",
+      "E.3 Limitations & Future Work"
+    ],
+    "char_count": 31242,
+    "n_sections": 12,
+    "n_paragraphs": 50
+  },
+  "result": {
+    "summary": "这篇论文提出并研究了面向语言模型智能体的“智能体-计算机接口”（ACI）设计问题，认为语言模型智能体是一类具有自身需求与能力的新型终端用户，需要专门设计的接口 [S2.p1]。作者构建了 SWE-agent，一个由语言模型与 ACI 组成的系统，通过搜索/导航、文件查看器、文件编辑器和上下文管理等组件，让智能体能够自主完成软件工程任务 [S3.p1]。在 SWE-bench 与 HumanEvalFix 上，SWE-agent 分别取得 12.5% 和 87.7% 的 pass@1 成绩，超过此前非交互式语言模型的最佳结果 [abstract]。消融实验表明，精心设计的 ACI 能在不修改底层语言模型权重的情况下显著提升智能体表现 [S1.p5]。",
+    "research_question": {
+      "text": "论文要解决的问题是：接口设计如何影响语言模型智能体的性能，以及语言模型智能体能否像人类工程师从 IDE 等软件中获益一样，从为其专门设计的接口中获益 [S1.p1]。作者指出，将智能体应用于软件工程这类更复杂的代码任务仍未被探索，而语言模型智能体在使用现有 Linux shell 等应用时常常难以可靠地采取行动 [S1.p1][S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, applying agents to more complex code tasks like software engineering remains unexplored."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "we investigate whether LM agents could similarly benefit from better-designed interfaces for performing software engineering tasks."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "In practice, we find that LM agents can struggle to reliably take actions in this environment."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出智能体-计算机接口（ACI）的概念，即语言模型智能体与计算机之间的抽象层，并构建了 SWE-agent 系统 [S1.p2][S1.p3]。SWE-agent 的 ACI 提供一小组简单动作用于查看、搜索和编辑文件，使用护栏防止常见错误，并在每一步给出关于命令效果的具体简洁反馈 [S1.p3]。其组件包括搜索/导航、文件查看器、文件编辑器和上下文管理，智能体在每一步生成一个 thought 和一个 command，并纳入命令执行反馈 [S3.p1]。作者假设固定语言模型，通过人工检查智能体行为和网格搜索来改进 ACI 配置 [S2.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "motivating the need for an agent-computer interface (ACI), i.e., an abstraction layer between the LM agent and computer"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "SWE-agent’s ACI instead offers a small set of simple actions for viewing, searching through and editing files."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The ACI uses guardrails to prevent common mistakes, and an agent receives specific, concise feedback about a command’s effects at every turn."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "The ACI comprises several principal components, including search/navigation, file viewer, file editor, and context management."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "At each step, SWE-agent generates a thought and a command, then incorporates the feedback from the command’s execution in the environment"
+        },
+        {
+          "id": "S2.p4",
+          "quote": "we assume a fixed LM and focus on designing the ACI to improve its performance"
+        },
+        {
+          "id": "S2.p4",
+          "quote": "manually inspect agent behavior to identify difficulties and propose improvements, and (2) run a grid search to select the best ACI configuration."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文主要在 SWE-bench 上评估，该数据集包含来自 12 个流行 Python 包仓库的 2,294 个任务实例，消融与分析在包含 300 个实例的 SWE-bench Lite 上进行，并用 HumanEvalFix 测试基本代码编辑能力 [S4.p1]。所有结果、消融和分析基于 GPT-4 Turbo 和 Claude 3 Opus 两个语言模型 [S4.p2]。基线包括非交互式检索增强生成（RAG）和基于 Linux shell 交互的 Shell-only 设置 [S4.p3][S4.p4]。主要指标为 % Resolved 或 pass@1，并报告平均 API 推理成本，单实例预算设为 4 美元 [S4.p5]。",
+      "evidence": [
+        {
+          "id": "S4.p1",
+          "quote": "SWE-bench dataset, which includes $2,294$ task instances from $12$ different repositories of popular Python packages."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench"
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We also test SWE-agent’s basic code editing abilities with HumanEvalFix"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "All results, ablations, and analyses are based on two leading LMs, GPT-4 Turbo ( gpt-4-1106-preview) and Claude 3 Opus ( claude-3-opus-20240229)."
+        },
+        {
+          "id": "S4.p3",
+          "quote": "The first setting is the non-interactive, retrieval-augmented generation (RAG) baselines"
+        },
+        {
+          "id": "S4.p4",
+          "quote": "The second setting, called Shell-only, is adapted from the interactive coding framework"
+        },
+        {
+          "id": "S4.p5",
+          "quote": "We report % Resolved or pass $@$ $1$ as the main metric"
+        },
+        {
+          "id": "S4.p5",
+          "quote": "we set the per-instance budget to $4; if a run exceeded this budget, existing edits were submitted automatically."
+        }
+      ]
+    },
+    "findings": {
+      "text": "SWE-agent w/ GPT-4 Turbo 在所有系统中表现最佳，解决了完整 SWE-bench 测试集的 12.47%（286/2,294）和 Lite 子集的 18.00%（54/300）[S5.p1]。相比 Shell-only，SWE-agent 在 GPT-4 Turbo 下实现了 64% 的相对提升 [S5.p1]。在 HumanEvalFix 上，SWE-agent 取得 88.3% 的 pass@1 率 [S5.p2]。消融实验显示，迭代式搜索界面在结果很多时反而可能比没有额外搜索工具更差（15.7% 对 12.0%），缺少文件编辑器时性能降至 10.3%，加入 linting 护栏可提升性能（无 linting 时为 15.0%）[S5.SS1.p3][S5.SS1.p4][S5.SS1.p5]。智能体行为分析发现，编辑对智能体仍有挑战，2,294 个任务中有 1,185 个（51.7%）轨迹出现至少一次失败编辑，且随着失败编辑累积恢复概率下降 [S5.SS2.p4]。",
+      "evidence": [
+        {
+          "id": "S5.p1",
+          "quote": "SWE-agent w/ GPT-4 Turbo achieves the best performance all-around, successfully solving $12.47$ % ( $286$ / $2,294$) of the full SWE-bench test set and $18.00$ % ( $54$ / $300$) of the Lite split."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "An LM-friendly ACI’s value is confirmed by SWE-agent’s $64$ % relative increase compared to Shell-only, both with GPT-4 Turbo."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "SWE-agent yields strong performance on HumanEvalFix with $88.3$ % pass@1 rate."
+        },
+        {
+          "id": "S5.SS1.p3",
+          "quote": "leading to even worse performance than the not having additional search tools at all ( $15.7$ % $\\downarrow$ 2.3 for No search vs. $12.0$ % $\\downarrow$ 6.0 with Iterative search)."
+        },
+        {
+          "id": "S5.SS1.p4",
+          "quote": "Without SWE-agent’s file editor interface, performance drops to ( $10.3$ % $\\downarrow$ 7.7)."
+        },
+        {
+          "id": "S5.SS1.p5",
+          "quote": "This intervention improves performance considerably (without linting, $15.0$ % $\\downarrow$ 3.0)."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "out of $2,294$ task instances, $1,185$ ( $51.7$ %) of SWE-agent w/ GPT-4 Turbo trajectories have $1$ + failed edits."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "the odds of recovery decrease as the agent accumulates more failed edits."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 8281,
+      "completion_tokens": 2057,
+      "elapsed_s": 7.92
+    }
+  },
+  "verify": {
+    "quote_hits": 26,
+    "quote_total": 26,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}
