@@ -109,7 +109,9 @@ def embed(texts: list[str]) -> list[list[float]]:
             for i in range(0, len(todo), 100):
                 batch = todo[i:i + 100]
                 # 超长段落截断：向量模型有输入上限，开头几千字已经足够判断主题
-                resp = client.embeddings.create(model=EMBED_MODEL, input=[t[:8000] for _, t in batch])
+                # 空文本（有的论文摘要为空）接口会拒收，换成占位符；它和任何查询都不相关
+                resp = client.embeddings.create(model=EMBED_MODEL,
+                                                input=[t[:8000].strip() or "(empty)" for _, t in batch])
                 for (k, _), d in zip(batch, resp.data):
                     _emb[k] = d.embedding
                     f.write(json.dumps({"k": k, "v": d.embedding}) + "\n")
