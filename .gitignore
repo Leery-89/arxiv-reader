@@ -28,6 +28,7 @@ backend/logs/
 backend/eval/emb_cache.jsonl
 # PDF 评测下载的原文，可随时重新下载
 backend/eval/pdf_cache/
+backend/eval/html_cache/
 
 try_*.py
 sample_*.html
