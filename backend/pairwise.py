@@ -79,6 +79,7 @@ def main():
     ap.add_argument("--b", required=True, help="版本标签，如 rag_bm25_25")
     ap.add_argument("--judge", default="deepseek-chat")
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--by-paper", action="store_true", help="逐篇列出结论和输入字数")
     args = ap.parse_args()
 
     # 判断用的 prompt 有 max_tokens=400 的参数组；这里要列漏掉的要点，放宽一些
@@ -102,7 +103,7 @@ def main():
             x, y = (ga, gb) if order == "AB" else (gb, ga)
             key = hashlib.sha256(f"{args.judge}|{PROMPT_VERSION}|{pid}|{x}|{y}".encode()).hexdigest()[:20]
             jobs.append({"key": key, "pid": pid, "cat": ra["category"], "order": order,
-                         "text": text, "x": x, "y": y})
+                         "chars": len(text), "text": text, "x": x, "y": y})
 
     cache = load_cache()
     todo = [j for j in jobs if j["key"] not in cache]
@@ -137,7 +138,7 @@ def main():
         who = "tie" if w == "tie" else ({"A": "a", "B": "b"}[w] if j["order"] == "AB" else {"A": "b", "B": "a"}[w])
         miss_a = d.get("missing_in_A") if j["order"] == "AB" else d.get("missing_in_B")
         miss_b = d.get("missing_in_B") if j["order"] == "AB" else d.get("missing_in_A")
-        e = by_pid.setdefault(j["pid"], {"cat": j["cat"], "votes": [], "miss_a": [], "miss_b": []})
+        e = by_pid.setdefault(j["pid"], {"cat": j["cat"], "chars": j["chars"], "votes": [], "miss_a": [], "miss_b": []})
         e["votes"].append(who)
         e["miss_a"].append(len(miss_a or []))
         e["miss_b"].append(len(miss_b or []))
@@ -162,6 +163,14 @@ def main():
     print(f"  平均每篇漏掉的关键要点：{args.a} {ma / n:.1f} 条   {args.b} {mb / n:.1f} 条")
     for cat, c in sorted(by_cat.items()):
         print(f"    {cat:10} {args.a} {c['a']}  {args.b} {c['b']}  平 {c['tie']}")
+    if args.by_paper:
+        print(f"\n  逐篇（按输入字数从长到短）：")
+        for pid, e in sorted(by_pid.items(), key=lambda kv: -kv[1]["chars"]):
+            if len(e["votes"]) < 2:
+                continue
+            v = e["votes"][0] if e["votes"][0] == e["votes"][1] else "tie"
+            name = {"a": args.a, "b": args.b, "tie": "平"}[v]
+            print(f"    {pid:12} {e['cat']:9} {e['chars'] // 1000:4}k 字  {name:12} 漏 {sum(e['miss_a']) / 2:.1f} / {sum(e['miss_b']) / 2:.1f}")
     print(f"\n逐条理由和漏掉的要点在 {CACHE.name}")
 
 

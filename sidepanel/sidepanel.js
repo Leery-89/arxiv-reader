@@ -385,11 +385,6 @@ function verifyBadge(state) {
   return badge;
 }
 
-/** 去掉 LaTeX 的 $ 包裹，先让公式可读；真正渲染公式是以后的事 */
-function display(text) {
-  return (text || '').replace(/\$([^$]+)\$/g, '$1');
-}
-
 /**
  * 点一个段落 ID → 跳到原文并高亮。
  *   - 当前标签已经是这篇论文的合适页面 → 直接发 HIGHLIGHT 给 content script
@@ -443,13 +438,13 @@ function textWithChips(text) {
   const p = el('p');
   const re = /\[(?:([A-Za-z0-9.]+)|推断)\]/g;
   let last = 0, m;
-  const s = display(text);
+  const s = text || '';
   while ((m = re.exec(s)) !== null) {
-    if (m.index > last) p.appendChild(document.createTextNode(s.slice(last, m.index)));
+    if (m.index > last) appendMath(p, s.slice(last, m.index));
     p.appendChild(m[1] ? idChip(m[1]) : inferTag());
     last = re.lastIndex;
   }
-  if (last < s.length) p.appendChild(document.createTextNode(s.slice(last)));
+  if (last < s.length) appendMath(p, s.slice(last));
   return p;
 }
 
@@ -468,7 +463,7 @@ function block(label, text, evidence) {
     for (const ev of evidence) {
       const q = el('div', 'quote');
       q.appendChild(idChip(ev.id));
-      q.appendChild(document.createTextNode(' ' + display(ev.quote)));
+      appendMath(q, ' ' + (ev.quote || ''));
       list.appendChild(q);
     }
 
