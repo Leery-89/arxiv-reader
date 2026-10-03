@@ -31,6 +31,7 @@ from pydantic import BaseModel
 
 import ratelimit
 from cache import cache_get, cache_key, cache_set, prompt_version
+from prompts import ACTIVE_PROMPT
 from fetcher import fetch_paper
 from llm import analyze, analyze_stream
 from serialize import paper_to_text
@@ -56,7 +57,7 @@ class AnalyzeRequest(BaseModel):
 
 @app.get("/health")
 def health():
-    return {"ok": True, "rate": ratelimit.snapshot()}
+    return {"ok": True, "prompt": ACTIVE_PROMPT, "rate": ratelimit.snapshot()}
 
 
 def _paper_meta(paper) -> dict:

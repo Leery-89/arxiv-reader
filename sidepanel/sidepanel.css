@@ -125,6 +125,17 @@ body {
 .id-chip:hover { filter: brightness(0.93); }
 .id-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
+.infer-tag {
+  font-size: 10.5px;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin: 0 2px;
+  vertical-align: baseline;
+  cursor: help;
+}
+
 .hint-line {
   font-size: 12px;
   color: var(--muted);

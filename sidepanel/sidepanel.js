@@ -431,15 +431,22 @@ function idChip(pid) {
   return chip;
 }
 
-/** 把正文里的 [S3.p1] 变成可点的标签，其余文字原样 */
+/** 推断句的标记：灰色、不可点——它没有出处可跳（D19） */
+function inferTag() {
+  const tag = el('span', 'infer-tag', '推断');
+  tag.title = '对原文的归纳或延伸，原文没有直接这样说';
+  return tag;
+}
+
+/** 把正文里的 [S3.p1] 变成可点的标签，[推断] 变成灰色标记，其余文字原样 */
 function textWithChips(text) {
   const p = el('p');
-  const re = /\[([A-Za-z0-9.]+)\]/g;
+  const re = /\[(?:([A-Za-z0-9.]+)|推断)\]/g;
   let last = 0, m;
   const s = display(text);
   while ((m = re.exec(s)) !== null) {
     if (m.index > last) p.appendChild(document.createTextNode(s.slice(last, m.index)));
-    p.appendChild(idChip(m[1]));
+    p.appendChild(m[1] ? idChip(m[1]) : inferTag());
     last = re.lastIndex;
   }
   if (last < s.length) p.appendChild(document.createTextNode(s.slice(last)));

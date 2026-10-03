@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "arXiv Reader",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Turns arXiv papers into a structured reading guide. Every claim is traced to a paragraph and verified against the source.",
   "permissions": [
     "sidePanel",

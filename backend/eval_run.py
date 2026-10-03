@@ -39,7 +39,8 @@ SUMMARY_CSV = EVAL_DIR / "summary.csv"
 ANNOTATE_CSV = EVAL_DIR / "annotate.csv"
 
 NOT_MENTIONED = "原文未明确提及"
-PROMPTS_KNOWN = {"v2", "v3"}
+from prompts import PROMPTS as _PROMPTS
+PROMPTS_KNOWN = set(_PROMPTS)       # 含 v3 消融变体：--tag 和 PROMPT 必须一致
 SAMPLES_PER_PAPER = 5
 random.seed(42)          # 抽样固定，重跑抽到同样的条目
 

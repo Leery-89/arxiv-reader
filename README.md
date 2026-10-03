@@ -31,8 +31,7 @@ summary, it is the evidence check that runs after it.
 
 ## Numbers so far
 
-Single-paper, single-prompt-version. The evaluation set (D14) will make
-these cross-paper.
+Early single-paper numbers; cross-paper results are in **Evaluation** below.
 
 | | |
 |---|---|
@@ -43,6 +42,36 @@ these cross-paper.
 | Tokens per paper | ~7–10 k in, ~2.3 k out |
 | Cost per paper | ≈ ¥0.015 |
 | Prompt v1 → v2 | evidence count 17 → 28, hit rate held at 100 % |
+
+## Evaluation: does the citation actually support the claim?
+
+Checking that a quote *exists* in the paper is easy (98 % pass). Checking that
+it *supports* the claim is the real question, so the project has a full
+evaluation chain (details in [DECISIONS.md](./DECISIONS.md) D14–D19):
+
+1. **Eval set** — 36 deliberately hard papers in 6 categories (long, odd
+   structure, AI-for-science, physics, abstract-only, standard).
+2. **Human labels** — 120 claim/evidence units labelled Y / P / N
+   (fully / partly / not supported). Human: 50.8 % / 41.7 % / 7.5 %.
+3. **Calibrated LLM judge** — five judge models compared against the human
+   labels. `deepseek-chat` agrees best (Cohen's κ 0.62) and is the only one
+   whose rate of unsupported (N) verdicts matches the humans; stronger models are stricter on
+   wording but flag only 1–3 claims as N (humans: 9), and a five-way vote
+   lowers κ to 0.52.
+4. **Prompt v2 → v3, scored on every claim** (~550 claims, not a sample):
+
+| Claim fully supported by its quotes | v2 | v3 |
+|---|---|---|
+| Main judge (`deepseek-chat`) | 52.0 % | **67.5 %** |
+| Stricter cross-vendor judge (`gpt-6.1-sol`, lower bound) | 41.0 % | **54.5 %** |
+| Long papers (main judge) | 46.4 % | 72.7 % |
+| Quote exact-match rate | 98.0 % | 96.4 % |
+
+v3 requires every checkable element of a claim (numbers, names, comparisons,
+both ends of a causal link) to appear in some quote, allows several quotes
+from one paragraph, and pulls in the antecedent when a quote starts with
+"This/It". Both judges agree on the size of the gain. The cost is more and
+longer quotes, so slightly more copy errors.
 
 ## How it's built
 
@@ -100,7 +129,7 @@ Requires Chrome 114+ (`sidePanel` API). The extension talks to
 |---|---|
 | Extension, fetcher, LLM, streaming, traceability, cache, telemetry | done |
 | Chrome Web Store listing | pending |
-| Evaluation set (cross-paper metrics, human-labelled relevance) | pending |
+| Evaluation set, human labels, calibrated judge, prompt v3 | done — see Evaluation above |
 | Table parsing, retrieval experiment, follow-up questions | v2 — see DECISIONS.md |
 
 ## License

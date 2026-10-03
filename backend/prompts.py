@@ -192,10 +192,46 @@ summary：
 summary 和各字段的 text 用中文；quote 保持原文语言。
 """
 
-# 用环境变量 PROMPT 切换（D19）。线上默认 v2：侧栏还不会显示 [推断]，用户会直接看到这几个字。
+# 用环境变量 PROMPT 切换（D19）。线上在 Railway 设 PROMPT=v3；侧栏 0.3.1 起把 [推断] 显示为灰色标记。
+# 代码默认仍是 v2：不带 PROMPT 跑 eval_run.py 会写进 v2 的原始目录，默认值不能悄悄变。
 # 评测用：PROMPT=v3 python eval_run.py --tag v3
 import os as _os
 PROMPTS = {"v2": SYSTEM_PROMPT_V2, "v3": SYSTEM_PROMPT_V3}
+
+# v3 消融（D19）：每个变体 = v3 去掉一条新增规则，其余逐字不变。
+# 去掉某条后 Y 率掉得越多，那条规则的贡献越大。
+_V3_RULES = {
+    "multi": ["   同一个段落需要引用多句时，每句单独作为 evidence 的一项（id 相同）。\n"],
+    "cover": ["""
+   **论断里每一个可核对的要素，都必须在某一条 quote 中出现**：
+   - 数字（连同单位和比较对象，如"从 48.6% 降至 42.4%"的两个数都要有）
+   - 数据集、模型、基准、方法的名称
+   - 比较结论（优于谁、在哪些设置下）
+   - 因果关系的两端（见第 6 条）
+   写每个论断前先确认：这些要素各自落在哪一条 quote 里。落不到的要素，要么补一条引用，要么从论断里删掉。
+"""],
+    "anaphor": ["""
+   如果一条 quote 以 This、These、It、Such 等指代词开头，而被指代的内容正是论断需要的，
+   必须把被指代的那一句也作为一条 quote 引出来。
+"""],
+    "tone": ["""
+   数量和程度不能放大：
+   - 原文“about half”不能写成“大多数”；原文“improves”不能写成“显著提升”。
+   - 原文的 may、might、suggest、likely 必须保留为“可能”“表明”“或许”。
+   - 数字可以按原文取整，但不能改变结论；取整时加“约”。
+"""],
+    "causal": ["   - 因果关系的两端（见第 6 条）\n", """6. 写“因此”“由于”“从而”“所以”这类因果论断时，原因和结果都必须有引用支撑。
+   原文没有明说的因果关系，不能自行建立；只能分别陈述两件事。
+
+"""],
+}
+for _name, _cuts in _V3_RULES.items():
+    _p = SYSTEM_PROMPT_V3
+    for _c in _cuts:
+        assert _c in _p, f"消融 {_name}：v3 里找不到要删的文字"
+        _p = _p.replace(_c, "", 1)
+    PROMPTS[f"v3_no_{_name}"] = _p
+
 ACTIVE_PROMPT = _os.getenv("PROMPT", "v2")
 SYSTEM_PROMPT = PROMPTS[ACTIVE_PROMPT]
 

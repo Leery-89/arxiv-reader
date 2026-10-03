@@ -66,19 +66,21 @@ AI+科学类变化最大：Y 55% → 75%、N 15% → 0（每 ID 平均引 1.47 �
 | D16 | Post-training：过滤式蒸馏 SFT → DPO → GRPO |
 | D17 | Harness 分层（草案）；数字检查已完成；推断要标出；候选 Jev 级联 |
 | D18 | 公式原文不动，只在比较时归一化，显示用 KaTeX；2true294 例外修复 |
-| D19 | prompt v3 + 全量评测；v2/v3 用环境变量 `PROMPT` 切换（待写进 DECISIONS.md） |
+| D19 | prompt v3 + 全量评测：论断级 Y 52.0% → 67.5%（GPT 下限 41.0% → 54.5%）；评审员五模型对比后保留 deepseek-chat |
 
 ## 路线图
 
-主线：① 标注收尾 + 评审员校准（进行中）→ ② prompt v3 + 论断级评测（**完成即投简历**）→ D · RAG 对比 → ③ Harness 分层（穿插 A 输入覆盖、B 阅读体验）→ ④ Qwen post-training → C · 网页版交互式 Agent（DOI → 分析 + 合法开放获取的原文，MCP 调度工具）。
+主线：① 标注收尾 + 评审员校准 ✅ → ② prompt v3 + 论断级评测 ✅（投简历）→ D · RAG 对比 → ③ Harness 分层（穿插 A 输入覆盖、B 阅读体验）→ ④ Qwen post-training → C · 网页版交互式 Agent（DOI → 分析 + 合法开放获取的原文，MCP 调度工具）。
 
 ## 当前进行中与下一步
 
-- [ ] 评审员五模型对比：`python judge.py --compare deepseek-chat gpt-6.1-sol claude-sonnet-5-5 claude-opus-5-5 claude-fable-5-1`
-- [ ] 按 kappa 和 N 召回定主评审员，或三家厂商投票
-- [ ] `PROMPT=v3 python eval_run.py --tag v3`（约 10 分钟，¥0.5）
-- [ ] `python eval_versions.py --tags v2 v3 --dry-run`，再 `--judges <选定>`
-- [ ] 结果写进 DECISIONS.md（D19），更新简历
+- [x] 评审员五模型对比：deepseek-chat kappa 0.620 最高，且唯一 N 判得够（9/9）；GPT/Claude 只判 1–3 条 N，五方投票 kappa 0.523 → 不投票（D19）
+- [x] `PROMPT=v3 python eval_run.py --tag v3` + `eval_versions.py`：论断级 Y 52.0% → 67.5%（deepseek），41.0% → 54.5%（gpt-6.1-sol 下限）
+- [x] 结果写进 DECISIONS.md（D19）
+- [ ] 更新简历，开始投递
+- [ ] v3 消融（每次加一条规则），回答"哪条规则贡献最大"
+- [ ] 侧栏加 `[推断]` 兜底后线上切 v3（v3 实际 0 次输出 `[推断]`）
+- [ ] `eval_versions.py` 两个评审员时退化成第一个评审员，改成分开报或要求奇数个
 
 v3 相对 v2：要素覆盖（数字、名称、比较结论、因果两端都要落在 quote 里）、同段可引多句、指代开头的 quote 连被指代句一起引、不许放大语气、因果两端都要引用、引入 `[推断]`。线上仍是 v2，侧栏支持 `[推断]` 后再切。
 
