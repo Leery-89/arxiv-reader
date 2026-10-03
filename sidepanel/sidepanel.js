@@ -326,6 +326,9 @@ function renderProgress(state) {
   if (state.paper?.source === 'abstract_only') {
     frag.appendChild(hint('本文没有 HTML 版，以下分析仅基于摘要。'));
   }
+  if (state.paper?.source === 'pdf') {
+    frag.appendChild(hint('本文没有 HTML 版，正文从 PDF 解析：公式可能不完整，点出处只能跳到所在页。'));
+  }
   if (state.paper?.truncated_sections?.length) {
     frag.appendChild(hint(`因篇幅未包含：${state.paper.truncated_sections.join('、')}`));
   }
@@ -390,10 +393,22 @@ function verifyBadge(state) {
  *   - 当前标签已经是这篇论文的合适页面 → 直接发 HIGHLIGHT 给 content script
  *   - 否则导航过去，URL 带 #<pid>，content script 加载时看到 hash 自己高亮
  * 摘要在 /abs/ 和 /html/ 都有；其他段落只在 /html/ 有。
+ * 从 PDF 解析的论文（D21）段落 ID 是 pg3.b4：没有段落锚点，只能打开 PDF 跳到第 3 页，不高亮。
  */
 async function jumpTo(pid) {
   if (!currentPaper) return;
   const { arxivId, tabId, isHtmlPage } = currentPaper;
+  const page = /^pg(\d+)\.b\d+$/.exec(pid);
+  if (page) {
+    const url = `https://arxiv.org/pdf/${arxivId}#page=${page[1]}`;
+    if (tabId == null) {
+      currentPaper.tabId = (await chrome.tabs.create({ url })).id;
+      currentPaper.isHtmlPage = false;
+    } else {
+      await chrome.tabs.update(tabId, { url });
+    }
+    return;
+  }
   const canHighlightHere = pid === 'abstract' || isHtmlPage;
 
   if (canHighlightHere) {

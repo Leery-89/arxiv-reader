@@ -15,6 +15,7 @@
 每写完一个函数就单独测一下，别攒到最后一起调。
 """
 
+import os
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -247,7 +248,7 @@ def fetch_paper(raw_id: str) -> Paper:
         paper = fetch_paper("1706.03762v7")
 
     把上面几步串起来，包含降级逻辑：
-        归一化 ID -> 拉 HTML -> 拿到就解析，拿不到就降级取摘要 -> 套预算
+        归一化 ID -> 拉 HTML -> 拿到就解析，拿不到试 PDF（PDF_FALLBACK=1）-> 再不行降级取摘要 -> 套预算
     """
     arxiv_id = normalize_arxiv_id(raw_id)
 
@@ -255,7 +256,12 @@ def fetch_paper(raw_id: str) -> Paper:
     if html is not None:
         paper = parse_html(html, arxiv_id)
     else:
-        paper = fetch_abstract_only(arxiv_id)
+        paper = None
+        if os.getenv("PDF_FALLBACK") == "1":       # 评测通过前默认关（pdf_bench.py）
+            from pdf import fetch_pdf_paper         # 放这里：pdf.py 反过来 import 本文件
+            paper = fetch_pdf_paper(arxiv_id)
+        if paper is None:
+            paper = fetch_abstract_only(arxiv_id)
 
     return apply_budget(paper)
 

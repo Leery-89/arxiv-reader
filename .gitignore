@@ -26,6 +26,8 @@ backend/*.db
 backend/logs/
 # RAG 实验的向量缓存，几十 MB，可随时重算（gitignore 不支持行尾注释）
 backend/eval/emb_cache.jsonl
+# PDF 评测下载的原文，可随时重新下载
+backend/eval/pdf_cache/
 
 try_*.py
 sample_*.html

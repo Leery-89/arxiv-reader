@@ -11,4 +11,5 @@ TEMPERATURE = 0          # 评测需要可复现，先用 0
 # 它进缓存 key（旧结果自动失效）和快照（知道快照是哪版解析器产出的）。
 #   1  初版
 #   2  修 LaTeXML 千分位 bug：2true294 → 2,294（D18）
-PARSER_VERSION = 2
+#   3  没有 HTML 的论文改从 PDF 解析正文（D21，PDF_FALLBACK=1 时）；旧的"只有摘要"结果要失效
+PARSER_VERSION = 3
