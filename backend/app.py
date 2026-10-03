@@ -35,6 +35,7 @@ from cache import cache_get, cache_key, cache_set, prompt_version
 from prompts import ACTIVE_PROMPT
 from doi import DoiNotFound, parse_doi, resolve_doi
 from fetcher import fetch_paper
+from oa import fetch_doi_paper, paper_id
 from llm import analyze, analyze_stream
 from serialize import paper_to_text
 from telemetry import log_request
@@ -54,7 +55,26 @@ app.add_middleware(
 
 
 class AnalyzeRequest(BaseModel):
-    arxiv_id: str
+    arxiv_id: str | None = None
+    doi: str | None = None          # D25：没有 arXiv 版本的期刊论文，后端下载开放获取 PDF
+
+    def key_id(self) -> str:
+        if self.arxiv_id:
+            return self.arxiv_id
+        d = parse_doi(self.doi or "")
+        if not d:
+            raise HTTPException(status_code=400, detail="要给 arxiv_id 或合法的 doi")
+        return paper_id(d)
+
+
+def _fetch(req: AnalyzeRequest):
+    """arXiv ID 走原来的链路；DOI 走 oa.fetch_doi_paper（有 arXiv 版本时内部也会转回 fetch_paper）。"""
+    if req.arxiv_id:
+        return fetch_paper(req.arxiv_id)
+    try:
+        return fetch_doi_paper(parse_doi(req.doi))
+    except DoiNotFound:
+        raise requests.RequestException("OpenAlex 和 Crossref 都查不到这个 DOI")
 
 
 @app.get("/health")
@@ -81,7 +101,8 @@ def _paper_meta(paper) -> dict:
     return {
         "arxiv_id": paper.arxiv_id,
         "title": paper.title,
-        "source": paper.source,                       # "html" | "abstract_only"
+        "source": paper.source,                       # "html" | "pdf" | "abstract_only"
+        "url": paper.url,                             # DOI 论文的开放获取 PDF（D25）；arXiv 论文为空
         "truncated_sections": paper.truncated_sections,
     }
 
@@ -106,7 +127,7 @@ def _log(paper_meta: dict, meta: dict, verify: dict, cache_hit: bool) -> None:
 
 @app.post("/analyze")
 def analyze_paper(req: AnalyzeRequest, request: Request):
-    key = cache_key(req.arxiv_id)
+    key = cache_key(req.key_id())
     cached = cache_get(key)
     if cached:
         _log(cached["paper"], cached["result"]["_meta"], cached["result"]["_meta"]["verify"], cache_hit=True)
@@ -115,9 +136,9 @@ def analyze_paper(req: AnalyzeRequest, request: Request):
 
     ratelimit.check(request)          # 只对真正要调模型的请求计数
     try:
-        paper = fetch_paper(req.arxiv_id)
+        paper = _fetch(req)
     except requests.RequestException as e:
-        raise HTTPException(status_code=502, detail=f"arXiv 请求失败：{e}")
+        raise HTTPException(status_code=502, detail=f"取论文失败：{e}")
 
     text = paper_to_text(paper)
     try:
@@ -153,8 +174,14 @@ def analyze_paper_stream(req: AnalyzeRequest, request: Request):
         done   {}
     出错：error {detail}
     """
+    try:
+        key_id = req.key_id()
+    except HTTPException as e:
+        detail = e.detail
+        return StreamingResponse(iter([sse("error", {"detail": detail})]), media_type="text/event-stream")
+
     def gen():
-        key = cache_key(req.arxiv_id)
+        key = cache_key(key_id)
         cached = cache_get(key)
 
         # ── 命中：回放 ──
@@ -183,9 +210,9 @@ def analyze_paper_stream(req: AnalyzeRequest, request: Request):
 
         yield sse("status", {"stage": "fetching"})
         try:
-            paper = fetch_paper(req.arxiv_id)
+            paper = _fetch(req)
         except requests.RequestException as e:
-            yield sse("error", {"detail": f"arXiv 请求失败：{e}"})
+            yield sse("error", {"detail": f"取论文失败：{e}"})
             return
 
         paper_meta = _paper_meta(paper)

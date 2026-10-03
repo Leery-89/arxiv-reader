@@ -82,3 +82,23 @@ def test_front_matter_header_and_refs_dropped():
     assert "Alice Author" not in body
     assert "Preprint" not in body                   # 页眉
     assert "Some paper" not in body and any("Some paper" in r for r in p.references)
+
+
+def test_headingless_body_after_abstract():
+    """Science 预印本：Abstract 之后直接是正文、没有章节标题，一路到 References（AlphaZero 实测，D25）。
+    参考文献里 "34. G. Tesauro, …" 这种条目不能被当成编号标题。"""
+    doc = pymupdf.open()
+    page = doc.new_page()
+    y = 72
+    for text, size, bold in [("A Big Title", 18, True), ("Abstract", 11, True),
+                             ("Short abstract that is skipped here.", 9, False),
+                             (LOREM, 10, False), (LOREM, 10, False),
+                             ("References and Notes", 12, True),
+                             ("34. G. Tesauro, Artificial Intelligence 134, 181 (2002).", 10, True)]:
+        page.insert_textbox(pymupdf.Rect(72, y, 540, y + 80), text, fontsize=size,
+                            fontname="hebo" if bold else "helv")
+        y += 86
+    p = parse_pdf(doc.tobytes(), "0000.00000", "T", "Short abstract that is skipped here.")
+    assert [s.title for s in p.sections] == ["正文"]
+    assert len(p.sections[0].paragraphs) == 2
+    assert any("Tesauro" in r for r in p.references)

@@ -20,7 +20,7 @@ Crossref 只有出版方填的元数据，has-preprint 填得很少。设了 CON
 import difflib
 import os
 import re
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from functools import lru_cache
 
 import requests
@@ -50,7 +50,8 @@ class DoiResult:
     year: int | None = None
     venue: str = ""
     arxiv_id: str | None = None
-    oa_url: str | None = None           # 开放获取副本（优先 PDF），没有就是 None
+    oa_url: str | None = None           # 开放获取副本（优先 PDF），没有就是 None；给人点的
+    oa_pdfs: list[str] = field(default_factory=list)   # 所有标了开放获取的 PDF 直链，按 best 优先；给 oa.py 下载用
     via: str = ""                       # 怎么找到的 arXiv 版本：arxiv-doi / openalex / crossref-preprint / title-search
 
     def to_dict(self) -> dict:
@@ -114,6 +115,10 @@ def _from_openalex(work: dict, doi: str) -> DoiResult:
             break
     best = work.get("best_oa_location") or {}
     r.oa_url = best.get("pdf_url") or best.get("landing_page_url")
+    for loc in [best, *(work.get("locations") or [])]:
+        url = loc.get("pdf_url")
+        if url and (loc is best or loc.get("is_oa")) and url not in r.oa_pdfs:
+            r.oa_pdfs.append(url)
     return r
 
 
@@ -133,6 +138,7 @@ def _from_crossref(msg: dict, doi: str) -> DoiResult:
         if link.get("content-type") == "application/pdf" and msg.get("license"):
             if any("creativecommons.org" in (lic.get("URL") or "") for lic in msg["license"]):
                 r.oa_url = link.get("URL")
+                r.oa_pdfs.append(r.oa_url)
                 break
     return r
 

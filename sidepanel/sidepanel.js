@@ -130,11 +130,11 @@ function showManualError(...parts) {
   els.manualError.hidden = false;
 }
 
-function startManual(id, title) {
+function startManual(id, title, extra = {}) {
   els.manualError.hidden = true;
   els.manualInput.value = '';
   currentPaper = null;                                   // 强制重画
-  showPaper({ arxivId: id, title: title || id, url: null, isHtmlPage: false, tabId: null, manual: true });
+  showPaper({ arxivId: id, title: title || id, url: null, isHtmlPage: false, tabId: null, manual: true, ...extra });
   analyze();                                             // 粘完直接开始，少点一次
 }
 
@@ -157,14 +157,18 @@ async function resolveDoi(text) {
     startManual(r.arxiv_id, r.title);
     return;
   }
-  const title = r.title ? `「${r.title}」` : '这篇';
-  if (r.oa_url) {
-    showManualError(`${title}在 arXiv 上没有找到版本。开放获取版：`, { text: '打开', href: r.oa_url },
-      '（直接分析开放获取版是下一步要做的功能）');
-  } else {
-    showManualError(`${title}在 arXiv 上没有找到版本，也没有开放获取副本。`,
-      { text: '出版方页面', href: `https://doi.org/${r.doi}` });
+  if (r.oa_pdfs?.length) {
+    // 没有 arXiv 版本但有开放获取 PDF：后端下载解析（D25）。ID 加 doi: 前缀，和 arXiv ID 不撞
+    startManual(`doi:${r.doi}`, r.title, { doi: r.doi });
+    return;
   }
+  const title = r.title ? `「${r.title}」` : '这篇';
+  if (r.abstract) {
+    startManual(`doi:${r.doi}`, r.title, { doi: r.doi });   // 只有摘要也能分析，侧栏会提示"仅基于摘要"
+    return;
+  }
+  showManualError(`${title}在 arXiv 上没有找到版本，也没有开放获取副本和摘要。`,
+    r.oa_url ? { text: '开放获取页面', href: r.oa_url } : { text: '出版方页面', href: `https://doi.org/${r.doi}` });
 }
 
 els.manualForm.addEventListener('submit', (e) => {
@@ -205,7 +209,7 @@ async function analyze() {
     const resp = await fetch(`${BACKEND}/analyze/stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ arxiv_id: currentPaper.arxivId }),
+      body: JSON.stringify(currentPaper.doi ? { doi: currentPaper.doi } : { arxiv_id: currentPaper.arxivId }),
       signal: controller.signal,
     });
     if (!resp.ok) throw new Error(`后端返回 ${resp.status}`);
@@ -253,6 +257,7 @@ function handleEvent({ event, data }, state) {
       break;
     case 'paper':
       state.paper = data;
+      if (currentPaper && data.url) currentPaper.pdfUrl = data.url;     // DOI 论文的开放获取 PDF（D25）
       if (data.title && currentPaper && currentPaper.title === currentPaper.arxivId) {
         currentPaper.title = data.title;
         els.paperTitle.textContent = data.title;
@@ -376,7 +381,8 @@ function renderProgress(state) {
     frag.appendChild(hint('本文没有 HTML 版，以下分析仅基于摘要。'));
   }
   if (state.paper?.source === 'pdf') {
-    frag.appendChild(hint('本文没有 HTML 版，正文从 PDF 解析：公式可能不完整，点出处只能跳到所在页。'));
+    const from = state.paper.url ? `开放获取副本（${new URL(state.paper.url).hostname}）` : 'PDF';
+    frag.appendChild(hint(`本文没有 HTML 版，正文从${from}解析：公式可能不完整，点出处只能跳到所在页。`));
   }
   if (state.paper?.truncated_sections?.length) {
     frag.appendChild(hint(`因篇幅未包含：${state.paper.truncated_sections.join('、')}`));
@@ -446,10 +452,16 @@ function verifyBadge(state) {
  */
 async function jumpTo(pid) {
   if (!currentPaper) return;
-  const { arxivId, tabId, isHtmlPage } = currentPaper;
+  const { arxivId, tabId, isHtmlPage, doi, pdfUrl } = currentPaper;
   const page = /^pg(\d+)\.b\d+$/.exec(pid);
+  if (doi && !page) {                     // DOI 论文没有 arXiv 页面：摘要等出处打开出版方页面
+    const url = `https://doi.org/${doi}`;
+    if (tabId == null) currentPaper.tabId = (await chrome.tabs.create({ url })).id;
+    else await chrome.tabs.update(tabId, { url });
+    return;
+  }
   if (page) {
-    const url = `https://arxiv.org/pdf/${arxivId}#page=${page[1]}`;
+    const url = doi && pdfUrl ? `${pdfUrl.split('#')[0]}#page=${page[1]}` : `https://arxiv.org/pdf/${arxivId}#page=${page[1]}`;
     if (tabId == null) {
       currentPaper.tabId = (await chrome.tabs.create({ url })).id;
       currentPaper.isHtmlPage = false;

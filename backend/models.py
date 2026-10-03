@@ -71,6 +71,10 @@ class Paper:
     abstract_only 表示 HTML 和 PDF 都没拿到，降级只拿到了摘要。
     前端据此提示用户，埋点据此统计降级比例。一个字段三个用途。"""
 
+    url: str = ""
+    """原文地址。只有 DOI 进来、正文取自开放获取 PDF 的论文才填（D25），前端点出处时跳到这里的第 N 页；
+    arXiv 论文留空，前端自己拼 arxiv.org 的地址。"""
+
     truncated_sections: list[str] = field(default_factory=list)
     """因超出预算被丢弃的章节名。空列表表示全文完整。
     这个也要透传到前端 —— 用户有权知道模型没看到哪些内容。"""

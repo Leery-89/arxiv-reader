@@ -34,7 +34,9 @@ HEADING_RE = re.compile(
 )
 # 附录里的 "A Extra Results"：单个大写字母开头，只在 References 之后认（正文里会和 "A Very Large Title" 混）
 APPX_LETTER_RE = re.compile(r"^[A-Z](?:\.\d+)*\.?\s+[A-Z][^\n]{0,80}$")
-REFS_RE = re.compile(r"^(?:References|Bibliography|Literature Cited)$", re.I)
+REFS_RE = re.compile(r"^(?:(?:Supplementa(?:ry|l)\s+)?References(?:\s+and\s+Notes)?|Bibliography|Literature Cited)$", re.I)
+# 参考文献条目长得像"编号 + 大写开头"的标题："34. G. Tesauro, Artificial Intelligence …"（Science 预印本）
+REF_ENTRY_RE = re.compile(r"^\d{1,3}\.\s+(?:[A-Z]\.\s?)+[A-Z][a-z]")
 APPENDIX_RE = re.compile(r"^(?:(?i:Appendix|Supplementa(?:ry|l))|S\d|[A-Z](?:\.\d+)*\.?\s+[A-Z])")
 # 没有 "References" 标题的参考文献（revtex、Nature 模板常见）：块里成串的 [12] 编号、(2019) 年份、J. Smith 式缩写
 REF_MARK_RE = re.compile(r"\[\d{1,3}\]|\((?:19|20)\d\d\)")
@@ -134,6 +136,7 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
     references: list[str] = []
     cur: Section | None = None
     state = "front"                       # front → body → refs → appendix
+    seen_abstract = False
     counter: Counter = Counter()
     run = 0                               # 连续像参考文献的块数
     for pno, text, size, bold, nlines, margin in blocks:
@@ -141,7 +144,8 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
             continue
         if margin and repeats[re.sub(r"\d+", "#", text)] >= max(3, n_pages // 3):
             continue
-        head = _is_heading(text, size, bold, body, nlines) and (state != "front" or HEADING_RE.match(text))
+        head = (_is_heading(text, size, bold, body, nlines) and (state != "front" or HEADING_RE.match(text))
+                and not REF_ENTRY_RE.match(text))
         if not head and state in ("refs", "appendix") and bold and APPX_LETTER_RE.match(text):
             head = True
         if head:
@@ -153,6 +157,7 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
                 continue
             if re.match(r"^abstract$", text, re.I):
                 state = "front"           # 摘要从 meta 取，PDF 里的摘要块跳过
+                seen_abstract = True
                 continue
             supp = re.match(r"^(?:(?i:appendix|supplementa(?:ry|l))|S\d)", text)
             kind = "appendix" if state in ("refs", "appendix") or supp else "body"
@@ -161,7 +166,14 @@ def parse_pdf(data: bytes, arxiv_id: str, title: str = "", abstract: str = "") -
             sections.append(cur)
             continue
         if state == "front":
-            continue
+            # 正文没有章节标题的版式（Science / Nature 的预印本：Abstract 之后直接是正文，一路到 References）：
+            # 摘要标题之后出现正文字号的长段落，就开一个隐含的"正文"节。摘要本身（常是小一号字）跳过
+            if not (seen_abstract and len(text) >= 200 and abs(size - body) < body * 0.1
+                    and not margin and text[:60] not in abstract):
+                continue
+            state = "body"
+            cur = Section(level=1, title="正文")
+            sections.append(cur)
         if state == "refs":
             references.append(text)
             continue

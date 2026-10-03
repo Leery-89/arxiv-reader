@@ -747,6 +747,18 @@ Jev（TypeSafe，System One 决策模型）：不生成文本，只在预定义�
 
 ---
 
+## D25 · 没有 arXiv 版本的 DOI：下载开放获取 PDF 解析，再不行用摘要
+
+**决策**：`/analyze` 和 `/analyze/stream` 除了 `arxiv_id` 也收 `doi`。后端（`oa.py`）先 `resolve_doi`：有 arXiv 版本照旧；没有就按 OpenAlex / Crossref 给的开放获取 PDF 直链逐个试（最多 3 个），第一个能解析出正文的用 D21 的 `parse_pdf`；都不行用两家的标题摘要（`source = abstract_only`）。论文 ID 记成 `doi:<doi>`，缓存、埋点、前端都用它，和 arXiv ID 不撞。`Paper.url` 记下用的那个 PDF，侧栏点出处跳到它的第 N 页，摘要出处跳出版方页面。插件 0.3.5。
+
+**边界**：只用标了开放获取的副本（OpenAlex `is_oa` / `best_oa_location`，Crossref 的 CC 许可链接），不碰付费墙。PDF 只在内存里解析，不落盘、不分发；用户看到的是原链接。付费墙论文（如 10.1021/acsnano.6c05081，2026 年的 ACS Nano）只能做摘要分析，或者等"本地 PDF 入口"让有权限的用户自己上传。
+
+**PDF 规则补丁**（AlphaZero 的 Science 预印本实测）：这种版式 Abstract 之后直接是正文，没有任何章节标题，一路到 References——D21 的规则把它全当成"标题前的内容"丢了，只剩附录。改成：见过 Abstract 标题之后，出现正文字号、≥200 字、不在摘要里的段落，就开一个隐含的"正文"节；另外 "34. G. Tesauro, …" 这种参考文献条目不再被当成编号标题，"Supplemental References"、"References and Notes" 也认作参考文献。AlphaZero 正文 0 → 14.7k 字。`PARSER_VERSION` 升到 5。
+
+**安全**：下载的是第三方给的 URL。只许 http/https；主机解析出的每个地址都必须是公网（挡 127.0.0.1、10.x、169.254.169.254 元数据）；重定向手动跟、每跳重查，最多 4 跳；流式读，超过 40 MB 停；开头不是 `%PDF` 的（落地页、登录页）跳过。已知残余：检查和连接之间的 DNS 重绑定没挡，Railway 上风险低，记下。
+
+---
+
 ## 路线图与未来方向
 
 ### 主线（已排期，按顺序）
@@ -781,7 +793,7 @@ Jev（TypeSafe，System One 决策模型）：不生成文本，只在预定义�
    - **溯源退化**：PDF 没有段落 ID，要自编（页-段），跳转只能定位到页。
    - 估时：选型评测 1–2 天 + 接入 2 天。
    - **HTML / PDF 来源判断（2026-10-03 记下，待做）**：现在是"有 HTML 就用"。arXiv 的 HTML 转换有时坏掉（`ltx_ERROR`、整节缺失、正文明显比 PDF 短），这时该改用 PDF。先做规则版健康检查（错误标记数、HTML/PDF 正文字数比、缺失章节），把评测集里 HTML 有问题的论文找出来人工标"哪边好"（现有 pdf_bench 拿 HTML 当标准答案，测不出 PDF 更好的情况）。拿到 TypeSafe 的 Jev（System One 模型：只返回预定义选项 + 校准置信度，70–500ms，2026-09 发布，early access）权限后，做规则 vs Jev 对比，看 Jev 在边界样本上是否有增益。
-4. **DOI 与本地 PDF 入口**——侧栏已支持粘链接 / ID / arXiv DOI（v0.3.0）；✅ 期刊 DOI 查 arXiv 版本（D24，0.3.4）。下一步：找不到 arXiv 版本时分析开放获取副本（路线图 C）；Chrome 里打开的本地 PDF 按文件名（arXiv 默认是 ID）自动识别。
+4. **DOI 与本地 PDF 入口**——侧栏已支持粘链接 / ID / arXiv DOI（v0.3.0）；✅ 期刊 DOI 查 arXiv 版本（D24，0.3.4）。✅ 找不到 arXiv 版本时分析开放获取副本（D25，0.3.5）。下一步：Chrome 里打开的本地 PDF 按文件名（arXiv 默认是 ID）自动识别。
 
 **B. 阅读体验**
 
