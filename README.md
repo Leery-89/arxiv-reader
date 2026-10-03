@@ -64,14 +64,24 @@ evaluation chain (details in [DECISIONS.md](./DECISIONS.md) D14–D19):
 |---|---|---|
 | Main judge (`deepseek-chat`) | 52.0 % | **67.5 %** |
 | Stricter cross-vendor judge (`gpt-6.1-sol`, lower bound) | 41.0 % | **54.5 %** |
-| Long papers (main judge) | 46.4 % | 72.7 % |
-| Quote exact-match rate | 98.0 % | 96.4 % |
+| Quote exact-match rate | 98.0 % | 96.4–98.7 % (two runs) |
 
-v3 requires every checkable element of a claim (numbers, names, comparisons,
-both ends of a causal link) to appear in some quote, allows several quotes
-from one paragraph, and pulls in the antecedent when a quote starts with
-"This/It". Both judges agree on the size of the gain. The cost is more and
-longer quotes, so slightly more copy errors.
+Both judges agree on the size of the gain. **Which rules matter** — a
+leave-one-out ablation (drop one v3 rule at a time, plus an unchanged re-run to
+measure noise: 1.4 points between two identical runs):
+
+| v3 without… | Fully supported | Change |
+|---|---|---|
+| several quotes from one paragraph | 61.9 % | −6.3 |
+| quoting the antecedent of "This/It" | 62.5 % | −5.7 |
+| every checkable element in some quote | 62.6 % | −5.6 |
+| no-exaggeration rule | 67.5 % | −0.7 (noise) |
+| both ends of a causal claim | 68.3 % | +0.1 (noise) |
+
+The three citation rules each carry ~6 points; the two wording rules show no
+measurable effect on support rate (they target overstatement, which the judge
+is less sensitive to). Per-category numbers swing by up to 15 points between
+identical runs (~100 claims each), so only totals are reported.
 
 ## How it's built
 
