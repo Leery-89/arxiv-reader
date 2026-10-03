@@ -4,18 +4,19 @@
       重启不丢。目录已在 .gitignore 里。
 
 key 是什么（这是这个文件唯一的设计决定）：
-    arXiv ID + prompt 哈希 + 模型名 + 温度  →  sha256 取前 16 位
+    arXiv ID + prompt 哈希 + 模型名 + 温度 + 解析器版本  →  sha256 取前 16 位
 
     为什么不只用 arXiv ID：改了 prompt 之后，同一篇论文返回的还是旧
     结果，消融实验就做不了了。把 prompt 内容哈希进 key，prompt 一改
     key 自动变，旧缓存自然失效，不用手动清。
+    解析器版本同理（D18）：修了 fetcher 之后，模型看到的原文变了，旧结果也该作废。
 """
 
 import hashlib
 import json
 import os
 
-from config import MODEL, TEMPERATURE
+from config import MODEL, PARSER_VERSION, TEMPERATURE
 from prompts import SYSTEM_PROMPT
 
 CACHE_DIR = os.getenv("CACHE_DIR", "./cache")
@@ -27,7 +28,7 @@ def prompt_version() -> str:
 
 
 def cache_key(arxiv_id: str) -> str:
-    raw = f"{arxiv_id}|{prompt_version()}|{MODEL}|{TEMPERATURE}"
+    raw = f"{arxiv_id}|{prompt_version()}|{MODEL}|{TEMPERATURE}|p{PARSER_VERSION}"
     return hashlib.sha256(raw.encode()).hexdigest()[:16]
 
 

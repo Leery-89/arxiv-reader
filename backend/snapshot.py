@@ -20,6 +20,7 @@ import sys
 from dataclasses import asdict
 from pathlib import Path
 
+from config import PARSER_VERSION
 from models import Paper, Paragraph, Section
 
 EVAL_DIR = Path(__file__).parent / "eval"
@@ -30,7 +31,9 @@ RESULTS_DIR = EVAL_DIR / "results"
 def save_snapshot(paper: Paper, snap_dir: Path = SNAP_DIR) -> Path:
     snap_dir.mkdir(parents=True, exist_ok=True)
     path = snap_dir / f"{paper.arxiv_id}.json"
-    path.write_text(json.dumps(asdict(paper), ensure_ascii=False, indent=1), encoding="utf-8")
+    # 记下是哪版解析器产出的（D18）；字段不属于 Paper，读回时剥掉
+    d = {**asdict(paper), "_parser_version": PARSER_VERSION}
+    path.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
     return path
 
 
@@ -39,11 +42,20 @@ def load_snapshot(arxiv_id: str, snap_dir: Path = SNAP_DIR) -> Paper | None:
     if not path.exists():
         return None
     d = json.loads(path.read_text(encoding="utf-8"))
+    d.pop("_parser_version", None)       # 旧快照没有这个字段，当作版本 1
     d["sections"] = [
         Section(**{**s, "paragraphs": [Paragraph(**p) for p in s["paragraphs"]]})
         for s in d["sections"]
     ]
     return Paper(**d)
+
+
+def snapshot_parser_version(arxiv_id: str, snap_dir: Path = SNAP_DIR) -> int | None:
+    """快照是哪版解析器产出的；没有快照返回 None，D18 之前的旧快照返回 1。"""
+    path = snap_dir / f"{arxiv_id}.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8")).get("_parser_version", 1)
 
 
 def main():

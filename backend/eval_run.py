@@ -172,6 +172,8 @@ def main():
                 from prompts import ACTIVE_PROMPT
                 from cache import prompt_version
                 rec["prompt"] = {"name": ACTIVE_PROMPT, "hash": prompt_version()}
+                from config import PARSER_VERSION
+                rec["parser_version"] = PARSER_VERSION
                 out.write_text(json.dumps(rec, ensure_ascii=False, indent=2), encoding="utf-8")
                 v = rec["verify"]
                 print(f" {time.time() - t0:5.1f}s  {rec['paper']['source']:13} "

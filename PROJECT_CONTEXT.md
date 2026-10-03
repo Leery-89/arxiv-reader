@@ -99,7 +99,7 @@ v3 相对 v2：要素覆盖（数字、名称、比较结论、因果两端都�
 ## 已知问题与待办
 
 - [ ] `deepseek-chat` 不在 DeepSeek 模型列表里（只剩 deepseek-flash / deepseek-v4-pro），可能是兼容旧名；v3 对比做完前不换生成模型
-- [ ] 解析器版本号写进缓存 key 和快照（D18）
+- [x] 解析器版本号写进缓存 key 和快照（D18）：`config.PARSER_VERSION`，改 fetcher 就加 1
 - [ ] 物理 35 条等朋友盲标（`eval/annotate_physics_blind.csv`）
 - [ ] 侧栏支持 `[推断]` 样式
 - [ ] harness 下一层：名字检查、限定词守恒；评审员接到 flagged 上
