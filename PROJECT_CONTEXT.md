@@ -86,7 +86,8 @@ AI+科学类变化最大：Y 55% → 75%、N 15% → 0（每 ID 平均引 1.47 �
 - [x] **D21 · PDF 后备**：没有 HTML 的论文从 PDF 解析正文（`pdf.py`，PyMuPDF 规则）。31 篇对照 HTML：正文召回 83.6%、数字召回 98.0%；无 HTML 的 5 篇全部捞回正文。线上 Railway 设 `PDF_FALLBACK=1` 打开；`PARSER_VERSION=3`；插件 0.3.3（PDF 来源跳到页）
 - [x] **D22 · HTML 表格进输入**：`| a | b |` 行文本接在图注后，ID 用表格锚点；`PARSER_VERSION=4`。PDF 的 `find_tables()` 把图当表格，不用
 - [x] **D23 · Docling 对比**：31 篇关公式正文召回 85.0%（PyMuPDF 83.6%）、数字 97.3%（98.0%），表格单元格结构 74.8%（0），每篇 12 秒；开公式 LaTeX 还原 41%、单篇 290 秒。线上不换，PyMuPDF 继续当后备
-- [ ] 输入改成文献 DOI 搜索（Crossref 查 arXiv 版本 / 开放获取副本）
+- [x] **D24 · DOI 入口**：`/resolve` 用 OpenAlex（Crossref 兜底、标题搜索补漏）把期刊 DOI 映射到 arXiv 版本；插件 0.3.4。待本地用真实 DOI 测命中率
+- [ ] 下载开放获取副本并分析（没有 arXiv 版本的 DOI）
 - [ ] HTML / PDF 来源判断：规则健康检查，拿到 Jev 权限后做规则 vs Jev（路线图）
 - [ ] `eval_versions.py` 两个评审员时退化成第一个评审员，改成分开报或要求奇数个
 

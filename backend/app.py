@@ -4,6 +4,7 @@
 
 接口：
     GET  /health              活着没
+    GET  /resolve?q=<DOI>     期刊 DOI → arXiv 版本 / 开放获取链接 / 标题摘要（doi.py）
     POST /analyze             {"arxiv_id": "1706.03762"} → 结构化结果（一次返回）
     POST /analyze/stream      同上，SSE 流式
 
@@ -32,6 +33,7 @@ from pydantic import BaseModel
 import ratelimit
 from cache import cache_get, cache_key, cache_set, prompt_version
 from prompts import ACTIVE_PROMPT
+from doi import DoiNotFound, parse_doi, resolve_doi
 from fetcher import fetch_paper
 from llm import analyze, analyze_stream
 from serialize import paper_to_text
@@ -58,6 +60,21 @@ class AnalyzeRequest(BaseModel):
 @app.get("/health")
 def health():
     return {"ok": True, "prompt": ACTIVE_PROMPT, "rate": ratelimit.snapshot()}
+
+
+@app.get("/resolve")
+def resolve(q: str):
+    """侧栏粘的不是 arXiv ID 而是 DOI 时先调这个。找到 arXiv 版本 → 前端拿 arxiv_id 照常分析；
+    找不到 → 返回标题、摘要和开放获取链接，前端提示。不调模型，不计入限流。"""
+    doi = parse_doi(q)
+    if not doi:
+        raise HTTPException(status_code=400, detail="没认出 DOI")
+    try:
+        return resolve_doi(doi).to_dict()
+    except DoiNotFound:
+        raise HTTPException(status_code=404, detail="OpenAlex 和 Crossref 都查不到这个 DOI")
+    except requests.RequestException as e:
+        raise HTTPException(status_code=502, detail=f"DOI 查询失败：{e}")
 
 
 def _paper_meta(paper) -> dict:

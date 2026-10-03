@@ -117,21 +117,70 @@ function parseManual(text) {
   return m[m.length - 1];
 }
 
-els.manualForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const id = parseManual(els.manualInput.value);
-  if (!id) {
-    els.manualError.textContent = /^10\.\d{4,}\//.test(els.manualInput.value.trim())
-      ? '暂时只认 arXiv 的 DOI（10.48550/arXiv.…），其他期刊的 DOI 还没接'
-      : '没认出 arXiv ID。试试 2408.13687 这样的格式，或者整条链接';
-    els.manualError.hidden = false;
-    return;
-  }
+const DOI_RE = /\b10\.\d{4,9}\/\S+/i;
+
+function showManualError(...parts) {
+  // parts：字符串或 {text, href}；链接用 DOM 拼，不拼 HTML 字符串（标题来自外部接口）
+  els.manualError.replaceChildren(...parts.map((p) => {
+    if (typeof p === 'string') return document.createTextNode(p);
+    const a = document.createElement('a');
+    a.href = p.href; a.textContent = p.text; a.target = '_blank'; a.rel = 'noopener';
+    return a;
+  }));
+  els.manualError.hidden = false;
+}
+
+function startManual(id, title) {
   els.manualError.hidden = true;
   els.manualInput.value = '';
   currentPaper = null;                                   // 强制重画
-  showPaper({ arxivId: id, title: id, url: null, isHtmlPage: false, tabId: null, manual: true });
+  showPaper({ arxivId: id, title: title || id, url: null, isHtmlPage: false, tabId: null, manual: true });
   analyze();                                             // 粘完直接开始，少点一次
+}
+
+/** 期刊 DOI：后端查 arXiv 版本（OpenAlex / Crossref，见 backend/doi.py） */
+async function resolveDoi(text) {
+  els.manualError.hidden = true;
+  els.status.textContent = '查 DOI…';
+  let r;
+  try {
+    const resp = await fetch(`${BACKEND}/resolve?q=${encodeURIComponent(text)}`);
+    r = await resp.json();
+    if (!resp.ok) throw new Error(r.detail || resp.status);
+  } catch (err) {
+    showManualError(`DOI 查询失败：${err.message}`);
+    return;
+  } finally {
+    els.status.textContent = '已就绪';
+  }
+  if (r.arxiv_id) {
+    startManual(r.arxiv_id, r.title);
+    return;
+  }
+  const title = r.title ? `「${r.title}」` : '这篇';
+  if (r.oa_url) {
+    showManualError(`${title}在 arXiv 上没有找到版本。开放获取版：`, { text: '打开', href: r.oa_url },
+      '（直接分析开放获取版是下一步要做的功能）');
+  } else {
+    showManualError(`${title}在 arXiv 上没有找到版本，也没有开放获取副本。`,
+      { text: '出版方页面', href: `https://doi.org/${r.doi}` });
+  }
+}
+
+els.manualForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const text = els.manualInput.value.trim();
+  // 非 arXiv 的 DOI 先走后端：10.1103/PhysRevB.1234.56789 这种里面的 "1234.56789" 会被误认成 arXiv ID
+  if (DOI_RE.test(text) && !/10\.48550\//i.test(text)) {
+    resolveDoi(text);
+    return;
+  }
+  const id = parseManual(text);
+  if (id) {
+    startManual(id);
+    return;
+  }
+  showManualError('没认出 arXiv ID 或 DOI。试试 2408.13687、10.1038/nature14539 这样的格式，或者整条链接');
 });
 
 // ───────────────────────────── 调后端（流式） ─────────────────────────────

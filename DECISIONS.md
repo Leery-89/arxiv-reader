@@ -731,6 +731,22 @@ Jev（TypeSafe，System One 决策模型）：不生成文本，只在预定义�
 
 ---
 
+## D24 · 期刊 DOI 入口：OpenAlex 查 arXiv 版本，Crossref 兜底
+
+**决策**：侧栏粘任意 DOI，后端 `GET /resolve?q=` 先找这篇的 arXiv 版本，找到就走现成的 HTML 全文链路；找不到时返回标题、摘要和开放获取链接，侧栏提示（直接分析开放获取副本是下一步）。查找顺序（`doi.py`）：
+1. `10.48550/arXiv.*` 直接取 ID，不发请求
+2. OpenAlex 按 DOI 查，`locations` 里有 arXiv 来源就取它的 ID；`best_oa_location` 当开放获取链接
+3. OpenAlex 没收录 → Crossref，看 `relation.has-preprint` 有没有 arXiv DOI
+4. 都没有 → 用标题在 OpenAlex 里搜 arXiv 来源（`S4306400194`），标题相似度 ≥ 0.9 才认；标题短于 15 字符不搜
+
+**理由**：OpenAlex 免费、不要 key、一次请求给全收录位置 + 开放获取 + 摘要；Crossref 只有出版方元数据，`has-preprint` 很少填，所以只当兜底。期刊版和预印本在 OpenAlex 里经常是两条记录（没合并），第 4 步捞这种。相似度门槛定得高，是因为认错比认不出更糟：分析的是另一篇论文，用户不一定发现。
+
+**侧栏**：非 arXiv 的 DOI 先走 `/resolve`，再解析 arXiv ID——`10.1103/PhysRevB.1234.56789` 里的 `1234.56789` 会被 ID 正则误认。外部接口返回的标题用 DOM 拼，不拼 HTML 字符串。
+
+**待测**：云端连不上 OpenAlex / Crossref，单测用手写的 JSON。上线前要在本地用真实 DOI 测一组：有 arXiv 版本且已合并的、没合并的、纯期刊的，量第 4 步的命中率和误认率。Railway 可设 `CONTACT_EMAIL` 进两家的 polite pool。
+
+---
+
 ## 路线图与未来方向
 
 ### 主线（已排期，按顺序）
@@ -765,7 +781,7 @@ Jev（TypeSafe，System One 决策模型）：不生成文本，只在预定义�
    - **溯源退化**：PDF 没有段落 ID，要自编（页-段），跳转只能定位到页。
    - 估时：选型评测 1–2 天 + 接入 2 天。
    - **HTML / PDF 来源判断（2026-10-03 记下，待做）**：现在是"有 HTML 就用"。arXiv 的 HTML 转换有时坏掉（`ltx_ERROR`、整节缺失、正文明显比 PDF 短），这时该改用 PDF。先做规则版健康检查（错误标记数、HTML/PDF 正文字数比、缺失章节），把评测集里 HTML 有问题的论文找出来人工标"哪边好"（现有 pdf_bench 拿 HTML 当标准答案，测不出 PDF 更好的情况）。拿到 TypeSafe 的 Jev（System One 模型：只返回预定义选项 + 校准置信度，70–500ms，2026-09 发布，early access）权限后，做规则 vs Jev 对比，看 Jev 在边界样本上是否有增益。
-4. **DOI 与本地 PDF 入口**——侧栏已支持粘链接 / ID / arXiv DOI（v0.3.0）。下一步：普通期刊 DOI 走 Crossref 查 arXiv 版本，找不到或付费墙则降级为摘要；Chrome 里打开的本地 PDF 按文件名（arXiv 默认是 ID）自动识别。
+4. **DOI 与本地 PDF 入口**——侧栏已支持粘链接 / ID / arXiv DOI（v0.3.0）；✅ 期刊 DOI 查 arXiv 版本（D24，0.3.4）。下一步：找不到 arXiv 版本时分析开放获取副本（路线图 C）；Chrome 里打开的本地 PDF 按文件名（arXiv 默认是 ID）自动识别。
 
 **B. 阅读体验**
 
