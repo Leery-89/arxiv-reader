@@ -1,0 +1,157 @@
+{
+  "paper": {
+    "arxiv_id": "2407.06858",
+    "title": "Accurate and Robust Stellar Rotation Periods catalog for 82771 Kepler stars using deep learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75869,
+    "n_sections": 28,
+    "n_paragraphs": 82
+  },
+  "result": {
+    "summary": "本文提出了 LightPred，一个用于从光变曲线中提取恒星自转周期的深度学习模型，采用 LSTM 与 Transformer 的双分支架构 [S6.p1]。模型先使用 Kepler 数据进行自监督对比预训练，再用基于模拟光变曲线的监督学习进行训练 [S4.SS2.p1]。评估表明 LightPred 在准确性和平均误差上优于自相关函数等经典方法，尤其在噪声数据上表现更好 [S6.p2]。作者将其应用于 Kepler 数据集，生成了迄今最大的主序星自转周期目录，包含超过 80000 颗恒星 [S6.p2]。",
+    "research_question": {
+      "text": "论文旨在从光变曲线中准确、稳健地提取恒星自转周期，以应对经典方法在大数据集上耗时且难以处理复杂光变曲线的挑战 [S1.p2]。作者指出，基于模拟数据的深度学习方法此前仅用于 TESS 样本的周期预测，尚未用于 Kepler 样本，且自监督学习在周期测定中从未被使用过 [S1.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "Classical methods for measuring rotation periods, such as Lomb-Scargle periodograms and autocorrelation functions, have been successful (,,,,,,,) but can be time-consuming and challenging to apply to large datasets."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Furthermore, these methods often struggle with complex light curves that exhibit multiple periodicities or evolving spot patterns."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "Simulation-based learning for period determination was done only by and for predictions of TESS samples and not for Kepler samples."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "To the best of our knowledge, the use of self-supervised learning for period determination was not done at all."
+        }
+      ]
+    },
+    "method": {
+      "text": "LightPred 采用双分支架构，结合 LSTM 和 Transformer 组件以同时捕捉时间依赖和全局特征 [S6.p1]。训练分为两步：首先用 Kepler 样本进行自监督对比学习预训练，然后将权重作为初始化，在模拟光变曲线数据集上进行监督训练 [S4.SS2.p1]。模拟数据由 Butterpy 生成，基于简化的星斑模型 [S2.SS1.p1]。模型同时预测周期和倾角，利用互学习提升周期测定 [S2.SS1.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p1",
+          "quote": "By leveraging a dual-branch architecture that incorporates LSTM and Transformer components, LightPred excels at capturing both temporal dependencies and global patterns within light curves."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "To train the model, we used a 2-step pipeline; First, we trained the model, without the prediction head, in a self-supervised fashion, with Kepler samples."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "Next, we used the weights from the SSL Step as an initialization for supervised training with the mock dataset."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To create a dataset for supervised training we used simulated light curves using Butterpy, a python package described in."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "By training a model to predict periods and inclinations at the same time we rely on the fact that mutual learning can benefit both aspects independently."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "监督训练使用 50000 个模拟样本，每个样本时长为 1000 天，按 81%、9%、10% 划分为训练、验证和测试集 [S4.SS2.p1]。作者将数据集加倍至 100000 样本，发现结果无显著变化，因此保持 50000 样本 [S4.SS2.p1]。模型在 Kepler 数据集上应用，生成超过 80000 颗主序星的周期目录 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p1",
+          "quote": "This was done on a dataset of 50000 simulated samples of 1000 days that were generated as explained in II.1 and II.2."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We then split the dataset into training ( $81\\%$), validation ( $9\\%$), and test sets ( $10\\%$)."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We experimented with doubling the dataset size to 100000 samples and found no significant change in the results so we decided to keep the dataset size with 50000 samples."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "This advancement has led to the generation of the largest and most accurate catalog of stellar rotation periods for main-sequence stars to date, comprising over 80000 stars."
+        }
+      ]
+    },
+    "findings": {
+      "text": "LightPred 在准确性和稳健性上优于自相关函数等传统方法，尤其在噪声数据上表现更好 [S6.p2]。作者生成了迄今最大的主序星自转周期目录，包含超过 80000 颗恒星 [S6.p2]。通过基于学习置信度和一致性度量的误差分析，作者过滤了预测并移除了与星斑诱导变率不同的恒星类型 [abstract]。分析显示误差水平与恒星参数之间存在强相关性，并确认了轨道周期短于 10 天的食双星中的潮汐同步现象 [abstract]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "Our training process, combining simulated and real Kepler data, has allowed LightPred to outperform traditional methods like the Autocorrelation Function in terms of accuracy and robustness, particularly for noisy data."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "This advancement has led to the generation of the largest and most accurate catalog of stellar rotation periods for main-sequence stars to date, comprising over 80000 stars."
+        },
+        {
+          "id": "abstract",
+          "quote": "Using error analysis based on learned confidence and consistency metric, we were able to filter the predictions and remove stellar types with variability which is different than spot-induced variability."
+        },
+        {
+          "id": "abstract",
+          "quote": "Our analysis shows strong correlations between error levels and stellar parameters."
+        },
+        {
+          "id": "abstract",
+          "quote": "Additionally, we confirm tidal synchronization in eclipsing binaries with orbital periods shorter than 10 days."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "模拟数据基于简化的星斑模型，存在倾角与星斑位置之间的内在简并，且模型依赖先验分布，星斑分布对结果有很大影响 [S2.SS1.p1]。星斑纬度分布、衰减和周期重叠等模式是否与其他恒星一致尚不清楚，且恒星周期与星斑总覆盖度之间的关系是统计性的，难以应用于特定恒星，因此未在模拟中实现 [S2.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The suggested model implies an inherent degeneracy between inclination and spot location."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "This implies that the model is prior-depended: the distribution of spots in the model has a large effect on the results."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "However, it is not well known whether this pattern (latitude distribution, decay, and cycle overlap) is consistent with other stars."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "However, as stated in, this relation is of a statistical nature, and applying this relation to the spot distribution of a specific star is not trivial."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "As such, it was not implemented in our simulation."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5315,
+      "completion_tokens": 1757,
+      "elapsed_s": 6.82
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 15,
+    "inline_total": 15,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

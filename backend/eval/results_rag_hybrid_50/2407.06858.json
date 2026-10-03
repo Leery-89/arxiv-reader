@@ -1,0 +1,185 @@
+{
+  "paper": {
+    "arxiv_id": "2407.06858",
+    "title": "Accurate and Robust Stellar Rotation Periods catalog for 82771 Kepler stars using deep learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75869,
+    "n_sections": 28,
+    "n_paragraphs": 82
+  },
+  "result": {
+    "summary": "本文提出了 LightPred，一个从光变曲线中提取恒星自转周期的深度学习模型，采用 LSTM 与 Transformer 双分支架构，并结合自监督对比预训练与基于模拟光变的监督训练 [abstract][S1.p3]。作者将该模型应用于 Kepler 数据，生成了迄今最大的自转周期目录，包含 82771 个可靠预测 [abstract][S5.SS3.p2]。评估显示 LightPred 在准确度和平均误差上优于 ACF 等经典方法 [abstract]。作者还利用学习到的置信度与一致性度量进行误差分析并过滤预测 [abstract]。",
+    "research_question": {
+      "text": "论文旨在从光变曲线中测量恒星自转周期，因为自转周期研究对理解恒星演化、活动周以及系外行星探测日益重要 [S1.p1]。经典方法（如 Lomb-Scargle 周期图与自相关函数）虽然成功，但耗时且难以应用于大型数据集，并且常常难以处理具有多个周期或演化黑子图案的复杂光变曲线 [S1.p2]。作者希望用数据驱动方法自动并改进周期测量的准确度 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "The study of stellar rotation periods has become increasingly important in our understanding of stellar evolution, activity cycles, and exoplanet detection."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Classical methods for measuring rotation periods, such as Lomb-Scargle periodograms and autocorrelation functions, have been successful"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "but can be time-consuming and challenging to apply to large datasets."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Furthermore, these methods often struggle with complex light curves that exhibit multiple periodicities or evolving spot patterns."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "In recent years, machine learning techniques have shown promise in automating and improving the accuracy of rotation period measurements."
+        }
+      ]
+    },
+    "method": {
+      "text": "LightPred 是一个双分支深度学习模型，结合 LSTM 与 Transformer 组件以捕捉光变曲线中的时间与全局特征 [abstract]。模型输出四个数值：自转周期、倾角、周期置信度分数和倾角置信度分数 [S3.SS1.p4]。训练采用两步流程：先用 Kepler 样本进行自监督对比学习（SSL），再用模拟数据集进行基于模拟的监督学习（SBSL） [S4.SS2.p1]。模拟光变曲线由 Butterpy 基于黑子模型生成 [S2.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The model utilizes a dual-branch architecture combining Long Short-Term Memory (LSTM) and Transformer components to capture temporal and global data features."
+        },
+        {
+          "id": "S3.SS1.p4",
+          "quote": "The output of the model is four numbers: rotation period, inclination, period confidence score, and inclination confidence score."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "To train the model, we used a 2-step pipeline; First, we trained the model, without the prediction head, in a self-supervised fashion, with Kepler samples."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "Next, we used the weights from the SSL Step as an initialization for supervised training with the mock dataset."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To create a dataset for supervised training we used simulated light curves using Butterpy, a python package described in."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在模拟光变曲线和 Kepler 数据上进行了验证。模拟数据集包含 50000 个样本，按 81%/9%/10% 划分为训练、验证和测试集 [S4.SS2.p1]。Kepler 数据使用长节奏 Data Release 25，经过预处理后用于 SSL 和推理的样本数为 130868 [S2.SS3.p1][S5.SS2.p1]。推理时进一步筛选，最终得到 108096 个样本用于误差分析 [S5.SS2.SSS1.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p1",
+          "quote": "This was done on a dataset of 50000 simulated samples of 1000 days that were generated as explained in II.1 and II.2."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We then split the dataset into training ( $81\\%$), validation ( $9\\%$), and test sets ( $10\\%$)."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "First, we downloaded the long cadence Kepler dataset Data Release 25."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "This left us with 130868 which serves both for the SSL step and the inference."
+        },
+        {
+          "id": "S5.SS2.SSS1.p1",
+          "quote": "this leaves us with 108096 samples."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在模拟数据上，模型能够推断哪些样本更难确定恒星属性，表现为高置信度对应低误差 [S5.SS1.p3]。在 Kepler 数据上，与 ACF 相比，LightPred 在全部样本上误差更低，在 ACF 有效样本上误差略低，相对观测误差平均均为 11% [S5.SS2.SSS2.p2]。模型预测与三个最大现有目录比较时，高置信度样本一致性更好，不一致点主要出现在半周期线和参考周期接近零的区域 [S5.SS2.SSS2.p4]。作者确认了轨道周期短于 10 天的食双星中的潮汐同步现象 [abstract]。最终目录包含 82771 个可靠预测 [S5.SS3.p2]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.p3",
+          "quote": "The trend of high confidence and low error, which can be easily seen in the figure, implies that the model was able to infer which samples are ”harder” for it to determine the stellar properties."
+        },
+        {
+          "id": "S5.SS2.SSS2.p2",
+          "quote": "When considering the entire samples (left panel), our model has much lower error."
+        },
+        {
+          "id": "S5.SS2.SSS2.p2",
+          "quote": "When considering only ACF-valid samples (right panel), The errors are comparable, with LightPred error slightly lower than ACF error."
+        },
+        {
+          "id": "S5.SS2.SSS2.p2",
+          "quote": "When considering the relative observational error (dividing by the predicted period) we get the same error on average (11%)."
+        },
+        {
+          "id": "S5.SS2.SSS2.p4",
+          "quote": "It can be seen that in general, more confident samples have better agreement."
+        },
+        {
+          "id": "S5.SS2.SSS2.p4",
+          "quote": "the first region is around the half period line Which suggests a ’double period mistake’."
+        },
+        {
+          "id": "S5.SS2.SSS2.p4",
+          "quote": "The second region is where the reference period is close to zero but our model’s predictions aren’t."
+        },
+        {
+          "id": "abstract",
+          "quote": "Additionally, we confirm tidal synchronization in eclipsing binaries with orbital periods shorter than 10 days."
+        },
+        {
+          "id": "S5.SS3.p2",
+          "quote": "This procedure left us with 82771 reliable predictions."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，模拟模型存在倾角与黑子位置之间的内在简并，且模型依赖先验：黑子分布在模型中影响很大 [S2.SS1.p1]。对于周期大于 25 天的预测，模拟误差与观测误差的相关性不同，可能与较老恒星活动下降有关 [S5.SS2.SSS1.p2]。模型对非常快速旋转体（周期 < 3 天）存在局限 [S5.SS2.SSS4.p5]。此外，数据中可能存在拥挤和双星污染 [S5.SS2.SSS4.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The suggested model implies an inherent degeneracy between inclination and spot location."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "This implies that the model is prior-depended: the distribution of spots in the model has a large effect on the results."
+        },
+        {
+          "id": "S5.SS2.SSS1.p2",
+          "quote": "For longer periods the correlation is different which might be related to a drop in the activity for older stars."
+        },
+        {
+          "id": "S5.SS2.SSS4.p5",
+          "quote": "the former can be assigned to the limitations of the model with very fast rotators, exactly as we saw in Figure 9."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "It is possible that the observed light curve does not represent a single object but multiple objects."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "Another possible source of bias is binaries."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 9802,
+      "completion_tokens": 2075,
+      "elapsed_s": 7.97
+    }
+  },
+  "verify": {
+    "quote_hits": 30,
+    "quote_total": 30,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

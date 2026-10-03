@@ -1,0 +1,186 @@
+{
+  "paper": {
+    "arxiv_id": "2405.15793",
+    "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix",
+      "Appendix A SWE-agent Design",
+      "A.1 ACI Design",
+      "File viewer.",
+      "File editor.",
+      "Search & navigation.",
+      "A.2 Implementation",
+      "A.3 Configuration",
+      "Appendix B Extended Results",
+      "B.1 Hyperparameter Sweep",
+      "B.2 Model Performance",
+      "Performance by Repository.",
+      "Temporal Analysis.",
+      "B.3 Trajectory Analysis",
+      "B.3.1 Turns to Resolution",
+      "B.3.2 Walkthrough of Trajectory Phases",
+      "B.3.3 Breakdowns of Action Sequences",
+      "B.4 Failure Modes",
+      "B.5 Performance Variance and Pass@k Rate",
+      "B.6 Patch Generations",
+      "B.7 HumanEvalFix Evaluation",
+      "B.8 Dataset Information",
+      "B.9 Miscellaneous",
+      "Appendix C Prompts",
+      "Appendix D Qualitative Analysis",
+      "Analysis for psf/requests-2317",
+      "Analysis for pylint-dev/pylint-5859",
+      "Analysis for sympy/sympy-21614",
+      "Analysis for django/django-14411",
+      "Appendix E Statements",
+      "E.1 Ethics & Broader Impacts",
+      "E.2 Reproducibility",
+      "E.3 Limitations & Future Work"
+    ],
+    "char_count": 31242,
+    "n_sections": 12,
+    "n_paragraphs": 50
+  },
+  "result": {
+    "summary": "这篇论文研究界面设计如何影响语言模型智能体在软件工程任务上的表现，并提出 SWE-agent 系统，其定制的 agent-computer interface（ACI）帮助智能体自主查看、搜索和编辑代码文件 [abstract][S1.p3]。作者在 SWE-bench 和 HumanEvalFix 上评估，使用 GPT-4 Turbo 时分别取得 12.5% 和 87.7% 的 pass@1 成绩 [abstract]。在 SWE-bench 上，SWE-agent 解决 12.47% 的 2,294 个测试任务，超过此前非交互式检索增强系统 3.8% 的最好成绩 [S1.p4]。作者认为，为 LM 智能体专门设计交互组件对下游任务表现有实际影响 [S1.p5]。",
+    "research_question": {
+      "text": "论文要解决的问题是：语言模型智能体在更复杂的软件工程任务上尚未被充分探索，而现有界面（如 Linux shell 或 Python 解释器）是为人类用户设计的 [S1.p1]。作者受 HCI 研究启发，探究 LM 智能体是否能像人类工程师从 VSCode 等强大应用中受益一样，从更好设计的界面中受益 [S1.p1]。作者主张 LM 智能体代表一类新的终端用户，有其自身需求和能力，因此需要专门的 agent-computer interface [S2.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, applying agents to more complex code tasks like software engineering remains unexplored."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "we investigate whether LM agents could similarly benefit from better-designed interfaces for performing software engineering tasks."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "We argue that LM agents represent a new category of end user, with their own needs and abilities."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出 SWE-agent，由 LM 和 ACI 组成，可与计算机交互解决真实软件工程问题 [S1.p3]。其 ACI 提供一小组简单动作用于查看、搜索和编辑文件，并设置 guardrails 防止常见错误，每轮向智能体提供具体简洁的反馈 [S1.p3]。作者假设固定 LM，专注于设计 ACI，通过人工检查智能体行为识别困难并提出改进，以及网格搜索选择最佳 ACI 配置 [S2.p4]。由此总结出若干设计原则，包括动作应简单易懂、紧凑高效，环境反馈应有信息量但简洁，guardrails 可缓解错误传播并加速恢复 [S2.p5]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "SWE-agent’s ACI instead offers a small set of simple actions for viewing, searching through and editing files."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The ACI uses guardrails to prevent common mistakes, and an agent receives specific, concise feedback about a command’s effects at every turn."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We use two approaches to enhance performance on a development set: (1) manually inspect agent behavior to identify difficulties and propose improvements, and (2) run a grid search to select the best ACI configuration."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "Actions should be simple and easy to understand for agents."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "Environment feedback should be informative but concise."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "Guardrails mitigate error propagation and hasten recovery."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文主要在 SWE-bench 上评估，该数据集包含来自 12 个流行 Python 包仓库的 2,294 个任务实例；主结果在完整测试集上报告，消融和分析在 SWE-bench Lite 的 300 个实例上进行 [S4.p1]。作者还用 HumanEvalFix 测试 SWE-agent 的基本代码编辑能力 [S4.p1]。对比设置包括 Shell-only 基线，即让 LM 通过 Linux shell 进程交互解决问题 [S4.p4]。",
+      "evidence": [
+        {
+          "id": "S4.p1",
+          "quote": "We primarily evaluate on the SWE-bench dataset, which includes $2,294$ task instances from $12$ different repositories of popular Python packages."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench that focus on evaluating self-contained functional bug fixes."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We also test SWE-agent’s basic code editing abilities with HumanEvalFix, a short-form code debugging benchmark."
+        },
+        {
+          "id": "S4.p4",
+          "quote": "The second setting, called Shell-only, is adapted from the interactive coding framework introduced in."
+        }
+      ]
+    },
+    "findings": {
+      "text": "使用 GPT-4 Turbo 时，SWE-agent 解决 12.47% 的 2,294 个 SWE-bench 测试任务，超过此前非交互式检索增强系统 3.8% 的最好成绩 [S1.p4]。在 SWE-bench Lite 上，SWE-agent 比仅使用默认 Linux shell 的基线多解决 10.7 个百分点 [S1.p4]。该 ACI 可迁移到其他 LM，SWE-agent 搭配 Claude 3 Opus 可解决 10.5% 的基准任务 [S1.p4]。在 HumanEvalFix 上，SWE-agent 取得 88.3% 的 pass@1 [S5.p2]。搜索界面分析显示，迭代搜索在结果很多时会导致智能体逐一检查每个匹配，可能耗尽成本预算或上下文窗口，表现甚至差于没有额外搜索工具（15.7% 对 12.0%）[S5.SS1.p3]。编辑仍然困难：在 2,294 个任务实例中，1,185 个（51.7%）SWE-agent w/ GPT-4 Turbo 轨迹有 1 次以上失败编辑；任何编辑尝试最终成功概率为 90.5%，但一次失败编辑后降至 57.2% [S5.SS2.p4]。对 SWE-bench Lite 上 248 个未解决轨迹的分类显示，约一半（52.0%）属于 Incorrect Implementation 或 Overly Specific Implementation，另有 23.4% 为级联失败编辑 [S5.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "SWE-agent solves $12.47$ % of the $2,294$ SWE-bench test tasks, substantially outperforming the previous best resolve rate of $3.8$ % by a non-interactive, retrieval-augmented system."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "The results show that SWE-agent solves $10.7$ percentage points more instances than the baseline agent, which uses only the default Linux shell."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "SWE-agent with Claude 3 Opus can solve $10.5$ % of the benchmark tasks."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "In Table 3, SWE-agent yields strong performance on HumanEvalFix with $88.3$ % pass@1 rate."
+        },
+        {
+          "id": "S5.SS1.p3",
+          "quote": "This inefficient behavior can exhaust an agent’s cost budget or context window, leading to even worse performance than the not having additional search tools at all ( $15.7$ % $\\downarrow$ 2.3 for No search vs. $12.0$ % $\\downarrow$ 6.0 with Iterative search)."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "out of $2,294$ task instances, $1,185$ ( $51.7$ %) of SWE-agent w/ GPT-4 Turbo trajectories have $1$ + failed edits."
+        },
+        {
+          "id": "S5.SS2.p4",
+          "quote": "Any attempt at editing has a $90.5$ % chance of eventually being successful. This probability drops off to $57.2$ % after a single failed edit."
+        },
+        {
+          "id": "S5.SS2.p6",
+          "quote": "about half ( $52.0$ %) of unresolved instances fall into the Incorrect Implementation or Overly Specific Implementation categories"
+        },
+        {
+          "id": "S5.SS2.p6",
+          "quote": "Cascading failed edits make up another $23.4$ % of failures."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5037,
+      "completion_tokens": 1957,
+      "elapsed_s": 6.84
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 22,
+    "quote_rate": 1.0,
+    "inline_hits": 17,
+    "inline_total": 17,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

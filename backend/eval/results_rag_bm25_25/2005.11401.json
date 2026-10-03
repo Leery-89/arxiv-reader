@@ -1,0 +1,149 @@
+{
+  "paper": {
+    "arxiv_id": "2005.11401",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 40572,
+    "n_sections": 46,
+    "n_paragraphs": 61
+  },
+  "result": {
+    "summary": "本文提出检索增强生成（RAG）模型，将预训练参数记忆（seq2seq 模型）与非参数记忆（Wikipedia 稠密向量索引，由预训练神经检索器访问）结合用于语言生成 [abstract]。作者提出 RAG-Sequence 与 RAG-Token 两种形式，分别在整个生成序列上使用同一检索段落和允许每个 token 使用不同段落 [S2.p2]。在多个知识密集型 NLP 任务上微调与评估后，模型在三个开放域 QA 任务上取得当时最优结果，超过参数化 seq2seq 模型和任务特定的检索-抽取架构 [abstract]。在语言生成任务上，RAG 生成的文本比纯参数化 seq2seq 基线更具体、多样且符合事实 [abstract]。作者还展示了非参数记忆可被替换以更新模型知识 [S1.p4]。",
+    "research_question": {
+      "text": "论文关注预训练语言模型在知识密集型任务上的局限：它们虽能在参数中存储事实知识，但访问和精确操作知识的能力仍有限，性能落后于任务特定架构，且为其决策提供出处和更新世界知识仍是未解决问题 [abstract]。作者因此探索一种通用的检索增强生成微调方案，将预训练参数记忆与非参数记忆结合用于语言生成 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However, their ability to access and precisely manipulate knowledge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task-specific architectures."
+        },
+        {
+          "id": "abstract",
+          "quote": "Additionally, providing provenance for their decisions and updating their world knowledge remain open research problems."
+        },
+        {
+          "id": "abstract",
+          "quote": "We explore a general-purpose fine-tuning recipe for retrieval-augmented generation (RAG) — models which combine pre-trained parametric and non-parametric memory for language generation."
+        }
+      ]
+    },
+    "method": {
+      "text": "RAG 模型将参数记忆设为预训练 seq2seq 模型，非参数记忆设为 Wikipedia 的稠密向量索引，并通过预训练神经检索器访问 [abstract]。为端到端训练检索器与生成器，作者将检索到的文档视为隐变量，并提出两种对隐文档进行边缘化的模型 [S2.p2]。RAG-Sequence 使用同一文档预测每个目标 token，RAG-Token 则可基于不同文档预测每个目标 token [S2.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We introduce RAG models where the parametric memory is a pre-trained seq2seq model and the non-parametric memory is a dense vector index of Wikipedia, accessed with a pre-trained neural retriever."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "In one approach, RAG-Sequence, the model uses the same document to predict each target token."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "The second approach, RAG-Token, can predict each target token based on a different document."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "开放域问答方面，作者在 Natural Questions、TriviaQA、WebQuestions 和 CuratedTrec 四个数据集上评估，使用与先前工作相同的训练/开发/测试划分并报告 Exact Match 分数；由于 CT 和 WQ 较小，作者按 DPR 做法用 NQ RAG 模型初始化 CT 和 WQ 模型 [S3.SS1.p1]。抽象问答方面，使用 MSMARCO NLG v2.1，仅使用问题与答案而不使用提供的段落，将其作为开放域抽象问答任务 [S3.SS2.p1]。生成任务方面，作者提出基于答案实体生成 Jeopardy 问题的开放域问题生成任务 [S3.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We consider four popular open-domain QA datasets: Natural Questions (NQ), TriviaQA (TQA). WebQuestions (WQ) and CuratedTrec (CT)."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We use the same train/dev/test splits as prior work and report Exact Match (EM) scores."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "As CT and WQ are small, we follow DPR by initializing CT and WQ models with our NQ RAG model."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "To test RAG’s natural language generation (NLG) in a knowledge-intensive setting, we use the MSMARCO NLG task v2.1."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "We do not use the supplied passages, only the questions and answers, to treat MSMARCO as an open-domain abstractive QA task."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "we propose the more demanding task of generating Jeopardy questions."
+        }
+      ]
+    },
+    "findings": {
+      "text": "RAG 模型在三个开放域 QA 任务上取得当时最优结果，超过参数化 seq2seq 模型和任务特定的检索-抽取架构 [abstract]。在 Jeopardy 问题生成上，RAG-Token 优于 RAG-Sequence，两者在 Q-BLEU-1 上均超过 BART [S4.SS3.p1]。基于 452 对 BART 与 RAG-Token 生成结果的人工评估显示，评估者认为 BART 比 RAG 更符合事实的仅占 7.1%，而 RAG 更符合事实的占 42.7%，两者都符合事实的占 17% [S4.SS3.p1]。作者还表明非参数记忆可被替换，从而在世界变化时更新模型知识 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We fine-tune and evaluate our models on a wide range of knowledge-intensive NLP tasks and set the state of the art on three open domain QA tasks, outperforming parametric seq2seq models and task-specific retrieve-and-extract architectures."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Table 2 shows that RAG-Token performs better than RAG-Sequence on Jeopardy question generation, with both models outperforming BART on Q-BLEU-1."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Evaluators indicated that BART was more factual than RAG in only 7.1% of cases, while RAG was more factual in 42.7% of cases, and both RAG and BART were factual in a further 17% of cases"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Finally, we demonstrate that the non-parametric memory can be replaced to update the models’ knowledge as the world changes."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，MSMARCO 中有些问题若无法访问金标段落就无法以匹配参考答案的方式回答，因此不使用金标段落时性能会更低 [S3.SS2.p1]。作者还指出，MSMARCO 中有些问题仅靠 Wikipedia 无法回答 [S3.SS2.p1]。在 FEVER 事实核查上，作者的结果与使用强检索监督的当时最优流水线模型相差 4.3% 以内 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S3.SS2.p1",
+          "quote": "MSMARCO has some questions that cannot be answered in a way that matches the reference answer without access to the gold passages"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "so performance will be lower without using gold passages."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "We also note that some MSMARCO questions cannot be answered using Wikipedia alone."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "For FEVER fact verification, we achieve results within 4.3% of state-of-the-art pipeline models which use strong retrieval supervision."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 3608,
+      "completion_tokens": 1830,
+      "elapsed_s": 7.02
+    }
+  },
+  "verify": {
+    "quote_hits": 21,
+    "quote_total": 21,
+    "quote_rate": 1.0,
+    "inline_hits": 15,
+    "inline_total": 15,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

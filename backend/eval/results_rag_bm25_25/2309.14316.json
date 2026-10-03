@@ -1,0 +1,146 @@
+{
+  "paper": {
+    "arxiv_id": "2309.14316",
+    "title": "Physics of Language Models: Part 3.1, Knowledge Storage and Extraction Thanks: Project page: https://physics.allen-zhu.com/part-3-knowledge/part-3-1 . An extended video of this paper is available at https://youtu.be/YSHzKmEianc .\nV1 was circulated internally at Meta on Sep 18, 2023, and appeared on arXiv on Sep 25, 2023.\nV2 is nearly identical to V1, with minor corrections to author names and writing.\nV3 includes additional Llama experiments and further writing improvements. We would like to thank Lin Xiao, Chunting Zhou, Tianyi Peng, Xiaodong Liu, and Zhijie Zhou for many helpful conversations. We would like to extend special thanks to Nabib Ahmed, Giri Anantharaman, Lucca Bertoncini, Henry Estela, Liao Hu, Caleb Ho, Wil Johnson, Apostolos Kokolis, and Shubho Sengupta from Meta FAIR, as well as Ian Clark, Gourab De, Anmol Mann, and Max Pfeifer from W&B ; without their invaluable support, the experiments in this paper would not have been possible.",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75682,
+    "n_sections": 29,
+    "n_paragraphs": 134
+  },
+  "result": {
+    "summary": "这篇论文研究语言模型在预训练中记忆人物传记知识后，能否通过指令微调提取这些知识来回答问答 [S1.p6][S1.p7]。作者构建了包含 10 万个人物传记的合成数据集 bioS 和用 Llama 改写的 bioR，并采用先预训练再微调 QA 的受控实验 [S1.p6][S1.p7]。研究发现，仅在传记上预训练再微调时模型难以回答未见过人物的问答，而加入多样性、句子置换或重复全名等知识增强后准确率大幅提升 [S1.p8][S4.SS2.p3]。作者还引入近线性探测技术，表明知识增强使人物知识几乎线性地编码在姓名 token 的隐藏嵌入中，从而便于提取 [S1.p8][S5.SS1.p4]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在传记数据集上预训练语言模型后，模型能否被微调来回答诸如“[name] 的出生城市是哪里”这类问题，以及模型是如何做到这一点的 [S1.p6]。作者指出，由于用互联网数据做受控实验存在挑战，因此提出使用良好控制的合成数据来研究这一问题 [S1.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "Given the challenges of conducting controlled experiments with internet data, we propose studying this question using well-controlled, synthetically generated data"
+        },
+        {
+          "id": "S1.p6",
+          "quote": "After pretraining a language model on the biography dataset, can the model be finetuned to answer questions like “Where is the birth city of [name ]”, and if so, how does the model achieve so?"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了包含 10 万个人物传记的合成数据集，涵盖生日、出生城市、所学专业等属性，并用 Llama 将其改写以接近真实传记风格 [S1.p6]。实验采用先预训练再微调 QA 的流程：在全部传记上预训练后，用来自 p 比例人物的问答对进行微调，再测试对剩余 1-p 比例人物的分布外问答能力 [S1.p7]。作者还引入近线性探测技术来考察知识在模型隐藏嵌入中的编码方式 [S1.p8]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "We construct a synthetic dataset of $100k$ biographies, including their birthday, birth city, major of study, etc."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "We also use Llama to rewrite them to make them close to real-life biography styles."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "After pretraining the model on the entire biography, we fine-tune it using question and answer (QA) pairs from a $p$ fraction of individuals."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "We then test its ability to out-of-distribution answer QAs about the remaining $1-p$ fraction."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "we introduce (nearly) linear probing techniques to show that knowledge augmentation pushes the model to encode a person’s knowledge almost linearly in the model’s hidden embedding of the person’s name tokens."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在合成数据集 bioS 和由 Llama 生成的 bioR 上进行，bioS 包含 10 万个人物，其姓名、出生日期、出生城市、大学、专业和雇主均从均匀分布中独立随机选取 [A1.SS1.p1]。模型方面使用了 GPT2-small 架构，并替换为旋转位置嵌入 [A2.p1]；知识提取实验还使用了与 GPT2 层数、头数和隐藏维度相同的缩小版 Llama 架构 [A2.p3]。评估采用问答框架，对每个人物的六个属性各提一个问题，以答案完全匹配的比例衡量准确率 [S2.p6]。",
+      "evidence": [
+        {
+          "id": "A1.SS1.p1",
+          "quote": "In the synthetic dataset labeled as bioS, we generate profiles for $N=100,000$ individuals."
+        },
+        {
+          "id": "A1.SS1.p1",
+          "quote": "Each individual’s first, middle, and last names, birth date, birth city, university attended, major of study, and current employer are selected independently and randomly from a uniform distribution."
+        },
+        {
+          "id": "A2.p1",
+          "quote": "The GPT2-small architecture has 12 layers, 12 heads, and $768=12\\times 64$ hidden dimensions (124M)."
+        },
+        {
+          "id": "A2.p1",
+          "quote": "we replace the positional embedding with a rotary embedding"
+        },
+        {
+          "id": "A2.p3",
+          "quote": "we also used a downsized Llama architecture with the same number of layers, heads, and hidden dimensions as the GPT2 architecture, yielding similar results."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "For each individual, we pose six questions targeting their six unique attributes"
+        },
+        {
+          "id": "S2.p6",
+          "quote": "QA accuracy is measured by the proportion of answers that exactly match the correct response."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在仅用传记预训练再微调 QA 的设置下，模型难以回答剩余 1-p 比例人物的问题，且与模型规模、预训练时间或微调参数无关 [S1.p8]。加入多样性、置换或重复全名等知识增强后，准确率显著提升：每个人有 5 条不同措辞和句子打乱的传记条目时，QA 微调准确率从 9.7% 提升到 96.6% [S4.SS2.p3]。探测结果显示，在 bioS single 设置下，直到目标属性前一个 token 位置探测准确率才升至 100%，说明模型虽记住了传记但知识编码方式不利于提取 [S5.SS1.p4]；而在 bioS multi5+permute 等强增强设置下，从第一个特殊位置起六个属性的探测准确率就接近 100% [S5.SS1.p4]。此外，即使只对一部分“名人”做知识增强，未增强的“少数群体”的测试准确率也显著提高 [S1.p8]。",
+      "evidence": [
+        {
+          "id": "S1.p8",
+          "quote": "it struggles to answer questions about the remaining $1-p$ fraction, irrespective of model size, pre-train time, or finetune parameters"
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "Pretraining on a dataset where each person has 5 diverse biography entries (i.e., different wording, sentence shuffling) boosts the QA fine-tune accuracy (on ${\\mathcal{P}_{\\mathsf{test}}}$) from 9.7% to 96.6%."
+        },
+        {
+          "id": "S5.SS1.p4",
+          "quote": "In the bioS single setup, P-probing accuracy remains low (e.g., 2% for company name) until the token immediately preceding the target attribute (where accuracy boosts to 100%)."
+        },
+        {
+          "id": "S5.SS1.p4",
+          "quote": "In the heavily augmented setup like bioS multi5+permute, the P-probing accuracy for all six attributes rises to nearly 100% from the first special position"
+        },
+        {
+          "id": "S1.p8",
+          "quote": "Even if knowledge augmentation is applied to a subset of individuals, what we call celebrities, test accuracy for others (without augmentation) also increases significantly."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及。",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6191,
+      "completion_tokens": 1722,
+      "elapsed_s": 7.01
+    }
+  },
+  "verify": {
+    "quote_hits": 19,
+    "quote_total": 19,
+    "quote_rate": 1.0,
+    "inline_hits": 14,
+    "inline_total": 15,
+    "inline_rate": 0.933,
+    "issues": [
+      {
+        "field": "research_question",
+        "id": "name",
+        "reason": "内嵌 ID 不存在"
+      }
+    ]
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

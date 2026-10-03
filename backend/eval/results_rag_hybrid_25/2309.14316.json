@@ -1,0 +1,164 @@
+{
+  "paper": {
+    "arxiv_id": "2309.14316",
+    "title": "Physics of Language Models: Part 3.1, Knowledge Storage and Extraction Thanks: Project page: https://physics.allen-zhu.com/part-3-knowledge/part-3-1 . An extended video of this paper is available at https://youtu.be/YSHzKmEianc .\nV1 was circulated internally at Meta on Sep 18, 2023, and appeared on arXiv on Sep 25, 2023.\nV2 is nearly identical to V1, with minor corrections to author names and writing.\nV3 includes additional Llama experiments and further writing improvements. We would like to thank Lin Xiao, Chunting Zhou, Tianyi Peng, Xiaodong Liu, and Zhijie Zhou for many helpful conversations. We would like to extend special thanks to Nabib Ahmed, Giri Anantharaman, Lucca Bertoncini, Henry Estela, Liao Hu, Caleb Ho, Wil Johnson, Apostolos Kokolis, and Shubho Sengupta from Meta FAIR, as well as Ian Clark, Gourab De, Anmol Mann, and Max Pfeifer from W&B ; without their invaluable support, the experiments in this paper would not have been possible.",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75682,
+    "n_sections": 29,
+    "n_paragraphs": 134
+  },
+  "result": {
+    "summary": "这篇论文研究自回归语言模型如何在预训练中记忆事实知识、并在推理时通过问答提取这些知识，核心问题是模型回答问题是真正从传记中提取知识，还是因为训练中见过类似问题（数据污染）[S1.p5]。作者构建了包含10万条传记的合成数据集，并采用先预训练传记、再用部分个体的问答对微调、最后在未见过问答的个体上测试的受控实验设计 [S1.p6][S1.p7]。主要发现是：仅预训练传记再指令微调时模型难以回答剩余个体的问题，而加入知识增强（如多种写法、句子打乱、重复全名）后准确率大幅提升 [S1.p8][S4.SS2.p3]。作者还提出近线性探测方法，表明知识增强使人物知识几乎线性地编码在姓名 token 的隐藏表示中，否则知识分散在整篇传记中导致难以提取 [S1.p8]。",
+    "research_question": {
+      "text": "论文要解决的问题是：语言模型回答诸如“Abraham Lincoln 的出生城市是哪里”这类问题时，究竟是从训练语料（如传记）中真正提取知识，还是因为在训练中见过类似或相同的问题而记住了答案（传统记忆/数据污染）[S1.p5]。作者指出，以往研究使用互联网数据预训练的模型，无法区分这两种情况 [S1.p5]。因此需要受控实验来研究语言模型如何在训练中记忆知识、并在推理时提取知识 [S1.p2][S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "These studies use models pretrained on internet data, leaving it unclear whether the model answers questions like “Which city was Abraham Lincoln born in?” by extracting knowledge from Lincoln’s biography ( our focus) or if it encountered a similar (or same!) question during training and memorized the answer (traditional memorization / data contamination)."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "In this paper, we explore how transformer-based language models memorize knowledge during training and extract it during inference."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Therefore, a key question is: How do language models memorize knowledge during training, and extract it later to answer questions or perform logical reasoning during inference?"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提出使用受控的合成数据来研究该问题，构建了包含10万条传记的合成数据集，涵盖生日、出生城市、专业等属性，并用 Llama 改写使其接近真实传记风格 [S1.p6]。实验流程为：先在全部传记上预训练语言模型，再用一部分个体（p 比例）的问答对进行微调，最后在剩余（1-p 比例）未见过问答的个体上测试分布外问答能力 [S1.p7]。此外，作者提出基于位置（P-probing）和基于查询（Q-probing）两种近线性探测方法，从模型隐藏状态中提取人物属性，以分析知识如何被编码 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "We construct a synthetic dataset of $100k$ biographies, including their birthday, birth city, major of study, etc."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "We also use Llama to rewrite them to make them close to real-life biography styles."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "After pretraining the model on the entire biography, we fine-tune it using question and answer (QA) pairs from a $p$ fraction of individuals."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "We then test its ability to out-of-distribution answer QAs about the remaining $1-p$ fraction."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We propose two probing methods: position-based (P-probing) and query-based (Q-probing)."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "Both methods employ simple, nearly-linear probes to extract personal attributes from the model’s hidden states."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在合成数据集上进行：bioS 数据集包含10万条合成传记，bioR 数据集由 Llama1-30B 生成以接近真实风格 [S1.p6][A1.SS2.p1]。问答评估针对每个个体的六个属性（出生日期、出生城市、大学、专业、公司、工作地点），以精确匹配衡量准确率 [S2.p6]。知识增强实验在 GPT2 模型和 bioS 数据集上进行，比较了 multiplicity、permutation、fullname 等增强方式单独及组合的效果 [S4.SS2.p3]。此外还使用与 GPT2 同规模层数、头数、隐藏维度的缩小版 Llama 架构进行知识提取实验，探测实验则仅使用 GPT2 架构 [A2.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "We construct a synthetic dataset of $100k$ biographies, including their birthday, birth city, major of study, etc."
+        },
+        {
+          "id": "A1.SS2.p1",
+          "quote": "We examine a “close-to-real” dataset produced by Llama."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "For each individual, we pose six questions targeting their six unique attributes"
+        },
+        {
+          "id": "S2.p6",
+          "quote": "QA accuracy is measured by the proportion of answers that exactly match the correct response."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "In Figure 3, we present our results for the GPT2 model on the bioS dataset."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "We implemented each knowledge augmentation individually and in combinations, then compared the model’s QA finetune accuracy on ${\\mathcal{P}_{\\mathsf{test}}}$."
+        },
+        {
+          "id": "A2.p3",
+          "quote": "In our knowledge extraction experiments (e.g., Figure 3), we also used a downsized Llama architecture with the same number of layers, heads, and hidden dimensions as the GPT2 architecture, yielding similar results."
+        },
+        {
+          "id": "A2.p3",
+          "quote": "For the probing experiments, we exclusively used the GPT2 architecture for conciseness."
+        }
+      ]
+    },
+    "findings": {
+      "text": "主要发现包括：混合训练（传记加部分个体问答一起预训练）能使模型回答剩余个体的问答 [S1.p8]；而仅预训练传记再指令微调时，模型难以回答剩余个体的问题，无论模型规模、预训练时间或微调参数如何 [S1.p8]。加入知识增强（如多种写法、句子打乱、重复全名）可显著提升准确率，例如每人5条多样化传记条目将问答微调准确率从9.7%提升到96.6% [S4.SS2.p3]。探测结果表明，知识增强使人物知识几乎线性地编码在姓名 token 的隐藏表示中，无增强时知识分散在整篇传记中，导致难以提取 [S1.p8]。此外，对“名人”子集做知识增强也能提升未增强的“少数”个体的测试准确率 [S1.p8]；而类似 BERT 的双向模型在微调后无法提取人物知识，除非知识是单个词或多个独立词（如出生月、日、年）[S1.p8][S7.p8]。",
+      "evidence": [
+        {
+          "id": "S1.p8",
+          "quote": "Before diving into the pretrain-finetune process, we first demonstrate that pretraining a model on all biographies plus QAs for a $p$ fraction of individuals together enables it to (apply knowledge to) answer questions about the remaining $1-p$ fraction."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "We discover that it struggles to answer questions about the remaining $1-p$ fraction, irrespective of model size, pre-train time, or finetune parameters ( Result 2)."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "However, accuracy significantly improves with knowledge augmentations like varying writing styles or sentence shuffling ( Result 3)."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "Pretraining on a dataset where each person has 5 diverse biography entries (i.e., different wording, sentence shuffling) boosts the QA fine-tune accuracy (on ${\\mathcal{P}_{\\mathsf{test}}}$) from 9.7% to 96.6%."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "Without augmentation, the model encodes the person’s knowledge across all biography words/tokens, making knowledge extraction nearly impossible no matter how one finetunes it."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "Even if knowledge augmentation is applied to a subset of individuals, what we call celebrities, test accuracy for others (without augmentation) also increases significantly."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "We show that encoder-only models akin to BERT, whether mixed-trained or pre-trained and then fine-tuned, cannot extract a person’s knowledge after finetuning, regardless of the knowledge augmentation, unless the knowledge is a single word or multiple but independent words (like birth month, day, and year)."
+        },
+        {
+          "id": "S7.p8",
+          "quote": "Unless the knowledge is a standalone word or of independent words (like month, day, year), extracting knowledge after MLM pretraining might prove challenging, if not totally impossible."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5928,
+      "completion_tokens": 2145,
+      "elapsed_s": 8.54
+    }
+  },
+  "verify": {
+    "quote_hits": 25,
+    "quote_total": 25,
+    "quote_rate": 1.0,
+    "inline_hits": 19,
+    "inline_total": 19,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

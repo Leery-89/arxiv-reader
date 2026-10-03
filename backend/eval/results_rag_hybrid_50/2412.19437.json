@@ -1,0 +1,166 @@
+{
+  "paper": {
+    "arxiv_id": "2412.19437",
+    "title": "DeepSeek-V3 Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 97112,
+    "n_sections": 89,
+    "n_paragraphs": 160
+  },
+  "result": {
+    "summary": "DeepSeek-V3 是一个总参数 671B、每 token 激活 37B 的 MoE 语言模型，采用 MLA 与 DeepSeekMoE 架构，并引入无辅助损失的负载均衡策略和多 token 预测训练目标 [abstract]。模型在 14.8 万亿 token 上预训练，随后进行 SFT 与 RL 后训练，完整训练仅需 2.788M H800 GPU 小时 [abstract][S1.p6]。综合评测显示其性能超过其他开源模型，并可与 GPT-4o、Claude-3.5-Sonnet 等领先闭源模型相比 [abstract][S1.p5]。",
+    "research_question": {
+      "text": "论文旨在同时追求强模型性能与经济成本，在 DeepSeek-V2 已验证的 MLA 和 DeepSeekMoE 架构基础上进一步提升模型能力 [S1.p2]。为此，作者探索两项额外策略：无辅助损失的负载均衡策略以最小化负载均衡对模型性能的不利影响，以及多 token 预测训练目标以提升评测基准上的整体表现 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "With a forward-looking perspective, we consistently strive for strong model performance and economical costs."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 pioneers an auxiliary-loss-free strategy for load balancing, with the aim of minimizing the adverse impact on model performance that arises from the effort to encourage load balancing."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 employs a multi-token prediction training objective, which we have observed to enhance the overall performance on evaluation benchmarks."
+        }
+      ]
+    },
+    "method": {
+      "text": "DeepSeek-V3 沿用 MLA 与 DeepSeekMoE 基本架构，并额外引入无辅助损失的负载均衡策略以缓解负载均衡带来的性能退化 [S2.SS1.p1]。模型设置多 token 预测（MTP）训练目标，顺序预测额外 token 并保持完整因果链 [S2.SS2.p1]。训练方面提出 FP8 混合精度框架，采用细粒度量化与高精度累加，并设计 DualPipe 流水线并行算法以重叠计算与通信 [S3.SS3.p1][S3.SS2.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "Compared with DeepSeek-V2, an exception is that we additionally introduce an auxiliary-loss-free load balancing strategy for DeepSeekMoE to mitigate the performance degradation induced by the effort to ensure load balance."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "we sequentially predict additional tokens and keep the complete causal chain at each prediction depth."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "we propose a fine-grained mixed precision framework utilizing the FP8 data format for training DeepSeek-V3."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "we design the DualPipe algorithm for efficient pipeline parallelism."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "预训练语料包含 14.8T 高质量多语言 token，英文和中文占多数 [S4.SS1.p1][S4.SS4.SSS1.p1]。评测覆盖语言理解与推理、闭卷问答、阅读理解、代码、数学等基准，并在内部评测框架中与 DeepSeek-V2-Base、Qwen2.5 72B Base、LLaMA-3.1 405B Base 等开源模型比较 [S4.SS4.SSS1.p3][S4.SS4.SSS1.p4][S4.SS4.SSS1.p5][S4.SS4.SSS1.p10][S4.SS4.SSS2.p1]。消融实验在 15.7B 和 228.7B 两种规模基线上验证 MTP 与无辅助损失均衡策略 [S4.SS5.SSS1.p1][S4.SS5.SSS2.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "the training corpus for DeepSeek-V3 consists of 14.8T high-quality and diverse tokens in our tokenizer."
+        },
+        {
+          "id": "S4.SS4.SSS1.p1",
+          "quote": "The base model of DeepSeek-V3 is pretrained on a multilingual corpus with English and Chinese constituting the majority"
+        },
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "we compare the base model of DeepSeek-V3 with the state-of-the-art open-source base models, including DeepSeek-V2-Base (our previous release), Qwen2.5 72B Base, and LLaMA-3.1 405B Base."
+        },
+        {
+          "id": "S4.SS5.SSS1.p1",
+          "quote": "At the small scale, we train a baseline MoE model comprising 15.7B total parameters on 1.33T tokens."
+        },
+        {
+          "id": "S4.SS5.SSS2.p1",
+          "quote": "At the large scale, we train a baseline MoE model comprising 228.7B total parameters on 578B tokens."
+        }
+      ]
+    },
+    "findings": {
+      "text": "DeepSeek-V3-Base 在多数基准上超过 DeepSeek-V2-Base 和 Qwen2.5 72B Base，并在大多数基准上超过 LLaMA-3.1 405B Base，基本成为最强开源模型 [S4.SS4.SSS2.p1]。MTP 策略在多数评测基准上持续提升模型性能 [S4.SS5.SSS1.p1]；无辅助损失均衡策略在多数评测基准上持续取得更好性能 [S4.SS5.SSS2.p1]。完整训练仅需 2.788M H800 GPU 小时，训练过程稳定，未出现不可恢复的损失尖峰或回滚 [abstract][S1.p4]。",
+      "evidence": [
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "DeepSeek-V3-Base comprehensively outperforms DeepSeek-V2-Base and Qwen2.5 72B Base, and surpasses LLaMA-3.1 405B Base in the majority of benchmarks, essentially becoming the strongest open-source model."
+        },
+        {
+          "id": "S4.SS5.SSS1.p1",
+          "quote": "the MTP strategy consistently enhances the model performance on most of the evaluation benchmarks."
+        },
+        {
+          "id": "S4.SS5.SSS2.p1",
+          "quote": "the auxiliary-loss-free strategy consistently achieves better model performance on most of the evaluation benchmarks."
+        },
+        {
+          "id": "abstract",
+          "quote": "Despite its excellent performance, DeepSeek-V3 requires only 2.788M H800 GPU hours for its full training."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Throughout the entire training process, we did not encounter any irrecoverable loss spikes or have to roll back."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认 DeepSeek-V3 在部署方面存在局限：为保证高效推理，推荐部署单元相对较大，可能给小团队带来负担 [S6.p2]。此外，尽管端到端生成速度已超过 DeepSeek-V2 两倍，仍有进一步提升空间 [S6.p2]。作者认为这些局限有望随更先进硬件的发展自然解决 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "the recommended deployment unit for DeepSeek-V3 is relatively large, which might pose a burden for small-sized teams."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "there still remains potential for further enhancement."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "these limitations are expected to be naturally addressed with the development of more advanced hardware."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12616,
+      "completion_tokens": 1788,
+      "elapsed_s": 6.88
+    }
+  },
+  "verify": {
+    "quote_hits": 20,
+    "quote_total": 20,
+    "quote_rate": 1.0,
+    "inline_hits": 19,
+    "inline_total": 23,
+    "inline_rate": 0.826,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S4.SS4.SSS1.p3",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "S4.SS4.SSS1.p4",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "S4.SS4.SSS1.p5",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "S4.SS4.SSS1.p10",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

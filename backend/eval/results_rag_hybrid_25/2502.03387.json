@@ -1,0 +1,140 @@
+{
+  "paper": {
+    "arxiv_id": "2502.03387",
+    "title": "LIMO: Less is More for Reasoning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 29931,
+    "n_sections": 29,
+    "n_paragraphs": 54
+  },
+  "result": {
+    "summary": "本文挑战了大型语言模型复杂推理需要海量训练数据的假设，提出 Less-Is-More Reasoning (LIMO) 假说 [S3.p1]。作者通过多层筛选构建了仅 800 条样本的 LIMO 数据集，并在 Qwen2.5-32B-Instruct 上做简单监督微调 [S1.p4]。LIMO 在 AIME24 上达到 63.3%、MATH500 上达到 95.6%，超过此前微调模型且仅用其 1% 的训练数据 [abstract]。作者认为，在预训练已编码领域知识的基础模型中，复杂推理可通过少量但精心设计的认知过程演示被激发 [S3.p1]。",
+    "research_question": {
+      "text": "本文要解决的问题是：大型语言模型的复杂推理是否必须依赖海量训练数据，还是可以通过极少量高质量示例来激发 [abstract]。原文指出，此前关于推理任务的数据效率研究仍使用远多于 LIMA 的数据量，能否将质量优先的思路应用于推理任务尚不确定 [S2.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We challenge the prevailing assumption that complex reasoning in large language models (LLMs) necessitates massive training data."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "However, whether this lesson can be applied to reasoning tasks remains uncertain, given the potential high computational complexity of such tasks."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "the quantity of such data is still much larger compared to that in LIMA"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提出 LIMO 假说：在预训练已全面编码领域知识的基础模型中，复杂推理能力可通过少量但精确编排的认知过程演示而涌现 [S3.p1]。基于此，作者设计多层数据筛选流程，从大量问答对中先做粗粒度难度过滤、再做细粒度难度评估和知识点多样化，同时按逻辑连贯性、步骤清晰度和解答正确性筛选推理链，最终得到 800 条训练样本 [S1.p4]。然后使用该数据集对 Qwen2.5-32B-Instruct 进行简单监督微调 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "sophisticated reasoning capabilities can emerge through minimal but precisely orchestrated demonstrations of cognitive processes"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "first conducting coarse difficulty filtering to eliminate trivial problems, then fine-grained difficulty assessment to identify challenging questions, followed by knowledge point diversification"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "we filter reasoning chains based on logical coherence, step-by-step clarity, and solution accuracy"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "This meticulous process yields a compact yet potent dataset of just 800 training samples."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "With simple supervised fine-tuning (SFT) using only this curated dataset based on Qwen2.5-32B-Instruct"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在数学推理基准上进行，包括 AIME24 和 MATH500 [abstract]。作者将 LIMO 与先前微调模型比较，并对比了更大规模数据集 NuminaMath-100k 和 OpenThoughts-114k [S6.SS2.SSS0.Px3.p1]。此外，作者通过控制实验比较同一问题不同质量推理链的效果 [S6.SS3.SSS1.p1]，并比较不同预训练基础模型（Qwen2.5 与 Qwen1.5）的影响 [S6.SS3.SSS3.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "achieves 63.3% accuracy on AIME24 and 95.6% on MATH500"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "NuminaMath-100k shows significant degradation (32.3% vs. base model’s 49.9%)"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "OpenThoughts-114k achieves suboptimal results (58.3%)"
+        },
+        {
+          "id": "S6.SS3.SSS1.p1",
+          "quote": "We investigate what characteristics define superior reasoning chains that lead to better model performance through a controlled comparative study"
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "LIMO (built on Qwen2.5) achieves 63.3% accuracy on AIME2024, a 54.1 percentage point improvement over Qwen1.5’s 9.2%."
+        }
+      ]
+    },
+    "findings": {
+      "text": "LIMO 在 AIME24 上达到 63.3%、MATH500 上达到 95.6%，超过此前微调模型（AIME24 6.5%、MATH500 59.2%），且仅使用其 1% 的训练数据 [abstract]。在分布外泛化上，LIMO 取得 45.8% 的绝对提升，优于用 100 倍数据训练的模型 [abstract]。对比实验中，LIMO 的 800 条精选问题达到 78.1%，优于 NuminaMath-100k 的 32.3% 和 OpenThoughts-114k 的 58.3% [S6.SS2.SSS0.Px3.p1]。预训练基础模型影响显著：基于 Qwen2.5 的 LIMO 在 AIME2024 上比基于 Qwen1.5 的高 54.1 个百分点，在 MATH500 上高 30.4 个百分点 [S6.SS3.SSS3.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "achieves 63.3% accuracy on AIME24 and 95.6% on MATH500, surpassing previous fine-tuned models (6.5% on AIME24, 59.2% on MATH500)"
+        },
+        {
+          "id": "abstract",
+          "quote": "while using only 1% of the training data required by prior approaches"
+        },
+        {
+          "id": "abstract",
+          "quote": "achieving a 45.8% absolute improvement across diverse benchmarks, outperforming models trained on 100× more data"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "LIMO’s carefully curated 800 problems yield superior performance (78.1%)"
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "a 54.1 percentage point improvement over Qwen1.5’s 9.2%"
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "On MATH500, LIMO reaches 95.6% accuracy, surpassing Qwen1.5 by 30.4 percentage points."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 3091,
+      "completion_tokens": 1576,
+      "elapsed_s": 6.38
+    }
+  },
+  "verify": {
+    "quote_hits": 19,
+    "quote_total": 19,
+    "quote_rate": 1.0,
+    "inline_hits": 13,
+    "inline_total": 13,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

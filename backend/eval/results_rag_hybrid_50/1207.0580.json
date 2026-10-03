@@ -1,0 +1,152 @@
+{
+  "paper": {
+    "arxiv_id": "1207.0580",
+    "title": "Improving neural networks by preventing co-adaptation of feature detectors",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 41183,
+    "n_sections": 21,
+    "n_paragraphs": 55
+  },
+  "result": {
+    "summary": "这篇论文研究的是如何减少大型前馈神经网络在小训练集上的过拟合问题 [p1]。作者提出在每次训练样本呈现时以 0.5 的概率随机省略一半的隐藏单元（即 dropout），以防止特征检测器之间复杂的共适应 [p1][p3]。在 MNIST、TIMIT、CIFAR-10、ImageNet 等多个基准任务上，dropout 都带来了改进，并在语音和物体识别上创下新纪录 [p1][p6][p9][p10][p11]。",
+    "research_question": {
+      "text": "论文要解决的问题是：当大型前馈神经网络在小训练集上训练时，通常在留出测试数据上表现很差，即过拟合 [p1]。原文指出，如果输入与正确输出之间的关系复杂且网络有足够多的隐藏单元，通常会有许多不同的权重设置能几乎完美地建模训练集，尤其是当标注训练数据有限时 [p2]。",
+      "evidence": [
+        {
+          "id": "p1",
+          "quote": "When a large feedforward neural network is trained on a small training set, it typically performs poorly on held-out test data."
+        },
+        {
+          "id": "p2",
+          "quote": "If the relationship between the input and the correct output is complicated and the network has enough hidden units to model it accurately, there will typically be many different settings of the weights that can model the training set almost perfectly, especially if there is only a limited amount of labeled training data."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出用 dropout 来减少过拟合：在每次呈现每个训练样本时，每个隐藏单元以 0.5 的概率被随机从网络中省略，从而使隐藏单元不能依赖其他隐藏单元的存在 [p3]。作者将 dropout 视为一种非常高效的神经网络模型平均方式，可以在合理时间内训练大量不同的网络，而这些网络共享被保留隐藏单元的相同权重 [p3]。训练使用标准随机梯度下降，但将通常的权重惩罚改为对每个隐藏单元输入权重向量的 L2 范数设置上界，若权重更新违反该约束则通过除法重新归一化 [p4]。",
+      "evidence": [
+        {
+          "id": "p3",
+          "quote": "On each presentation of each training case, each hidden unit is randomly omitted from the network with a probability of 0.5, so a hidden unit cannot rely on other hidden units being present."
+        },
+        {
+          "id": "p3",
+          "quote": "Another way to view the dropout procedure is as a very efficient way of performing model averaging with neural networks."
+        },
+        {
+          "id": "p3",
+          "quote": "Random dropout makes it possible to train a huge number of different networks in a reasonable time."
+        },
+        {
+          "id": "p4",
+          "quote": "Instead of penalizing the squared length (L2 norm) of the whole weight vector, we set an upper bound on the L2 norm of the incoming weight vector for each individual hidden unit."
+        },
+        {
+          "id": "p4",
+          "quote": "If a weight-update violates this constraint, we renormalize the weights of the hidden unit by division."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在多个基准任务上验证 dropout：MNIST 手写数字数据集（60,000 张 28x28 训练图像和 10,000 张测试图像）[p6]；TIMIT 语音基准的核心测试集，输入为 21 个相邻帧、每帧间隔 10ms，网络有 4 个全连接隐藏层、每层 4000 个单元和 185 个 softmax 输出单元 [p9]；CIFAR-10 物体识别基准（32x32 下采样彩色图像，50,000 训练和 10,000 测试图像）[p10]；以及 ImageNet 物体识别数据集（2010 年竞赛子集，约 1000 类、每类约 1000 例）[p11]。此外还在 Reuters 数据集上进行了实验 [A3.p3]。",
+      "evidence": [
+        {
+          "id": "p6",
+          "quote": "It contains 60,000 28x28 training images of individual hand written digits and 10,000 test images."
+        },
+        {
+          "id": "p9",
+          "quote": "The input to the net is 21 adjacent frames with an advance of 10ms per frame."
+        },
+        {
+          "id": "p9",
+          "quote": "The neural net has 4 fully-connected hidden layers of 4000 units per layer and 185 “softmax” output units"
+        },
+        {
+          "id": "p10",
+          "quote": "It uses 32x32 downsampled color images of 10 different object classes"
+        },
+        {
+          "id": "p10",
+          "quote": "These images were labeled by hand to produce 50,000 training images and 10,000 test images"
+        },
+        {
+          "id": "p11",
+          "quote": "In 2010, a subset of 1000 classes with roughly 1000 examples per class was the basis of an object recognition competition"
+        },
+        {
+          "id": "A3.p3",
+          "quote": "We trained a neural network using dropout-backpropagation and compared it with standard backpropagation."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 MNIST 上，不使用任何技巧时标准前馈神经网络的最佳已发表结果为 160 个测试错误，使用 50% dropout 并配合每个隐藏单元输入权重的独立 L2 约束可降至约 130 个错误，再随机丢弃 20% 像素可进一步降至约 110 个错误 [p6]。在 TIMIT 上，无 dropout 时识别率为 22.7%，使用 dropout 后改善至 19.7%，这是不使用说话人身份信息的方法中的纪录 [p9]。在 CIFAR-10 上，不使用变换数据的最佳已发表错误率为 18.5%，作者用卷积网络达到 16.6%，在最后一个隐藏层使用 dropout 后达到 15.6% [p10]。在 ImageNet 上，作者用单个神经网络达到 48.6% 错误率，在第六隐藏层使用 50% dropout 后降至创纪录的 42.4% [p11]。此外，dropout 与生成式预训练结合时，预训练深度信念网用标准反向传播微调得到 118 个错误，用 50% dropout 微调得到 92 个错误 [p7]。",
+      "evidence": [
+        {
+          "id": "p6",
+          "quote": "Without using any of these tricks, the best published result for a standard feedforward neural network is 160 errors on the test set."
+        },
+        {
+          "id": "p6",
+          "quote": "This can be reduced to about 130 errors by using 50% dropout with separate L2 constraints on the incoming weights of each hidden unit and further reduced to about 110 errors by also dropping out a random 20% of the pixels"
+        },
+        {
+          "id": "p9",
+          "quote": "Without dropout, the recognition rate is $22.7$ % and with dropout this improves to $19.7$ %, which is a record for methods that do not use any information about speaker identity."
+        },
+        {
+          "id": "p10",
+          "quote": "The best published error rate on the test set, without using transformed data, is 18.5%. We achieved an error rate of 16.6%"
+        },
+        {
+          "id": "p10",
+          "quote": "Using dropout in the last hidden layer gives an error rate of 15.6%."
+        },
+        {
+          "id": "p11",
+          "quote": "We achieved comparable performance of 48.6% error using a single neural network"
+        },
+        {
+          "id": "p11",
+          "quote": "Using 50% dropout in the sixth hidden layer reduces this to a record 42.4%"
+        },
+        {
+          "id": "p7",
+          "quote": "The publically available, pre-trained deep belief net described in got 118 errors when it was fine-tuned using standard back-propagation and 92 errors when fine-tuned using 50% dropout of the hidden units."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5977,
+      "completion_tokens": 1794,
+      "elapsed_s": 6.56
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 22,
+    "quote_rate": 1.0,
+    "inline_hits": 15,
+    "inline_total": 15,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

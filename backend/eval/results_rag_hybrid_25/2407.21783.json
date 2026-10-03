@@ -1,0 +1,192 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21783",
+    "title": "The Llama 3 Herd of Models",
+    "source": "html",
+    "truncated_sections": [
+      "Contributors and Acknowledgements",
+      "Acknowledgements",
+      "9 Related Work"
+    ],
+    "char_count": 239042,
+    "n_sections": 99,
+    "n_paragraphs": 388
+  },
+  "result": {
+    "summary": "本文介绍了 Llama 3 系列基础模型，包括 8B、70B 和 405B 三个参数规模的多语言语言模型，最大模型为密集 Transformer，支持最长 128K token 的上下文窗口 [S1.p3]。作者在约 15T 多语言 token 上预训练，旗舰模型使用 3.8×10^25 FLOPs，并采用 SFT、拒绝采样和 DPO 进行后训练 [S1.p5][S4.p1]。实验表明旗舰模型在多种任务上与 GPT-4 等领先模型质量相当，较小模型在同规模中表现最佳 [S1.p6]。作者还通过组合式方法将图像、视频和语音能力集成到 Llama 3，并观察到这些方法在相应识别任务上具有竞争力，但这些多模态模型仍在开发中、尚未广泛发布 [abstract]。",
+    "research_question": {
+      "text": "本文旨在提出并公开一套新的语言基础模型 Llama 3，使其原生支持多语言、编程、推理和工具使用 [S1.p3]。作者希望公开旗舰模型的发布能推动研究社区创新，并加速负责任地迈向通用人工智能的发展 [S1.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we present a new set of foundation models for language, called Llama 3."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The Llama 3 Herd of models natively supports multilinguality, coding, reasoning, and tool usage."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "We hope that the open release of a flagship model will spur a wave of innovation in the research community, and accelerate a responsible path towards the development of artificial general intelligence (AGI)."
+        }
+      ]
+    },
+    "method": {
+      "text": "Llama 3 采用标准密集 Transformer 架构，与 Llama 和 Llama 2 相比架构变化不大，性能提升主要来自数据质量与多样性以及训练规模 [S3.SS2.p1]。预训练使用约 15T 多语言 token，旗舰模型为 405B 参数、3.8×10^25 FLOPs [S1.p5]。后训练在预训练检查点上进行多轮对齐，每轮包含监督微调（SFT）和直接偏好优化（DPO），示例来自人工标注或合成生成 [S4.p1]。作者还通过组合式方法为 Llama 3 添加图像、视频和语音能力 [S2.p4]。",
+      "evidence": [
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Llama 3 uses a standard, dense Transformer architecture."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "our performance gains are primarily driven by improvements in data quality and diversity as well as by increased training scale."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We pre-train Llama 3 on a corpus of about 15T multilingual tokens, compared to 1.8T tokens for Llama 2."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "our flagship language model was pre-trained using $3.8\\times 10^{25}$ FLOPs"
+        },
+        {
+          "id": "S4.p1",
+          "quote": "Each round of post-training involves supervised finetuning (SFT) followed by Direct Preference Optimization on examples collected either via human annotations or generated synthetically."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We also perform experiments in which we add image, video, and speech capabilities to Llama 3 using a compositional approach."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者对预训练模型、后训练模型以及安全性进行了广泛评估 [S5.p1]。预训练评估覆盖常识推理、知识、阅读理解、数学推理、长上下文、代码、对抗评估和综合评估等八类标准基准 [S5.SS1.SSS1.p1]。后训练评估包括通用知识与指令遵循、编程、多语言、数学推理、长上下文和工具使用等基准 [S5.T16]。此外还进行了人类评估，将 Llama 3 405B 与 GPT-4、GPT-4o 和 Claude 3.5 Sonnet 进行比较 [S5.SS3.p4]。多模态方面，作者在图像识别、视频识别和语音理解任务上进行了实验 [S7.SS6.p1][S7.SS7.p3][S8.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S5.p1",
+          "quote": "We performed an extensive series of evaluations of Llama 3, investigating the performance of: (1) the pre-trained language model, (2) the post-trained language model, and (3) the safety characteristics of Llama 3."
+        },
+        {
+          "id": "S5.SS1.SSS1.p1",
+          "quote": "These evaluations cover eight top-level categories: (1) commonsense reasoning; (2) knowledge; (3) reading comprehension; (4) math, reasoning, and problem solving; (5) long context; (6) code; (7) adversarial evaluations; and (8) aggregate evaluations."
+        },
+        {
+          "id": "S5.T16",
+          "quote": "Table 16: Post-training benchmarks by category. Overview of all benchmarks we use to evaluate post-trained Llama 3 models, ordered by capability."
+        },
+        {
+          "id": "S5.SS3.p4",
+          "quote": "We use our human evaluation process to compare Llama 3 405B with GPT-4 (0125 API version), GPT-4o (API version), and Claude 3.5 Sonnet (API version)."
+        },
+        {
+          "id": "S7.SS6.p1",
+          "quote": "We evaluate the performance of the image understanding capabilities of Llama 3 on a range of tasks spanning natural image understanding, text understanding, charts understanding and multimodal reasoning"
+        },
+        {
+          "id": "S7.SS7.p3",
+          "quote": "We present the performance of Llama 3 8B and 70B in Table 30."
+        },
+        {
+          "id": "S8.SS4.p1",
+          "quote": "We evaluate the speech understanding capabilities of our speech interface for Llama 3 on three tasks: (1) automatic speech recognition, (2) speech translation, and (3) spoken question answering."
+        }
+      ]
+    },
+    "findings": {
+      "text": "实验评估表明，旗舰模型在多种任务上与 GPT-4 等领先语言模型表现相当，较小模型在同参数规模中表现最佳 [S1.p6]。Llama 3 8B 在几乎所有类别上优于竞争模型，70B 在多数基准上大幅优于 Llama 2 70B，并优于 Mixtral 8x22B [S5.SS1.SSS1.p4]。人类评估中，Llama 3 405B 与 GPT-4 0125 版本大致相当，与 GPT-4o 和 Claude 3.5 Sonnet 相比互有胜负 [S5.SS3.p4]。多模态方面，Llama 3-V 405B 在所有图像识别基准上优于 GPT-4V，但略落后于 Gemini 1.5 Pro 和 Claude 3.5 Sonnet [S7.SS6.p2]；语音接口在语音识别基准上优于 Whisper 和 SeamlessM4T [S8.SS4.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "Our experimental evaluation suggests that our flagship model performs on par with leading language models such as GPT-4 across a variety of tasks, and is close to matching the state-of-the-art."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Our smaller models are best-in-class, outperforming alternative models with similar numbers of parameters."
+        },
+        {
+          "id": "S5.SS1.SSS1.p4",
+          "quote": "The results show that Llama 3 8B outperforms competing models in virtually every category, both in terms of per-category win rate and in terms of average per-category performance."
+        },
+        {
+          "id": "S5.SS1.SSS1.p4",
+          "quote": "We also find that Llama 3 70B outperforms its predecessor Llama 2 70B by a large margin on most benchmarks"
+        },
+        {
+          "id": "S5.SS1.SSS1.p4",
+          "quote": "Llama 3 70B also outperforms Mixtral 8x22B."
+        },
+        {
+          "id": "S5.SS3.p4",
+          "quote": "We observe that Llama 3 405B performs approximately on par with the 0125 API version of GPT-4, while achieving mixed results (some wins and some losses) compared to GPT-4o and Claude 3.5 Sonnet."
+        },
+        {
+          "id": "S7.SS6.p2",
+          "quote": "Using the resulting Llama 3-V 405B model, we outperform GPT-4V on all benchmarks, while being slightly behind Gemini 1.5 Pro and Claude 3.5 Sonnet."
+        },
+        {
+          "id": "S8.SS4.p3",
+          "quote": "our model outperforms models that are tailored to speech like Whisper and SeamlessM4T on all benchmarks."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，多模态模型仍在积极开发中，尚未准备好发布 [S1.p8]。安全性方面，作者承认没有任何测试能保证穷尽所有风险，Llama 3 仍可能生成有害内容，尤其是在英语之外的语言以及被熟练对抗性红队人员提示工程时 [S5.SS4.SSS8.p1]。人类评估方面，由于难以定义客观标准，评估仍可能受标注者个人偏见、背景和偏好的影响，导致结果不一致或不可靠 [S5.SS3.p5]。此外，安全基准是 Meta 内部的，作者承认这些数字无法在外部复现 [S5.SS4.SSS4.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p8",
+          "quote": "These models are still under active development and not yet ready for release."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "However, no testing can be guaranteed to be exhaustive in identifying every possible risk."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "Llama 3 may still generate harmful content due to training on various datasets, particularly for languages beyond English and when prompt engineered by skilled adversarial red teamers."
+        },
+        {
+          "id": "S5.SS3.p5",
+          "quote": "human evaluations can still be influenced by personal biases, backgrounds, and preferences of human annotators, which may lead to inconsistent or unreliable results."
+        },
+        {
+          "id": "S5.SS4.SSS4.p2",
+          "quote": "we acknowledge that the numbers in this section are not reproducible externally"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 15060,
+      "completion_tokens": 2425,
+      "elapsed_s": 9.01
+    }
+  },
+  "verify": {
+    "quote_hits": 28,
+    "quote_total": 29,
+    "quote_rate": 0.966,
+    "inline_hits": 22,
+    "inline_total": 22,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S8.SS4.p3",
+        "reason": "quote 不在该段落里",
+        "quote": "our model outperforms models that are tailored to speech like Whisper and Seamle"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

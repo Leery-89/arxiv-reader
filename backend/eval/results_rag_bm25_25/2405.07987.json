@@ -1,0 +1,250 @@
+{
+  "paper": {
+    "arxiv_id": "2405.07987",
+    "title": "The Platonic Representation Hypothesis",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 78065,
+    "n_sections": 45,
+    "n_paragraphs": 108
+  },
+  "result": {
+    "summary": "这篇论文提出“柏拉图表示假说”，认为不同 AI 模型（尤其是深度网络）对数据的表示正在趋同，并可能收敛到一种共享的、关于现实统计结构的表示 [abstract][S1.p4]。作者综述了文献中跨模型、跨模态的趋同证据，并用视觉与语言模型的相互最近邻对齐度进行测量，发现模型越大、能力越强，表示越相似 [abstract][S2.F3]。论文还讨论了推动这种趋同的可能选择压力、其含义、局限与反例 [abstract]。",
+    "research_question": {
+      "text": "论文要回答的核心问题是：不同 AI 模型的表示是否正在趋同，以及这种趋同是否指向一个共享的、关于现实联合分布的表示 [S1.p4]。作者指出，AI 系统在架构和能力上正变得越来越同质化，因此需要理解这种趋同是否有终点和驱动原则 [S1.p1][S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "AI systems are becoming increasingly homogeneous in both their architectures and their capabilities."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Our central hypothesis, stated above in Figure 1, is that there is indeed an endpoint to this convergence and a principle that drives it: different models are all trying to arrive at a representation of reality, meaning a representation of the joint distribution over events in the world that generate the data we observe."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出“柏拉图表示假说”，即存在一个真实世界 Z，各种传感器测量和文本描述都是它的投影，表示学习算法找到的向量嵌入都源自 Z，因而会趋于对齐 [S1.p4]。作者用相互最近邻对齐度来测量模型表示之间的相似性，并考察对齐度随模型规模、能力和跨模态的变化 [S2.F3][S2.SS2.p1]。此外，作者还构建了一个理想化世界模型，将世界视为离散事件序列，观测是双射确定性函数 [S4.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "Representation learning algorithms find vector embeddings that statistically model the various measurements and projections."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "The resulting vector embeddings are all derived from the underlying reality in $Z$ and thereby become aligned."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We measure alignment using mutual nearest-neighbor on the Wikipedia caption dataset (WIT)."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "observed model alignment not only exists but also increases with model scale and dataset size."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The world consists of a sequence of $T$ discrete events, denoted as $\\mathbf{Z}\\triangleq[z_{1},\\ldots,z_{T}]$, sampled from some unknown distribution $\\mathbb{P}(\\mathbf{Z})$."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "An observation is a bijective, deterministic function $\\texttt{obs}:\\mathcal{Z}\\rightarrow\\cdot{}$ that maps events to an arbitrary measurement space"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "在视觉-视觉对齐方面，作者使用 78 个视觉模型（包括 17 个 ViT、1 个随机初始化 ResNet-50、11 个 ResNet-50 和 49 个 ResNet-18），在 Places-365 上用相互最近邻测量对齐度，并在 VTAB 的 19 个分类任务上评估线性探测性能 [A3.SS1.p1][A3.SS1.p2][S2.F2.fig1]。在语言-视觉对齐方面，作者在 Wikipedia 标题数据集（WIT）上测量对齐度，语言模型性能用 OpenWebText 的 4M tokens 上的 1-bits-per-byte 衡量 [S2.F3]。此外，作者还进行了颜色案例研究，用图像共现的 K_PMI 学习颜色表示，并在 Densely Captioned Images 数据集上用 LLaMA3-8B-Instruct 生成不同密度的标题来测试对齐度 [S4.SS2.SSS0.Px1.p1][A5.p1][A5.p4]。",
+      "evidence": [
+        {
+          "id": "A3.SS1.p1",
+          "quote": "We consider 78 vision models in total:"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "17 ViT models ranging from ViT-tiny to ViT-giant"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "1 randomly initialized ResNet-50."
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "11 ResNet-50 models trained with contrastive learning on ImageNet-1k, Places-365, and 9 synthetic image datasets"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "49 ResNet-18 models trained with Alignment and Uniformity contrastive loss on ImageNet-100, Places-365, and 47 realistic and synthetic image datasets"
+        },
+        {
+          "id": "A3.SS1.p2",
+          "quote": "we evaluate linear probing performance on all 19 VTAB classification tasks"
+        },
+        {
+          "id": "S2.F2.fig1",
+          "quote": "We measure alignment among 78 models using mutual nearest-neighbors on Places-365"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We measure alignment using mutual nearest-neighbor on the Wikipedia caption dataset (WIT)."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "The x-axis is the language model performance measured over 4M tokens from the OpenWebText dataset"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We measure performance using $1-\\texttt{bits-per-byte}$"
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "we also learn representations of color based on $K_{\\mathsf{PMI}}$ from cooccurrences in images."
+        },
+        {
+          "id": "A5.p1",
+          "quote": "We use LLaMA3-8B-Instruct to generate summary captions at various densities for images in the Densely Captioned Images dataset"
+        },
+        {
+          "id": "A5.p4",
+          "quote": "we find that the alignment score also improves as caption length increases."
+        }
+      ]
+    },
+    "findings": {
+      "text": "论文发现，能力更强的视觉模型彼此之间更对齐，且更通用 [S2.F2.fig1]；语言模型能力越强，与视觉模型的对齐也越好，其中 CLIP 模型因显式语言监督而对齐更高，但在 ImageNet 分类微调后对齐下降 [S2.F3]。对齐度随模型规模和数据集增大而增加 [S2.SS2.p1]。跨模态方面，单一线性投影即可将视觉模型与 LLM 拼接并取得良好性能 [S2.SS3.p2]。对齐度提高与常识推理（Hellaswag）和数学问题求解（GSM8K）性能提升相关 [S2.SS5.p1]。颜色案例研究表明，从文本或图像共现中学习都能恢复大致相同的感知表示 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.F2.fig1",
+          "quote": "Models that solve more VTAB tasks tend to be more aligned with each other."
+        },
+        {
+          "id": "S2.F2.fig1",
+          "quote": "More competent and general models (blue) have more similar representations."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "The results show a linear relationship between language-vision alignment and language modeling score, where a general trend is that more capable language models align better with more capable vision models."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We find that CLIP models, which are trained with explicit language supervision, exhibit a higher level of alignment."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "However, this alignment decreases after being fine-tuned on ImageNet classification (labeled CLIP (I12K ft))."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "observed model alignment not only exists but also increases with model scale and dataset size."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "finding that a single linear projection is sufficient to stitch a vision model to an LLM and achieve good performance on visual question answering and image captioning."
+        },
+        {
+          "id": "S2.SS5.p1",
+          "quote": "Figure 4 supports this hypothesis by demonstrating improved performance on commonsense reasoning (Hellaswag;) and mathematical problem solving (GSM8K;) as alignment improves."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "learning cooccurrence statistics in either domain recovers roughly the same perceptual representation."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，不同传感器和视角可能捕获不同信息，这可能限制它们收敛到完全相同的表示 [S1.p4]。不同模态可能包含独有信息，若输入信号信息不同，两个模型无法收敛到同一表示；更精细的假说需要处理非双射观测和抽象概念 [S6.SS0.SSS0.Px1.p1][S6.SS0.SSS0.Px1.p3]。作者还指出，当前对齐分数仅达到 0.16（理论最大值为 1），这究竟意味着强对齐还是存在重大差异，仍是未决问题 [S6.SS0.SSS0.Px6.p1]。此外，AI 社区的研究者偏见和“硬件彩票”也可能影响趋同趋势 [S6.SS0.SSS0.Px3.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "different sensors and views might capture different information, which may limit their potential to converge to identical representations."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p1",
+          "quote": "Two different models cannot converge to the same representation if they have access to fundamentally different information."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p3",
+          "quote": "A more nuanced version of our hypothesis will need to be developed to handle the case of non-bijective observations and abstract concepts."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "alignment clearly increases but only reaches a score of $0.16$, according to our mutual nearest-neighbor metric."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "We leave this as an open question."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px3.p1",
+          "quote": "Researcher bias and collective preferences within the AI community have shaped the trajectory of model development."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px3.p1",
+          "quote": "the “hardware lottery” suggests that the success of AI models can also depend on the compatibility of their design with available computational architectures"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5649,
+      "completion_tokens": 2489,
+      "elapsed_s": 9.53
+    }
+  },
+  "verify": {
+    "quote_hits": 31,
+    "quote_total": 37,
+    "quote_rate": 0.838,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S4.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "An observation is a bijective, deterministic function $\\texttt{obs}:\\mathcal{Z}\\"
+      },
+      {
+        "field": "experiments",
+        "id": "A3.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "17 ViT models ranging from ViT-tiny to ViT-giant"
+      },
+      {
+        "field": "experiments",
+        "id": "A3.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "1 randomly initialized ResNet-50."
+      },
+      {
+        "field": "experiments",
+        "id": "A3.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "11 ResNet-50 models trained with contrastive learning on ImageNet-1k, Places-365"
+      },
+      {
+        "field": "experiments",
+        "id": "A3.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "49 ResNet-18 models trained with Alignment and Uniformity contrastive loss on Im"
+      },
+      {
+        "field": "experiments",
+        "id": "S2.F2.fig1",
+        "reason": "quote 不在该段落里",
+        "quote": "We measure alignment among 78 models using mutual nearest-neighbors on Places-36"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

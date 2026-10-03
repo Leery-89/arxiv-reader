@@ -1,0 +1,161 @@
+{
+  "paper": {
+    "arxiv_id": "2005.11401",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 40572,
+    "n_sections": 46,
+    "n_paragraphs": 61
+  },
+  "result": {
+    "summary": "本文提出检索增强生成（RAG）模型，将预训练参数记忆（BART）与非参数记忆（Wikipedia 稠密向量索引，经 DPR 检索）结合，并端到端微调 [S1.p2]。作者比较了两种 RAG 形式：整个生成序列条件于同一检索段落，或每个 token 可使用不同段落 [abstract]。在多个知识密集型任务上，RAG 在三个开放域问答任务上取得当时最优结果，并优于参数化 seq2seq 模型和任务特定的检索-抽取架构 [abstract]；在语言生成任务上，RAG 生成的文本比纯参数化 BART 基线更具体、多样且符合事实 [abstract]。",
+    "research_question": {
+      "text": "预训练语言模型虽能存储事实知识，但其访问和精确操作知识的能力仍有限，在知识密集型任务上落后于任务特定架构，且提供决策来源和更新世界知识仍是未解决问题 [abstract]。已有结合掩码语言模型与可微检索器的混合模型（REALM、ORQA）仅探索了开放域抽取式问答 [S1.p1]。本文旨在将参数与非参数记忆的混合引入序列到序列模型这一“NLP 的主力” [S1.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However, their ability to access and precisely manipulate knowledge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task-specific architectures."
+        },
+        {
+          "id": "abstract",
+          "quote": "Additionally, providing provenance for their decisions and updating their world knowledge remain open research problems."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "REALM and ORQA, two recently introduced models that combine masked language models with a differentiable retriever, have shown promising results, but have only explored open-domain extractive question answering."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Here, we bring hybrid parametric and non-parametric memory to the “workhorse of NLP,” i.e. sequence-to-sequence (seq2seq) models."
+        }
+      ]
+    },
+    "method": {
+      "text": "RAG 通过通用微调方法为预训练参数记忆生成模型赋予非参数记忆：参数记忆是预训练 seq2seq transformer（BART），非参数记忆是 Wikipedia 的稠密向量索引，由预训练神经检索器（DPR）访问 [S1.p2]。检索器根据输入提供潜在文档，seq2seq 模型结合这些潜在文档与输入生成输出，并以 top-K 近似对潜在文档进行边缘化，可基于每个输出（假设同一文档负责所有 token）或基于每个 token（不同文档负责不同 token）[S1.p2]。RAG 可在任意 seq2seq 任务上微调，生成器与检索器联合学习 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "We build RAG models where the parametric memory is a pre-trained seq2seq transformer, and the non-parametric memory is a dense vector index of Wikipedia, accessed with a pre-trained neural retriever."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The retriever (Dense Passage Retriever, henceforth DPR) provides latent documents conditioned on the input, and the seq2seq model (BART) then conditions on these latent documents together with the input to generate the output."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We marginalize the latent documents with a top-K approximation, either on a per-output basis (assuming the same document is responsible for all tokens) or a per-token basis (where different documents are responsible for different tokens)."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Like T5 or BART, RAG can be fine-tuned on any seq2seq task, whereby both the generator and retriever are jointly learned."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验使用单一 Wikipedia dump 作为非参数知识源，采用 2018 年 12 月版本，每篇文章切分为不重叠的 100 词块，共 2100 万文档，并用 FAISS 构建单一 MIPS 索引（Hierarchical Navigable Small World 近似）以快速检索 [S3.p1]。训练时对每个查询检索 top k 文档，k∈{5,10}，测试时的 k 由开发数据设定 [S3.p1]。在抽象式问答上，使用 MSMARCO NLG v2.1，仅使用问题与答案，不使用提供的段落，将其视为开放域抽象式问答任务 [S3.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "For all experiments, we use a single Wikipedia dump for our non-parametric knowledge source."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "Each Wikipedia article is split into disjoint 100-word chunks, to make a total of 21M documents."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We use the document encoder to compute an embedding for each document, and build a single MIPS index using FAISS with a Hierarchical Navigable Small World approximation for fast retrieval."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We consider $k\\in\\{5,10\\}$ for training and set $k$ for test time using dev data."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "To test RAG’s natural language generation (NLG) in a knowledge-intensive setting, we use the MSMARCO NLG task v2.1."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "We do not use the supplied passages, only the questions and answers, to treat MSMARCO as an open-domain abstractive QA task."
+        }
+      ]
+    },
+    "findings": {
+      "text": "RAG 模型在开放域 Natural Questions、WebQuestions 和 CuratedTrec 上取得当时最优结果，并在 TriviaQA 上大幅优于使用专门预训练目标的近期方法 [S1.p4]。尽管这些是抽取式任务，无约束生成仍优于先前的抽取式方法 [S1.p4]。在知识密集型生成任务（MS-MARCO 和 Jeopardy 问题生成）上，模型生成的回答比 BART 基线更符合事实、更具体且更多样 [S1.p4]。在 FEVER 事实核查上，结果与使用强检索监督的流水线模型相差 4.3% 以内 [S1.p4]。非参数记忆可被替换以更新模型知识，无需重新训练 [S1.p4][S6.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "Our RAG models achieve state-of-the-art results on open Natural Questions, WebQuestions and CuratedTrec and strongly outperform recent approaches that use specialised pre-training objectives on TriviaQA."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Despite these being extractive tasks, we find that unconstrained generation outperforms previous extractive approaches."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "For knowledge-intensive generation, we experiment with MS-MARCO and Jeopardy question generation, and we find that our models generate responses that are more factual, specific, and diverse than a BART baseline."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "For FEVER fact verification, we achieve results within 4.3% of state-of-the-art pipeline models which use strong retrieval supervision."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Finally, we demonstrate that the non-parametric memory can be replaced to update the models’ knowledge as the world changes."
+        },
+        {
+          "id": "S6.p1",
+          "quote": "we illustrated how the retrieval index can be hot-swapped to update the model without requiring any retraining."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "在初步实验中，作者观察到对于故事生成等任务，检索组件会“崩溃”，学会无论输入如何都检索相同文档；一旦检索崩溃，生成器会学会忽略文档，RAG 模型的表现与 BART 相当 [A8.p1]。作者推测崩溃可能由于某些任务对事实知识的需求不够明确，或目标序列较长导致检索器梯度信息较少 [A8.p1]。未来工作可研究两个组件能否从头联合预训练 [S6.p1]。",
+      "evidence": [
+        {
+          "id": "A8.p1",
+          "quote": "In preliminary experiments, we observed that for some tasks such as story generation, the retrieval component would “collapse” and learn to retrieve the same documents regardless of the input."
+        },
+        {
+          "id": "A8.p1",
+          "quote": "In these cases, once retrieval had collapsed, the generator would learn to ignore the documents, and the RAG model would perform equivalently to BART."
+        },
+        {
+          "id": "A8.p1",
+          "quote": "The collapse could be due to a less-explicit requirement for factual knowledge in some tasks, or the longer target sequences, which could result in less informative gradients for the retriever."
+        },
+        {
+          "id": "S6.p1",
+          "quote": "In future work, it may be fruitful to investigate if the two components can be jointly pre-trained from scratch, either with a denoising objective similar to BART or some another objective."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 3591,
+      "completion_tokens": 2069,
+      "elapsed_s": 7.99
+    }
+  },
+  "verify": {
+    "quote_hits": 24,
+    "quote_total": 24,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,157 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结门定义纳米线中实现了对费米子宇称的单次干涉测量，作为迈向基于测量操作的拓扑量子计算的一步 [abstract][S1.p3]。器件由邻近化纳米线与量子点构成干涉仪，通过量子电容探测宇称，观测到 h/2e 周期的双模随机电报信号 [abstract][S3.p3]。在约 2 T 面内磁场下，两个宇称态的驻留时间超过 1 ms，对应约 3 µm 分离的 Majorana 零能模和低准粒子毒化率 [abstract]。作者据此估计宇称测量误差概率约为 1% [abstract][S5.p1]。",
+    "research_question": {
+      "text": "论文要解决的问题是实现对 Majorana 零能模共享费米子宇称的单次干涉测量，这是测量型拓扑量子计算的基本操作 [abstract][S1.p2]。原文指出，此前已有工作报道了 Aharonov-Bohm 干涉仪中门定义纳米线岛的相干输运，但其工作区间不允许量子比特读出 [S1.p2]。作者认为该测量验证了拓扑量子计算的一个必要要素 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The fusion of non-Abelian anyons or topological defects is a fundamental operation in measurement-only topological quantum computation."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Progress in this direction was made in Ref., which reported coherent transport through a gate-defined nanowire island in an Aharonov-Bohm interferometer, albeit in a regime that does not allow qubit readout."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we demonstrate an interferometric measurement of the parity of a near-zero-energy state in a 1D nanowire, thereby validating a necessary ingredient of topological quantum computation."
+        }
+      ]
+    },
+    "method": {
+      "text": "器件由可调至一维拓扑超导态的纳米线和用于干涉环耦合 Majorana 零能模的量子点组成，纳米线基于门控超导体-半导体异质结 [S2.p1]。测量通过色散栅极传感探测与纳米线耦合的量子点的量子电容，从而单次确定费米子宇称 [S1.p3]。作者还建立了包含 rf 驱动功率、电荷噪声和温度的量子动力学模拟，并给出量子电容随总费米子宇称 Z 和相位 φ 变化的解析表达式 [S3.p4]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "The first component is a nanowire, sections of which can be tuned into a 1DTS state, leading to topological degeneracy of the many-body ground state."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The second component consists of quantum dots, which are designed to couple pairs of MZMs in an interferometric loop."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The measurement technique is based on probing the quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$ of a quantum dot coupled to the nanowire and allows determination of the parity in a single shot ( Fig. 1), with a probability of assignment errors of $1\\%$ for optimal measurement time."
+        },
+        {
+          "id": "S3.p4",
+          "quote": "We support this interpretation by reproducing our results with quantum dynamics simulations that incorporate rf drive power, charge noise, and temperature."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者对器件 A 进行了约 1.5×10^4 次连续测量，每次积分时间 4.5 µs，总时长 67 ms，并扫描面外磁场 B⊥ 和 V_QD2 以研究干涉环磁通依赖 [S3.p1]。器件 A 的相关区间在 B∥≈1.8 T 和 V_WP1≈-1.832 V 附近，观测到 kurtosis 以 1.7(±0.2) mT 周期振荡，与 h/2e 磁通周期一致 [S3.p2]。作者还在器件 A 的第二次测量和器件 B 上重复了类似测量，并进行了注入准粒子、断开量子点与纳米线连接等对照实验 [S3.p11][S3.p12][S3.p13]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "For device A, the relevant regime is in the neighborhood of $B_{\\parallel}=$1.8\\text{\\,}\\mathrm{T}$$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}=$-1.832\\text{\\,}\\mathrm{V}$$."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "we observe oscillations in the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ of the $C_{\\mathrm{\\scriptscriptstyle Q}}$ time trace with a period of $1.7(\\pm 0.2)\\text{\\,}\\mathrm{mT}$"
+        },
+        {
+          "id": "S3.p11",
+          "quote": "The reproducibility of the observed phenomena is demonstrated in Sec. S6.1, where we discuss a second measurement (A2) on device A ( Fig. S8) and a measurement of device B ( Fig. S9)."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a"
+        },
+        {
+          "id": "S3.p13",
+          "quote": "Our second control experiment is to completely disconnect the dots from the wire."
+        }
+      ]
+    },
+    "findings": {
+      "text": "量子电容测量显示 h/2e 周期的双模分布，在最优磁通值下信噪比为 1 所需积分时间为 3.7 µs [abstract][S3.p3]。从时间轨迹中提取的两个态驻留时间在约 2 T 面内磁场下超过 1 ms，与约 3 µm 分离的 Majorana 零能模及低准粒子毒化率一致 [abstract]。作者将 h/2e 周期双模振荡和随机电报信号解释为费米子宇称的切换，并估计宇称测量误差概率约为 1% [S3.p3][S5.p1]。作者指出，这些测量本身不能确定所探测的低能态是否为拓扑态，但通过拟合平凡 Andreev 态模型，已严格约束了这类态需具备的性质 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Our quantum capacitance measurements show flux h / 2 ​ e h/2e -periodic bimodality with a signal-to-noise ratio of 1 1 in 3.7 µ ​ s 3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s} at optimal flux values."
+        },
+        {
+          "id": "abstract",
+          "quote": "we extract a dwell time in the two associated states that is longer than 1 ms 1\\text{\\,}\\mathrm{ms} at in-plane magnetic fields of approximately 2 T 2\\text{\\,}\\mathrm{T} ."
+        },
+        {
+          "id": "abstract",
+          "quote": "These results are consistent with a measurement of the fermion parity encoded in a pair of Majorana zero modes that are separated by approximately 3 µ ​ m 3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m} and subjected to a low rate of poisoning by non-equilibrium quasiparticles."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "We interpret these $h/2e$ -periodic bimodal oscillations and RTS in ${\\tilde{C}}_{\\mathrm{\\scriptscriptstyle Q}}$ as originating from switches of fermion parity."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "by fitting to a model of trivial Andreev states, we have tightly constrained the properties that such states would have to have in order to be consistent with our data."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，该测量本身不能明确区分拓扑相中的 Majorana 零能模和平凡相中精细调节的低能 Andreev 束缚态 [S1.p3]。作者还指出，这些测量本身不能确定干涉测量探测到的低能态是否为拓扑态，需要另文讨论器件相图和所观测磁通依赖 RTS 的稳定性 [S5.p1]。此外，作者提到在当前器件中预期 E_M 会有显著变化，归因于有限尺寸效应导致的介观涨落 [S4.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase"
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "To fully resolve this issue, we will discuss the device’s phase diagram and the stability of the observed flux-dependent RTS in a separate publication."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Within the topological phase, we expect a substantial variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ in our current devices, attributable to mesoscopic fluctuations due to finite-size effects."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 19556,
+      "completion_tokens": 2220,
+      "elapsed_s": 9.05
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

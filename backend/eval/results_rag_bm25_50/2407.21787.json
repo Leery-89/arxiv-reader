@@ -1,0 +1,236 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21787",
+    "title": "Large Language Monkeys : Scaling Inference Compute with Repeated Sampling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 49608,
+    "n_sections": 29,
+    "n_paragraphs": 96
+  },
+  "result": {
+    "summary": "本文研究将推理阶段的计算量作为新的扩展维度，采用重复采样这一简单技术，从模型中反复采样候选解 [abstract]。作者在五个任务和多种模型上观察到，覆盖率随样本数在四个数量级范围内扩展，且覆盖率与样本数的关系常呈对数线性，可用指数幂律建模 [abstract]。在可自动验证的编码和形式化证明领域，覆盖率的提升直接转化为性能提升，例如在 SWE-bench Lite 上使用 DeepSeek-Coder-V2-Instruct 将解决率从单样本的 15.9% 提升到 250 个样本的 56%，超过单样本最优的 43% [abstract]。但在没有自动验证器的领域，常用的样本选择方法（多数投票和奖励模型）在数百个样本后趋于饱和，无法随样本预算充分扩展 [abstract]。",
+    "research_question": {
+      "text": "论文旨在探索将推理计算量作为扩展轴，系统性地刻画重复采样在多种任务、模型和样本预算下带来的收益 [S1.p3]。作者指出，与训练计算量的持续投入相比，推理计算量的投入相对有限，用户和开发者通常限制模型只做一次尝试 [S1.p2]。重复采样要实用，既需要能在可行预算内提高覆盖率，也需要能识别出正确样本 [S1.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this work, we explore repeated sampling (Figure 1) as a simple approach to scaling inference compute in order to improve reasoning performance."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Our goal is to systematically characterize these benefits across a range of tasks, models, and sample budgets."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "In contrast, a comparatively limited investment has been made in scaling the amount of computation used during inference."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "However, when interacting with LLMs, users and developers often restrict models to making only one attempt when solving a problem."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Both properties are needed for achieving strong real-world performance."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "However, repeated sampling is only practical if we can improve coverage with a feasible budget."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用重复采样方法：对每个问题独立生成多个候选解，并以覆盖率（至少一个生成样本解决的问题比例）和精度（识别正确样本的能力）作为核心指标 [S2.p1]。作者使用 pass@k 公式估计覆盖率，并采用数值稳定的实现 [S2.p6][S2.p7]。为刻画覆盖率与样本数的关系，作者采用指数幂律模型 c ≈ exp(a k^b)，其中 a、b 为拟合参数 [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "With repeated sampling, we consider a setup where a model can generate many candidate solutions while attempting to solve a problem."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The success rate is therefore influenced both by the ability to generate correct samples for many problems (i.e. coverage), as well as the ability to identify these correct samples (i.e. precision)."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "pass@k"
+        },
+        {
+          "id": "S2.p7",
+          "quote": "We use the numerically stable implementation of the above formula suggested in."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "In order to directly predict coverage, we exponentiate both sides, ending up with the final model of: c ≈ exp(ak^b)"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在五个任务上评估：GSM8K、MATH、MiniF2F-MATH、CodeContests 和 SWE-bench Lite [S2.p3][S2.p4]。对前四个任务，使用 Llama-3-8B-Instruct 和 Llama-3-70B-Instruct，每个问题生成 10,000 个独立样本；对 SWE-bench Lite，使用 DeepSeek-Coder-V2-Instruct 配合 Moatless Tools 框架，每个问题限制 250 次尝试 [S2.SS1.p1]。作者还将评估扩展到多种模型尺寸（70M-70B）、模型家族（Llama、Gemma、Pythia）和后训练水平（Base 和 Instruct），但仅限 MATH 和 CodeContests 数据集 [S2.SS2.p1][S2.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "We consider the following five tasks:"
+        },
+        {
+          "id": "S2.p4",
+          "quote": "1. GSM8K: A dataset of grade-school level math word problems."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "2. MATH: Another dataset of math word problems that are generally harder than those from GSM8K."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "3. MiniF2F-MATH: A dataset of mathematics problems that have been formalized into proof checking languages."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "4. CodeContests: A dataset of competitive programming problems."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "5. SWE-bench Lite: A dataset of real world Github issues"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We evaluate Llama-3-8B-Instruct and Llama-3-70B-Instruct on CodeContests, MiniF2F, GSM8K, and MATH, generating 10,000 independent samples per problem."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "For SWE-bench Lite, we use DeepSeek-Coder-V2-Instruct, as the required context length of this task exceeds the limits of the Llama-3 models."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To minimize costs, we restrict the number of attempts per issue to 250, with all attempts made independently of one another."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "We now show that these trends hold across other model sizes, families, and levels of post-training."
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "We restrict evaluation to the MATH and CodeContests datasets to minimize inference costs, reporting results in Figure 3."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在五个任务上，覆盖率随样本预算增加而平滑提升；当所有模型只给一次尝试时 GPT-4o 在每个任务上都优于 Llama 和 DeepSeek 模型，但随着样本数增加，三个较弱模型都超过了 GPT-4o 的单次尝试性能 [S2.SS1.p2]。在 SWE-bench Lite 上，重复采样解决了 56% 的问题，超过单次尝试最优的 43% [S2.SS1.p2]。覆盖率提升在多种模型尺寸、家族和后训练水平上普遍成立，较小模型提升尤为显著，例如 Gemma-2B 在 CodeContests 上覆盖率从 pass@1 的 0.02% 增至 pass@10k 的 7.1%，Pythia-160M 在 MATH 上从 0.27% 增至 57% [S2.SS2.p3]。例外是 Pythia 家族在 CodeContests 上即使 10,000 个样本也零覆盖，作者推测这与 Pythia 训练数据中编码数据较少有关 [S2.SS2.p4]。在成本方面，固定 FLOPs 预算时最优模型随任务和预算变化，例如 MiniF2F、GSM8K 和 MATH 上 Llama-3-8B-Instruct 始终比 70B 模型覆盖率高，而 CodeContests 上 70B 模型几乎总是更划算 [S2.SS3.p4]。在 SWE-bench Lite 上，DeepSeek 模型比 GPT 和 Claude 便宜超过 10 倍，重复采样提供了更便宜的替代方案并取得更高的解决率 [S2.SS3.p5]。在没有自动验证器的 GSM8K 和 MATH 上，多数投票、奖励模型选择等样本选择方法在不到 100 个样本时就饱和，无法达到覆盖率上界 [S4.F7]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p2",
+          "quote": "Across all five tasks, we find that coverage smoothly improves as the sample budget increases."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "When all LLMs are given a single attempt, GPT-4o outperforms the Llama and DeepSeek models at every task."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "However, as the number of samples increases, all three of the weaker models exceed GPT-4o’s single-attempt performance."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "In the case of SWE-bench Lite, we solve 56% of problems, exceeding the single-attempt SOTA of 43%."
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "Coverage increases across almost every model we test, with smaller models showing some of the sharpest increases in coverage when repeated sampling is applied."
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "On CodeContests, the coverage of Gemma-2B increases by over 300x, from a pass@1 of 0.02% to a pass@10k of 7.1%."
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "Similarly, when solving MATH problems with Pythia-160M, coverage increases from a pass@1 of 0.27% to a pass@10k of 57%."
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "All Pythia models achieve zero coverage on this dataset, even with a budget of 10,000 samples."
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "We speculate that this due to Pythia being trained on less coding-specific data than Llama and Gemma."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "On MiniF2F, GSM8K and MATH, Llama-3-8B-Instruct always obtains higher coverage than the larger (and more expensive) 70B model when the FLOP budget is fixed."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "However for CodeContests, the 70B model is almost always more cost effective."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "While the DeepSeek model is weaker than the GPT and Claude models, it is also over 10x cheaper."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "In this case, repeated sampling provides a cheaper alternative to paying a premium for access to strong models while achieving a superior issue solve rate."
+        },
+        {
+          "id": "S4.F7",
+          "quote": "Although near-perfect coverage is achieved, all sample selection methods fail to reach the coverage upper bound and saturate before reaching 100 samples."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，实验只探索了简单版本的重复采样，即所有尝试使用完全相同的提示和超参数独立生成 [S5.p2]。作者指出当前仅依赖正采样温度作为样本多样性的唯一机制，并建议结合更高层次的方法 [S5.p3]。此外，尽管 CodeContests 和 MiniF2F 有自动验证工具，实验只使用单轮设置，模型无法迭代改进解 [S5.p3]。作者还指出，在没有自动验证工具时，改进样本验证方法很重要，并将重复采样扩展到创意写作等非结构化任务作为未来方向 [S5.p5]。",
+      "evidence": [
+        {
+          "id": "S5.p2",
+          "quote": "In our experiments, we explore only a simple version of repeated sampling where all attempts to a problem are generated independently of one another using the exact same prompt and hyperparameters."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "We currently rely on a positive sampling temperature as the sole mechanism for creating diversity among samples."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "Despite automatic verification tools being available when solving CodeContests and MiniF2F problems, we use only a single-turn setup where models generate a solution without any ability to iterate on it."
+        },
+        {
+          "id": "S5.p5",
+          "quote": "Our results from Section 4 highlight the importance of improving sample verification methods when tools for automatically doing so are unavailable."
+        },
+        {
+          "id": "S5.p5",
+          "quote": "Of particular interest is applying repeated sampling to unstructured tasks like creative writing, which can require a more subjective comparison between different samples than the pass-fail tasks we consider."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6924,
+      "completion_tokens": 2916,
+      "elapsed_s": 10.19
+    }
+  },
+  "verify": {
+    "quote_hits": 40,
+    "quote_total": 41,
+    "quote_rate": 0.976,
+    "inline_hits": 23,
+    "inline_total": 23,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S3.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "In order to directly predict coverage, we exponentiate both sides, ending up wit"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

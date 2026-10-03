@@ -1,0 +1,181 @@
+{
+  "paper": {
+    "arxiv_id": "2412.19437",
+    "title": "DeepSeek-V3 Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 97112,
+    "n_sections": 89,
+    "n_paragraphs": 160
+  },
+  "result": {
+    "summary": "DeepSeek-V3 是一个总参数 671B、每 token 激活 37B 的 MoE 语言模型，采用 MLA 与 DeepSeekMoE 架构，并引入无辅助损失的负载均衡策略和多 token 预测训练目标 [abstract]。模型在 14.8 万亿 token 上预训练，随后经过监督微调与强化学习阶段 [abstract]。综合评测显示，DeepSeek-V3 优于其他开源模型，并达到与领先闭源模型相当的性能 [abstract]。其完整训练仅需 2.788M H800 GPU 小时，且训练过程稳定，未出现不可恢复的损失尖峰或回滚 [abstract]。",
+    "research_question": {
+      "text": "论文旨在追求强模型性能与经济成本的兼顾，为此在架构上继续采用 MLA 以实现高效推理、采用 DeepSeekMoE 以实现经济训练 [S1.p2]。在此基础上，论文还试图通过无辅助损失的负载均衡策略和多 token 预测训练目标进一步提升模型能力 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "With a forward-looking perspective, we consistently strive for strong model performance and economical costs."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 still adopts Multi-head Latent Attention (MLA) for efficient inference and DeepSeekMoE for cost-effective training."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 pioneers an auxiliary-loss-free strategy for load balancing"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 employs a multi-token prediction training objective, which we have observed to enhance the overall performance on evaluation benchmarks."
+        }
+      ]
+    },
+    "method": {
+      "text": "DeepSeek-V3 的基本架构仍处于 Transformer 框架内，采用 MLA 和 DeepSeekMoE，并额外引入无辅助损失的负载均衡策略以缓解负载均衡带来的性能退化 [S2.SS1.p1]。模型采用多 token 预测目标，在每个位置将预测范围扩展到多个未来 token，并顺序预测额外 token、在每个预测深度保留完整因果链 [S2.SS2.p1]。训练由 HAI-LLM 框架支持，采用 16 路流水线并行、跨 8 节点的 64 路专家并行和 ZeRO-1 数据并行 [S3.SS2.p1]，并设计了 DualPipe 算法以重叠前向与后向的计算-通信阶段并减少流水线气泡 [S3.SS2.SSS1.p1]。此外，论文提出使用 FP8 数据格式的细粒度混合精度框架进行训练 [S3.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The basic architecture of DeepSeek-V3 is still within the Transformer framework."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "we additionally introduce an auxiliary-loss-free load balancing strategy for DeepSeekMoE to mitigate the performance degradation induced by the effort to ensure load balance."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "we investigate and set a Multi-Token Prediction (MTP) objective for DeepSeek-V3, which extends the prediction scope to multiple future tokens at each position."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "we sequentially predict additional tokens and keep the complete causal chain at each prediction depth."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "DeepSeek-V3 applies 16-way Pipeline Parallelism (PP), 64-way Expert Parallelism (EP) spanning 8 nodes, and ZeRO-1 Data Parallelism (DP)."
+        },
+        {
+          "id": "S3.SS2.SSS1.p1",
+          "quote": "we design an innovative pipeline parallelism algorithm called DualPipe, which not only accelerates model training by effectively overlapping forward and backward computation-communication phases, but also reduces the pipeline bubbles."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "we propose a fine-grained mixed precision framework utilizing the FP8 data format for training DeepSeek-V3."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "预训练语料由 14.8T 高质量、多样化 token 组成 [S4.SS1.p1]。基础模型在英语和中文为主的多语言语料上预训练，评测主要使用英语和中文基准以及一个多语言基准 [S4.SS4.SSS1.p1]。基础模型与 DeepSeek-V2-Base、Qwen2.5 72B Base、LLaMA-3.1 405B Base 在内部评测框架下以相同设置比较 [S4.SS4.SSS2.p1]。聊天模型评测将输出长度限制为 8K，样本少于 1000 的基准使用不同温度多次测试 [S5.T6]。开放生成任务使用 LLM 作为评判者，遵循 AlpacaEval 2.0 和 Arena-Hard 的原始配置，以 GPT-4-Turbo-1106 进行成对比较 [S5.SS3.SSS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "the training corpus for DeepSeek-V3 consists of 14.8T high-quality and diverse tokens in our tokenizer."
+        },
+        {
+          "id": "S4.SS4.SSS1.p1",
+          "quote": "we evaluate its performance on a series of benchmarks primarily in English and Chinese, as well as on a multilingual benchmark."
+        },
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "we compare the base model of DeepSeek-V3 with the state-of-the-art open-source base models, including DeepSeek-V2-Base (our previous release), Qwen2.5 72B Base, and LLaMA-3.1 405B Base."
+        },
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "We evaluate all these models with our internal evaluation framework, and ensure that they share the same evaluation setting."
+        },
+        {
+          "id": "S5.T6",
+          "quote": "All models are evaluated in a configuration that limits the output length to 8K."
+        },
+        {
+          "id": "S5.T6",
+          "quote": "Benchmarks containing fewer than 1000 samples are tested multiple times using varying temperature settings to derive robust final results."
+        },
+        {
+          "id": "S5.SS3.SSS3.p1",
+          "quote": "we adhere to the original configurations of AlpacaEval 2.0 and Arena-Hard, which leverage GPT-4-Turbo-1106 as judges for pairwise comparisons."
+        }
+      ]
+    },
+    "findings": {
+      "text": "综合评测显示，DeepSeek-V3 优于其他开源模型，并达到与领先闭源模型相当的性能 [abstract]。基础模型在大多数基准上取得最佳表现，尤其在数学和代码任务上 [S4.T3]，并全面优于 DeepSeek-V2-Base 和 Qwen2.5 72B Base，在多数基准上超过 LLaMA-3.1 405B Base [S4.SS4.SSS2.p1]。在数学基准上，DeepSeek-V3 在 AIME、MATH-500 和 CNMO 2024 上比第二名 Qwen2.5 72B 高出约 10% 的绝对分数 [S5.SS3.SSS2.Px2.p2]。在 Arena-Hard 上，DeepSeek-V3 对基线 GPT-4-0314 的胜率超过 86%，成为首个在该基准上超过 85% 的开源模型 [S5.SS3.SSS3.p1]。完整训练仅需 2.788M H800 GPU 小时，且训练过程未出现不可恢复的损失尖峰或回滚 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Comprehensive evaluations reveal that DeepSeek-V3 outperforms other open-source models and achieves performance comparable to leading closed-source models."
+        },
+        {
+          "id": "S4.T3",
+          "quote": "DeepSeek-V3-Base achieves the best performance on most benchmarks, especially on math and code tasks."
+        },
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "DeepSeek-V3-Base comprehensively outperforms DeepSeek-V2-Base and Qwen2.5 72B Base, and surpasses LLaMA-3.1 405B Base in the majority of benchmarks"
+        },
+        {
+          "id": "S5.SS3.SSS2.Px2.p2",
+          "quote": "on AIME, MATH-500, and CNMO 2024, DeepSeek-V3 outperforms the second-best model, Qwen2.5 72B, by approximately 10% in absolute scores"
+        },
+        {
+          "id": "S5.SS3.SSS3.p1",
+          "quote": "On Arena-Hard, DeepSeek-V3 achieves an impressive win rate of over 86% against the baseline GPT-4-0314"
+        },
+        {
+          "id": "S5.SS3.SSS3.p1",
+          "quote": "DeepSeek-V3 achieves a groundbreaking milestone as the first open-source model to surpass 85% on the Arena-Hard benchmark."
+        },
+        {
+          "id": "abstract",
+          "quote": "DeepSeek-V3 requires only 2.788M H800 GPU hours for its full training."
+        },
+        {
+          "id": "abstract",
+          "quote": "we did not experience any irrecoverable loss spikes or perform any rollbacks."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认 DeepSeek-V3 在部署方面存在局限：为保证高效推理，推荐的部署单元相对较大，可能给小团队带来负担 [S6.p2]。其次，尽管部署策略已实现超过 DeepSeek-V2 两倍的端到端生成速度，仍有进一步提升的空间 [S6.p2]。作者表示这些局限有望随着更先进硬件的发展自然得到解决 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "the recommended deployment unit for DeepSeek-V3 is relatively large, which might pose a burden for small-sized teams."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "our deployment strategy for DeepSeek-V3 has achieved an end-to-end generation speed of more than two times that of DeepSeek-V2, there still remains potential for further enhancement."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "these limitations are expected to be naturally addressed with the development of more advanced hardware."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6953,
+      "completion_tokens": 2363,
+      "elapsed_s": 7.9
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 29,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

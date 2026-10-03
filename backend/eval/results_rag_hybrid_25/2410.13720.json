@@ -1,0 +1,206 @@
+{
+  "paper": {
+    "arxiv_id": "2410.13720",
+    "title": "Movie Gen : A Cast of Media Foundation Models",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix A Additional Model Training Details",
+      "A.1 Text encoders",
+      "A.2 Model scaling and training efficiency",
+      "Appendix B Additional Data Details",
+      "B.1 Video Data Curation Thresholds",
+      "B.2 Camera Motion Control types",
+      "Appendix C Additional Evaluation Details",
+      "C.1 Annotation Variance Study on Text-to-Video Evaluation",
+      "C.2 T2V comparison to prior work",
+      "C.3 Correlations between audio-based objective and subjective metrics",
+      "C.3.1 System-level correlations",
+      "C.3.2 Item-level correlations",
+      "Appendix D Additional Results",
+      "D.1 Additional Audio Generation Results",
+      "D.1.1 Additional Metrics for Main Results on Sound Effect Generation",
+      "D.1.2 Control audio quality through text prompts",
+      "D.1.3 Control music style through text prompts",
+      "D.1.4 Additional Audio Samples",
+      "D.2 Additional Results from Movie Gen Video",
+      "Contributors and Acknowledgements",
+      "Acknowledgements",
+      "7 Related work"
+    ],
+    "char_count": 219922,
+    "n_sections": 79,
+    "n_paragraphs": 341
+  },
+  "result": {
+    "summary": "本文提出了 Movie Gen，一组媒体生成基础模型，能够生成带同步音频的高质量 1080p 视频，并支持基于指令的视频编辑和基于用户图像的人物个性化视频生成 [abstract]。模型通过同时扩展训练数据、训练计算量和模型规模来训练基于 Transformer 和 Flow Matching 的生成模型，其中最大的视频生成模型为 30B 参数、最大上下文长度 73K 视频 token，对应 16 秒、16 FPS 的视频 [abstract][S1.p2]。作者在文本到视频、视频个性化、视频编辑、视频到音频和文本到音频等多个任务上报告了新的最优结果，并公开了两个基准以支持未来评测 [abstract][S1.p4]。作者希望这项工作能帮助研究社区加速媒体生成模型的进展与创新 [abstract]。",
+    "research_question": {
+      "text": "论文关注的核心科学挑战是让 AI 系统具备生成、组合和预测能力，并以图像、视频、音频作为输出空间，而非像大语言模型那样以文本为输出空间 [S1.p1]。作者希望构建一组媒体生成基础模型，能够原生生成高保真图像、视频和音频，并具备编辑和个性化视频的能力 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Equipping AI systems with such generative, compositional, and prediction capabilities is a core scientific challenge with broad applications."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "While Large Language Models (LLMs) aim to learn such capabilities with a text output space, in this paper we focus on media – image, video, audio – as the output space."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Movie Gen models can natively generate high fidelity images, video, and audio while also possessing the abilities to edit and personalize the videos"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者训练了一个联合的图像与视频基础模型 Movie Gen Video，将图像视为单帧视频，从而用同一模型生成图像和视频 [S3.p1]。训练分为多个阶段：先在低分辨率 256 px 图像上预训练，再进行低分辨率图像与视频联合预训练和高分辨率联合训练，最后在高品质视频上微调 [S3.p1]。模型架构为 Transformer，并紧密遵循 LLaMa3 的设计空间 [S3.T1]。此外，作者通过后训练为模型加入个性化能力，并采用多阶段方法训练视频编辑模型 [S2.p3][S5.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "We train a single joint foundation model, Movie Gen Video, for the text-to-image and the text-to-video tasks."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We treat images as a single frame video, enabling us to use the same model to generate both images and videos."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We first pretrain our model only on low-resolution 256 px images followed by joint pre-training on low-resolution images and videos, and high-resolution joint training."
+        },
+        {
+          "id": "S3.T1",
+          "quote": "Our model architecture is a Transformer and we closely follow the LLaMa3 design space."
+        },
+        {
+          "id": "S2.p3",
+          "quote": "We add video personalization and video editing capabilities to our foundation Movie Gen Video model via post-training procedures"
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "we introduce a multi-stage approach that progressively minimizes these discrepancies"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在文本到视频生成任务上，使用 Movie Gen Video Bench 提示集或公开视频提示，与 Runway Gen3、LumaLabs、Kling1.5 和 OpenAI Sora 等系统进行人类 A/B 对比评估 [S3.T6][S3.SS6.SSS1.p1]。作者公开了包含 1003 个提示的 Movie Gen Video Bench，覆盖人类活动、动物、自然风景、物理以及不寻常主体和活动等概念，并按高/中/低运动水平标注 [S3.SS5.SSS2.p1]。在视频编辑方面，作者在 TGVE+ 和自建的 Movie Gen Edit Bench 上评估，后者包含 64 个验证视频和 128 个测试视频，视频具有不同分辨率、FPS、长度和宽高比 [S5.SS2.SSS1.p2][S5.SS3.SSS1.p3]。在音频生成方面，作者使用 VGGSound、OpenAI Sora、Runway Gen3 以及自建的 Movie Gen Audio Bench（527 个视频）等数据集进行评估 [S6.SS3.SSS2.p3]。",
+      "evidence": [
+        {
+          "id": "S3.T6",
+          "quote": "The comparison uses either generated videos from the Movie Gen Video Bench prompt set (Runway Gen3, LumaLabs, Kling1.5) or prompts from publicly released videos on their website (OpenAI Sora)."
+        },
+        {
+          "id": "S3.SS5.SSS2.p1",
+          "quote": "which consists of 1003 prompts that cover all the different testing aspects summarized above"
+        },
+        {
+          "id": "S3.SS5.SSS2.p1",
+          "quote": "We specifically include prompts capturing the following concepts of interest: 1) human activity (limb and mouth motion, emotions, etc.), 2) animals, 3) nature and scenery, 4) physics (fluid dynamics, gravity, acceleration, collisions, explosions, etc.), 5) unusual subjects and unusual activities."
+        },
+        {
+          "id": "S5.SS2.SSS1.p2",
+          "quote": "Overall, the benchmark validation set has 64 videos, whereas the test set has 128 videos."
+        },
+        {
+          "id": "S5.SS3.SSS1.p3",
+          "quote": "we evaluate our method versus SDEdit and Runway Gen3 Video-to-Video"
+        },
+        {
+          "id": "S6.SS3.SSS2.p3",
+          "quote": "This includes VGGSound, OpenAI Sora, Runway Gen3, and our proposed Movie Gen Audio Bench."
+        },
+        {
+          "id": "S6.SS3.SSS2.p3",
+          "quote": "It includes 527 videos and is designed to cover various ambient environments"
+        }
+      ]
+    },
+    "findings": {
+      "text": "在文本到视频生成上，Movie Gen Video 在整体质量上大幅优于 Runway Gen3（净胜率 35.02%）和 LumaLabs，对 OpenAI Sora 取得中等净胜（8.23%），与 Kling1.5 持平（3.87%）[S3.SS6.SSS1.p2]。在真实感和美学方面，Movie Gen Video 显著优于 Runway Gen3、LumaLabs 和 Kling1.5，对 OpenAI Sora 在真实感上取得显著净胜（11.62%），在美学上取得中等净胜（6.45%）[S3.SS6.SSS1.p3]。在视频编辑上，人类评估者在 TGVE+ 基准上偏好 Movie Gen Edit 超过此前最优方法 EVE 达 74% [S5.SS3.SSS1.p4]。在音频生成上，Movie Gen Audio 在所有指标上大幅优于所有基线，同步性净胜 33.8% 至 72.8%，正确性净胜 27.5% 至 82.2%，生成视频整体质量净胜 31.3% 至 91.0% [S6.SS4.SSS1.p3]。",
+      "evidence": [
+        {
+          "id": "S3.SS6.SSS1.p2",
+          "quote": "On overall quality, Movie Gen Video strongly outperforms Runway Gen3 (35.02%) and LumaLabs with the net win rate beyond $2\\sigma$."
+        },
+        {
+          "id": "S3.SS6.SSS1.p2",
+          "quote": "Our generations moderately net win over OpenAI Sora (8.23%) (net win rate within 1-2 $\\sigma$) and are on par with Kling1.5 (3.87%)."
+        },
+        {
+          "id": "S3.SS6.SSS1.p3",
+          "quote": "Movie Gen Video significantly outperforms Runway Gen3, LumaLabs and Kling1.5 on both metrics, with 48.49%, 61.83% and 37.09% net win rates on realness, respectively."
+        },
+        {
+          "id": "S3.SS6.SSS1.p3",
+          "quote": "Compared to OpenAI Sora, Movie Gen Video has a significant win on realness with 11.62% net win rate beyond $2\\sigma$ and a moderate win over OpenAI Sora on aesthetics with 6.45% net win rate within 1–2 $\\sigma$."
+        },
+        {
+          "id": "S5.SS3.SSS1.p4",
+          "quote": "On the TGVE+ benchmark, our model is preferred 74% more often than the current state-of-the-art EVE in the overall Human evaluation criterion."
+        },
+        {
+          "id": "S6.SS4.SSS1.p3",
+          "quote": "Movie Gen Audio outperforms all baselines on all metrics by a large margin: with 33.8% to 72.8% on synchronization, 27.5% to 82.2% on correctness for all videos, and 31.3% to 91.0% on overall quality for generated videos."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，视频生成模型在复杂几何、物体操作、物体物理、状态变换等方面仍存在生成或编辑视频的伪影 [S8.p2]。生成音频在运动密集（如踢踏舞）、视觉上较小或被遮挡（如脚步声）或需要更细粒度视觉理解（如识别吉他和弦）时有时会不同步，且由于设计选择目前不支持语音生成 [S8.p2]。作者还指出，使用人类评估定义客观标准仍然具有挑战性，人类评估可能受到个人偏见、背景等因素影响 [S8.p2]。此外，模型分别针对视频和音频生成训练，开发能联合生成这些模态的模型是重要的研究方向 [S8.p2]。作者也说明本研究仅限于英语文本输入 [S8.p3]。",
+      "evidence": [
+        {
+          "id": "S8.p2",
+          "quote": "we observe that video generation models still suffer from issues – artifacts in generated or edited videos around complex geometry, manipulation of objects, object physics, state transformations etc."
+        },
+        {
+          "id": "S8.p2",
+          "quote": "Generated audio is sometimes out of synchronization when motions are dense ( e.g., tap dance), visually small or occluded ( e.g., footsteps), or when it requires finer-grained visual understanding ( e.g., recognizing the guitar chords)."
+        },
+        {
+          "id": "S8.p2",
+          "quote": "It currently does not support voice generation either due to our design choices."
+        },
+        {
+          "id": "S8.p2",
+          "quote": "defining objective criteria evaluating model generations using human evaluations remains challenging and thus human evaluations can be influenced by a number of other factors such as personal biases, backgrounds etc."
+        },
+        {
+          "id": "S8.p2",
+          "quote": "While our models are trained separately for video and audio generation, developing models that can generate these modalities jointly is an important area of research."
+        },
+        {
+          "id": "S8.p3",
+          "quote": "Our study in this paper is limited to text inputs in the English language."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 13819,
+      "completion_tokens": 2540,
+      "elapsed_s": 9.24
+    }
+  },
+  "verify": {
+    "quote_hits": 28,
+    "quote_total": 28,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 22,
+    "inline_rate": 0.955,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S3.SS6.SSS1.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

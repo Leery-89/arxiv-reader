@@ -1,0 +1,149 @@
+{
+  "paper": {
+    "arxiv_id": "2411.04330",
+    "title": "Scaling Laws for Precision",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 69719,
+    "n_sections": 43,
+    "n_paragraphs": 114
+  },
+  "result": {
+    "summary": "这篇论文提出了“精度感知”的缩放定律，用于预测低精度训练和训练后量化对语言模型损失的影响 [abstract]。作者提出低精度训练会降低模型的有效参数量，并据此预测低精度训练和训练后量化带来的额外损失 [abstract]。研究发现，训练后量化带来的退化会随着模型训练数据量的增加而增大，最终使额外的预训练数据变得有害 [abstract]。作者在超过 465 次预训练运行上拟合，并在最多 1.7B 参数、最多 26B token 的模型上验证了预测 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：精度、参数量和数据之间存在怎样的权衡，以及这些权衡在预训练和推理中有何不同 [S1.p1]。研究动机在于，精度是影响模型成本和性能的第三个重要因素，而当前的缩放定律并未考虑这一点 [S1.p1][abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, the precision in which models are trained and served is an important third factor that contributes to both cost and performance."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Specifically, we ask: What are the tradeoffs between precision, parameters, and data? How do they compare for pretraining and inference?"
+        },
+        {
+          "id": "abstract",
+          "quote": "Low precision training and inference affect both the quality and cost of language models, but current scaling laws do not account for this."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出“精度感知”的缩放定律，其核心思想是：比特精度和参数量可以互换地贡献于模型的“有效参数量” N_eff，而量化实现细节仅通过影响该量来与损失缩放交互 [S1.p2]。作者将训练后量化和预训练量化的缩放定律统一为单一函数形式，以预测不同精度下训练和推理带来的退化 [abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This functional form that posits bit precision and parameter count interchangeably contribute to a model’s “effective parameter count,” $N_{\\text{eff}}$, and implementation details like which parts of a model are quantized to what precision, interact with loss scaling only through their effect on this quantity."
+        },
+        {
+          "id": "abstract",
+          "quote": "We unify the scaling laws for post and pretraining quantization to arrive at a single functional form that predicts degradation from training and inference in varied precisions."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在 Dolma V1.7 数据集上训练和评估了一系列 OLMo 风格的模型，使用标准 Transformer++ 实现 [S2.SS3.p1]。实验扫描了非嵌入参数量 N 在 3 千万到 2.2 亿之间、数据量 D 在 15 亿到 260 亿 token 之间的预训练运行，并在每个 (N,D) 组合上启动超过 20 次运行，扫描 8 种精度值 [S2.SS3.p1]。训练精度 P_w、P_a、P_kv 分别在 [3,12] 范围内单独扫描，并预训练了任意组合的模型以验证缩放定律 [S4.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We train and evaluate a suite of OLMo-style models on the Dolma V1.7 dataset, using a standard Transformer++ implementation"
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "Our experiments consist of a sweep of language model pretraining runs over $N\\in[30,60,110,220]$ million parameters (non-embedding) and $D\\in[1.5,3,6,13,26]$ billion tokens."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "we sweep 8 values of precision for each of the (weights, activations, attention)."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We sweep the training precisions of the weights, activations, and KV cache $P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}}\\in[3,12]$ individually, as well as training BF16 baselines."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We also pretrain models with arbitrary combinations of $P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}}$ to validate our scaling laws."
+        }
+      ]
+    },
+    "findings": {
+      "text": "训练后量化带来的损失退化随数据量增加而增大，因此对于固定模型，在某个点之后继续用更多数据训练，如果模型之后会被量化，可能反而有害 [S1.p3][S3.p1]。在量化训练中，权重的比特精度可以与参数量进行权衡，即较小 N 但较大 P_w 的模型可以达到与较大 N 但较小 P_w 的模型相同的损失，且增加权重比特精度的收益在低精度时较大，但在约 6-7 比特后饱和 [S4.SS1.p1]。预训练缩放定律表明，计算最优的预训练精度通常与计算预算无关，但如果模型大小受限，这种独立性不再成立，此时计算最优精度随计算量缓慢增长 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "We find that the degradation increases with data, so that for a fixed model, training on additional data after a certain point can be actively harmful if the model will be quantized after training."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We quantify the resulting loss degradation $\\delta_{\\text{PTQ}}$, finding that post-train quantization scales poorly in data."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We observe that the bit precision of the weights can be traded off for the number of parameters, i.e., a model with smaller $N$ but larger $P_{\\text{w}}$ can achieve the same loss as a model with larger $N$ but smaller $P_{\\text{w}}$."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "Additionally, we find that the gains from increasing the bit precision of the weights are large at lower precisions but saturate at higher precisions (typically around 6-7 bits per weight)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Our scaling laws for pretraining suggest that the compute-optimal pretraining precision is in general independent of compute budget."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Surprisingly, however, this independence ceases to be true if model size is constrained, in which case the compute-optimal precision grows slowly in compute."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认以下局限：全程使用固定架构来考察精度、参数和 token 的影响，而低精度训练常涉及架构调整，可能缩小与全精度模型的差距 [S6.p2]。虽然计算成本随精度线性缩放，但由于系统开销，减半精度带来的收益通常不到 2 倍 [S6.p2]。研究仅考虑损失缩放，未进行下游模型评估 [S6.p2]。作者强调所发现的趋势旨在提供启示而非规定性结论，并希望未来工作能在更大模型规模上更全面地检验这些效应 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "First, we use a fixed architecture throughout to examine the effects of precision, parameters, and tokens in a controlled manner."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "In contrast, low precision training often involves architectural tweaks that can close much of the gap from a vanilla full precision model."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Second, while compute costs do scale linearly with precision, the gains from halving precision are usually less than 2x due to systems overhead."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Third, we only consider loss scaling without downstream model evaluations."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "We emphasize that the trends we find aim to be suggestive rather than prescriptive, and hope future work can more comprehensively examine these effects at larger model scale."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5422,
+      "completion_tokens": 1842,
+      "elapsed_s": 6.91
+    }
+  },
+  "verify": {
+    "quote_hits": 21,
+    "quote_total": 21,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

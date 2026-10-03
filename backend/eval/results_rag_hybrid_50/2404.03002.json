@@ -1,0 +1,204 @@
+{
+  "paper": {
+    "arxiv_id": "2404.03002",
+    "title": "DESI 2024 VI: Cosmological Constraints from the Measurements of Baryon Acoustic Oscillations",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix A Comparison of results from DESI and combined DESI+SDSS BAO data",
+      "Appendix B Comparison to Planck PR4 likelihoods",
+      "Appendix C Author Affiliations"
+    ],
+    "char_count": 135045,
+    "n_sections": 35,
+    "n_paragraphs": 142
+  },
+  "result": {
+    "summary": "本文报告了 DESI 第一年观测（DR1）中星系、类星体和莱曼-α 森林示踪物重子声学振荡（BAO）测量的宇宙学结果，在 0.1<z<4.2 的七个红移区间内提供了相对于声视界的距离和哈勃率测量 [abstract]。DESI BAO 数据单独与平坦 ΛCDM 模型一致，给出物质密度 Ωm=0.295±0.015 [abstract]；结合 BBN 先验和 CMB 声学角尺度，得到 H0=(68.52±0.62) km/s/Mpc [abstract]。在扩展暗能量模型中，DESI 与 CMB 或 Ia 型超新星的组合偏好 w0>-1 和 wa<0，与 ΛCDM 的差异在 2.5σ 至 3.9σ 之间 [abstract]。这些结果标志着 DESI 作为首个运行中的 Stage-IV 巡天开始提供宇宙学约束 [S8.p1]。",
+    "research_question": {
+      "text": "本文旨在利用 DESI 第一年观测的 BAO 测量，在七个红移区间内约束宇宙学参数，包括物质密度、哈勃常数、暗能量状态方程、空间曲率和中微子质量 [abstract][S1.p8]。BAO 提供了对宇宙膨胀历史敏感的宇宙学探针，且系统误差控制良好，可用于检验暗能量动力学和空间曲率 [S1.p5]。DESI 是正在进行的 Stage IV 巡天，设计通过测量星系、类星体和莱曼-α 森林的成团性显著改进宇宙学约束 [S1.p7]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We present cosmological results from the measurement of baryon acoustic oscillations (BAO) in galaxy, quasar and Lyman- α \\alpha forest tracers from the first year of observations from the Dark Energy Spectroscopic Instrument (DESI)"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "BAO provides a key cosmological probe sensitive to the cosmic expansion history, with well-controlled systematics."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "The Dark Energy Spectroscopic Instrument (DESI) is carrying out a Stage IV survey that was designed to significantly improve cosmological constraints through measurements of the clustering of galaxies, quasars, and the Lyman- $\\alpha$ forest."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "In this paper, we report the constraints derived from the measurements of baryon acoustic oscillations with the first year of data from DESI as part of a larger series of papers."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用盲分析流程测量 BAO 尺度，以减轻确认偏误 [abstract][S2.SS3.SSS1.p1]。BAO 分析基于标准尺测量，使用参考宇宙学模型将角度位置和红移转换为共动坐标，并通过 Alcock-Paczynski 效应检验不同宇宙学模型 [S2.SS3.p2]。对于星系和类星体，使用重构后的成团性测量，各向异性 BAO 测量用于 LRG 和 ELG 样本，而 BGS 和 QSO 样本因信噪比较低仅使用各向同性拟合 [S2.SS3.p5]。莱曼-α 森林 BAO 测量结合了自相关和与类星体密度的互相关 [S2.SS3.p6]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "To mitigate confirmation bias, a blind analysis was implemented to measure the BAO scales."
+        },
+        {
+          "id": "S2.SS3.SSS1.p1",
+          "quote": "An imperative of science with modern cosmology experiments, and especially for a survey with the statistical precision that DESI is able to achieve, is to mitigate against the possibility of the results being affected by observer confirmation bias."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "First, a fiducial cosmological model is adopted to convert tracer angular positions and redshifts to comoving coordinates, and the two-point clustering pattern is measured as a function of comoving separation assuming this fiducial model."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "Anisotropic BAO measurements are obtained for LRG and ELG samples, but we restrict to isotropic fits for BGS and QSO samples due to the lower signal-to-noise ratio of the two-point function measurements."
+        },
+        {
+          "id": "S2.SS3.p6",
+          "quote": "The Ly $\\alpha$ BAO measurement is presented in, and it combines a measurement of the auto-correlation of fluctuations in the Ly $\\alpha$ forest and of its cross-correlation with the density of quasars at $z>1.77$."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "分析使用了 DESI DR1 中超过 600 万个独特红移，红移范围 0.1<z<4.2，包括亮星系、LRG、ELG、类星体和莱曼-α 森林示踪物 [abstract][S2.SS2.SSS0.Px6.p2]。BAO 各向同性尺度的总精度为 0.49%，而最终 SDSS 测量为 0.60% [S2.SS2.SSS0.Px6.p2]。外部数据集包括来自 Planck 和 ACT 的 CMB 温度、极化及透镜数据，以及 Pantheon+、Union3 和 DES-SN5YR 超新星数据集 [abstract][S2.SS4.SSS2.p3][S2.SS4.SSS2.p4]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "in seven redshift bins from over 6 million extragalactic objects in the redshift range 0.1 < z < 4.2"
+        },
+        {
+          "id": "S2.SS2.SSS0.Px6.p2",
+          "quote": "Overall, this analysis of the DESI Data Release 1 relies on over $6$ million unique redshifts, more than twice the number of redshifts considered in the final SDSS cosmological analysis."
+        },
+        {
+          "id": "S2.SS2.SSS0.Px6.p2",
+          "quote": "The aggregate precision on the BAO isotropic scale is $0.49\\%$ to be compared to $0.60\\%$ for the final SDSS measurements."
+        },
+        {
+          "id": "S2.SS4.SSS2.p3",
+          "quote": "We use as our baseline the temperature (TT) and polarisation (EE) auto-spectra, plus their cross-spectra (TE), as incorporated in the simall, Commander (for multipoles $\\ell<30$) and plik (for $\\ell\\geq 30$) likelihoods from the official PR3 release."
+        },
+        {
+          "id": "S2.SS4.SSS2.p4",
+          "quote": "We adopt this combined CMB lensing likelihood from both experiments as our baseline."
+        },
+        {
+          "id": "abstract",
+          "quote": "for the addition of the Pantheon+, Union3, or DES-SN5YR supernova datasets respectively"
+        }
+      ]
+    },
+    "findings": {
+      "text": "DESI BAO 数据单独与平坦 ΛCDM 模型一致，给出 Ωm=0.295±0.015 和 rdh=(101.8±1.3) Mpc [abstract][S4.SS1.p1]。结合 BBN 先验和 CMB 声学角尺度，得到 H0=(68.52±0.62) km/s/Mpc [abstract][S4.SS1.p4]。在 wCDM 模型中，DESI 单独给出 w=-0.99^{+0.15}_{-0.13} [abstract][S5.SS1.p3]。在 w0waCDM 模型中，DESI 与 CMB 或超新星的组合偏好 w0>-1 和 wa<0，与 ΛCDM 的差异在 2.5σ 至 3.9σ 之间 [abstract][S8.p7]。中微子质量上限在平坦 ΛCDM 下为 ∑mν<0.072 eV（95% CL），但在扩展暗能量模型中显著放宽 [abstract][S7.SS1.p9]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "DESI BAO data alone are consistent with the standard flat \\Lambda CDM cosmological model with a matter density \\Omega_{\\mathrm{m}}=0.295\\pm 0.015"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The 68% credible-interval results for these parameters are $\\left.\\begin{aligned} \\Omega_{\\mathrm{m}}&=0.295\\pm 0.015,\\\\ r_{\\mathrm{d}}h&=(101.8\\pm 1.3)\\,\\text{Mpc},\\end{aligned}\\ \\right\\}$"
+        },
+        {
+          "id": "abstract",
+          "quote": "DESI requires H 0 = ( 68.52 ± 0.62 ) ​ km ​ s − 1 ​ Mpc − 1 H_{0}=(68.52\\pm 0.62)\\,\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}"
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "further tightens the $H_{0}$ result to $H_{0}=(68.52\\pm 0.62)\\;\\,{\\rm km\\,s^{-1}\\,Mpc^{-1}}\\qquad(\\mbox{DESI BAO\\,+\\,BBN\\,+\\,$\\theta_{\\ast}$}),$"
+        },
+        {
+          "id": "abstract",
+          "quote": "DESI BAO alone require w = − 0.99 − 0.13 + 0.15 w=-0.99^{+0.15}_{-0.13}"
+        },
+        {
+          "id": "S5.SS1.p3",
+          "quote": "w&=-0.99^{+0.15}_{-0.13},\\end{aligned}\\ \\right\\}\\ \\ \\mbox{\\text{\\parbox{42.67912pt}{\\begin{flushleft}DESI~BAO, \\end{flushleft}}}}$"
+        },
+        {
+          "id": "abstract",
+          "quote": "combinations of DESI with CMB or with type Ia supernovae (SN Ia) individually prefer w 0 > − 1 w_{0}>-1 and w a < 0 w_{a}<0"
+        },
+        {
+          "id": "S8.p7",
+          "quote": "with the level of the tension with $\\Lambda$ CDM remaining at the $\\sim 2.5\\sigma$ level for combining DESI and CMB information with Pantheon+, but increasing to $3.5\\sigma$ and $3.9\\sigma$ levels for the Union3 and DESY5SN SN Ia datasets respectively."
+        },
+        {
+          "id": "abstract",
+          "quote": "combining the DESI and CMB data yields an upper limit \\sum m_{\\nu} < 0.072 \\sum m_{\\nu}<0.072 ( 0.113 ) ​ eV (0.113){\\,\\rm eV} at 95% confidence"
+        },
+        {
+          "id": "S7.SS1.p9",
+          "quote": "in a $w_{0}w_{a}$ CDM background, the upper limit from DESI BAO and CMB relaxes to $\\sum m_{\\nu}<0.195$ eV (for the $\\sum m_{\\nu}>0$ eV prior)."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，中微子质量上限的显著收紧部分是由 DESI 数据偏好较高 H0 所驱动，且上限依赖于所选的 ∑mν 先验，在改变背景几何的扩展模型中会放宽 [S8.p8]。在 w0waCDM 模型中，与 ΛCDM 的张力需要进一步检查不同数据集之间可能存在的未计入系统误差或不一致性 [S8.p7]。此外，DESI 与 SDSS 的 BAO 结果存在部分天区重叠，两者之间的相关性尚未精确量化 [S3.SS3.p8]。",
+      "evidence": [
+        {
+          "id": "S8.p8",
+          "quote": "We however caution that this substantial tightening of the upper bound compared to the previous state-of-the-art measurements is partly driven by the preference of DESI data for a higher value of $H_{0}$."
+        },
+        {
+          "id": "S8.p8",
+          "quote": "Moreover, the upper bound obtained depends on the priors chosen for $\\sum m_{\\nu}$ and, because DESI contributes through breaking a geometrical degeneracy, the upper limit is relaxed in extended models that alter the background geometry."
+        },
+        {
+          "id": "S8.p7",
+          "quote": "It remains important to thoroughly examine unaccounted-for sources of systematic uncertainties or inconsistencies between the different datasets that might be contributing to these results."
+        },
+        {
+          "id": "S3.SS3.p8",
+          "quote": "Bearing in mind that the degree of correlation between BAO results from discrete galaxy and quasar tracers in the two surveys has not been precisely quantified—to avoid double-counting information—this combined sample should be selected by choosing the result from the survey covering the larger effective volume $V_{\\rm eff}$ at a given redshift."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 18329,
+      "completion_tokens": 2969,
+      "elapsed_s": 11.29
+    }
+  },
+  "verify": {
+    "quote_hits": 26,
+    "quote_total": 29,
+    "quote_rate": 0.897,
+    "inline_hits": 28,
+    "inline_total": 28,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "DESI BAO data alone are consistent with the standard flat \\Lambda CDM cosmologic"
+      },
+      {
+        "field": "findings",
+        "id": "S4.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The 68% credible-interval results for these parameters are $\\left.\\begin{aligned"
+      },
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "combining the DESI and CMB data yields an upper limit \\sum m_{\\nu} < 0.072 \\sum "
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

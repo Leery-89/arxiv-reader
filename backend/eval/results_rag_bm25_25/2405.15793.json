@@ -1,0 +1,166 @@
+{
+  "paper": {
+    "arxiv_id": "2405.15793",
+    "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix",
+      "Appendix A SWE-agent Design",
+      "A.1 ACI Design",
+      "File viewer.",
+      "File editor.",
+      "Search & navigation.",
+      "A.2 Implementation",
+      "A.3 Configuration",
+      "Appendix B Extended Results",
+      "B.1 Hyperparameter Sweep",
+      "B.2 Model Performance",
+      "Performance by Repository.",
+      "Temporal Analysis.",
+      "B.3 Trajectory Analysis",
+      "B.3.1 Turns to Resolution",
+      "B.3.2 Walkthrough of Trajectory Phases",
+      "B.3.3 Breakdowns of Action Sequences",
+      "B.4 Failure Modes",
+      "B.5 Performance Variance and Pass@k Rate",
+      "B.6 Patch Generations",
+      "B.7 HumanEvalFix Evaluation",
+      "B.8 Dataset Information",
+      "B.9 Miscellaneous",
+      "Appendix C Prompts",
+      "Appendix D Qualitative Analysis",
+      "Analysis for psf/requests-2317",
+      "Analysis for pylint-dev/pylint-5859",
+      "Analysis for sympy/sympy-21614",
+      "Analysis for django/django-14411",
+      "Appendix E Statements",
+      "E.1 Ethics & Broader Impacts",
+      "E.2 Reproducibility",
+      "E.3 Limitations & Future Work"
+    ],
+    "char_count": 31242,
+    "n_sections": 12,
+    "n_paragraphs": 50
+  },
+  "result": {
+    "summary": "这篇论文研究界面设计如何影响语言模型智能体在软件工程任务上的表现，并提出 SWE-agent 系统，让 LM 智能体通过专门设计的 agent-computer interface（ACI）自主使用计算机解决软件工程问题 [abstract][S1.p3]。SWE-agent 的 ACI 提供少量简单动作用于查看、搜索和编辑文件，并配有 guardrails 和简洁反馈 [S1.p3]。作者在 SWE-bench 和 HumanEvalFix 上评估，分别取得 12.5% 和 87.7% 的 pass@1，超过此前非交互式 LM 的最好结果 [abstract]。论文还讨论了 ACI 设计如何影响智能体行为与性能 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：界面设计如何影响语言模型智能体的性能，以及 LM 智能体是否能像人类工程师从强大软件应用中受益那样，从专门设计的界面中受益 [abstract][S1.p1]。作者指出，将智能体应用于软件工程这类更复杂代码任务仍未被充分探索，而现有界面是为人类用户设计的 [S1.p1][S2.p1]。作者认为 LM 智能体代表一类新的终端用户，有其自身需求与能力，因此需要专门构建的界面 [abstract][S2.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We investigate how interface design affects the performance of language model agents."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "However, applying agents to more complex code tasks like software engineering remains unexplored."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Inspired by human-computer interaction (HCI) studies on the efficacy of user interfaces for humans, we investigate whether LM agents could similarly benefit from better-designed interfaces for performing software engineering tasks."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "We argue that LM agents represent a new category of end user, with their own needs and abilities."
+        },
+        {
+          "id": "abstract",
+          "quote": "we posit that LM agents represent a new category of end users with their own needs and abilities, and would benefit from specially-built interfaces to the software they use."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出 agent-computer interface（ACI）概念，并在固定 LM 权重的前提下，通过设计 ACI 来提升智能体性能 [S1.p5][S2.p4]。SWE-agent 由 LM 和 ACI 组成，其 ACI 提供少量简单动作用于查看、搜索和编辑文件，使用 guardrails 防止常见错误，并在每轮给出具体简洁的反馈 [S1.p3]。作者借鉴 HCI 方法，在开发集上通过人工检查智能体行为识别困难并提出改进，以及网格搜索选择最佳 ACI 配置 [S2.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "First, we introduce the concept of the agent-computer interface (ACI) and demonstrate how careful ACI design can substantially improve LM agent performance without modifying the underlying LM’s weights."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "In this paper, we assume a fixed LM and focus on designing the ACI to improve its performance."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "SWE-agent’s ACI instead offers a small set of simple actions for viewing, searching through and editing files."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The ACI uses guardrails to prevent common mistakes, and an agent receives specific, concise feedback about a command’s effects at every turn."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We use two approaches to enhance performance on a development set: (1) manually inspect agent behavior to identify difficulties and propose improvements, and (2) run a grid search to select the best ACI configuration."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文主要在 SWE-bench 上评估，该数据集包含来自 12 个流行 Python 包仓库的 2,294 个任务实例；主要智能体结果报告在完整 SWE-bench 测试集上，消融和分析在 SWE-bench Lite 测试集上进行 [S4.p1]。SWE-bench Lite 是 SWE-bench 的 300 个实例的规范子集，聚焦于自包含的功能性 bug 修复 [S4.p1]。作者还用 HumanEvalFix 测试 SWE-agent 的基本代码编辑能力 [S4.p1]。",
+      "evidence": [
+        {
+          "id": "S4.p1",
+          "quote": "We primarily evaluate on the SWE-bench dataset, which includes $2,294$ task instances from $12$ different repositories of popular Python packages."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We report our main agent results on the full SWE-bench test set and ablations and analysis on the SWE-bench Lite test set, unless otherwise specified."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench that focus on evaluating self-contained functional bug fixes."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We also test SWE-agent’s basic code editing abilities with HumanEvalFix, a short-form code debugging benchmark."
+        }
+      ]
+    },
+    "findings": {
+      "text": "SWE-agent 在 SWE-bench 和 HumanEvalFix 上均取得当时最优性能，pass@1 分别为 12.5% 和 87.7%，远超此前非交互式 LM 的最好结果 [abstract]。作者表明，为 LM 专门定制的 ACI 优于为人类用户设计的现有界面（如 Linux shell）[S1.p3]。论文还指出，精心设计 ACI 可以在不修改底层 LM 权重的情况下显著提升 LM 智能体性能 [S1.p5]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We evaluate SWE-agent on SWE-bench and HumanEvalFix, achieving state-of-the-art performance on both with a pass@ 1 1 rate of 12.5 12.5 % and 87.7 87.7 %, respectively, far exceeding the previous state-of-the-art achieved with non-interactive LMs."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "We show that ACIs tailored specifically for LMs outperform existing user interfaces (UIs) designed for human users, such as the Linux shell."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "First, we introduce the concept of the agent-computer interface (ACI) and demonstrate how careful ACI design can substantially improve LM agent performance without modifying the underlying LM’s weights."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 3309,
+      "completion_tokens": 1525,
+      "elapsed_s": 5.83
+    }
+  },
+  "verify": {
+    "quote_hits": 17,
+    "quote_total": 17,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

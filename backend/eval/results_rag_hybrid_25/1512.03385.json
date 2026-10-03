@@ -1,0 +1,189 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文针对深度神经网络难以训练的问题，提出了残差学习框架，让堆叠层学习相对于输入的残差映射而非无参照映射 [S1.p5]。作者在 ImageNet 上评估了最深达 152 层的残差网络，其复杂度仍低于 VGG 网络 [abstract]，并在 CIFAR-10 上分析了 100 层和 1000 层网络 [abstract]。实验表明极深残差网络易于优化，能随深度增加获得精度提升，而对应的普通网络深度增加时训练误差反而更高 [S1.p7]。152 层单模型在 ImageNet 验证集上取得 4.49% 的 top-5 误差，六模型集成在测试集上取得 3.57% 的 top-5 误差，赢得 ILSVRC 2015 分类任务第一名 [S4.SS1.p16]。",
+    "research_question": {
+      "text": "论文要解决的问题是：随着网络加深，训练难度增加，且存在退化问题——普通网络深度增加时训练误差反而更高 [S1.p7]。其动机在于网络深度对图像分类至关重要，领先的 ImageNet 结果都使用了十六到三十层的极深模型 [S1.p1]。作者提出疑问：学习更好的网络是否像堆叠更多层一样简单 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Recent evidence reveals that network depth is of crucial importance, and the leading results on the challenging ImageNet dataset all exploit “very deep” models, with a depth of sixteen to thirty."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Driven by the significance of depth, a question arises: Is learning better networks as easy as stacking more layers?"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "Our extremely deep residual nets are easy to optimize, but the counterpart “plain” nets (that simply stack layers) exhibit higher training error when the depth increases"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出深度残差学习框架，显式地让堆叠的非线性层拟合残差映射 F(x):=H(x)-x，将原始映射重铸为 F(x)+x [S1.p5]。作者假设优化残差映射比优化原始无参照映射更容易 [S1.p5]。在 ImageNet 实现中，采用批归一化、SGD（mini-batch 256，学习率从 0.1 开始，误差平台时除以 10，训练最多 60×10^4 次迭代，权重衰减 0.0001，动量 0.9），不使用 dropout [S3.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "we explicitly let these layers fit a residual mapping."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We hypothesize that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We adopt batch normalization (BN) right after each convolution and before activation, following."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We use SGD with a mini-batch size of 256."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "The learning rate starts from 0.1 and is divided by 10 when the error plateaus, and the models are trained for up to $60\\times 10^{4}$ iterations."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We use a weight decay of 0.0001 and a momentum of 0.9."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We do not use dropout, following the practice in."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 ImageNet 分类数据集上评估了 18 层和 34 层残差网络，并与对应的普通网络比较 [S4.SS1.p5]。在 CIFAR-10 数据集（50k 训练图像、10k 测试图像、10 类）上进行了更多研究，使用简单架构，输入为 32×32 图像，网络为 6n+2 层堆叠加权层，滤波器数为 {16,32,64} [S4.SS2.p1][S4.SS2.p2]。此外，在 PASCAL VOC 2007/2012 和 MS COCO 目标检测任务上，采用 Faster R-CNN，将 VGG-16 替换为 ResNet-101 进行验证 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p5",
+          "quote": "Next we evaluate 18-layer and 34-layer residual nets ( ResNets)."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We conducted more studies on the CIFAR-10 dataset, which consists of 50k training images and 10k testing images in 10 classes."
+        },
+        {
+          "id": "S4.SS2.p2",
+          "quote": "The network inputs are 32 $\\times$ 32 images, with the per-pixel mean subtracted."
+        },
+        {
+          "id": "S4.SS2.p2",
+          "quote": "There are totally 6 $n$ +2 stacked weighted layers."
+        },
+        {
+          "id": "S4.SS2.p2",
+          "quote": "The numbers of filters are $\\{16,32,64\\}$ respectively."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We adopt Faster R-CNN as the detection method."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Here we are interested in the improvements of replacing VGG-16 with ResNet-101."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 ImageNet 上，34 层 ResNet 比 18 层 ResNet 更好（提升 2.8%），且 34 层 ResNet 训练误差更低并能泛化到验证数据，表明退化问题得到解决 [S4.SS1.p6]。与对应的普通网络相比，34 层 ResNet 将 top-1 误差降低 3.5% [S4.SS1.p7]。152 层 ResNet 单模型在验证集上取得 4.49% 的 top-5 误差，优于所有先前集成结果；六模型集成在测试集上取得 3.57% 的 top-5 误差，赢得 ILSVRC 2015 第一名 [S4.SS1.p16]。在 CIFAR-10 上，ResNet 同样克服优化困难，随深度增加获得精度提升 [S4.SS2.p5]。在 COCO 目标检测上，ResNet-101 相比 VGG-16 在 mAP@[.5,.95] 上提升 6.0%，相对提升 28% [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p6",
+          "quote": "the 34-layer ResNet is better than the 18-layer ResNet (by 2.8%)."
+        },
+        {
+          "id": "S4.SS1.p6",
+          "quote": "the 34-layer ResNet exhibits considerably lower training error and is generalizable to the validation data."
+        },
+        {
+          "id": "S4.SS1.p7",
+          "quote": "the 34-layer ResNet reduces the top-1 error by 3.5% (Table 2), resulting from the successfully reduced training error"
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "Our 152-layer ResNet has a single-model top-5 validation error of 4.49%."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This single-model result outperforms all previous ensemble results (Table 5)."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This leads to 3.57% top-5 error on the test set (Table 5)."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This entry won the 1st place in ILSVRC 2015."
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "we obtain a 6.0% increase in COCO’s standard metric (mAP@[.5,.95]), which is a 28% relative improvement."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，在 CIFAR-10 上 1202 层网络的测试结果比 110 层网络更差，尽管两者训练误差相似，作者认为这是因为过拟合，1202 层网络对此小数据集可能不必要地大（19.4M） [S4.SS2.p9]。本文未使用 maxout/dropout，仅通过深而窄的架构施加正则化，作者表示结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "We argue that this is because of overfitting."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The 1202-layer network may be unnecessarily large (19.4M) for this small dataset."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "In this paper, we use no maxout/dropout and just simply impose regularization via deep and thin architectures by design"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "But combining with stronger regularization may improve results, which we will study in the future."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4079,
+      "completion_tokens": 2259,
+      "elapsed_s": 7.7
+    }
+  },
+  "verify": {
+    "quote_hits": 31,
+    "quote_total": 31,
+    "quote_rate": 1.0,
+    "inline_hits": 17,
+    "inline_total": 17,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

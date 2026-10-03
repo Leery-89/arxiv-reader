@@ -1,0 +1,194 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结门定义纳米线中实现了对费米子宇称的单次干涉测量，通过将邻近化纳米线与量子点隧穿耦合构成干涉仪 [abstract]。量子电容测量显示通量 h/2e 周期的双模性，在最优通量下 3.7 µs 内信噪比为 1，并提取出约 2 T 面内磁场下超过 1 ms 的驻留时间 [abstract]。作者将这些结果解释为与一对相距约 3 µm 的 Majorana 零模所编码的费米子宇称测量一致，且非平衡准粒子中毒率低 [abstract]。该测量本身不能明确区分拓扑相中的 MZMs 与精细调节的平庸 Andreev 束缚态，但要求低能态支撑在纳米线两端且与其他低能态耦合极弱 [S1.p3]。作者认为这些发现代表了向基于测量操作的拓扑量子比特实现的重要进展 [S5.p2]。",
+    "research_question": {
+      "text": "本文旨在实现一维纳米线中近零能态宇称的干涉测量，从而验证拓扑量子计算的一个必要要素 [S1.p3]。其动机在于，一维拓扑超导体中量子信息存储于 Majorana 零模的费米子宇称中，而投影测量费米子宇称可用于处理量子信息和读取量子比特状态 [S1.p2]。一对 MZMs 共享的费米子宇称可通过干涉测量确定，多种拓扑量子比特概念设计都包含此类干涉仪 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we demonstrate an interferometric measurement of the parity of a near-zero-energy state in a 1D nanowire, thereby validating a necessary ingredient of topological quantum computation."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Quantum information is stored in the fermion parity of Majorana zero modes (MZMs) localized at the ends of superconducting wires, and projective measurements of the fermion parity are used to process quantum information and perform qubit state readout."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The fermion parity shared by a pair of MZMs can be determined through an interferometric measurement."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "A number of conceptual designs for topological qubits incorporate such interferometers."
+        }
+      ]
+    },
+    "method": {
+      "text": "器件由可调至一维拓扑超导态的纳米线和用于在干涉环路中耦合 MZMs 对的量子点组成 [S2.p1]。测量基于探测与纳米线耦合的量子点的量子电容 C_Q，从而允许单次确定宇称 [S1.p3]。作者通过将 TQDI 调谐并执行约 1.5×10^4 次连续谐振器响应测量来记录宇称时间轨迹，每次积分时间 4.5 µs，总长 67 ms [S3.p1]。为与理论比较，作者将时间轨迹降采样至 90 µs 分辨率并转换为 C_Q 记录，同时扫描面外磁场 B_⊥ 和 V_QD2 [S3.p1]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "The first component is a nanowire, sections of which can be tuned into a 1DTS state, leading to topological degeneracy of the many-body ground state."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The second component consists of quantum dots, which are designed to couple pairs of MZMs in an interferometric loop."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The measurement technique is based on probing the quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$ of a quantum dot coupled to the nanowire and allows determination of the parity in a single shot"
+        },
+        {
+          "id": "S3.p1",
+          "quote": "To measure a time record of the fermion parity, we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "To improve visibility and compare with theoretical predictions we downsample the time trace to a resolution of $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ and convert the resonator response into a $C_{\\mathrm{\\scriptscriptstyle Q}}$ record"
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We sweep the out-of-plane magnetic field $B_{\\perp}$ in steps of $0.14\\text{\\,}\\mathrm{mT}$ to study the dependence on the external flux $\\Phi$ through the interferometer loop and sweep $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ to find charge transitions in dot 2."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 InAs-Al 异质结门定义纳米线器件上进行，器件 A 的相关区域在 B_∥=1.8 T 和 V_WP1=-1.832 V 附近 [S3.p2]。作者使用 TGP 选择磁场和 V_WP1 范围，并调谐 dot 2 至电荷简并点 [S3.p2]。为验证解释，作者进行了三项检查：注入准粒子、完全断开量子点与纳米线、以及分析隐藏 Majorana 模情形 [S3.p12][S3.p13][S3.p15]。此外，在第二个器件 B 和器件 A 的第二次测量中观察到类似的通量依赖双模性和 RTS [S3.p11]。",
+      "evidence": [
+        {
+          "id": "S3.p2",
+          "quote": "For device A, the relevant regime is in the neighborhood of $B_{\\parallel}=$1.8\\text{\\,}\\mathrm{T}$$ and $V_{\\mathrm{\\scriptscriptstyle WP1}}=$-1.832\\text{\\,}\\mathrm{V}$$."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "We tune dot 2 to charge degeneracy and use the TGP to select a magnetic field and a $V_{\\mathrm{\\scriptscriptstyle WP1}}$ range for our measurements."
+        },
+        {
+          "id": "S3.p12",
+          "quote": "First, we investigate the impact of injecting quasiparticles into the superconductor as indicated in Fig. 5 a"
+        },
+        {
+          "id": "S3.p13",
+          "quote": "Our second control experiment is to completely disconnect the dots from the wire."
+        },
+        {
+          "id": "S3.p15",
+          "quote": "In Sec. S3, we extend the model introduced above to allow us to analyze the quasi-MZM scenario discussed in previous works."
+        },
+        {
+          "id": "S3.p11",
+          "quote": "We see very similar flux-dependent bimodality and RTS in these two additional data sets."
+        }
+      ]
+    },
+    "findings": {
+      "text": "量子电容测量显示通量 h/2e 周期的双模性，在最优通量下 3.7 µs 内信噪比为 1 [abstract]。从时间轨迹中提取出两个相关态的驻留时间在约 2 T 面内磁场下超过 1 ms [abstract]。这些结果与一对相距约 3 µm 的 Majorana 零模所编码的费米子宇称测量一致，且非平衡准粒子中毒率低 [abstract]。大的电容移动和长的中毒时间使得宇称测量误差概率为 1% [abstract]。作者将 RTS 解释为纳米线中费米子态宇称的切换，并发现与 MZMs 模型拟合良好 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Our quantum capacitance measurements show flux $h/2e$-periodic bimodality with a signal-to-noise ratio of 1 in $3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ at optimal flux values."
+        },
+        {
+          "id": "abstract",
+          "quote": "From the time traces of the quantum capacitance measurements, we extract a dwell time in the two associated states that is longer than $1\\text{\\,}\\mathrm{ms}$ at in-plane magnetic fields of approximately $2\\text{\\,}\\mathrm{T}$."
+        },
+        {
+          "id": "abstract",
+          "quote": "These results are consistent with a measurement of the fermion parity encoded in a pair of Majorana zero modes that are separated by approximately $3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$ and subjected to a low rate of poisoning by non-equilibrium quasiparticles."
+        },
+        {
+          "id": "abstract",
+          "quote": "The large capacitance shift and long poisoning time enable a parity measurement error probability of $1\\%$."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We interpret this RTS as switches of the parity of a fermionic state in the wire."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We have fit these data to a model in which the fermion parity is associated with two MZMs localized at the opposite ends of a 1DTS, and we find good agreement."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "该测量本身不能明确区分拓扑相中的 MZMs 与平庸相中精细调节的低能 Andreev 束缚态 [S1.p3]。这些测量本身不能确定干涉测量检测到的低能态是否是拓扑的 [S5.p1]。作者指出，在当前器件中，由于有限尺寸效应导致的介观涨落，预期 E_M 会有显著变化，且当前器件中预期有适度的能隙 Δ_T 和相干长度 [S4.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase"
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Within the topological phase, we expect a substantial variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ in our current devices, attributable to mesoscopic fluctuations due to finite-size effects."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Indeed, in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 9934,
+      "completion_tokens": 2387,
+      "elapsed_s": 9.48
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 26,
+    "quote_rate": 0.846,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "Our quantum capacitance measurements show flux $h/2e$-periodic bimodality with a"
+      },
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "From the time traces of the quantum capacitance measurements, we extract a dwell"
+      },
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "These results are consistent with a measurement of the fermion parity encoded in"
+      },
+      {
+        "field": "findings",
+        "id": "abstract",
+        "reason": "quote 不在该段落里",
+        "quote": "The large capacitance shift and long poisoning time enable a parity measurement "
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

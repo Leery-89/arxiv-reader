@@ -1,0 +1,222 @@
+{
+  "paper": {
+    "arxiv_id": "2005.14165",
+    "title": "Language Models are Few-Shot Learners",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix A Details of Common Crawl Filtering",
+      "Appendix B Details of Model Training",
+      "Appendix C Details of Test Set Contamination Studies",
+      "Initial training set filtering",
+      "Overlap methodology",
+      "Overlap results",
+      "Appendix D Total Compute Used to Train Language Models",
+      "Appendix E Human Quality Assessment of Synthetic News Articles",
+      "Appendix F Additional Samples from GPT-3",
+      "Appendix G Details of Task Phrasing and Specifications",
+      "Appendix H Results on All Tasks for All Model Sizes"
+    ],
+    "char_count": 129450,
+    "n_sections": 43,
+    "n_paragraphs": 226
+  },
+  "result": {
+    "summary": "本文训练了一个 1750 亿参数的自回归语言模型 GPT-3，并在不进行任何梯度更新或微调的情况下，用零样本、单样本和少样本设置评估其性能 [abstract][S1.p9]。GPT-3 在翻译、问答、完形填空以及需要即时推理或领域适应的任务上取得较强表现，有时接近此前最先进的微调方法 [abstract]。同时，论文也指出 GPT-3 在部分数据集上仍然表现不佳，并存在与大规模网络语料训练相关的方法论问题 [abstract]。作者还系统研究了数据污染问题，并讨论了该发现及 GPT-3 的更广泛社会影响 [abstract][S1.p15]。",
+    "research_question": {
+      "text": "论文要解决的问题是：传统方法虽然架构与任务无关，但仍需要针对每个任务准备数千到数十万个样本的微调数据集 [S1.p2]。作者希望探索一条途径，使语言模型在训练时获得广泛技能，并在推理时仅通过自然语言指令和少量示例快速适应或识别任务 [S1.p6]。此前这类方法的结果远逊于微调，因此需要大幅改进才能成为实用的语言任务求解方法 [S1.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "there is still a need for task-specific datasets and task-specific fine-tuning"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "typically requires fine-tuning on a dataset of thousands to hundreds of thousands of examples specific to that task"
+        },
+        {
+          "id": "S1.p6",
+          "quote": "the model develops a broad set of skills and pattern recognition abilities at training time, and then uses those abilities at inference time to rapidly adapt to or recognize the desired task"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "this approach still achieves results far inferior to fine-tuning"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "Meta-learning clearly requires substantial improvement in order to be viable as a practical method of solving language tasks."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文训练了一个 1750 亿参数的自回归语言模型 GPT-3，其规模是此前任何非稀疏语言模型的 10 倍 [abstract]。模型沿用 GPT-2 的架构，但在 transformer 层中使用交替的稠密和局部带状稀疏注意力模式，并训练了从 1.25 亿到 1750 亿参数的 8 种不同规模模型 [S2.SS1.p1]。评估时，GPT-3 不进行任何梯度更新或微调，任务和少样本示例完全通过文本交互指定 [abstract]。少样本设置从任务训练集中随机抽取 K 个示例作为条件，K 通常为 10 到 100，受模型上下文窗口 2048 限制 [S2.SS4.p1][S2.SS4.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "we train GPT-3, an autoregressive language model with 175 billion parameters, 10x more than any previous non-sparse language model"
+        },
+        {
+          "id": "abstract",
+          "quote": "GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "we use alternating dense and locally banded sparse attention patterns in the layers of the transformer, similar to the Sparse Transformer"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "we train 8 different sizes of model, ranging over three orders of magnitude from 125 million parameters to 175 billion parameters"
+        },
+        {
+          "id": "S2.SS4.p1",
+          "quote": "we evaluate each example in the evaluation set by randomly drawing $K$ examples from that task’s training set as conditioning"
+        },
+        {
+          "id": "S2.SS4.p2",
+          "quote": "which is $n_{\\mathrm{ctx}}=2048$ for all models and typically fits $10$ to $100$ examples"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在超过两打 NLP 数据集以及若干为测试快速适应而设计的新任务上评估 GPT-3，每个任务均在少样本、单样本和零样本三种条件下评估 [S1.p9]。数据集被分为 9 类，涵盖语言建模、闭卷问答、翻译、Winograd 风格任务、常识推理、阅读理解、SuperGLUE、NLI 以及合成与定性任务 [S3.p2][S3.p3]。此外，论文还系统研究了数据污染，开发工具测量其影响，并对部分数据集不报告结果或加星号标注 [S1.p15]。",
+      "evidence": [
+        {
+          "id": "S1.p9",
+          "quote": "we evaluate GPT-3 on over two dozen NLP datasets, as well as several novel tasks designed to test rapid adaptation"
+        },
+        {
+          "id": "S1.p9",
+          "quote": "we evaluate GPT-3 under 3 conditions: (a) “few-shot learning” ... (b) “one-shot learning” ... and (c) “zero-shot” learning"
+        },
+        {
+          "id": "S3.p2",
+          "quote": "we group the datasets into 9 categories representing roughly similar tasks"
+        },
+        {
+          "id": "S3.p3",
+          "quote": "In Section 3.9, we invent some additional tasks designed especially to probe in-context learning abilities"
+        },
+        {
+          "id": "S1.p15",
+          "quote": "we develop systematic tools to measure data contamination and quantify its distorting effects"
+        },
+        {
+          "id": "S1.p15",
+          "quote": "we either do not report results on these datasets or we note them with an asterisk, depending on the severity"
+        }
+      ]
+    },
+    "findings": {
+      "text": "GPT-3 在多个 NLP 数据集上取得较强表现，包括翻译、问答和完形填空，以及需要即时推理或领域适应的任务，有时甚至接近此前最先进的微调方法 [abstract]。在 LAMBADA 上，GPT-3 少样本达到 86.4% 准确率，比此前最先进结果提高超过 18% [S3.SS1.SSS2.p5]。在 TriviaQA 上，零样本结果已超过微调 T5-11B 14.2%，少样本结果进一步比单样本提高 3.2% [S3.SS2.p2]。然而，GPT-3 在部分任务上仍然表现不佳，如 ANLI、RACE 和 QuAC [S1.p13]。此外，GPT-3 能生成人类评估者难以与人类撰写文章区分的新闻样本 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "GPT-3 achieves strong performance on many NLP datasets, including translation, question-answering, and cloze tasks"
+        },
+        {
+          "id": "abstract",
+          "quote": "sometimes even reaching competitiveness with prior state-of-the-art fine-tuning approaches"
+        },
+        {
+          "id": "S3.SS1.SSS2.p5",
+          "quote": "GPT-3 achieves 86.4% accuracy in the few-shot setting, an increase of over 18% from the previous state-of-the-art"
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "The zero-shot result already outperforms the fine-tuned T5-11B by 14.2%"
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "GPT-3’s few-shot result further improves performance another 3.2% beyond this."
+        },
+        {
+          "id": "S1.p13",
+          "quote": "we also find some tasks on which few-shot performance struggles, even at the scale of GPT-3. This includes natural language inference tasks like the ANLI dataset, and some reading comprehension datasets like RACE or QuAC."
+        },
+        {
+          "id": "abstract",
+          "quote": "GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出 GPT-3 存在若干局限：模型仅采用自回归架构，未包含双向架构或其他训练目标，这可能解释其在 WiC、ANLI 及部分阅读理解任务上的落后表现 [S5.p3]。另一个更根本的局限是，单纯扩大自监督预测模型可能最终触及预训练目标的极限，因为当前目标对每个 token 等权，缺乏重要性概念，且模型未扎根于视频或真实世界物理交互等其他经验领域 [S5.p4]。此外，GPT-3 在预训练阶段的样本效率仍然较差，其预训练所见文本远多于人类一生所见 [S5.p5]。少样本学习究竟是在推理时从零学习新任务，还是仅识别训练中已学到的任务，这一点仍不明确 [S5.p6]。最后，GPT-3 规模的模型推理成本高且不便，可能对实际应用构成挑战 [S5.p7]。",
+      "evidence": [
+        {
+          "id": "S5.p3",
+          "quote": "our experiments do not include any bidirectional architectures or other training objectives such as denoising"
+        },
+        {
+          "id": "S5.p3",
+          "quote": "This could be a possible explanation for GPT-3’s lagging few-shot performance on a few of the tasks, such as WIC ... ANLI ... and several reading comprehension tasks (e.g. QuAC and RACE)."
+        },
+        {
+          "id": "S5.p4",
+          "quote": "it may eventually run into (or could already be running into) the limits of the pretraining objective"
+        },
+        {
+          "id": "S5.p4",
+          "quote": "Our current objective weights every token equally and lacks a notion of what is most important to predict and what is less important."
+        },
+        {
+          "id": "S5.p4",
+          "quote": "large pretrained language models are not grounded in other domains of experience, such as video or real-world physical interaction"
+        },
+        {
+          "id": "S5.p5",
+          "quote": "Another limitation broadly shared by language models is poor sample efficiency during pre-training."
+        },
+        {
+          "id": "S5.p5",
+          "quote": "it still sees much more text during pre-training than a human sees in the their lifetime"
+        },
+        {
+          "id": "S5.p6",
+          "quote": "ambiguity about whether few-shot learning actually learns new tasks “from scratch” at inference time, or if it simply recognizes and identifies tasks that it has learned during training"
+        },
+        {
+          "id": "S5.p7",
+          "quote": "they are both expensive and inconvenient to perform inference on, which may present a challenge for practical applicability of models of this scale in their current form"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 15587,
+      "completion_tokens": 2322,
+      "elapsed_s": 9.2
+    }
+  },
+  "verify": {
+    "quote_hits": 31,
+    "quote_total": 33,
+    "quote_rate": 0.939,
+    "inline_hits": 22,
+    "inline_total": 22,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S1.p9",
+        "reason": "quote 不在该段落里",
+        "quote": "we evaluate GPT-3 under 3 conditions: (a) “few-shot learning” ... (b) “one-shot "
+      },
+      {
+        "field": "limitations",
+        "id": "S5.p3",
+        "reason": "quote 不在该段落里",
+        "quote": "This could be a possible explanation for GPT-3’s lagging few-shot performance on"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

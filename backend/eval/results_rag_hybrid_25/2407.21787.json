@@ -1,0 +1,157 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21787",
+    "title": "Large Language Monkeys : Scaling Inference Compute with Repeated Sampling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 49608,
+    "n_sections": 29,
+    "n_paragraphs": 96
+  },
+  "result": {
+    "summary": "本文探索将推理计算作为新的扩展维度，采用重复采样这一简单技术，从模型中反复采样候选解 [abstract]。在多个任务和模型上，覆盖率随样本数在四个数量级范围内扩展，且覆盖率与样本数的关系常呈对数线性，可用指数幂律建模 [abstract]。在编码和形式化证明等可自动验证的领域，覆盖率的提升直接转化为性能提升；在 SWE-bench Lite 上，DeepSeek-Coder-V2-Instruct 的解决率从单样本的 15.9% 提升到 250 样本的 56%，超过单样本最优的 43% [abstract]。在没有自动验证器的领域，多数投票和奖励模型等常见选择方法在数百样本后趋于平台期，无法随样本预算充分扩展 [abstract]。",
+    "research_question": {
+      "text": "论文关注的问题是：在推理阶段，用户和开发者通常限制模型只做一次尝试，而训练计算扩展已带来显著能力提升，因此本文探索将推理计算作为另一个扩展轴，通过重复采样来提升推理性能 [S1.p2][S1.p3]。作者的目标是系统性地刻画重复采样在一系列任务、模型和样本预算下的收益 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "However, when interacting with LLMs, users and developers often restrict models to making only one attempt when solving a problem."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this work, we explore repeated sampling (Figure 1) as a simple approach to scaling inference compute in order to improve reasoning performance."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Our goal is to systematically characterize these benefits across a range of tasks, models, and sample budgets."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用重复采样方法：在 pass-fail 任务上，让模型为每个问题生成多个候选解，关注的成功率同时受覆盖率（能否生成正确样本）和精度（能否识别正确样本）影响 [S2.p1]。作者借鉴 GPT-4 技术报告中用幂律建模编码问题平均对数通过率与训练计算关系的做法，将覆盖率 c 的对数建模为样本数 k 的函数 log(c) ≈ a k^b，并指数化得到 c ≈ exp(a k^b) [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "With repeated sampling, we consider a setup where a model can generate many candidate solutions while attempting to solve a problem."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The success rate is therefore influenced both by the ability to generate correct samples for many problems (i.e. coverage), as well as the ability to identify these correct samples (i.e. precision)."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We start by adopting the same function class, but now modelling the log of coverage $c$ as a function of the number of samples $k$: $\\displaystyle\\log(c)\\approx ak^{b}$ (2)"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "In order to directly predict coverage, we exponentiate both sides, ending up with the final model of: $\\displaystyle c\\approx\\exp(ak^{b})$ (3)"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在多个数据集上评估：GSM8K 随机 128 题、MATH 随机 128 题、MiniF2F-MATH 的 130 道由 MATH 形式化的测试题（使用 Lean4）、CodeContests 竞赛编程题（要求 Python3）、以及 SWE-bench Lite 真实 GitHub issue [S2.p4]。模型覆盖 70M 到 70B 参数、Llama/Gemma/Pythia 家族以及 Base 和 Instruct 后训练水平 [S2.F3]。作者还在固定 FLOP 预算下比较不同模型与样本数的覆盖率，并比较 DeepSeek-Coder-V2-Instruct、GPT-4o 和 Claude Sonnet 3.5 在 SWE-bench Lite 上的 API 价格 [S1.p9][S2.SS3.p4]。",
+      "evidence": [
+        {
+          "id": "S2.p4",
+          "quote": "1. GSM8K: A dataset of grade-school level math word problems. We evaluate on a random subset of 128 problems from the GSM8K test set."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "3. MiniF2F-MATH: A dataset of mathematics problems that have been formalized into proof checking languages. We use Lean4 as our language, and evaluate on the 130 test set problems that are formalized from the MATH dataset."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "5. SWE-bench Lite: A dataset of real world Github issues, where each problem consists of a description and a snapshot of a code repository."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "Figure 3: Scaling inference time compute via repeated sampling leads to consistent coverage gains across a variety of model sizes (70M-70B), families (Llama, Gemma and Pythia) and levels of post-training (Base and Instruct models)."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "We also compare API prices between DeepSeek-Coder-V2-Instruct, GPT-4o, and Claude Sonnet 3.5 in the context of solving SWE-bench Lite issues."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "We present our re-scaled results for MiniF2F, CodeContests, MATH, and GSM8K in Figure 4."
+        }
+      ]
+    },
+    "findings": {
+      "text": "覆盖率随样本数在四个数量级范围内扩展，且覆盖率与样本数的关系常呈对数线性，可用指数幂律建模 [abstract]。在可自动验证的编码和形式化证明领域，覆盖率提升直接转化为性能提升；在 SWE-bench Lite 上，DeepSeek-Coder-V2-Instruct 的解决率从单样本的 15.9% 提升到 250 样本的 56%，超过单样本最优的 43% [abstract]。在没有自动验证器的领域，多数投票和奖励模型等常见选择方法在约 100 样本后趋于平台期，与覆盖率上界之间的差距不断扩大 [S1.p12]。在固定 FLOP 预算下，最大化覆盖率的模型随预算和任务变化：在 MiniF2F、GSM8K 和 MATH 上 Llama-3-8B-Instruct 始终优于 70B 模型，而在 CodeContests 上 70B 模型几乎总是更具成本效益 [S2.SS3.p4]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Across multiple tasks and models, we observe that coverage – the fraction of problems that are solved by any generated sample – scales with the number of samples over four orders of magnitude."
+        },
+        {
+          "id": "abstract",
+          "quote": "Interestingly, the relationship between coverage and the number of samples is often log-linear and can be modelled with an exponentiated power law, suggesting the existence of inference-time scaling laws."
+        },
+        {
+          "id": "abstract",
+          "quote": "When we apply repeated sampling to SWE-bench Lite, the fraction of issues solved with DeepSeek-Coder-V2-Instruct increases from 15.9% with one sample to 56% with 250 samples, outperforming the single-sample state-of-the-art of 43%."
+        },
+        {
+          "id": "S1.p12",
+          "quote": "In domains without automatic verifiers, we show that common approaches to verification plateau beyond approximately 100 samples."
+        },
+        {
+          "id": "S1.p12",
+          "quote": "This leads to a growing gap between the performance achieved with these methods and the coverage upper bound."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "On MiniF2F, GSM8K and MATH, Llama-3-8B-Instruct always obtains higher coverage than the larger (and more expensive) 70B model when the FLOP budget is fixed."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "However for CodeContests, the 70B model is almost always more cost effective."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，这些覆盖率缩放规律不如训练缩放规律精确，最明显的是在 MiniF2F-MATH 上 [S3.SS1.p1]。作者还指出，仅考察 FLOPs 可能是一种粗糙的成本度量，忽略了系统效率的其他方面 [S2.SS3.p4]。此外，重复采样是与聊天机器人请求服务不同的推理工作负载，后者强调低响应延迟 [S5.p4]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "While these laws are not as exact as training scaling laws (most strikingly on MiniF2F-MATH), they provide encouraging early evidence that the benefits of inference scaling can be characterized."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "We note that examining FLOPs alone can be a crude cost metric that ignores other aspects of system efficiency."
+        },
+        {
+          "id": "S5.p4",
+          "quote": "Repeated sampling is a distinct LLM inference workload from serving chatbot requests."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4111,
+      "completion_tokens": 2090,
+      "elapsed_s": 7.58
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

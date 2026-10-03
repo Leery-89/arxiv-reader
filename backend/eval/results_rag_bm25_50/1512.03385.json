@@ -1,0 +1,189 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文针对深度神经网络难以训练的问题，提出了残差学习框架，让堆叠层学习相对于输入的残差映射而非无参照映射 [S1.p5]。作者在 ImageNet 上验证了极深残差网络易于优化，并能从深度增加中获得精度提升，而对应的普通网络随深度增加训练误差反而升高 [S1.p7]。152 层残差网络是当时 ImageNet 上最深网络，复杂度仍低于 VGG，集成模型在测试集上取得 3.57% top-5 错误率并赢得 ILSVRC 2015 分类任务第一名 [S1.p9]。作者还在 CIFAR-10 上分析了 100 层和 1000 层网络 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：随着网络加深，训练精度反而下降（退化问题），而这不是由梯度消失/爆炸造成的 [S1.p4]。作者指出，按构造存在一个更深的模型其训练误差不应高于较浅对应模型，但现有求解器无法找到与构造解相当或更好的解 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "The degradation (of training accuracy) indicates that not all systems are similarly easy to optimize."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "The existence of this constructed solution indicates that a deeper model should produce no higher training error than its shallower counterpart."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "But experiments show that our current solvers on hand are unable to find solutions that are comparably good or better than the constructed solution"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出深度残差学习框架：不要求每几个堆叠层直接拟合目标映射 H(x)，而是让这些层拟合残差映射 F(x):=H(x)-x，原映射改写为 F(x)+x [S1.p5]。作者假设优化残差映射比优化原始无参照映射更容易 [S1.p5]。捷径连接不引入额外参数或计算复杂度，因此可以在参数、深度、宽度和计算开销相同的条件下公平比较普通网络与残差网络 [S3.SS2.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a residual mapping."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We hypothesize that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "The shortcut connections in Eqn.( 1) introduce neither extra parameter nor computation complexity."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "We can fairly compare plain/residual networks that simultaneously have the same number of parameters, depth, width, and computational cost"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在 ImageNet 2012 分类数据集（1000 类，128 万训练图像，5 万验证图像，10 万测试图像）上评估方法，报告 top-1 和 top-5 错误率 [S4.SS1.p1]。训练采用随机尺度增强、224×224 裁剪、逐像素均值减法、标准颜色增强、每个卷积后激活前使用 BN，SGD 小批量 256，学习率从 0.1 开始，误差平台时除以 10，最多训练 60×10^4 次迭代，权重衰减 0.0001，动量 0.9，不使用 dropout [S3.SS4.p1]。此外在 CIFAR-10（5 万训练图像、1 万测试图像、10 类）上研究极深网络行为，使用简单架构、权重衰减 0.0001、动量 0.9、BN、无 dropout，小批量 128，学习率 0.1 并在 32k 和 48k 迭代时除以 10，64k 迭代终止 [S4.SS2.p1][S4.SS2.p3]。还在 PASCAL VOC 2007/2012 和 MS COCO 上以 Faster R-CNN 做目标检测，比较用 ResNet-101 替换 VGG-16 的改进 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We evaluate our method on the ImageNet 2012 classification dataset that consists of 1000 classes."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The models are trained on the 1.28 million training images, and evaluated on the 50k validation images."
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We adopt batch normalization (BN) right after each convolution and before activation"
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We use SGD with a mini-batch size of 256."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We conducted more studies on the CIFAR-10 dataset, which consists of 50k training images and 10k testing images in 10 classes."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "These models are trained with a mini-batch size of 128 on two GPUs."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We adopt Faster R-CNN as the detection method."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Here we are interested in the improvements of replacing VGG-16 with ResNet-101."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 ImageNet 上，34 层 ResNet 比 18 层 ResNet 好 2.8%，且 34 层 ResNet 训练误差明显更低并能泛化到验证数据，表明退化问题在此设置下得到解决 [S4.SS1.p6]。与对应的普通网络相比，34 层 ResNet 将 top-1 误差降低 3.5% [S4.SS1.p7]。152 层 ResNet 单模型 top-5 验证误差为 4.49%，优于此前所有集成结果；六模型集成在测试集上达到 3.57% top-5 误差，赢得 ILSVRC 2015 第一名 [S4.SS1.p16]。在 CIFAR-10 上，ResNet 同样克服优化困难并随深度增加获得精度提升 [S4.SS2.p5]；1202 层网络训练误差低于 0.1%，测试误差 7.93%，但测试结果差于 110 层网络，作者认为原因是过拟合 [S4.SS2.p8][S4.SS2.p9]。在目标检测上，ResNet-101 在 COCO 标准指标 mAP@[.5,.95] 上比 VGG-16 提升 6.0%，相对提升 28% [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p6",
+          "quote": "the 34-layer ResNet is better than the 18-layer ResNet (by 2.8%)"
+        },
+        {
+          "id": "S4.SS1.p6",
+          "quote": "This indicates that the degradation problem is well addressed in this setting"
+        },
+        {
+          "id": "S4.SS1.p7",
+          "quote": "the 34-layer ResNet reduces the top-1 error by 3.5% (Table 2)"
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "Our 152-layer ResNet has a single-model top-5 validation error of 4.49%."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This leads to 3.57% top-5 error on the test set (Table 5). This entry won the 1st place in ILSVRC 2015."
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases"
+        },
+        {
+          "id": "S4.SS2.p8",
+          "quote": "this $10^{3}$ -layer network is able to achieve training error $<$ 0.1%"
+        },
+        {
+          "id": "S4.SS2.p8",
+          "quote": "Its test error is still fairly good (7.93%, Table 6)."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error. We argue that this is because of overfitting."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "we obtain a 6.0% increase in COCO’s standard metric (mAP@[.5,.95]), which is a 28% relative improvement"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，1202 层网络测试结果差于 110 层网络，认为原因是过拟合，该网络对此小数据集可能不必要地大，本文未使用 maxout/dropout，仅通过深而窄的架构施加正则化，结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。作者还指出，深层普通网络优化困难的原因尚不清楚，将在未来研究 [S4.SS1.p4]。此外，多尺度训练因时间有限未进行，多尺度测试也仅用于 Fast R-CNN 步骤而未用于 RPN 步骤 [A2.p5]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The 1202-layer network may be unnecessarily large (19.4M) for this small dataset."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "In this paper, we use no maxout/dropout and just simply impose regularization via deep and thin architectures by design"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "But combining with stronger regularization may improve results, which we will study in the future."
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "The reason for such optimization difficulties will be studied in the future."
+        },
+        {
+          "id": "A2.p5",
+          "quote": "we have not performed multi-scale training because of limited time"
+        },
+        {
+          "id": "A2.p5",
+          "quote": "we have performed multi-scale testing only for the Fast R-CNN step (but not yet for the RPN step)"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6634,
+      "completion_tokens": 2387,
+      "elapsed_s": 8.52
+    }
+  },
+  "verify": {
+    "quote_hits": 31,
+    "quote_total": 31,
+    "quote_rate": 1.0,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

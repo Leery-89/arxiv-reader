@@ -1,0 +1,87 @@
+{
+  "paper": {
+    "arxiv_id": "1701.00001",
+    "title": "Digital Advertising Traffic Operation: Machine Learning for Process Discovery",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 830,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "本文关注数字广告流量运营中客户服务流程投诉增多的问题，提出用机器学习技术进行流程发现，以自动发现流程变体并识别问题 [abstract]。作者提出基于 Process Mining 对 CRM 数据进行流程发现，从而识别流程中不希望的循环和延迟 [abstract]。论文声称该方法能自动发现变体，让人一眼看出问题所在并采取纠正措施 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是数字广告流量运营中客户服务流程投诉不断增多，需要识别流程本身的弱点并将其传达给相关部门 [abstract]。原文指出，借助对 CRM 数据的 Process Mining 可以识别流程中不希望的循环和延迟 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "In order to solve a growing number of complaints in the customer service process, the weaknesses in the process itself must be identified and communicated to the department."
+        },
+        {
+          "id": "abstract",
+          "quote": "With the help of Process Mining for the CRM data it is possible to identify unwanted loops and delays in the process."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出一种基于机器学习技术的流程发现方法，用于自动发现变体并检测问题所在 [abstract]。该方法以 Process Mining 为基础，作用于 CRM 数据 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "we propose a process discovery based on Machine Learning technique to automatically discover variations and detect at first glance what the problem is"
+        },
+        {
+          "id": "abstract",
+          "quote": "With the help of Process Mining for the CRM data it is possible to identify unwanted loops and delays in the process."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "findings": {
+      "text": "原文指出，借助对 CRM 数据的 Process Mining 可以识别流程中不希望的循环和延迟 [abstract]。论文还声称所提出的方法能够自动发现变体，并一眼看出问题所在，从而采取纠正措施 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "With the help of Process Mining for the CRM data it is possible to identify unwanted loops and delays in the process."
+        },
+        {
+          "id": "abstract",
+          "quote": "to automatically discover variations and detect at first glance what the problem is, and undertake corrective measures."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1520,
+      "completion_tokens": 545,
+      "elapsed_s": 2.6
+    }
+  },
+  "verify": {
+    "quote_hits": 6,
+    "quote_total": 6,
+    "quote_rate": 1.0,
+    "inline_hits": 6,
+    "inline_total": 6,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 2,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,149 @@
+{
+  "paper": {
+    "arxiv_id": "2501.19393",
+    "title": "s1 : Simple test-time scaling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44775,
+    "n_sections": 55,
+    "n_paragraphs": 75
+  },
+  "result": {
+    "summary": "本文研究如何以最简单的方式实现测试时扩展（test-time scaling）并获得强推理性能 [S1.p1]。作者构建了仅含 1,000 个问题及其推理轨迹的小数据集 s1K，对 Qwen2.5-32B-Instruct 进行监督微调，并提出 budget forcing 这一测试时技术来控制思考时长 [S1.p2]。得到的模型 s1-32B 在竞赛数学题上超过 o1-preview 最多 27%（MATH 和 AIME24），并可通过 budget forcing 将 AIME24 性能从 50% 外推到 57% [abstract]。作者还通过消融实验表明，难度、多样性、质量三者联合的数据选择很重要，且 budget forcing 在可控性和扩展斜率上表现最佳 [S1.p3]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在众多 o1 复现尝试中，尚无人公开复现出清晰的测试时扩展行为，因此作者追问实现测试时扩展与强推理性能的最简单方法是什么 [S1.p1]。其动机在于，o1 展示了测试时扩展带来的稳定收益，但未公开方法，而 DeepSeek R1 等复现依赖大规模强化学习和海量样本 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, despite the large number of o1 replication attempts, none have openly replicated a clear test-time scaling behavior."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "o1 has demonstrated strong reasoning performance with consistent gains from scaling test-time compute."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "DeepSeek R1 has successfully replicated o1-level performance, also employing reinforcement learning via millions of samples and multiple training stages."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了 s1K 数据集，包含 1,000 个精心挑选的问题及其从 Gemini Thinking Experimental 蒸馏出的推理轨迹和答案，并在现成预训练模型上进行监督微调 [S1.p2]。测试时采用 budget forcing：若模型生成的思考 token 超过设定上限，就强制插入结束思考的 token 分隔符使其转入作答；若希望模型花更多测试时算力，则抑制结束思考 token 并追加“Wait”以鼓励更多探索 [S1.p2]。作者将测试时扩展方法分为顺序式与并行式，并聚焦于顺序式扩展 [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "we construct s1K, which consists of 1,000 carefully curated questions paired with reasoning traces and answers distilled from Gemini Thinking Experimental."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "If the model generates more thinking tokens than a desired limit, we forcefully end the thinking process by appending an end-of-thinking token delimiter."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "we suppress the generation of the end-of-thinking token delimiter and instead append “Wait” to the model’s current reasoning trace to encourage more exploration."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We focus on sequential scaling as intuitively we believe it should scale better, since later computations can build on intermediate results, allowing for deeper reasoning and iterative refinement."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在推理密集型任务上对 s1-32B 进行基准测试，并变化测试时算力 [S1.F1]。测试时扩展的评估在 AIME24 上进行，用思考 token 数衡量算力，并定义 Control、Scaling、Performance 三个指标 [S3.SS2.p1]。消融实验针对数据选择与测试时扩展方法：随机选择、选最长推理轨迹或只选最大多样性样本都会导致性能显著变差（AIME24 上平均约 -30%），而在 59K 全量数据池上训练相比 1K 选择并无实质增益 [S1.p3]。测试时扩展方法消融在 AIME24 上比较了 budget forcing、token/step/class-conditional control 和 rejection sampling 等 [S5.T3]。",
+      "evidence": [
+        {
+          "id": "S1.F1",
+          "quote": "We benchmark s1-32B on reasoning-intensive tasks and vary test-time compute."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "For each method we consider, we run a set of evaluations $a\\in\\mathcal{A}$ varying test-time compute on a fixed benchmark, e.g. AIME24."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection."
+        },
+        {
+          "id": "S5.T3",
+          "quote": "Ablations on methods to scale test-time compute on AIME24."
+        }
+      ]
+    },
+    "findings": {
+      "text": "s1-32B 在竞赛数学题上超过 o1-preview 最多 27%（MATH 和 AIME24）[abstract]。通过 budget forcing 扩展测试时算力，可将 AIME24 性能从 50% 外推到 57% [abstract]。s1-32B 配合 budget forcing 的性能随测试时算力增加而提升，但最终在六倍处趋于平坦 [S4.SS2.SSS0.Px1.p1]。在基础模型上用多数投票扩展测试时算力无法追上 s1-32B 的性能，验证了顺序式扩展比并行式更有效的直觉 [S4.SS2.SSS0.Px1.p1]。数据选择方面，联合纳入难度、多样性、质量很重要，且 budget forcing 因具有完美可控性和清晰正斜率而带来最佳扩展 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)."
+        },
+        {
+          "id": "abstract",
+          "quote": "from 50% to 57% on AIME24."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "it does eventually flatten out at six times."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Scaling test-time compute on the base model via majority voting cannot catch up with the performance of s1-32B which validates our intuition from §3 that sequential scaling is more effective than parallel."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "we find that jointly incorporating difficulty, diversity, and quality measures into our selection algorithm is important."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Budget forcing leads to the best scaling as it has perfect controllability with a clear positive slope leading to strong performance."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出 budget forcing 在进一步扩展时有两个关键局限：它最终会趋于平坦，且受底层语言模型上下文窗口的限制 [S6.SS2.SSS0.Px2.p1]。作者还提到，继续测试时扩展需要能够进一步外推测试时算力的方法，并建议了改进 budget forcing 的可能方向 [S6.SS2.SSS0.Px2.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "However, it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p2",
+          "quote": "Continuing test-time scaling will require approaches that can further extrapolate test-time compute."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4000,
+      "completion_tokens": 1838,
+      "elapsed_s": 7.39
+    }
+  },
+  "verify": {
+    "quote_hits": 21,
+    "quote_total": 21,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

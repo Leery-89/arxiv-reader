@@ -1,0 +1,168 @@
+{
+  "paper": {
+    "arxiv_id": "2405.03370",
+    "title": "AntiFold: Improved antibody structure-based design using inverse folding",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 31464,
+    "n_sections": 34,
+    "n_paragraphs": 84
+  },
+  "result": {
+    "summary": "AntiFold 是一个抗体特异性逆折叠模型，由 ESM-IF1 在已解析和预测的抗体结构上微调而来 [S1.p6]。它在 CDR 序列恢复上优于现有逆折叠工具，设计序列与原始结构高度相似 [abstract]。在零样本预测抗体-抗原结合亲和力时相关性更强，加入抗原信息后性能进一步提升 [abstract]。AntiFold 对破坏抗原结合的突变赋予低概率，可与蛋白语言模型残基概率协同，用于指导抗体优化 [abstract]。",
+    "research_question": {
+      "text": "抗体优化需要选择能维持结构及相关性质（如稳定性和抗原结合模式）的突变，而现有抗体逆折叠工具在 CDR 区域的序列恢复有限，且 ProteinMPNN 类工具存在链重排、CDRH3 112 位插入或引入 gap 等与抗体结构不兼容的问题 [S1.p3][S1.p5]。因此，本文旨在开发一个抗体特异性逆折叠模型，以改进 CDR 序列恢复和零样本亲和力预测 [S1.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "A guiding consideration in antibody optimization is selecting mutations that maintain the structure and therefore structure-mediated properties, such as stability and antigen binding mode."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "However, the sequence recovery of existing tools for the CDR regions has been limited."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "Additionally, ProteinMPNN-based tools have features such as the occasional re-ordering of antibody chains or CDRH3 position 112 insertions, or the introduction of gaps into IMGT numbered antibodies, incompatible with antibody structures."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Here, we present AntiFold, an antibody-specific inverse folding model fine-tuned from ESM-IF1, which significantly improves upon CDR sequence recovery and zero-shot affinity prediction."
+        }
+      ]
+    },
+    "method": {
+      "text": "AntiFold 通过微调 ESM-IF1 逆折叠架构在抗体结构上训练，学习给定骨架坐标下序列的条件概率分布 [S0.SS1.SSS3.p1]。训练采用 IMGT 加权 shotgun 和 span masking、逐层学习率衰减，并在预测结构上添加高斯噪声 [S0.SS2.SSS1.p5]。训练分两阶段：先在 OAS 预测结构上微调一遍，再在已解析训练集上微调，当验证损失 10 个 epoch 无改善时停止 [S0.SS2.SSS1.p5]。模型输入抗体可变域结构，输出每个残基的突变容忍度（perplexity）和氨基酸概率，可选指定区域采样序列并用温度控制多样性 [S1.p6]。",
+      "evidence": [
+        {
+          "id": "S0.SS1.SSS3.p1",
+          "quote": "We trained AntiFold by fine-tuning the ESM-IF1 inverse folding architecture (Figure S1) on antibody structures."
+        },
+        {
+          "id": "S0.SS1.SSS3.p1",
+          "quote": "The inverse folding problem can be formalized as learning the conditional probability distribution, $p(Y|X)$, of the protein sequence, $Y$, consisting of amino acids $(y_{1},\\ldots,y_{i},\\ldots,y_{n})$, given the structure, $X$, with spatial coordinates of the backbone atoms (N, C α and C) $(x_{1},\\ldots,x_{i},\\ldots,x_{3n})$ (Equation (1))."
+        },
+        {
+          "id": "S0.SS2.SSS1.p5",
+          "quote": "Based on these results, we chose to train the final AntiFold model with IMGT-weighted shotgun and span masking, layer-wise learning rate decay and added Gaussian noise on predicted structures."
+        },
+        {
+          "id": "S0.SS2.SSS1.p5",
+          "quote": "First we fine-tuned ESM-IF1 on one pass of the training dataset of predicted structures from OAS."
+        },
+        {
+          "id": "S0.SS2.SSS1.p5",
+          "quote": "Next we fine-tuned the model on the solved training dataset, stopping training when there was no further improvement in validation loss for 10 epochs."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "For each residue position, the tool outputs the overall tolerance to mutations without altering the backbone structure (perplexity) and individual amino acid probabilities."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Optionally, the user may specify regions to sample new sequences for, and a temperature parameter to control sequence diversity."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "训练、验证和测试使用与 AbMPNN 相同的数据：来自 SAbDab 的 2,074 个已解析复合物，以及来自 OAS 配对数据库、用 ABodyBuilder2 建模的 147,458 个序列结构，按 90% 拼接 CDR 序列一致性划分（80/10/10）[S2.SS1.p1]。序列恢复在实验结构测试集上评估，并与 ESM-IF1、AbMPNN 比较 [S3.SS1.p1]。结构一致性评估选取测试集中 56 个 X 射线分辨率低于 2.5 Å 的抗体结构，用 ProteinMPNN、ESM-IF1、AbMPNN 和 AntiFold 在温度 0.20 下各采样 20 条序列并重新折叠 [S3.SS2.p1]。结合亲和力预测在抗溶菌酶抗体 Fab D44.1（PDB 1MLC）的 2209 个可变域变体深度突变扫描上评估，并加入 ESM-2 作为序列基线 [S3.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To enable a direct comparison with AbMPNN, we trained, validated and tested our model on the same data: 2,074 solved complexes from the Structural Antibody Database (SAbDab), and 147,458 structures of sequences from the Observed Antibody Space (OAS) paired database modeled with ABodyBuilder2."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "Each dataset was split using a 90% concatenated CDR sequence identity cutoff (80/10/10 train/validation/test)."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "AntiFold demonstrated a substantial improvement in AAR on the experimental structure test set as compared to the original ESM-IF1 model (60 vs 43% AAR for CDRH3, p $<$ 0.005; Table 1, Figure S2."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "We identified 56 antibody structures in the test set that were solved using X-ray crystallography with a resolution below 2.5 Å."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Next, we sampled 20 sequences for each antibody using ProteinMPNN, ESM-IF1, AbMPNN and AntiFold using a residue sampling temperature of 0.20 (for more details, see Supplementary Methods)."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "We assessed the ability of AntiFold and other inverse folding models to predict antibody-antigen binding affinity by applying them to a deep mutational scan of an anti-lysozyme antibody."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "We calculated the log-likelihoods of the 2209 variable domain variants of Fab D44.1 (PDB 1MLC) (Figure S6)."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "As a sequence-only baseline, we included the sequence-based ESM-2 model (650M parameters)."
+        }
+      ]
+    },
+    "findings": {
+      "text": "AntiFold 在实验结构测试集上 CDRH3 的 AAR 为 60%，显著优于 ESM-IF1 的 43%（p < 0.005），也优于 AbMPNN 的 56%，并在其余 CDR 区域（75-84% vs 63-76%）和多数 FR 区域（87-94% vs 85-89%）上表现更好 [S3.SS1.p1]。AntiFold 在已解析和预测结构上 AAR 相似（ΔAAR 约 -0.5%），而 AbMPNN 在实验结构上略差（ΔAAR -2.7%）[S3.SS1.p2]。在抗溶菌酶深度突变扫描中，AntiFold 的 Spearman 秩相关为 0.418，优于 ESM-IF1（0.334）、AbMPNN（0.322）、ProteinMPNN（0.301）和 ESM-2（0.264）[S3.SS3.p1]。加入抗原链后，AntiFold 在所有 CDR 区域性能提升，特别是 CDR2（Sr 42.7 到 47.3%，p < 0.005）和 CDR3（Sr 29.8 到 32.0%，p < 0.005），而 ProteinMPNN 和 AbMPNN 在多数 CDR 区域性能下降 [S3.SS3.p2]。在 124 个变体上，AntiFold 对改善结合亲和力变体的中位秩评分为 80%，优于 ProteinMPNN 的 73%、ESM-IF1 的 57% 和 AbMPNN 的 55% [S3.SS3.p5]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "AntiFold demonstrated a substantial improvement in AAR on the experimental structure test set as compared to the original ESM-IF1 model (60 vs 43% AAR for CDRH3, p $<$ 0.005; Table 1, Figure S2."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "AntiFold also outperformed AbMPNN for CDRH3 (60% vs 56%), all remaining CDR regions (75-84% vs 63-76%), and most FR regions (87-94% vs 85-89%, Figure S3)."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "AntiFold achieved similar AAR for solved and predicted structures ( $\\Delta$ AAR c-0.5%), unlike AbMPNN which performed slightly worse on experimental structures ( $\\Delta$ AAR -2.7%, Figure S2 C)."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "AntiFold significantly outperformed the other models with a Spearman’s rank correlation of 0.418, versus ESM-IF1 (0.334), AbMPNN (0.322), ProteinMPNN (0.301) and ESM-2 (0.264), assessed by Mann-Whitney one-tailed U tests."
+        },
+        {
+          "id": "S3.SS3.p2",
+          "quote": "With this additional context, AntiFold’s performance improves in the case of all CDR regions, in particular the CDR2 ( $S_{r}$ 42.7 to 47.3%, p $<$ 0.005) and CDR3 ( $S_{r}$ 29.8 to 32.0%, p $<$ 0.005), but not for framework residues."
+        },
+        {
+          "id": "S3.SS3.p2",
+          "quote": "Contrary to this, ProteinMPNN and AbMPNN lose performance for most CDR regions when including the antigen chain, while performance on framework residues is largely unchanged."
+        },
+        {
+          "id": "S3.SS3.p5",
+          "quote": "AntiFold achieved significantly improved separation of these groups, scoring the improved variants with a median rank score of 80% (p $<$ 0.005) versus 73 % for ProteinMPNN, 57 % for ESM-IF1 and 55 % for AbMPNN."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5150,
+      "completion_tokens": 2701,
+      "elapsed_s": 9.47
+    }
+  },
+  "verify": {
+    "quote_hits": 26,
+    "quote_total": 26,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 16,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "science",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

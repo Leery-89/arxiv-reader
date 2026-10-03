@@ -1,0 +1,145 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文针对深度神经网络难以训练的问题，提出了残差学习框架，让堆叠层学习相对于输入的残差映射而非无参照映射 [S1.p5]。作者在 ImageNet 上验证了极深残差网络易于优化，而对应的普通网络随深度增加训练误差反而升高 [S1.p7]。152 层残差网络是当时 ImageNet 上最深网络，复杂度仍低于 VGG，集成模型在测试集取得 3.57% top-5 错误率并赢得 ILSVRC 2015 分类冠军 [S1.p9]。作者还在 CIFAR-10 上分析了 100 层和 1000 层网络 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：随着网络加深，训练变得更困难，出现了退化问题——更深的普通网络训练误差反而高于较浅网络 [S1.p7]。作者指出，深度对图像分类至关重要，但简单地堆叠更多层并不容易带来更好的网络 [S1.p1][S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Recent evidence reveals that network depth is of crucial importance"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Is learning better networks as easy as stacking more layers?"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "the counterpart “plain” nets (that simply stack layers) exhibit higher training error when the depth increases"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出深度残差学习框架，显式地让堆叠的非线性层拟合残差映射 F(x):=H(x)-x，原始映射被重写为 F(x)+x [S1.p5]。作者假设优化残差映射比优化原始无参照映射更容易；极端情况下若恒等映射最优，将残差推向零比用非线性层拟合恒等映射更容易 [S1.p5]。该重表述的动机来自退化现象：若新增层可构造为恒等映射，更深模型训练误差不应高于较浅模型，而退化问题表明求解器难以用多个非线性层逼近恒等映射 [S3.SS1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "we explicitly let these layers fit a residual mapping"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We hypothesize that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping"
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "The degradation problem suggests that the solvers might have difficulties in approximating identity mappings by multiple nonlinear layers"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 ImageNet 分类数据集上评估了极深残差网络，其中 152 层残差网络是当时 ImageNet 上最深网络，复杂度仍低于 VGG [S1.p9]。ImageNet 实现中，图像短边随机采样于 [256,480] 进行尺度增强，随机裁剪 224×224 并减去逐像素均值，每个卷积后、激活前使用批归一化，用 SGD、mini-batch 256 从头训练，学习率从 0.1 开始并在误差平台时除以 10，最多训练 60×10^4 次迭代 [S3.SS4.p1]。作者还在 CIFAR-10 上分析了 100 层和 1000 层网络 [abstract]，并在 PASCAL VOC 2007/2012 和 COCO 上采用 Faster R-CNN 进行目标检测评估，比较用 ResNet-101 替换 VGG-16 的改进 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p9",
+          "quote": "Our 152-layer residual net is the deepest network ever presented on ImageNet, while still having lower complexity than VGG nets"
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We use SGD with a mini-batch size of 256"
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "The learning rate starts from 0.1 and is divided by 10 when the error plateaus"
+        },
+        {
+          "id": "abstract",
+          "quote": "We also present analysis on CIFAR-10 with 100 and 1000 layers"
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We adopt Faster R-CNN as the detection method"
+        }
+      ]
+    },
+    "findings": {
+      "text": "极深残差网络易于优化，而对应的普通网络随深度增加训练误差升高 [S1.p7]。残差网络能轻松从大幅增加的深度中获得精度提升，结果显著优于此前网络 [S1.p7]。在 ImageNet 测试集上，残差网络集成取得 3.57% top-5 错误率，赢得 ILSVRC 2015 分类任务第一名 [S1.p9]。在 CIFAR-10 上，ResNet 也克服了优化困难，随深度增加表现出精度提升 [S4.SS2.p5]。在 COCO 目标检测上，ResNet-101 相比 VGG-16 在 mAP@[.5,.95] 上提升 6.0%，相对提升 28%，这一增益完全来自所学表示 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p7",
+          "quote": "Our extremely deep residual nets are easy to optimize, but the counterpart “plain” nets (that simply stack layers) exhibit higher training error when the depth increases"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "Our deep residual nets can easily enjoy accuracy gains from greatly increased depth"
+        },
+        {
+          "id": "S1.p9",
+          "quote": "Our ensemble has 3.57% top-5 error on the ImageNet test set, and won the 1st place in the ILSVRC 2015 classification competition"
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases"
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "we obtain a 6.0% increase in COCO’s standard metric (mAP@[.5,.95]), which is a 28% relative improvement"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，在 CIFAR-10 上 1202 层网络的测试结果差于 110 层网络，尽管两者训练误差相近，作者认为这是过拟合所致，1202 层网络对该小数据集可能过大 [S4.SS2.p9]。作者在本文中未使用 maxout/dropout，仅通过深而窄的架构施加正则化，并指出结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。此外，作者指出深度普通网络优化困难的原因尚待未来研究 [S4.SS1.p4]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The 1202-layer network may be unnecessarily large (19.4M) for this small dataset"
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "But combining with stronger regularization may improve results, which we will study in the future"
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "The reason for such optimization difficulties will be studied in the future"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4019,
+      "completion_tokens": 1699,
+      "elapsed_s": 6.7
+    }
+  },
+  "verify": {
+    "quote_hits": 20,
+    "quote_total": 20,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

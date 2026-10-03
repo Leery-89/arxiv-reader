@@ -1,0 +1,192 @@
+{
+  "paper": {
+    "arxiv_id": "2405.04967",
+    "title": "MatterSim: A Deep Learning Atomistic Model Across Elements, Temperatures and Pressures",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 129440,
+    "n_sections": 56,
+    "n_paragraphs": 167
+  },
+  "result": {
+    "summary": "MatterSim 是一个基于大规模第一性原理计算主动学习得到的深度学习原子模型，用于在元素、温度和压力维度上进行高效原子模拟 [abstract][S1.p3]。它开箱即用可作为机器学习力场，在 MPF-TP 数据集上达到 36 meV/atom 的平均绝对误差，相比此前最优模型精度提升约十倍 [S1.p3]。模型能预测晶格动力学、力学与热力学性质，并在 1000 K 以内对无机固体的 Gibbs 自由能给出接近第一性原理的精度，与实验相比达到 15 meV/atom 的分辨率 [abstract]。此外，MatterSim 可作为持续学习与定制的平台，微调后数据需求最多可减少 97% [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：材料性质不仅取决于化学组成和近平衡原子结构，还取决于温度和压力等热力学条件，而现有数据库和模型通常只覆盖基态或局部极小结构，从根本上限制了其在材料设计中的适用性 [S1.p2]。因此需要构建一个在巨大构型空间上仍具有高预测精度的模型，以在真实温度和压力条件下模拟材料并预测其性质 [S1.p2][S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "However, the property of a potential candidate material not only depends on its chemical composition and corresponding near-equilibrium atomic structure, but also on thermodynamic conditions including temperature and pressure."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "This results in a requirement of high predictive accuracy over an enormous configuration space well beyond the ground states or local minima of crystal structures typically captured by current databases and models, which fundamentally limits their applicability for materials design."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "To address this challenge, we introduce MatterSim, a deep learning model designed for emulating materials and predicting their properties under realistic thermodynamic conditions including finite temperatures and pressures, as illustrated in Fig. 1."
+        }
+      ]
+    },
+    "method": {
+      "text": "MatterSim 采用主动学习方法探索广阔材料空间，整合了深度图神经网络、材料探索器、第一性原理监督器和集成不确定性监测器 [S2.SS1.p1]。第一性原理监督器在 GGA-PBE 水平（对部分材料按 Materials Project 标准设置加入 Hubbard U 修正）提供能量、力和应力监督信号，训练后的模型作为第一性原理方法的代理，引导材料探索器采集更多结构 [S2.SS1.p1]。材料探索器包含基态探索器和非平衡态探索器，后者在 0、500、800 和 1000 GPa 压力下将温度从 0 逐步升至 5000 K 进行分子动力学模拟以采样构型 [S2a.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "MatterSim employs an active learning approach to explore the extensive materials space, integrating a deep graph neural network, a materials explorer, a first-principles supervisor, and an ensemble uncertainty monitor, see Fig. 2 (a)."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "the first-principles supervisor offers the deep learning model supervision signals relating to energies, forces, and stresses on the given structures at the generalized gradient approximation (GGA) Perdew–Burke–Ernzerhof (PBE) level of theory with Hubbard U correction for select materials as specified by the Materials Project standard settings."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "This trained model then functions as an effective surrogate to the first-principles method, guiding the materials explorer to gather more structures, thereby exploring the most uncertain regions of materials space to enrich the samples for model training."
+        },
+        {
+          "id": "S2a.p2",
+          "quote": "It conducts molecular dynamics (MD) simulations under a wide range of pressures, including 0, 500, 800, and $1000\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S2a.p2",
+          "quote": "Under each pressure, we incrementally increase the temperature from 0 to $5000\\text{\\,}\\mathrm{K}$ within $200\\text{\\,}\\mathrm{ps}$."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "零样本性能在多个与训练数据同级别 DFT 的开放数据集以及三个新建数据集上进行了基准测试 [S2.SS2.p1][S6.p1]。MPtrj-1k 和 Alexandria-1k 各随机采样一千个材料，MPtrj-highest-stress-1k 包含 MPtrj 中应力最大的 1000 个材料 [S6.p1]。MPF-Alkali-TP、MPF-TP 和 Random-TP 由第一性原理分子动力学轨迹构建，温度在 0 到 5000 K 均匀采样，压力在 0 到 1000 GPa 对数采样，用于评估有限温度和压力下远离平衡构型的性能 [S6.p2]。此外，在 118 个系统上进行了从 0 到 5000 K 的加热模拟以测试鲁棒性 [S2.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S2.SS2.p1",
+          "quote": "Its universality and accuracy is benchmarked on multiple open datasets as well as three newly created ones with better representation of the model’s capability under finite temperatures and pressures."
+        },
+        {
+          "id": "S6.p1",
+          "quote": "MPtrj-1k and Alexandria-1k are collected by sampling randomly one thousand materials from the MPtrj and Alexandria dataset, respectively."
+        },
+        {
+          "id": "S6.p1",
+          "quote": "The MPtrj-highest-stress-1k contains the 1,000 materials with the highest stress in magnitude computed using DFT from the MPtrj datasets."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "The MPF-Alkali-TP, MPF-TP, Random-TP benchmark sets are created with increasing complexity to evaluate the models’ performance on materials under finite temperature and pressure conditions with far from equilibrium atomic positions."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "For the temperature, it is uniformly sampled between 0 to 5000K. For the pressure, we used a log scale when carrying out the sampling. The pressure range is from 0 to 1000 GPa."
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "we randomly selected 118 systems including bulk inorganic materials, metal organic frameworks, two-dimensional materials, interfaces, molecular crystals, polymers and surfaces"
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "All of these systems are subject to heating from 0 to $5000\\text{\\,}\\mathrm{K}$ in a relatively short time frame to benchmark the emulator’s robustness"
+        }
+      ]
+    },
+    "findings": {
+      "text": "MatterSim 在 MPF-TP 数据集上达到 36 meV/atom 的平均绝对误差，相比此前工作精度提升约十倍 [S1.p3]。在声子谱预测中，以最大声子频率为指标，与 PhononDB 材料的第一性原理参考相比平均绝对误差为 0.87 THz [S2.SS2.p3]。在力学性质方面，0 K 体模量预测的平均绝对误差仅为 2.47 GPa，AlN 体模量随温度变化的平均绝对误差为 0.97 GPa，在 1000 K 以内百分比误差小于 5% [S2.SS2.p4]。自由能预测在 1000 K 以内与 PBE 级 QHA 计算相比误差低于 10 meV/atom，与 200 多种材料的实验测量相比平均绝对误差为 15 meV/atom [S2.SS2.p5]。在 118 个系统的加热模拟中，所有材料家族的成功率超过 90%，压缩模拟的平均完成率也高于 90% [S2.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "with a mean absolute error (MAE) of 36 meV/atom (43 meV/atom as chemical accuracy) on MPF-TP"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "marking a ten-fold increase in accuracy compared with previous efforts"
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "a good agreement is achieved with a mean absolute error (MAE) of $0.87\\text{\\,}\\mathrm{THz}$"
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "A remarkable agreement is achieved with an MAE of only $2.47\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "with the MAE being $0.97\\text{\\,}\\mathrm{GPa}$ over the temperature range and with a percentage error less than 5% up to $1000\\text{\\,}\\mathrm{K}$ compared to first-principles references"
+        },
+        {
+          "id": "S2.SS2.p5",
+          "quote": "MatterSim achieves a sub-$10\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ error for temperatures up to $1000\\text{\\,}\\mathrm{K}$ when compared with QHA computations at PBE level of theory"
+        },
+        {
+          "id": "S2.SS2.p5",
+          "quote": "it achieves an MAE of $15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ (see Section S11.1), lower than dedicated models directly trained on experimental data"
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "MatterSim achieved more than 90% success rate for all the material families tested, exhibiting robustness over wide temperature ranges."
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "the vast majority of systems have completed the entire simulation process and the average finished rate is above 90% as well"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，MatterSim 目前使用半局域原子相互作用描述，长程相互作用主要依赖消息传递或注意力权重更新，在长程相互作用主导性质的场景（如聚合物和异质系统）中表现不佳 [S3.p3]。数据覆盖方面，当前模型仅在均匀体相系统上训练，未显式包含对催化等应用至关重要的表面和界面数据 [S3.p3]。此外，模型目前仅原生支持 DFT-PBE 理论水平的推断，限制了其在涉及复杂相互作用的系统（如聚合物和有机液体）中的使用 [S3.p3]。模型目前仅支持能量、力和应力的原生预测，纳入电荷、自旋、磁矩等更多数据模态可能进一步提升精度和适用性 [S3.p3]。",
+      "evidence": [
+        {
+          "id": "S3.p3",
+          "quote": "it currently utilizes a semi-local description of atomic interactions, where long-range interactions majorly leverages message passing or updates on attention weights through graph nodes."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "it doesn’t perform effectively in scenarios where long-range interactions dominate the properties, such as polymeric and heterogeneous systems."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the current model is trained only on homogeneous bulk systems, without explicit inclusion of surface and interface data that are crucial for applications such as catalysis."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "the model currently only naively supports inferences with DFT-PBE level of theory, limiting its use for systems involving complex interactions, such as polymers and organic liquids."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "Currently, the model only supports the native prediction of energy, forces, and stresses."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "Including more data modalities, such as charge, spin, magnetic moments, and even more complex electronic structure features, could further enhance the model’s accuracy and applicability."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 7846,
+      "completion_tokens": 2705,
+      "elapsed_s": 9.98
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 30,
+    "quote_rate": 0.967,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S2.SS2.p5",
+        "reason": "quote 不在该段落里",
+        "quote": "MatterSim achieves a sub-$10\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\ma"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "science",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

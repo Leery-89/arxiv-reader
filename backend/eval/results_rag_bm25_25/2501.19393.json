@@ -1,0 +1,161 @@
+{
+  "paper": {
+    "arxiv_id": "2501.19393",
+    "title": "s1 : Simple test-time scaling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44775,
+    "n_sections": 55,
+    "n_paragraphs": 75
+  },
+  "result": {
+    "summary": "本文研究如何以最简单的方式实现测试时扩展（test-time scaling）并获得强推理性能 [S1.p1]。作者构建了仅含 1,000 道题的小数据集 s1K，并对 Qwen2.5-32B-Instruct 进行监督微调，同时提出 budget forcing 这一解码时干预手段来控制思考 token 数量 [S1.p2]。结果显示 s1-32B 在竞赛数学题上超过 o1-preview 最多 27%，并可通过 budget forcing 将 AIME24 成绩从 50% 外推到 57% [abstract]。作者还通过消融实验表明，难度、多样性、质量三项数据筛选标准缺一不可 [S1.p3]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在 OpenAI o1 未公开方法、众多复现尝试均未公开复现出清晰测试时扩展行为的情况下，实现测试时扩展与强推理性能的最简单方法是什么 [S1.p1]。作者指出，o1 展示了测试时扩展带来的稳定收益，但其方法被描述为使用大规模强化学习，暗示需要大量数据 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "o1 has demonstrated strong reasoning performance with consistent gains from scaling test-time compute."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "OpenAI describes their approach as using large-scale reinforcement learning (RL) implying the use of sizable amounts of data."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "none have openly replicated a clear test-time scaling behavior"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了 s1K 数据集，包含 1,000 道经过筛选的问题及其从 Gemini Thinking Experimental 蒸馏出的推理轨迹和答案，并对现成预训练模型进行监督微调 [S1.p2]。数据筛选依据质量、难度、多样性三项原则，经过三个阶段过滤得到这 1,000 个样本 [S2.SS2.p1]。作者提出 budget forcing：当模型生成超过上限的思考 token 时，追加思考结束符强制其转入作答；若希望模型花更多测试时计算，则抑制思考结束符并追加“Wait”以鼓励继续探索 [S3.SS1.SSS0.Px1.p1]。作者将测试时扩展方法分为顺序式与并行式，并聚焦于顺序式扩展 [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "we construct s1K, which consists of 1,000 carefully curated questions paired with reasoning traces and answers distilled from Gemini Thinking Experimental"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We perform supervised fine-tuning (SFT) of an off-the-shelf pretrained model on our small dataset"
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "we go through three stages of filtering to arrive at a minimal set of 1,000 samples relying on our three guiding data principles: Quality, Difficulty, and Diversity."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "we enforce a maximum token count by simply appending the end-of-thinking token delimiter and optionally “ Final Answer: ” to early exit the thinking stage"
+        },
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "To enforce a minimum, we suppress the generation of the end-of-thinking token delimiter and optionally append the string “Wait”"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We classify test-time scaling methods into 1) Sequential, where later computations depend on earlier ones (e.g., a long reasoning trace), and 2) Parallel, where computations run independently (e.g., majority voting)."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在竞赛数学基准上评估模型，包括 MATH 和 AIME24 [abstract]。训练方面，在 16 张 H100 GPU 上仅用 26 分钟完成对 Qwen2.5-32B-Instruct 的微调 [S1.p2]。作者定义了 Control、Scaling、Performance 三项指标，通过在固定基准（如 AIME24）上变化测试时计算量得到分段线性函数来评估各方法 [S3.SS2.p1]。消融实验针对数据选择与测试时扩展两方面：随机选择、选最长推理轨迹或只选最大多样性样本都会导致性能显著下降（AIME24 上平均约 -30%），而在 59K 全量数据池上训练相比 1K 选择并无实质提升 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "requiring just 26 minutes of training on 16 H100 GPUs"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "we run a set of evaluations $a\\in\\mathcal{A}$ varying test-time compute on a fixed benchmark, e.g. AIME24"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "We measure three metrics"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection."
+        }
+      ]
+    },
+    "findings": {
+      "text": "s1-32B 在竞赛数学题上超过 o1-preview 最多 27%（MATH 和 AIME24）[abstract]。通过 budget forcing 扩展测试时计算，可将 AIME24 成绩从 50% 外推到 57% [abstract]。s1-32B 的性能随测试时计算增加而提升，但最终在六倍处趋于平坦 [S4.SS2.SSS0.Px1.p1]。在基础模型上通过多数投票扩展测试时计算无法追上 s1-32B 的性能，验证了顺序式扩展比并行式更有效的直觉 [S4.SS2.SSS0.Px1.p1]。消融实验表明，联合纳入难度、多样性、质量三项指标对数据选择很重要 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)"
+        },
+        {
+          "id": "abstract",
+          "quote": "scaling s1-32B with budget forcing allows extrapolating beyond its performance without test-time intervention: from 50% to 57% on AIME24"
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "it does eventually flatten out at six times"
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Scaling test-time compute on the base model via majority voting cannot catch up with the performance of s1-32B"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "we find that jointly incorporating difficulty, diversity, and quality measures into our selection algorithm is important"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出 budget forcing 在进一步扩展时有两个关键局限：最终会趋于平坦，且受底层语言模型的上下文窗口限制 [S6.SS2.SSS0.Px2.p1]。作者还提到，过于频繁地抑制思考结束符可能导致模型陷入重复循环而非继续推理 [S4.SS2.SSS0.Px1.p1]。作者认为继续测试时扩展需要能够进一步外推测试时计算的方法，例如轮换不同的字符串（而不仅是“Wait”），或结合频率惩罚、更高温度以避免重复循环 [S6.SS2.SSS0.Px2.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Suppressing the end-of-thinking token delimiter too often can lead the model into repetitive loops instead of continued reasoning."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px2.p2",
+          "quote": "There may be improvements to budget forcing such as rotating through different strings, not only “Wait”, or combining it with frequency penalties or higher temperature to avoid repetitive loops."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4070,
+      "completion_tokens": 2016,
+      "elapsed_s": 8.04
+    }
+  },
+  "verify": {
+    "quote_hits": 24,
+    "quote_total": 24,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

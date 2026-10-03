@@ -1,0 +1,177 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21783",
+    "title": "The Llama 3 Herd of Models",
+    "source": "html",
+    "truncated_sections": [
+      "Contributors and Acknowledgements",
+      "Acknowledgements",
+      "9 Related Work"
+    ],
+    "char_count": 239042,
+    "n_sections": 99,
+    "n_paragraphs": 388
+  },
+  "result": {
+    "summary": "本文介绍了 Llama 3 系列基础模型，包括 8B、70B 和 405B 三个参数规模的多语言语言模型，原生支持多语言、编程、推理和工具使用 [S1.p3]。最大的模型是 405B 参数的稠密 Transformer，上下文窗口最高 128K tokens [S1.p3]。论文进行了广泛的实证评估，发现 Llama 3 在众多任务上质量与 GPT-4 等领先模型相当 [abstract]。论文还通过组合式方法将图像、视频和语音能力集成到 Llama 3 中，并观察到该方法在图像、视频和语音识别任务上与最先进水平具有竞争力 [abstract]。作者公开释放了 Llama 3，包括 405B 参数模型的预训练和后训练版本以及 Llama Guard 3 安全模型 [abstract]。",
+    "research_question": {
+      "text": "论文旨在提出一套新的语言基础模型 Llama 3，其原生支持多语言、编程、推理和工具使用 [S1.p3]。研究动机在于通过改进数据数量与质量、扩大训练规模以及管理复杂性来提升模型能力 [S1.p5]。作者认为分享开发过程有助于研究社区理解基础模型开发的关键因素，并促进公众对基础模型未来的知情讨论 [S10.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we present a new set of foundation models for language, called Llama 3."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The Llama 3 Herd of models natively supports multilinguality, coding, reasoning, and tool usage."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "Compared to prior versions of Llama, we improved both the quantity and quality of the data we use for pre-training and post-training."
+        },
+        {
+          "id": "S10.p3",
+          "quote": "We shared the details of our development process because we believe this will: (1) help the larger research community understand the key factors of foundation model development"
+        }
+      ]
+    },
+    "method": {
+      "text": "Llama 3 采用标准的稠密 Transformer 架构，与 Llama 和 Llama 2 相比架构变化不大，性能提升主要来自数据质量与多样性以及训练规模的增加 [S3.SS2.p1]。相比 Llama 2 的小改动包括使用 8 个键值头的分组查询注意力、文档间自注意力掩码、128K tokens 词表和将 RoPE 基频提高到 500,000 [S3.SS2.p2]。后训练采用基于监督微调、拒绝采样和直接偏好优化的相对简单流程，而非更复杂的强化学习算法 [S1.p5]。论文还通过组合式方法将图像、视频和语音能力集成到 Llama 3 中 [S2.p4]。",
+      "evidence": [
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Llama 3 uses a standard, dense Transformer architecture."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "our performance gains are primarily driven by improvements in data quality and diversity as well as by increased training scale."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "We use grouped query attention (GQA;) with 8 key-value heads to improve inference speed"
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "We use a vocabulary with 128K tokens."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "We increase the RoPE base frequency hyperparameter to 500,000."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "we adopt a relatively simple post-training procedure based on supervised finetuning (SFT), rejection sampling (RS), and direct preference optimization (DPO;)"
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We also perform experiments in which we add image, video, and speech capabilities to Llama 3 using a compositional approach."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在大量标准基准上评估了预训练和后训练的 Llama 3，覆盖常识推理、知识、阅读理解、数学推理、长上下文、代码、对抗评估和综合评估等类别 [S5.SS1.SSS1.p1]。评估还包括对多选题设置变化的鲁棒性测试和污染分析 [S5.SS1.p1]。此外，论文进行了广泛的人类评估，将 Llama 3 与竞争模型进行比较 [S1.p6]。多模态实验方面，视觉识别在 MMMU、VQAv2、AI2 Diagram、ChartQA、TextVQA 和 DocVQA 等基准上评估 [S7.SS6.p1]，视频识别在 PerceptionTest、NExT-QA、TVQA 和 ActivityNet-QA 上评估 [S7.SS7.p1]，语音理解在 MLS、LibriSpeech、VoxPopuli、FLEURS 和 Covost 2 上评估 [S8.SS4.p2][S8.SS4.p4]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.SSS1.p1",
+          "quote": "These evaluations cover eight top-level categories: (1) commonsense reasoning; (2) knowledge; (3) reading comprehension; (4) math, reasoning, and problem solving; (5) long context; (6) code; (7) adversarial evaluations; and (8) aggregate evaluations."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We evaluate the quality of our models on standard benchmarks (Section 5.1.1), for robustness to changes in multiple-choice question setups (Section 5.1.2), and on adversarial evaluations (Section 5.1.3)."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "In addition, we perform extensive human evaluations that compare Llama 3 with competing models."
+        },
+        {
+          "id": "S7.SS6.p1",
+          "quote": "We evaluate the performance of the image understanding capabilities of Llama 3 on a range of tasks spanning natural image understanding, text understanding, charts understanding and multimodal reasoning"
+        },
+        {
+          "id": "S7.SS7.p1",
+          "quote": "We evaluate our video adapter for Llama 3 on three benchmarks"
+        },
+        {
+          "id": "S8.SS4.p2",
+          "quote": "We evaluate the ASR performance on the English datasets of Multilingual LibriSpeech (MLS;), LibriSpeech, VoxPopuli, and a subset of the multilingual FLEURS dataset."
+        },
+        {
+          "id": "S8.SS4.p4",
+          "quote": "We use the FLEURS and Covost 2 datasets in these evaluations, measuring BLEU scores of the translated English."
+        }
+      ]
+    },
+    "findings": {
+      "text": "实验评估表明，旗舰模型在多种任务上与 GPT-4 等领先语言模型表现相当，并接近最先进水平 [S1.p6]。较小的模型在同类参数规模中表现最佳，优于其他类似参数量的模型 [S1.p6]。Llama 3 在有用性和无害性之间取得了比前代更好的平衡 [S1.p6]。多模态方面，组合式方法在图像、视频和语音识别任务上与最先进水平具有竞争力 [abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "Our experimental evaluation suggests that our flagship model performs on par with leading language models such as GPT-4 across a variety of tasks, and is close to matching the state-of-the-art."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Our smaller models are best-in-class, outperforming alternative models with similar numbers of parameters."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Llama 3 also delivers a much better balance between helpfulness and harmlessness than its predecessor."
+        },
+        {
+          "id": "abstract",
+          "quote": "We observe this approach performs competitively with the state-of-the-art on image, video, and speech recognition tasks."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，多模态模型仍在开发中，尚未广泛发布 [abstract]。安全方面，作者承认没有任何测试能保证穷尽所有风险，Llama 3 仍可能生成有害内容，尤其是在英语之外的语言以及被熟练对抗性红队人员提示工程时 [S5.SS4.SSS8.p1]。人类评估方面，由于难以定义客观标准，评估仍可能受标注者个人偏见、背景和偏好的影响，导致结果不一致或不可靠 [S5.SS3.p5]。此外，安全基准是 Meta 内部的，作者承认这些数字无法在外部复现 [S5.SS4.SSS4.p2]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The resulting models are not yet being broadly released as they are still under development."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "However, no testing can be guaranteed to be exhaustive in identifying every possible risk."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "Llama 3 may still generate harmful content due to training on various datasets, particularly for languages beyond English and when prompt engineered by skilled adversarial red teamers."
+        },
+        {
+          "id": "S5.SS3.p5",
+          "quote": "human evaluations can still be influenced by personal biases, backgrounds, and preferences of human annotators, which may lead to inconsistent or unreliable results."
+        },
+        {
+          "id": "S5.SS4.SSS4.p2",
+          "quote": "Because these safety benchmarks are internal to Meta, we acknowledge that the numbers in this section are not reproducible externally"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 27835,
+      "completion_tokens": 2140,
+      "elapsed_s": 8.27
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 22,
+    "inline_total": 22,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

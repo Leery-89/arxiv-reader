@@ -1,0 +1,237 @@
+{
+  "paper": {
+    "arxiv_id": "2405.07987",
+    "title": "The Platonic Representation Hypothesis",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 78065,
+    "n_sections": 45,
+    "n_paragraphs": 108
+  },
+  "result": {
+    "summary": "本文提出“柏拉图表示假说”，认为不同神经网络对数据的表示正在趋同，并最终趋向一个关于现实世界的共享统计模型 [abstract][S1.p4]。作者综述了文献中跨架构、跨目标乃至跨模态的表示对齐证据，并用 78 个视觉模型和多种语言模型测量对齐随规模与能力提升而增加 [S2.SS2.p2][S2.F3]。作者进一步提出任务通用性、模型容量和简单性偏置三种可能的选择压力来解释这种收敛 [S3.SS1.p2][S3.SS2.p2][S3.SS3.p1]，并在理想化世界中证明一类对比学习器会收敛到与 PMI 相关的同一核 [S4.SS2.p6]。作者还讨论了该假说的含义、局限与反例 [abstract]。",
+    "research_question": {
+      "text": "论文要探讨的问题是：不同神经网络模型的表示是否正在趋同，以及这种趋同是否存在一个终点和驱动原则 [S1.p2][S1.p4]。作者提出，不同模型都在试图得到对现实的表示，即对生成观测数据的世界事件联合分布的表示，因此随着数据和任务增加，表示会向一个收敛点对齐 [S1.p4]。作者将这一收敛的假想表示称为“柏拉图表示”，并类比柏拉图洞穴寓言和科学哲学中的收敛实在论 [S1.p5]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This paper explores one aspect of this trend: representational convergence."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "We argue that there is a growing similarity in how datapoints are represented in different neural network models."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Our central hypothesis, stated above in Figure 1, is that there is indeed an endpoint to this convergence and a principle that drives it"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "different models are all trying to arrive at a representation of reality, meaning a representation of the joint distribution over events in the world that generate the data we observe"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "alignment toward $Z$ increases toward a convergent point as a function of scale"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We call this converged hypothetical representation the “platonic representation” in reference to Plato’s Allegory of the Cave"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "our hypothesis is also related to the notion of “convergent realism” in the philosophy of science"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文将表示定义为把输入映射为向量的函数，并用核刻画表示诱导的相似性结构，用核对齐度量衡量两个表示的相似性 [S2.SS0.SSS0.Px1.p1]。作者通过测量不同模型在数据点距离度量上的一致性来评估表示对齐，并综述了模型拼接等证据 [S2.SS0.SSS0.Px1.p1][S2.SS1.p3]。作者还提出任务通用性、模型容量和简单性偏置三种假说来解释收敛 [S3.SS1.p2][S3.SS2.p2][S3.SS3.p1]，并在理想化世界模型中证明一类对比学习器会收敛到同一核 [S4.SS2.p6]。",
+      "evidence": [
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "We restrict our attention to representations that are vector embeddings."
+        },
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "We characterize such a representation by the similarity structure it induces, referred to as its kernel."
+        },
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "we define representational alignment as a measure of the similarity of the similarity structures induced by two representations"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "they measured representational similarity through a technique called model stitching"
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "The Multitask Scaling Hypothesis There are fewer representations that are competent for $N$ tasks than there are for $M<N$ tasks."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "The Capacity Hypothesis Bigger models are more likely to converge to a shared representation than smaller models."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "One key factor might be simplicity bias:"
+        },
+        {
+          "id": "S4.SS2.p6",
+          "quote": "for any modality in our idealized world, we observe representational convergence to the same kernel, which represents certain pairwise statistics of $\\mathbb{P}(\\mathbf{Z})$"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在视觉-视觉对齐实验中使用了 78 个视觉模型，包括 17 个 ViT、1 个随机初始化 ResNet-50、11 个 ResNet-50 和 49 个 ResNet-18，训练架构、目标和数据集各不相同 [A3.SS1.p1]。表示质量用 VTAB 的 19 个分类任务上的线性探测评估，对齐度量使用 Places-365 验证集上 1000 个图像表示的 k=10 最近邻 [A3.SS1.p2][A3.SS1.p3]。跨模态对齐实验使用 Wikipedia caption 数据集（WIT）上的互最近邻，语言模型性能在 OpenWebText 的 4M token 上测量 [S2.F3]。作者还进行了颜色案例研究，从 CIFAR-10 像素共现和语言共现中学习颜色表示，并与 CIELAB 感知空间比较 [S4.SS2.SSS0.Px1.p1][A4.SS0.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "A3.SS1.p1",
+          "quote": "We consider 78 vision models in total:"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "$17$ ViT models ranging from ViT-tiny to ViT-giant, trained on tasks including ImageNet-21k classification, Masked Autoencoders, DINO, and CLIP"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "$11$ ResNet-50 models trained with contrastive learning on ImageNet-1k, Places-365, and $9$ synthetic image datasets"
+        },
+        {
+          "id": "A3.SS1.p1",
+          "quote": "$49$ ResNet-18 models trained with Alignment and Uniformity contrastive loss on ImageNet-100, Places-365, and $47$ realistic and synthetic image datasets"
+        },
+        {
+          "id": "A3.SS1.p2",
+          "quote": "we evaluate linear probing performance on all 19 VTAB classification tasks"
+        },
+        {
+          "id": "A3.SS1.p3",
+          "quote": "we use $k=10$ nearest neighbors over $1000$ image representations computed on Places-365’s validation dataset"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We measure alignment using mutual nearest-neighbor on the Wikipedia caption dataset (WIT)."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "The x-axis is the language model performance measured over 4M tokens from the OpenWebText dataset"
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "We conduct a case study to verify that convergence does happen on real data."
+        },
+        {
+          "id": "A4.SS0.SSS0.Px2.p1",
+          "quote": "We collect color cooccurrence statistics from the CIFAR-10 dataset"
+        }
+      ]
+    },
+    "findings": {
+      "text": "作者发现，解决更多 VTAB 任务的视觉模型彼此更加对齐，能力强的模型形成紧密聚集的表示，而弱模型表示更分散 [S2.F2.fig1][S2.SS2.p2]。跨模态上，语言-视觉对齐与语言建模得分呈线性关系，能力更强的语言模型与能力更强的视觉模型对齐更好，CLIP 模型因显式语言监督对齐更高，但在 ImageNet 分类微调后对齐下降 [S2.F3]。对齐提高时，在常识推理（Hellaswag）和数学问题求解（GSM8K）上的性能也提高 [S2.SS5.p1]。颜色案例研究表明，从图像或文本共现统计中学习都能恢复大致相同的感知表示 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.F2.fig1",
+          "quote": "Models that solve more VTAB tasks tend to be more aligned with each other."
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "models with high transfer performance form a tightly clustered set of representations, while models with weak performance have more variable representations"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "The results show a linear relationship between language-vision alignment and language modeling score"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "more capable language models align better with more capable vision models"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We find that CLIP models, which are trained with explicit language supervision, exhibit a higher level of alignment."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "However, this alignment decreases after being fine-tuned on ImageNet classification"
+        },
+        {
+          "id": "S2.SS5.p1",
+          "quote": "Figure 4 supports this hypothesis by demonstrating improved performance on commonsense reasoning (Hellaswag;) and mathematical problem solving (GSM8K;) as alignment improves."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "learning cooccurrence statistics in either domain recovers roughly the same perceptual representation"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，不同传感器和视角可能捕获不同信息，这可能限制它们收敛到完全相同的表示 [S1.p4]。作者指出，当前论证主要聚焦视觉和语言两种模态，其他模态尚未看到同等程度的收敛，例如机器人领域还没有标准化的世界状态表示方式 [S6.SS0.SSS0.Px2.p1]。作者还指出，不同模态可能包含不同信息，两个模型如果访问根本不同的信息就无法收敛到同一表示，需要更精细的假说来处理非双射观测和抽象概念 [S6.SS0.SSS0.Px1.p1][S6.SS0.SSS0.Px1.p3]。此外，作者承认其论证只适用于被优化以在多个任务上表现良好的智能系统，专用智能可能不会收敛 [S6.SS0.SSS0.Px4.p1]。作者还指出，不同模型到达的是相似但不相同的表示，例如图 3 中对齐分数仅达到 0.16，而该指标理论最大值为 1，这一差距是噪声还是重大差异仍未解决 [S6.SS0.SSS0.Px6.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "different sensors and views might capture different information, which may limit their potential to converge to identical representations"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "Our argument has mainly focused on two modalities: vision and language."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "we have yet to see the same level of convergence across all domains"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "in robotics there is not yet a standardized approach to representing world states"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p1",
+          "quote": "Two different models cannot converge to the same representation if they have access to fundamentally different information."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p3",
+          "quote": "A more nuanced version of our hypothesis will need to be developed to handle the case of non-bijective observations and abstract concepts."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px4.p1",
+          "quote": "Our argument only holds for intelligences that are optimized to perform well on many tasks."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "We have shown results where different models arrive at similar but not the same representations."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "alignment clearly increases but only reaches a score of $0.16$, according to our mutual nearest-neighbor metric"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "We leave this as an open question."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 11162,
+      "completion_tokens": 2849,
+      "elapsed_s": 10.91
+    }
+  },
+  "verify": {
+    "quote_hits": 43,
+    "quote_total": 43,
+    "quote_rate": 1.0,
+    "inline_hits": 28,
+    "inline_total": 28,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

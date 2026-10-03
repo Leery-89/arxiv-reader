@@ -1,0 +1,177 @@
+{
+  "paper": {
+    "arxiv_id": "2501.12948",
+    "title": "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 135548,
+    "n_sections": 82,
+    "n_paragraphs": 234
+  },
+  "result": {
+    "summary": "本文提出通过纯强化学习（RL）激励大语言模型的推理能力，无需人工标注的推理轨迹 [abstract]。作者基于 DeepSeek-V3-Base 和 GRPO 框架训练出 DeepSeek-R1-Zero，其 AIME 2024 pass@1 从 15.6% 提升至 77.9%，并涌现出自反思、验证等推理模式 [S2.SS3.p2]。为解决可读性和语言混杂问题，作者进一步提出多阶段训练的 DeepSeek-R1，在推理和通用任务上均取得提升 [S1.p3][S4.p3]。作者认为解锁推理潜力的关键不在于大规模人工标注，而在于提供困难问题、可靠验证器和充足计算资源 [S6.p1]。",
+    "research_question": {
+      "text": "论文旨在探索如何通过自我演化的强化学习框架，以最小的人工标注依赖来发展大语言模型的推理能力 [S1.p2]。现有方法依赖人工标注的推理轨迹，这阻碍了可扩展性并引入认知偏差，且将模型限制在模仿人类思维过程，无法探索更优的非人类推理路径 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "we aim to explore the potential of LLMs for developing reasoning abilities through self-evolution in an RL framework, with minimal reliance on human labeling efforts"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Their dependence on human-annotated reasoning traces hinders scalability and introduces cognitive biases"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "by constraining models to replicate human thought processes, their performance is inherently capped by the human-provided exemplars, which prevents the exploration of superior, non-human-like reasoning pathways"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文基于 DeepSeek-V3-Base，采用 Group Relative Policy Optimization (GRPO) 作为强化学习框架，奖励信号仅基于最终预测与标准答案的正确性，不对推理过程施加约束 [S1.p2]。作者跳过了传统的监督微调阶段，认为人类定义的推理模式可能限制模型探索 [S1.p2]。对于 DeepSeek-R1，作者采用多阶段学习框架，整合拒绝采样、强化学习和监督微调 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "we build upon DeepSeek-V3-Base and employ Group Relative Policy Optimization (GRPO) as our RL framework"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The reward signal is solely based on the correctness of final predictions against ground-truth answers, without imposing constraints on the reasoning process itself"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "we bypass the conventional supervised fine-tuning (SFT) phase before RL training"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "human-defined reasoning patterns may limit model exploration, whereas unrestricted RL training can better incentivize the emergence of novel reasoning capabilities in LLMs"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "we introduce DeepSeek-R1, a model trained through a multi-stage learning framework that integrates rejection sampling, reinforcement learning, and supervised fine-tuning"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 AIME 2024 数学基准上追踪了 DeepSeek-R1-Zero 的训练表现，并报告了 pass@1 和 self-consistency 解码下的准确率 [S2.SS3.p2]。此外，模型还在编码竞赛以及研究生级别的生物、物理、化学问题上进行了评估 [S2.SS3.p2]。对于 DeepSeek-R1，论文在多个基准上比较了不同开发阶段的性能，包括 IF-Eval、ArenaHard、AIME、AlpacaEval 2.0 和 Aider-Polyglot 等 [S4.p2][S4.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p2",
+          "quote": "Figure 1 (a) depicts the performance trajectory of DeepSeek-R1-Zero on the AIME 2024 benchmark throughout the RL training process"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "the average pass@1 score on AIME 2024 shows a significant increase, jumping from an initial 15.6% to 77.9%"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "by leveraging the self-consistency decoding, the model’s performance can be further improved, achieving an accuracy of 86.7%"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "DeepSeek-R1-Zero also achieves remarkable performance in coding competitions and graduate-level biology, physics, and chemistry problems"
+        },
+        {
+          "id": "S4.p2",
+          "quote": "A comparison between DeepSeek-R1-Zero and DeepSeek-R1 Dev1 reveals substantial improvements in instruction-following, as evidenced by higher scores on the IF-Eval and ArenaHard benchmarks"
+        },
+        {
+          "id": "S4.p3",
+          "quote": "Compared to Dev2, DeepSeek-R1 Dev3 achieves notable performance improvements on AlpacaEval 2.0 and Aider-Polyglot"
+        }
+      ]
+    },
+    "findings": {
+      "text": "DeepSeek-R1-Zero 在 AIME 2024 上的 pass@1 从 15.6% 提升至 77.9%，结合自一致性解码可达 86.7%，显著超越人类参赛者平均水平 [S2.SS3.p2]。训练过程中模型自然涌现出反思性推理和系统性探索替代方案等高级策略，并出现“aha moment” [S2.SS3.p5]。DeepSeek-R1 的最终版本在通用指令遵循和用户偏好基准上取得主要进步，AlpacaEval 2.0 提升 25%，ArenaHard 提升 17% [S4.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p2",
+          "quote": "the average pass@1 score on AIME 2024 shows a significant increase, jumping from an initial 15.6% to 77.9%"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "by leveraging the self-consistency decoding, the model’s performance can be further improved, achieving an accuracy of 86.7%"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "This performance significantly surpasses the average performance across all human competitors"
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "DeepSeek-R1-Zero increasingly exhibits advanced reasoning strategies such as reflective reasoning and systematic exploration of alternative solutions"
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "during training, DeepSeek-R1-Zero exhibits an “aha moment” (Table 2), characterized by a sudden increase in the use of the word “wait” during reflections"
+        },
+        {
+          "id": "S4.p3",
+          "quote": "The primary advancements in the final DeepSeek-R1 were in general instruction-following and user-preference benchmarks, with AlpacaEval 2.0 improving by 25% and ArenaHard by 17%"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "DeepSeek-R1 的结构化输出能力仍不如现有模型，且无法利用搜索引擎、计算器等工具提升输出性能 [S6.p3]。在 token 效率方面，对简单问题仍存在过度推理（overthinking）现象 [S6.p4]。语言混杂问题依然存在，模型主要针对中英文优化，处理其他语言查询时可能混用英语 [S6.p5]。由于评估时间长影响 RL 效率，大规模 RL 尚未广泛应用于软件工程任务，DeepSeek-R1 在软件工程基准上未显著超越 DeepSeek-V3 [S6.p7]。纯 RL 方法本身面临奖励黑客挑战，对于无法通过可靠奖励模型有效评估的复杂任务，扩展纯 RL 仍是开放问题 [S6.p9]。",
+      "evidence": [
+        {
+          "id": "S6.p3",
+          "quote": "the structural output capabilities of DeepSeek-R1 remain suboptimal compared to existing models"
+        },
+        {
+          "id": "S6.p3",
+          "quote": "DeepSeek-R1 cannot leverage tools, such as search engines and calculators, to improve the performance of output"
+        },
+        {
+          "id": "S6.p4",
+          "quote": "there remains room for further optimization in terms of token efficiency, as instances of excessive reasoning—manifested as overthinking—are still observed in response to simpler questions"
+        },
+        {
+          "id": "S6.p5",
+          "quote": "DeepSeek-R1 is currently optimized for Chinese and English, which may result in language mixing issues when handling queries in other languages"
+        },
+        {
+          "id": "S6.p7",
+          "quote": "large-scale RL has not been applied extensively in software engineering tasks"
+        },
+        {
+          "id": "S6.p7",
+          "quote": "DeepSeek-R1 has not demonstrated a huge improvement over DeepSeek-V3 on software engineering benchmarks"
+        },
+        {
+          "id": "S6.p9",
+          "quote": "If the reward signal is assigned by a model instead of predefined rules, it becomes more susceptible to exploitation as training progresses"
+        },
+        {
+          "id": "S6.p9",
+          "quote": "for complex tasks that cannot be effectively evaluated by a reliable reward model, scaling up pure RL methods remains an open challenge"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 8493,
+      "completion_tokens": 2079,
+      "elapsed_s": 7.26
+    }
+  },
+  "verify": {
+    "quote_hits": 28,
+    "quote_total": 28,
+    "quote_rate": 1.0,
+    "inline_hits": 17,
+    "inline_total": 17,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,208 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21787",
+    "title": "Large Language Monkeys : Scaling Inference Compute with Repeated Sampling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 49608,
+    "n_sections": 29,
+    "n_paragraphs": 96
+  },
+  "result": {
+    "summary": "这篇论文研究如何通过重复采样（repeated sampling）来扩展推理阶段的计算量，以提升大语言模型在推理任务上的表现 [S1.p3]。作者在 GSM8K、MATH、MiniF2F-MATH、CodeContests 和 SWE-bench Lite 五个任务上，使用 Llama-3、DeepSeek-Coder-V2-Instruct 等模型生成大量独立样本，发现覆盖率随样本数增加而提升，且常可用指数幂律建模 [S2.p4][S2.SS1.p1][S3.SS1.p1]。在可自动验证的领域，覆盖率提升直接转化为性能提升，例如 SWE-bench Lite 上 DeepSeek-Coder-V2-Instruct 的解决率从单样本的 15.9% 提升到 250 个样本的 56%，超过单样本最优的 43% [abstract]。但在缺乏自动验证器的领域，多数投票和奖励模型等常见选择方法在数百个样本后趋于饱和，无法充分利用覆盖率增长 [abstract][S4.SS1.p3]。",
+    "research_question": {
+      "text": "论文旨在探索重复采样作为一种扩展推理计算量的简单方法，以提升大语言模型的推理性能 [S1.p3]。作者指出，尽管训练计算量的扩展持续推动模型能力提升，但推理阶段的计算投入相对有限，用户和开发者通常只让模型对一个问题尝试一次 [S1.p1][S1.p2]。因此，本文的目标是系统性地刻画重复采样在多种任务、模型和样本预算下的收益 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this work, we explore repeated sampling (Figure 1) as a simple approach to scaling inference compute in order to improve reasoning performance."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Scaling the amount of training compute through bigger models, longer pre-training runs, and larger datasets has been a consistent driver of these gains."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "However, when interacting with LLMs, users and developers often restrict models to making only one attempt when solving a problem."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Our goal is to systematically characterize these benefits across a range of tasks, models, and sample budgets."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用重复采样方法：对每个问题独立生成多个候选解，并关注覆盖率（至少一个样本正确的题目比例）和精度（从样本中识别正确解的能力）两个指标 [S2.p1]。在可自动验证的任务中（如 Lean 证明检查器、代码单元测试），精度自动解决，覆盖率提升直接转化为成功率；在数学应用题等缺乏自动验证工具的任务中，则需要额外的验证方法从多个样本中选出最终答案 [S2.p2]。作者还使用 pass@k 公式计算覆盖率，并采用数值稳定的实现 [S2.p6][S2.p7]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "The success rate is therefore influenced both by the ability to generate correct samples for many problems (i.e. coverage), as well as the ability to identify these correct samples (i.e. precision)."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "When proving formal statements in Lean, proof checkers can quickly identify whether a candidate solution is correct."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "In contrast, the tools available for verifying solutions to math word problems from GSM8K and MATH are limited, necessitating additional verification methods that decide on a single final answer from many (often conflicting) samples."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "pass@k"
+        },
+        {
+          "id": "S2.p7",
+          "quote": "We use the numerically stable implementation of the above formula suggested in."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在五个任务上进行评估：GSM8K（128 道随机测试题）、MATH（128 道随机测试题）、MiniF2F-MATH（130 道 Lean4 形式化题）、CodeContests（Python3 竞赛编程题）和 SWE-bench Lite（真实 GitHub 问题）[S2.p4]。主要实验使用 Llama-3-8B-Instruct 和 Llama-3-70B-Instruct 在 CodeContests、MiniF2F、GSM8K、MATH 上生成每个问题 10,000 个独立样本；SWE-bench Lite 使用 DeepSeek-Coder-V2-Instruct 配合 Moatless Tools 框架，每个问题最多 250 次独立尝试 [S2.SS1.p1]。此外，作者还在 MATH 和 CodeContests 上扩展评估了多种模型尺寸（70M-70B）、模型家族（Llama、Gemma、Pythia）和后训练水平（Base 和 Instruct）[S2.SS2.p1][S2.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S2.p4",
+          "quote": "1. GSM8K: A dataset of grade-school level math word problems. We evaluate on a random subset of 128 problems from the GSM8K test set."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "2. MATH: Another dataset of math word problems that are generally harder than those from GSM8K. Similarly, we evaluate on 128 random problems from this dataset’s test set."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "3. MiniF2F-MATH: A dataset of mathematics problems that have been formalized into proof checking languages. We use Lean4 as our language, and evaluate on the 130 test set problems that are formalized from the MATH dataset."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "4. CodeContests: A dataset of competitive programming problems."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "5. SWE-bench Lite: A dataset of real world Github issues, where each problem consists of a description and a snapshot of a code repository."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We evaluate Llama-3-8B-Instruct and Llama-3-70B-Instruct on CodeContests, MiniF2F, GSM8K, and MATH, generating 10,000 independent samples per problem."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "For SWE-bench Lite, we use DeepSeek-Coder-V2-Instruct, as the required context length of this task exceeds the limits of the Llama-3 models."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To minimize costs, we restrict the number of attempts per issue to 250, with all attempts made independently of one another."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "We now show that these trends hold across other model sizes, families, and levels of post-training."
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "We restrict evaluation to the MATH and CodeContests datasets to minimize inference costs, reporting results in Figure 3."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在五个任务上，覆盖率随样本预算增加而平滑提升；当所有模型只给一次尝试时 GPT-4o 优于 Llama 和 DeepSeek 模型，但随着样本数增加，三个较弱模型均超过 GPT-4o 的单次尝试表现 [S2.SS1.p2]。在 SWE-bench Lite 上，DeepSeek-Coder-V2-Instruct 解决了 56% 的问题，超过单次尝试最优的 43% [S2.SS1.p2]。覆盖率与样本数的关系常可用指数幂律 c ≈ exp(ak^b) 建模，但并非所有曲线都紧密遵循该趋势（如 MiniF2F-MATH 上的 Llama-3-8B-Instruct）[S3.SS1.p1][S3.F5]。在缺乏自动验证器的数学应用题设置中，多数投票和奖励模型在约 100 个样本后趋于饱和，而覆盖率继续增加并最终超过 95%，导致两者差距扩大 [S4.SS1.p3]。此外，重复采样可能比使用更强模型更经济：在 SWE-bench Lite 上，采样更弱的 DeepSeek 模型比单次使用 Claude 或 GPT 更便宜且解决率更高 [S2.SS3.p5]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p2",
+          "quote": "Across all five tasks, we find that coverage smoothly improves as the sample budget increases."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "When all LLMs are given a single attempt, GPT-4o outperforms the Llama and DeepSeek models at every task."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "However, as the number of samples increases, all three of the weaker models exceed GPT-4o’s single-attempt performance."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "In the case of SWE-bench Lite, we solve 56% of problems, exceeding the single-attempt SOTA of 43%."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "we exponentiate both sides, ending up with the final model of: c≈exp(ak^{b})"
+        },
+        {
+          "id": "S3.F5",
+          "quote": "We highlight that some curves, such as Llama-3-8B-Instruct on MiniF2F-MATH, do not follow this trend closely."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "While success rates initially increase with the number of samples for all three methods, they plateau around 100 samples."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "Meanwhile, coverage continues to increase with the number of samples and eventually exceeds 95%."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "While the DeepSeek model is weaker than the GPT and Claude models, it is also over 10x cheaper."
+        },
+        {
+          "id": "S2.SS3.p5",
+          "quote": "In this case, repeated sampling provides a cheaper alternative to paying a premium for access to strong models while achieving a superior issue solve rate."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确承认以下局限：实验只探索了简单版本的重复采样，即所有尝试使用完全相同的提示和超参数独立生成，认为这一设置可以改进 [S5.p2]。具体改进方向包括：目前仅依赖正采样温度作为样本多样性的唯一机制 [S5.p3]；尽管 CodeContests 和 MiniF2F 有自动验证工具，实验只使用单轮设置，模型无法迭代 [S5.p3]；当前实验完全隔离各次尝试，未利用已有样本 [S5.p3]。此外，在缺乏自动验证器的领域，常见验证方法（多数投票和奖励模型）在约 100 个样本后饱和，无法随样本预算扩展 [S4.SS1.p3]。",
+      "evidence": [
+        {
+          "id": "S5.p2",
+          "quote": "In our experiments, we explore only a simple version of repeated sampling where all attempts to a problem are generated independently of one another using the exact same prompt and hyperparameters."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "We currently rely on a positive sampling temperature as the sole mechanism for creating diversity among samples."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "Despite automatic verification tools being available when solving CodeContests and MiniF2F problems, we use only a single-turn setup where models generate a solution without any ability to iterate on it."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "Currently, our experiments fully isolate attempts from each other."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "While success rates initially increase with the number of samples for all three methods, they plateau around 100 samples."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6853,
+      "completion_tokens": 2702,
+      "elapsed_s": 9.74
+    }
+  },
+  "verify": {
+    "quote_hits": 33,
+    "quote_total": 34,
+    "quote_rate": 0.971,
+    "inline_hits": 23,
+    "inline_total": 23,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S3.SS1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "we exponentiate both sides, ending up with the final model of: c≈exp(ak^{b})"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

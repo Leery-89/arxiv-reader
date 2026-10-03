@@ -1,0 +1,206 @@
+{
+  "paper": {
+    "arxiv_id": "2407.06858",
+    "title": "Accurate and Robust Stellar Rotation Periods catalog for 82771 Kepler stars using deep learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 75869,
+    "n_sections": 28,
+    "n_paragraphs": 82
+  },
+  "result": {
+    "summary": "本文提出了 LightPred，一个用于从光变曲线中提取恒星自转周期的深度学习模型，采用结合 LSTM 与 Transformer 的双分支架构 [abstract]。模型先以自监督对比学习在 Kepler 数据上预训练，再用基于真实恒星黑子模型生成的模拟光变曲线进行监督训练 [abstract][S4.SS2.p1]。评估显示 LightPred 在准确度和平均误差上优于自相关函数（ACF）等经典方法 [abstract]，并据此生成了迄今最大的恒星自转周期目录，包含超过 80000 颗主序星 [abstract][S6.p2]。作者还通过基于学习置信度与一致性度量的误差分析过滤预测，并确认了轨道周期短于 10 天的食双星中的潮汐同步现象 [abstract]。",
+    "research_question": {
+      "text": "论文旨在解决如何从 Kepler 光变曲线中准确、稳健地测量恒星自转周期的问题 [S1.p1][S1.p3]。作者指出，经典方法（如 Lomb-Scargle 周期图和自相关函数）虽然成功，但耗时且难以应用于大规模数据集，并且常常难以处理具有多个周期或演化黑子图案的复杂光变曲线 [S1.p2]。此外，经典方法的一个缺点是难以提供预测的不确定性估计，而这对于评估结果可靠性至关重要 [S1.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "The study of stellar rotation periods has become increasingly important in our understanding of stellar evolution, activity cycles, and exoplanet detection."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Classical methods for measuring rotation periods, such as Lomb-Scargle periodograms and autocorrelation functions, have been successful"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "but can be time-consuming and challenging to apply to large datasets."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Furthermore, these methods often struggle with complex light curves that exhibit multiple periodicities or evolving spot patterns."
+        },
+        {
+          "id": "S1.SS1.p1",
+          "quote": "One shortcoming of classical methods is their inability to provide uncertainty estimates for predictions, which are essential for evaluating the reliability of the results."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we present a novel deep-learning approach for measuring stellar rotation periods using Kepler light curves."
+        }
+      ]
+    },
+    "method": {
+      "text": "LightPred 采用双分支架构，结合 LSTM 与 Transformer 组件以同时捕捉光变曲线中的时间依赖和全局特征 [abstract]。训练分为两步：首先在 Kepler 样本上以自监督对比学习（SSL）方式训练不含预测头的模型，然后将该权重作为初始化，在模拟数据集上进行基于模拟的监督学习（SBSL）[S4.SS2.p1]。模拟光变曲线使用真实的黑子模型生成，训练时同时预测周期和倾角，作者认为这种相互学习可使两方面各自受益 [S2.SS1.p2]。模型还引入了一种新的误差度量，结合了与预测一同优化的学习置信度，以及基于同一恒星不同片段预测一致性的度量 [S1.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The model utilizes a dual-branch architecture combining Long Short-Term Memory (LSTM) and Transformer components to capture temporal and global data features."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "To train the model, we used a 2-step pipeline; First, we trained the model, without the prediction head, in a self-supervised fashion, with Kepler samples."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "Next, we used the weights from the SSL Step as an initialization for supervised training with the mock dataset."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "By training a model to predict periods and inclinations at the same time we rely on the fact that mutual learning can benefit both aspects independently."
+        },
+        {
+          "id": "S1.SS2.p1",
+          "quote": "We use new error metric which combines a learned confidence level, optimized together with the predictions, and a consistency measure based on the ability to reproduce the same predictions on different segments of the same sample."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "模型在 50000 个模拟样本（时长 1000 天）上进行监督训练，并按 81%、9%、10% 划分为训练、验证和测试集，得到 5000 个测试样本和 4500 个验证样本 [S4.SS2.p1]。作者尝试将数据集加倍至 100000 个样本，发现结果无显著变化，因此保留 50000 个样本 [S4.SS2.p1]。在 Kepler 数据上，作者筛选出出现在连续 8 个季度的样本，共 130868 个，用于 SSL 步骤和推理 [S5.SS2.p1]。与 ACF 的比较在全部样本以及一个遵循一般筛选规则（去除行星宿主星和食双星，且 ACF 能对所有片段给出预测）的子样本上进行，该子样本大小为 36154 [S5.SS2.SSS2.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p1",
+          "quote": "This was done on a dataset of 50000 simulated samples of 1000 days that were generated as explained in II.1 and II.2."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We then split the dataset into training ( $81\\%$), validation ( $9\\%$), and test sets ( $10\\%$)."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "This gave us 5000 samples for testing and 4500 samples for validating the model which is representative."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We experimented with doubling the dataset size to 100000 samples and found no significant change in the results so we decided to keep the dataset size with 50000 samples."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "This left us with 130868 which serves both for the SSL step and the inference."
+        },
+        {
+          "id": "S5.SS2.SSS2.p1",
+          "quote": "The size of the second sub-sample is 36154, i.e. only $\\sim\\frac{1}{3}$ of the data."
+        }
+      ]
+    },
+    "findings": {
+      "text": "LightPred 在准确度和平均误差上优于 ACF 等经典方法 [abstract]，并生成了迄今最大的恒星自转周期目录，包含超过 80000 颗主序星 [abstract][S6.p2]。与三个最大的现有 Kepler 周期目录比较显示，模型置信度越高的样本一致性越好，表明学习到的置信度反映了物理性质 [S5.SS2.SSS4.p1]。不一致的样本主要分布在两个区域：半周期线附近（暗示双周期错误）以及参考周期接近零而模型预测不为零的区域 [S5.SS2.SSS4.p1]。此外，作者确认了轨道周期短于 10 天的食双星中的潮汐同步现象 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Our evaluation demonstrates that LightPred outperforms classical methods like the Autocorrelation Function (ACF) in terms of accuracy and average error."
+        },
+        {
+          "id": "abstract",
+          "quote": "We apply LightPred to the Kepler dataset, generating the largest catalog to date."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "This advancement has led to the generation of the largest and most accurate catalog of stellar rotation periods for main-sequence stars to date, comprising over 80000 stars."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "It can be seen that in general, more confident samples have better agreement."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "This implies that the learned confidence represents physical properties and is somehow similar to the scoring functions used in and."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "The first region is around the half period line Which suggests a ’double period mistake’."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "The second region is where the reference period is close to zero but our model’s predictions aren’t."
+        },
+        {
+          "id": "abstract",
+          "quote": "Additionally, we confirm tidal synchronization in eclipsing binaries with orbital periods shorter than 10 days."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，观测到的光变曲线可能不代表单一目标，拥挤（Kepler 像素覆盖 4″×4″ 天区）可能导致多个天体进入同一孔径，从而引入偏差 [S5.SS2.SSS4.p1]。双星系统也可能使模型偏向错误的周期（例如双星的轨道周期）[S5.SS2.SSS4.p1]。此外，作者提到倾角测定比自转周期测定更具挑战性，因此本文仅将倾角作为辅助变量，留待未来工作处理 [S2.SS1.p2]。",
+      "evidence": [
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "It is possible that the observed light curve does not represent a single object but multiple objects."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "since Kepler pixels cover $4^{\\prime\\prime}$ x $4^{\\prime\\prime}$ patch of sky it is plausible that multiple objects would enter a single aperture."
+        },
+        {
+          "id": "S5.SS2.SSS4.p1",
+          "quote": "A system of multiple stars can bias the model towards an incorrect period (the orbital period of the binary for example)."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "We therefore treat inclination and period predictions separately; in this paper, we investigate the period predictions and treat inclinations as an auxiliary variable, while in a future paper, we will focus on the more complex issue of inclination determination."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5469,
+      "completion_tokens": 2273,
+      "elapsed_s": 8.8
+    }
+  },
+  "verify": {
+    "quote_hits": 25,
+    "quote_total": 29,
+    "quote_rate": 0.862,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S5.SS2.SSS4.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "It can be seen that in general, more confident samples have better agreement."
+      },
+      {
+        "field": "findings",
+        "id": "S5.SS2.SSS4.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "This implies that the learned confidence represents physical properties and is s"
+      },
+      {
+        "field": "findings",
+        "id": "S5.SS2.SSS4.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The first region is around the half period line Which suggests a ’double period "
+      },
+      {
+        "field": "findings",
+        "id": "S5.SS2.SSS4.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The second region is where the reference period is close to zero but our model’s"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

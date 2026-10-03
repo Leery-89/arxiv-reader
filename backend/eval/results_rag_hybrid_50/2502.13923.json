@@ -1,0 +1,173 @@
+{
+  "paper": {
+    "arxiv_id": "2502.13923",
+    "title": "Qwen2.5-VL Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 51134,
+    "n_sections": 33,
+    "n_paragraphs": 95
+  },
+  "result": {
+    "summary": "Qwen2.5-VL 是 Qwen 视觉语言系列的最新旗舰模型，在视觉识别、目标定位、文档解析和长视频理解等方面取得进展 [abstract]。该模型通过从头训练原生动态分辨率 ViT 并引入窗口注意力来降低计算开销，同时采用动态分辨率处理和绝对时间编码以处理不同尺寸图像和长达数小时的视频 [abstract]。模型提供 72B、7B 和 3B 三种规模，旗舰 72B 在文档和图表理解上可与 GPT-4o 和 Claude 3.5 Sonnet 匹敌，较小模型也优于同类竞品 [abstract]。",
+    "research_question": {
+      "text": "论文指出当前视觉语言模型面临计算复杂度、上下文理解有限、细粒度视觉感知差以及不同序列长度下性能不一致等发展瓶颈 [S1.p3]。Qwen2.5-VL 旨在探索细粒度感知能力，为 LVLMs 建立坚实基础，并打造面向真实应用的智能体放大器 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "vision-language models currently face developmental bottlenecks, including computational complexity, limited contextual understanding, poor fine-grained visual perception, and inconsistent performance across varied sequence length."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "we are committed to exploring fine-grained perception capabilities, aiming to establish a robust foundation for LVLMs and create an agentic amplifier for real-world applications."
+        }
+      ]
+    },
+    "method": {
+      "text": "Qwen2.5-VL 整体架构由大语言模型、视觉编码器和跨模态投影器三部分组成，语言模型以 Qwen2.5 LLM 预训练权重初始化，并将一维 RoPE 改为对齐绝对时间的多模态旋转位置嵌入 [S2.SS1.p2]。视觉编码器采用重新设计的 ViT，引入 2D-RoPE 和窗口注意力以支持原生输入分辨率并加速计算 [S2.SS1.p3]。模型在空间维度上直接将图像实际尺寸用于表示边界框和点等空间特征，而非归一化坐标 [S2.SS1.SSS2.p2]；在时间维度上将 MRoPE 的时间分量与绝对时间对齐，使模型能跨不同 FPS 采样率学习一致的时间对齐 [S2.SS1.SSS3.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p2",
+          "quote": "The model is initialized with pre-trained weights from the Qwen2.5 LLM."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "we have modified the 1D RoPE (Rotary Position Embedding) to our Multimodal Rotary Position Embedding Aligned to Absolute Time."
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "we incorporate 2D-RoPE and window attention to support native input resolutions while accelerating the computation of the entire visual encoder."
+        },
+        {
+          "id": "S2.SS1.SSS2.p2",
+          "quote": "our model directly uses the actual dimensions of the input image to represent bounding boxes, points, and other spatial features."
+        },
+        {
+          "id": "S2.SS1.SSS3.p3",
+          "quote": "aligning the temporal component of MRoPE with absolute time."
+        },
+        {
+          "id": "S2.SS1.SSS3.p3",
+          "quote": "the model is able to learn consistent temporal alignment across videos with different FPS sampling rates."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在多种数据集上评估 Qwen2.5-VL，并与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 及不同规模的 Qwen2-VL 等模型比较 [S3.SS1.p1]。评估覆盖大学水平问题、数学任务、通用视觉问答、纯文本任务、文档理解与 OCR、空间理解、视频理解与定位以及 GUI 智能体等基准 [S3.SS1.p1][S3.SS2.p1][S3.SS3.SSS2.p1][S3.SS3.SSS3.p2][S3.SS3.SSS4.p1][S3.SS3.SSS5.p1]。视频评估中，每个视频分析的最大帧数限制为 768，视频 token 总数不超过 24,576 [S3.SS3.SSS4.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "comparing it with state-of-the-art models such as Claude-3.5-Sonnet-0620, GPT-4o-0513, InternVL2.5, and different sizes of Qwen2-VL."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "In college-level problems, Qwen2.5-VL-72B achieves a score of 70.2 on MMMU."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "we selected several representative benchmarks to assess the model’s capabilities across a variety of domains, including general tasks, mathematics and science tasks, coding tasks, and alignment task."
+        },
+        {
+          "id": "S3.SS3.SSS2.p1",
+          "quote": "We evaluated our models across a diverse range of OCR, chart, and document understanding benchmarks."
+        },
+        {
+          "id": "S3.SS3.SSS3.p2",
+          "quote": "We compare Qwen2.5-VL’s visual grounding capabilities with other leading LVLMs including Gemini, Grounding-DINO, Molmo, and InternVL2.5."
+        },
+        {
+          "id": "S3.SS3.SSS4.p1",
+          "quote": "We assessed our models across a diverse range of video understanding and grounding tasks, utilizing benchmarks that include videos ranging from a few seconds to several hours in length."
+        },
+        {
+          "id": "S3.SS3.SSS5.p1",
+          "quote": "We assess the agent capabilities of Qwen2.5-VL through various aspects."
+        },
+        {
+          "id": "S3.SS3.SSS4.p2",
+          "quote": "we capped the maximum number of frames analyzed per video at 768, with the total number of video tokens not exceeding 24,576."
+        }
+      ]
+    },
+    "findings": {
+      "text": "Qwen2.5-VL-72B 在 MMMU 上得分 70.2，在 MMMU-Pro 上得分 51.1，超过此前开源最优模型并与 GPT-4o 相当 [S3.SS1.p1]。在数学任务上，MathVista 得分 74.8，超过此前开源最优的 72.3 [S3.SS1.p2]。在通用视觉问答上，MMbench-EN 得分 88.6，略超此前最佳的 88.3 [S3.SS1.p3]。在视频定位上，Charades-STA 的 mIoU 达 50.9，超过 GPT-4o [S3.SS3.SSS4.p2]。在 GUI 智能体基准上，ScreenSpot 准确率 87.1%，ScreenSpot Pro 达 43.6%，远超 Aguvis-72B 的 23.6% 和 Qwen2-VL-72B 的 1.6% [S3.SS3.SSS5.p2]。较小规模的 Qwen2.5-VL-7B 和 3B 也表现出竞争力，例如 MMStar 上分别为 63.9% 和 55.9% [S3.SS3.SSS1.p4]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "Qwen2.5-VL-72B achieves a score of 70.2 on MMMU."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "For MMMU-Pro, Qwen2.5-VL-72B scores 51.1, surpassing the previous open-source state-of-the-art models and achieving performance comparable to GPT-4o."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "On MathVista, it achieves a score of 74.8, outperforming the previous open-source state-of-the-art score of 72.3."
+        },
+        {
+          "id": "S3.SS1.p3",
+          "quote": "On MMbench-EN, it achieves a score of 88.6, slightly surpassing the previous best score of 88.3."
+        },
+        {
+          "id": "S3.SS3.SSS4.p2",
+          "quote": "On the Charades-STA dataset, which assesses the capability to accurately localize events or activities with precise timestamps, Qwen2.5-VL-72B achieves an impressive mIoU score of 50.9, thereby surpassing the performance of GPT-4o."
+        },
+        {
+          "id": "S3.SS3.SSS5.p2",
+          "quote": "It achieves 87.1% accuracy on ScreenSpot, competing strongly with Gemini 2.0 (84.0%) and Claude (83.0%)"
+        },
+        {
+          "id": "S3.SS3.SSS5.p2",
+          "quote": "notably setting a new standard on ScreenSpot Pro with 43.6% accuracy - far surpassing both Aguvis-72B (23.6%) and its foundation Qwen2-VL-72B (1.6%)."
+        },
+        {
+          "id": "S3.SS3.SSS1.p4",
+          "quote": "on the MMStar dataset, Qwen2.5-VL-7B achieves 63.9%, while Qwen2.5-VL-3B scores 55.9%."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "论文指出，将 CoT 推理应用于视觉语言模型的一个关键挑战是模型依赖文本和视觉两种模态，中间推理步骤可能未能充分整合视觉信息，要么忽略相关视觉线索，要么误解它们 [S2.SS3.SSS3.p4]。尽管采用了基于规则和模型驱动的过滤策略来验证中间推理步骤的准确性，实现最优的模态对齐仍是一个需要进一步推进的持续挑战 [S2.SS3.SSS3.p4]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "A key challenge in applying CoT reasoning to vision-language models is their reliance on both textual and visual modalities."
+        },
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "Intermediate reasoning steps may fail to adequately integrate visual information, either by ignoring relevant visual cues or misinterpreting them."
+        },
+        {
+          "id": "S2.SS3.SSS3.p4",
+          "quote": "Despite these efforts, achieving optimal modality alignment remains an ongoing challenge that requires further advancements."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 7265,
+      "completion_tokens": 2394,
+      "elapsed_s": 7.8
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 22,
+    "inline_total": 22,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

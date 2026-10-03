@@ -1,0 +1,144 @@
+{
+  "paper": {
+    "arxiv_id": "2502.13923",
+    "title": "Qwen2.5-VL Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 51134,
+    "n_sections": 33,
+    "n_paragraphs": 95
+  },
+  "result": {
+    "summary": "本文介绍了 Qwen2.5-VL 系列视觉语言模型，在视觉识别、目标定位、文档解析和长视频理解等方面取得进展 [abstract]。模型采用原生动态分辨率 ViT 与窗口注意力以降低计算开销，并引入动态 FPS 采样与绝对时间编码处理图像和长视频 [abstract][S1.p4]。实验表明，旗舰模型 Qwen2.5-VL-72B 在文档与图表理解上可与 GPT-4o、Claude 3.5 Sonnet 等模型匹敌，较小的 7B 与 3B 版本也优于同类竞品 [abstract]。",
+    "research_question": {
+      "text": "论文旨在推出 Qwen2.5-VL 系列模型，延续 Qwen 系列的开源理念，在多项基准上达到甚至超越顶级闭源模型 [S1.p4]。其动机是提升模型在视觉识别、精确目标定位、鲁棒文档解析和长视频理解等方面的基础能力与交互功能 [abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "In this report, we introduce the latest work Qwen2.5-VL, which continues the open-source philosophy of the Qwen series, achieving and even surpassing top-tier closed-source models on various benchmarks."
+        },
+        {
+          "id": "abstract",
+          "quote": "Qwen2.5-VL achieves a major leap forward in understanding and interacting with the world through enhanced visual recognition, precise object localization, robust document parsing, and long-video comprehension."
+        }
+      ]
+    },
+    "method": {
+      "text": "Qwen2.5-VL 由视觉编码器和语言模型解码器组成，视觉编码器采用重新设计的 ViT，引入 2D-RoPE 和窗口注意力以支持原生输入分辨率并加速计算 [S2.SS1.p3]。模型引入动态 FPS 采样将动态分辨率扩展到时间维度，并升级 MRoPE 在时间域对齐绝对时间 [S1.p4]。在文档数据方面，作者将表格、图表、公式等元素统一格式化为 HTML，并整合布局框信息与坐标 [S2.SS2.SSS1.Px3.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p3",
+          "quote": "Structurally, we incorporate 2D-RoPE and window attention to support native input resolutions while accelerating the computation of the entire visual encoder."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "We introduce dynamic FPS sampling, extending dynamic resolution to the temporal dimension and enabling comprehensive video understanding across varied sampling rates"
+        },
+        {
+          "id": "S1.p4",
+          "quote": "We upgrade MRoPE in the temporal domain by aligning to absolute time, thereby facilitating more sophisticated temporal sequence learning"
+        },
+        {
+          "id": "S2.SS2.SSS1.Px3.p1",
+          "quote": "These elements were uniformly formatted in HTML, which integrates layout box information and descriptions of illustrations into HTML tag structures."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在多种数据集上评估 Qwen2.5-VL，并与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 及不同规模的 Qwen2-VL 等模型比较 [S3.SS1.p1]。评估覆盖大学水平问题、数学任务、纯文本任务、通用视觉问答、文档理解与 OCR、空间理解、视频理解以及 GUI Agent 等基准 [S3.SS1.p1][S3.SS2.p1][S3.SS3.SSS1.p3][S3.SS3.SSS2.p3][S3.SS3.SSS3.p3][S3.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "The experimental section evaluates the performance of Qwen2.5-VL across a variety of datasets, comparing it with state-of-the-art models such as Claude-3.5-Sonnet-0620, GPT-4o-0513, InternVL2.5, and different sizes of Qwen2-VL."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "we selected several representative benchmarks to assess the model’s capabilities across a variety of domains, including general tasks, mathematics and science tasks, coding tasks, and alignment task."
+        },
+        {
+          "id": "S3.SS3.SSS1.p3",
+          "quote": "in high-resolution real-world scenarios, specifically on the MME-RealWorld benchmark, Qwen2.5-VL demonstrates state-of-the-art performance with a score of 63.2"
+        },
+        {
+          "id": "S3.SS3.SSS2.p3",
+          "quote": "on composite OCR-related understanding benchmarks as OCRBench, InfoVQA which focusing on infographics, and SEED-Bench-2-Plus covering text-rich scenarios including charts, maps, and webs"
+        },
+        {
+          "id": "S3.SS3.SSS3.p3",
+          "quote": "Qwen2.5-VL achieves leading performance across different benchmarks from box-grounding, and point-grounding to counting."
+        },
+        {
+          "id": "S3.SS3.SSS5.p2",
+          "quote": "The performance of Qwen2.5-VL-72B demonstrates exceptional advancements across GUI grounding benchmarks."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在大学水平问题上，Qwen2.5-VL-72B 在 MMMU 上得分 70.2，在 MMMU-Pro 上得分 51.1，超越此前开源最优模型并与 GPT-4o 相当 [S3.SS1.p1]。在数学任务上，MathVista 得分 74.8，超过此前开源最优的 72.3 [S3.SS1.p2]。在空间理解上，ODinW-13 上达到 43.1 mAP，CountBench 上以“先检测后计数”提示达到 93.6 的准确率 [S3.SS3.SSS3.p3]。在 GUI 基准上，ScreenSpot 达到 87.1% 准确率，ScreenSpot Pro 达到 43.6%，远超 Aguvis-72B（23.6%）和 Qwen2-VL-72B（1.6%）[S3.SS3.SSS5.p2]。较小的 Qwen2.5-VL-7B 和 3B 也表现有竞争力，例如 MMStar 上分别为 63.9% 和 55.9% [S3.SS3.SSS1.p4]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "Qwen2.5-VL-72B achieves a score of 70.2 on MMMU."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "For MMMU-Pro, Qwen2.5-VL-72B scores 51.1, surpassing the previous open-source state-of-the-art models and achieving performance comparable to GPT-4o."
+        },
+        {
+          "id": "S3.SS1.p2",
+          "quote": "On MathVista, it achieves a score of 74.8, outperforming the previous open-source state-of-the-art score of 72.3."
+        },
+        {
+          "id": "S3.SS3.SSS3.p3",
+          "quote": "Qwen2.5-VL achieves a good performance of 43.1 mAP on ODinW-13"
+        },
+        {
+          "id": "S3.SS3.SSS3.p3",
+          "quote": "achieving a leading accuracy of 93.6 on CountBench with Qwen2.5-VL-72B using a “detect then count”-style prompt."
+        },
+        {
+          "id": "S3.SS3.SSS5.p2",
+          "quote": "It achieves 87.1% accuracy on ScreenSpot, competing strongly with Gemini 2.0 (84.0%) and Claude (83.0%)"
+        },
+        {
+          "id": "S3.SS3.SSS5.p2",
+          "quote": "setting a new standard on ScreenSpot Pro with 43.6% accuracy - far surpassing both Aguvis-72B (23.6%) and its foundation Qwen2-VL-72B (1.6%)"
+        },
+        {
+          "id": "S3.SS3.SSS1.p4",
+          "quote": "on the MMStar dataset, Qwen2.5-VL-7B achieves 63.9%, while Qwen2.5-VL-3B scores 55.9%."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4454,
+      "completion_tokens": 1919,
+      "elapsed_s": 6.77
+    }
+  },
+  "verify": {
+    "quote_hits": 20,
+    "quote_total": 20,
+    "quote_rate": 1.0,
+    "inline_hits": 17,
+    "inline_total": 17,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,151 @@
+{
+  "paper": {
+    "arxiv_id": "2408.13687",
+    "title": "Quantum error correction below the surface code threshold",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 88505,
+    "n_sections": 41,
+    "n_paragraphs": 134
+  },
+  "result": {
+    "summary": "本文在超导量子处理器上实现了低于阈值的表面码量子纠错。作者在105量子比特处理器上运行距离-7表面码，在72量子比特处理器上运行距离-5表面码并集成实时解码器，观测到码距每增加2逻辑错误率被抑制超过一半，距离-7逻辑量子比特寿命超过其最佳组成物理量子比特寿命的2.4倍 [S2.p5][S2.p7]。作者还用距离-29重复码探测超低错误率区域，发现逻辑性能受约每小时发生一次的罕见关联错误事件限制，形成约10^-10的错误地板 [S4.p3][S4.p4]。作者认为这些结果表明，若可扩展，该器件性能有望满足大规模容错量子算法的运行需求 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是实现低于阈值的量子纠错，即物理错误率低于临界阈值从而使逻辑错误率随码距增加而指数抑制 [S1.p1]。原文指出，尽管许多平台展示了量子纠错的不同特征，但尚无量子处理器明确展示低于阈值的性能 [S1.p1]。此外，容错量子计算还要求解码速度跟上综合征产生速度，这对快速运行的超导量子比特构成挑战 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "While many platforms have demonstrated different features of quantum error correction, no quantum processor has definitively shown below-threshold performance."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "If the physical operations are below a critical noise threshold, the logical error should be suppressed exponentially as we increase the number of physical qubits per logical qubit."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Fault-tolerant quantum computing also imposes requirements on classical coprocessors – namely, the syndrome information produced by the quantum device must be decoded as fast as it is generated."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者在超导transmon量子比特处理器上实现ZXXZ表面码存储实验，通过重复错误纠正循环提取综合征并解码 [S2.p3]。他们使用两种离线高精度解码器：神经网络解码器和相关最小权完美匹配解码器集成，并针对器件噪声进行微调 [S2.p2]。此外，作者实现了实时解码系统，采用分块流式解码算法以跟上1.1微秒的纠错周期 [S5.p1][S5.F4]。",
+      "evidence": [
+        {
+          "id": "S2.p3",
+          "quote": "We operate a distance-7 surface code memory comprising 49 data qubits, 48 measure qubits, and 4 additional leakage removal qubits"
+        },
+        {
+          "id": "S2.p2",
+          "quote": "One is a neural network decoder, and the other is a harmonized ensemble of correlated minimum-weight perfect matching decoders augmented with matching synthesis."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "The throughput of transmitting, processing, and decoding the syndrome information in each cycle must keep pace with the fast error correcting cycle time of 1.1 µs."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在105量子比特处理器上运行距离-7表面码，在72量子比特处理器上运行距离-5表面码并集成实时解码器 [S1.p3]。作者还使用72量子比特处理器运行距离-29重复码，进行1000个纠错循环、2×10^7次采样，总计2×10^10个纠错循环、5.5小时处理器执行时间 [S4.p2]。实时解码测试中，距离-5表面码的纠错循环数增加到10^6，观测解码延迟 [S5.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "Using a 72-qubit processor, we implement a distance-5 surface code operating with an integrated real-time decoder."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In addition, using a 105-qubit processor with similar performance, we realize a distance-7 surface code."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "Using our 72-qubit processor, we run a distance-29 repetition code for 1000 cycles of error correction over $2\\times 10^{7}$ shots split evenly between bit- and phase-flip codes."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "In total, we execute $2\\times 10^{10}$ cycles of error correction comprising 5.5 hours of processor execution time."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "For our distance-5 surface code, we test different problem sizes by increasing the number of error correction cycles up to $10^{6}$."
+        }
+      ]
+    },
+    "findings": {
+      "text": "使用神经网络解码器，作者观测到错误抑制因子Λ=2.14±0.02，距离-7逻辑错误率ε7=(1.43±0.03)×10^-3；使用集成匹配合成解码器，Λ=2.04±0.02，ε7=(1.71±0.03)×10^-3 [S2.p5]。距离-7逻辑量子比特寿命为291±6微秒，超过所有组成物理量子比特的寿命（中位数85±7微秒，最佳119±13微秒）2.4±0.3倍 [S2.p7]。在重复码中，作者获得Λ=8.4±0.1，逻辑错误率远低于10^-6，但在码距d≥15时偏离指数抑制，出现约10^-10的表观逻辑错误地板 [S4.p3]。实时解码中，距离-5表面码的平均解码延迟约为63±17微秒，与实验长度无关，表明解码在实时进行 [S5.p3]。",
+      "evidence": [
+        {
+          "id": "S2.p5",
+          "quote": "With our neural network decoder, we observe $\\Lambda=2.14\\pm 0.02$ and $\\varepsilon_{7}$ = $(1.43\\pm 0.03)\\times 10^{-3}$"
+        },
+        {
+          "id": "S2.p5",
+          "quote": "With ensembled matching synthesis, we observe $\\Lambda=2.04\\pm 0.02$ and $\\varepsilon_{7}$ = $(1.71\\pm 0.03)\\times 10^{-3}$."
+        },
+        {
+          "id": "S2.p7",
+          "quote": "The distance-7 logical qubit lifetime is $291\\pm 6$ µs, exceeding the lifetimes of all the constituent physical qubits (median $85\\pm 7$ µs, best $119\\pm 13$ µs) by a factor of $2.4\\pm 0.3$."
+        },
+        {
+          "id": "S4.p3",
+          "quote": "Averaging over bit- and phase-flip repetition codes, we obtain an error suppression factor $\\Lambda=8.4\\pm 0.1$ when fitting logical error per cycle versus code distance between $d=5$ and 11"
+        },
+        {
+          "id": "S4.p3",
+          "quote": "However, at code distances $d\\geq 15$, we observe a deviation from exponential error suppression at high distances culminating in an apparent logical error floor of $10^{-10}$."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "We observe that the average latency remains roughly constant at a net average of $63\\pm 17$ µs independent of the length of the experiment (up to 1.1 seconds), indicating that the decoding problem is being processed in real time."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，重复码中高码距逻辑错误由罕见关联错误事件引起，这些事件约每小时发生一次，其成因尚不清楚，缓解它们对构建容错量子计算机至关重要 [S4.p4]。此外，实时解码延迟尚未包括反馈到逻辑电路中的时间 [S5.p3]。作者还指出，当前逻辑错误率与实用量子计算需求之间仍相差多个数量级 [S4.p1]。",
+      "evidence": [
+        {
+          "id": "S4.p4",
+          "quote": "We do not yet understand the cause of these events, but mitigating them remains vital to building a fault-tolerant quantum computer."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "This latency will eventually determine the reaction time of the logical processor when enacting non-Clifford gates, but does not yet include feedback into the logical circuit."
+        },
+        {
+          "id": "S4.p1",
+          "quote": "Despite realizing below-threshold surface codes, orders of magnitude remain between present logical error rates and the requirements for practical quantum computation."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 11456,
+      "completion_tokens": 1923,
+      "elapsed_s": 7.64
+    }
+  },
+  "verify": {
+    "quote_hits": 20,
+    "quote_total": 20,
+    "quote_rate": 1.0,
+    "inline_hits": 16,
+    "inline_total": 17,
+    "inline_rate": 0.941,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S5.F4",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

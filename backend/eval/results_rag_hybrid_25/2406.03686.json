@@ -1,0 +1,152 @@
+{
+  "paper": {
+    "arxiv_id": "2406.03686",
+    "title": "BindGPT: A Scalable Framework for 3D Molecular Design via Language Modeling and Reinforcement Learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 42065,
+    "n_sections": 23,
+    "n_paragraphs": 58
+  },
+  "result": {
+    "summary": "BindGPT 是一个将 3D 分子设计表述为文本提示生成任务的生成式框架，使用仅解码器的语言模型在蛋白质结合位点内联合生成分子图与构象 [S3.p1][S1.p5]。作者在大规模 3D 分子与蛋白质口袋数据集上预训练，并用外部对接软件的评分进行强化学习微调 [abstract][S3.SS2.p1]。实验表明，该模型可同时充当 3D 分子生成模型、以分子图为条件的构象生成器以及口袋条件 3D 分子生成器，在多项任务上达到或超过专门的扩散模型、语言模型和图神经网络，且采样成本低约两个数量级 [abstract]。作者认为该工作表明大规模预训练范式可以从 NLP 有效迁移到 3D 药物发现 [S5.p1]。",
+    "research_question": {
+      "text": "论文要解决的问题是如何为给定蛋白质生成具有活性的新分子，这要求生成模型理解分子与其环境之间复杂的物理相互作用 [abstract]。作者指出，3D 分子生成这一挑战在语言模型方法中受到的关注有限 [S2.p5]。其动机是当前药物发现领域多数工作未采用近期高效语言模型预训练的技术与算法进展，作者希望填补这一空白 [S3.SS2.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Generating novel active molecules for a given protein is an extremely challenging task for generative models that requires an understanding of the complex physical interactions between the molecule and its environment."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "However, the challenge of 3D molecule generation has received limited attention in language model approach."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Our work aims to fill this gap by demonstrating the effectiveness of the pretraining for 3D drug discovery."
+        }
+      ]
+    },
+    "method": {
+      "text": "核心思想是用受 GPT 模型影响的自回归 token 生成模型，在一个统一范式中解决多个 3D 小分子生成任务，把任务表述为带提示的文本生成，将条件 token 排在待生成对象 token 之前 [S3.p1]。模型采用仅解码器架构与 GPT-NeoX，使用旋转位置嵌入以支持长度泛化 [S3.SS1.p1]。它用结构化 SMILES 和空间 XYZ 格式描述分子图与原子位置，从而无需外部软件进行图重建 [S1.p5]。作者在大规模 3D 分子与蛋白质口袋数据集上预训练，再用外部对接软件的反馈进行强化学习微调 [abstract]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "The key idea of our method is utilizing an autoregressive token generation model, influenced by GPT-based models, to solve several 3D small molecule generation tasks in one simple yet flexible paradigm."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "The main principle in our approach is to formulate several 3D molecular design task as prompted generation of text."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "In our work we follow the decoder-only paradigm in Language Models and use the GPT-NeoX 1 1 1 Despite other architectures existing today (such as LLaMa2), our main focus was building a general framework of working with 3D molecules that can work with any Language Model architecture. architecture that utilizes rotary position embeddings."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "It uses structural SMILES and spatial XYZ formats to describe molecular graphs and atom locations, eliminating the dependency on external software for graph reconstruction."
+        },
+        {
+          "id": "abstract",
+          "quote": "We pretrain BindGPT on a large-scale dataset and fine-tune it with reinforcement learning using scores from external simulation software."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "预训练使用 108M 参数、15 层、12 头、隐藏维度 768 的模型，训练批次为每步 1.6M token，且由于数据集中口袋远少于配体，每训练一个配体 epoch 就训练 5 个蛋白质 epoch，约 8% 的 token 为口袋 token [S3.SS2.p1]。评估覆盖 3D 分子生成建模与口袋条件分子生成等任务，并与 XYZ-TF、MolDiff、Torsional Diffusion、Uni-Mol-BERT 等基线比较 [S4.SS1.p3]。在口袋条件生成中，作者比较了在完整 CrossDocked 数据上微调的 BindGPT-FT、带奖励上下文微调的 BindGPT-RFT，以及从 BindGPT-FT 初始化进行强化学习的 BindGPT-RL [S4.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S3.SS2.p1",
+          "quote": "During pretraining, we use the model with 108M parameters consisting of 15 layers, 12 heads, and a hidden size of 768."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "To speedup and stabilize pretraining, we use large batch training with 1.6M tokens per one training step."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Since the dataset has much fewer pockets than ligands, for one epoch of training on ligands, we do 5 epochs of training on proteins, that is, around 8% of all tokens seen by the model are pocket tokens."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "First, the pretrained BindGPT model consistently outperforms the XYZ-TF baseline both without and with explicit hydrogens."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "For the conformation generation task, the current best baseline is Torsional Diffusion (TD)."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "First, BindGPT-FT is a model finetuned on the complete CrossDocked data (the data layout as described in Figure 3, top), i.e. both good and bad binding pairs."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "Finally, the BindGPT-RL model is trained with RL (see Section 3.3.2 and Appendix B.3) from the BindGPT-FT initialization."
+        }
+      ]
+    },
+    "findings": {
+      "text": "预训练 BindGPT 在有无显式氢两种设置下均持续优于 XYZ-TF 基线，并且是首个能在如此大规模下显式建模氢的模型 [S4.SS1.p3]。在 GEOM-DRUGS 上微调后，BindGPT 在几乎所有分布评估指标上取得 state-of-the-art 分数，仅在 Druglikeness 上未超过 MolDiff [S4.SS1.p3]。在构象生成任务中，BindGPT 在 RDKit 辅助下可匹配 Torsional Diffusion 的表现，无辅助时存在小差距，而 Uni-Mol 未能泛化到 Platinum 数据集 [S4.SS1.p3]。在口袋条件生成中，经强化学习微调的模型能更高效地搜索结合分子空间，在结合能上显著优于此前所有最佳基线 [S4.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p3",
+          "quote": "First, the pretrained BindGPT model consistently outperforms the XYZ-TF baseline both without and with explicit hydrogens."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT is the first model capable of modeling hydrogen explicitly at such large scale."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT (being finetuned on this data) shows state-of-the-art performance scores for nearly all distributional evaluation metrics."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "Even though BindGPT does not outperform MolDiff in Druglikeness, that could be explained by a smaller vocabulary of the, containing only frequent atoms."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "BindGPT, in contrast, is capable of matching the performance of TD when assisted by the RDKit tool and having a small gap when not."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "Surprisingly, Uni-Mol fails to generalize to this new dataset (even assisted by RDKit), which we think is because of its structural diversity."
+        },
+        {
+          "id": "S4.SS2.p3",
+          "quote": "Our main conclusion is that the RL finetuned model can learn to search the space of binding molecules much more efficiently and significantly outperforms all the previous best baselines in terms of the binding energy."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 3672,
+      "completion_tokens": 1947,
+      "elapsed_s": 7.49
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 22,
+    "quote_rate": 1.0,
+    "inline_hits": 14,
+    "inline_total": 14,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "science",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

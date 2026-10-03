@@ -1,0 +1,201 @@
+{
+  "paper": {
+    "arxiv_id": "2412.19437",
+    "title": "DeepSeek-V3 Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 97112,
+    "n_sections": 89,
+    "n_paragraphs": 160
+  },
+  "result": {
+    "summary": "DeepSeek-V3 是一个总参数 671B、每 token 激活 37B 的 MoE 语言模型，采用 MLA 与 DeepSeekMoE 架构，并引入无辅助损失的负载均衡策略和多 token 预测训练目标 [abstract]。模型在 14.8 万亿 token 上预训练，随后经过监督微调和强化学习阶段 [abstract]。综合评估显示，DeepSeek-V3 优于其他开源模型，性能与领先闭源模型相当 [abstract]。其完整训练仅需 2.788M H800 GPU 小时，且训练过程稳定，未出现不可恢复的损失尖峰或回滚 [abstract]。",
+    "research_question": {
+      "text": "论文旨在同时追求强模型性能与经济成本，通过架构与训练策略创新提升效率 [S1.p2]。具体包括：采用 MLA 实现高效推理、DeepSeekMoE 实现低成本训练，并引入无辅助损失负载均衡以最小化对性能的负面影响，以及多 token 预测目标以增强评估基准表现 [S1.p2]。此外，论文还探索 FP8 混合精度训练在超大规模模型上的有效性，以加速训练并降低 GPU 内存占用 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "With a forward-looking perspective, we consistently strive for strong model performance and economical costs."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 pioneers an auxiliary-loss-free strategy for load balancing, with the aim of minimizing the adverse impact on model performance"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "DeepSeek-V3 employs a multi-token prediction training objective, which we have observed to enhance the overall performance on evaluation benchmarks."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "we introduce an FP8 mixed precision training framework and, for the first time, validate its effectiveness on an extremely large-scale model."
+        }
+      ]
+    },
+    "method": {
+      "text": "DeepSeek-V3 基于 Transformer 框架，采用 MLA 和 DeepSeekMoE 架构，并额外引入无辅助损失的负载均衡策略以缓解负载均衡带来的性能退化 [S2.SS1.p1]。模型设置多 token 预测目标，顺序预测额外 token 并保持完整因果链 [S2.SS2.p1]。训练方面，提出 FP8 混合精度框架，采用细粒度量化（激活按 1x128 tile、权重按 128x128 block 分组缩放）和提升累积精度等策略 [S3.SS3.p1][S3.SS3.SSS2.Px1.p1]。同时设计 DualPipe 算法实现高效流水线并行，并开发跨节点 all-to-all 通信内核以充分利用 IB 和 NVLink 带宽 [S3.SS2.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "DeepSeek-V3 also adopts MLA and DeepSeekMoE, which have been thoroughly validated by DeepSeek-V2."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "we additionally introduce an auxiliary-loss-free load balancing strategy for DeepSeekMoE to mitigate the performance degradation induced by the effort to ensure load balance."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "we sequentially predict additional tokens and keep the complete causal chain at each prediction depth."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "we propose a fine-grained mixed precision framework utilizing the FP8 data format for training DeepSeek-V3."
+        },
+        {
+          "id": "S3.SS3.SSS2.Px1.p1",
+          "quote": "for activations, we group and scale elements on a 1x128 tile basis (i.e., per token per 128 channels)"
+        },
+        {
+          "id": "S3.SS3.SSS2.Px1.p1",
+          "quote": "for weights, we group and scale elements on a 128x128 block basis (i.e., per 128 input channels per 128 output channels)."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "we design the DualPipe algorithm for efficient pipeline parallelism."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "we develop efficient cross-node all-to-all communication kernels to fully utilize IB and NVLink bandwidths"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "预训练在 14.8 万亿 token 上进行，随后进行监督微调和强化学习 [abstract]。评估覆盖多学科选择题、语言理解与推理、闭卷问答、阅读理解、指代消解、语言建模、中文理解与文化、数学和代码等基准，主要使用英文和中文，以及一个多语言基准 [S4.SS4.SSS1.p1]。基座模型与 DeepSeek-V2-Base、Qwen2.5 72B Base、LLaMA-3.1 405B Base 在相同内部评估框架下比较 [S4.SS4.SSS2.p1]。MTP 策略在 15.7B 总参数/1.33T token 和 228.7B 总参数/540B token 两个规模上消融验证 [S4.SS5.SSS1.p1]。无辅助损失均衡策略在 15.7B/1.33T 和 228.7B/578B 两个规模上消融验证 [S4.SS5.SSS2.p1]。FP8 混合精度框架在约 16B/1.33T 和约 230B/0.9T 两个规模上与 BF16 对比验证 [A2.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We pre-train DeepSeek-V3 on 14.8 trillion diverse and high-quality tokens, followed by Supervised Fine-Tuning and Reinforcement Learning stages"
+        },
+        {
+          "id": "S4.SS4.SSS1.p1",
+          "quote": "we evaluate its performance on a series of benchmarks primarily in English and Chinese, as well as on a multilingual benchmark."
+        },
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "we compare the base model of DeepSeek-V3 with the state-of-the-art open-source base models, including DeepSeek-V2-Base (our previous release), Qwen2.5 72B Base, and LLaMA-3.1 405B Base."
+        },
+        {
+          "id": "S4.SS5.SSS1.p1",
+          "quote": "At the small scale, we train a baseline MoE model comprising 15.7B total parameters on 1.33T tokens."
+        },
+        {
+          "id": "S4.SS5.SSS1.p1",
+          "quote": "At the large scale, we train a baseline MoE model comprising 228.7B total parameters on 540B tokens."
+        },
+        {
+          "id": "S4.SS5.SSS2.p1",
+          "quote": "At the small scale, we train a baseline MoE model comprising 15.7B total parameters on 1.33T tokens."
+        },
+        {
+          "id": "S4.SS5.SSS2.p1",
+          "quote": "At the large scale, we train a baseline MoE model comprising 228.7B total parameters on 578B tokens."
+        },
+        {
+          "id": "A2.SS1.p1",
+          "quote": "At the small scale, we train a baseline MoE model comprising approximately 16B total parameters on 1.33T tokens."
+        },
+        {
+          "id": "A2.SS1.p1",
+          "quote": "At the large scale, we train a baseline MoE model comprising approximately 230B total parameters on around 0.9T tokens."
+        }
+      ]
+    },
+    "findings": {
+      "text": "DeepSeek-V3-Base 在多数基准上超越 LLaMA-3.1 405B Base，全面优于 DeepSeek-V2-Base 和 Qwen2.5 72B Base，基本成为最强开源模型 [S4.SS4.SSS2.p1]。MTP 策略在大多数评估基准上持续提升模型性能 [S4.SS5.SSS1.p1]。无辅助损失均衡策略在大多数评估基准上持续取得更好性能 [S4.SS5.SSS2.p1]。FP8 训练模型相对损失误差始终低于 0.25% [S3.SS3.p1]。完整训练仅需 2.788M H800 GPU 小时，训练过程稳定，未出现不可恢复的损失尖峰或回滚 [abstract]。",
+      "evidence": [
+        {
+          "id": "S4.SS4.SSS2.p1",
+          "quote": "DeepSeek-V3-Base comprehensively outperforms DeepSeek-V2-Base and Qwen2.5 72B Base, and surpasses LLaMA-3.1 405B Base in the majority of benchmarks"
+        },
+        {
+          "id": "S4.SS5.SSS1.p1",
+          "quote": "the MTP strategy consistently enhances the model performance on most of the evaluation benchmarks."
+        },
+        {
+          "id": "S4.SS5.SSS2.p1",
+          "quote": "the auxiliary-loss-free strategy consistently achieves better model performance on most of the evaluation benchmarks."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "the relative loss error of our FP8-training model remains consistently below 0.25%"
+        },
+        {
+          "id": "abstract",
+          "quote": "DeepSeek-V3 requires only 2.788M H800 GPU hours for its full training."
+        },
+        {
+          "id": "abstract",
+          "quote": "we did not experience any irrecoverable loss spikes or perform any rollbacks."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认 DeepSeek-V3 在部署方面存在局限：推荐部署单元相对较大，可能给小型团队带来负担 [S6.p2]。尽管端到端生成速度已超过 DeepSeek-V2 两倍，但仍有进一步提升空间 [S6.p2]。此外，当前通信实现依赖昂贵的 SM（H800 中 132 个 SM 分配 20 个用于通信），限制了计算吞吐，且张量核心完全未被利用 [S3.SS5.SSS1.p1]。Hopper 架构 FP8 GEMM 累积精度有限，当前实现仅通过 CUDA 核心 FP32 累积部分缓解，是硬件缺陷下的妥协 [S3.SS5.SSS2.Px1.p1]。当前 GPU 仅支持 per-tensor 量化，缺乏对细粒度量化的原生支持，频繁数据移动仍限制计算效率 [S3.SS5.SSS2.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "the recommended deployment unit for DeepSeek-V3 is relatively large, which might pose a burden for small-sized teams."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "there still remains potential for further enhancement."
+        },
+        {
+          "id": "S3.SS5.SSS1.p1",
+          "quote": "the current communication implementation relies on expensive SMs (e.g., we allocate 20 out of the 132 SMs available in the H800 GPU for this purpose), which will limit the computational throughput."
+        },
+        {
+          "id": "S3.SS5.SSS1.p1",
+          "quote": "using SMs for communication results in significant inefficiencies, as tensor cores remain entirely under-utilized."
+        },
+        {
+          "id": "S3.SS5.SSS2.Px1.p1",
+          "quote": "it is merely a compromise due to the Hopper architecture’s hardware deficiency in FP8 GEMM accumulation precision."
+        },
+        {
+          "id": "S3.SS5.SSS2.Px2.p1",
+          "quote": "Current GPUs only support per-tensor quantization, lacking the native support for fine-grained quantization like our tile- and block-wise quantization."
+        },
+        {
+          "id": "S3.SS5.SSS2.Px2.p1",
+          "quote": "the frequent data movements between Tensor Cores and CUDA cores still limit the computational efficiency."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 12393,
+      "completion_tokens": 2681,
+      "elapsed_s": 9.3
+    }
+  },
+  "verify": {
+    "quote_hits": 34,
+    "quote_total": 34,
+    "quote_rate": 1.0,
+    "inline_hits": 24,
+    "inline_total": 24,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

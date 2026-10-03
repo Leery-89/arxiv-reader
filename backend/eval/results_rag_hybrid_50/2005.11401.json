@@ -1,0 +1,173 @@
+{
+  "paper": {
+    "arxiv_id": "2005.11401",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 40572,
+    "n_sections": 46,
+    "n_paragraphs": 61
+  },
+  "result": {
+    "summary": "本文提出检索增强生成（RAG）模型，将预训练参数记忆（BART）与非参数记忆（Wikipedia 稠密向量索引，经 DPR 检索）结合，并端到端微调 [S1.p2]。作者比较了 RAG-Sequence 与 RAG-Token 两种形式，在多个知识密集型任务上评估 [S2.p2][S3.p1]。RAG 在三个开放域问答任务上取得当时最优结果，并在 TriviaQA 上超过使用专门预训练目标的方法 [S1.p4]。在生成任务上，RAG 生成的文本比纯参数 BART 基线更具体、多样且符合事实 [S1.p4]。作者还展示了非参数记忆可被替换以更新模型知识 [S1.p4]。",
+    "research_question": {
+      "text": "论文要解决的问题是：预训练语言模型虽能存储事实知识，但访问和精确操作知识的能力有限，在知识密集型任务上落后于任务专用架构，且难以提供决策依据和更新世界知识 [abstract]。作者希望将混合参数与非参数记忆的方法从抽取式任务扩展到序列到序列生成模型 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "However, their ability to access and precisely manipulate knowledge is still limited, and hence on knowledge-intensive tasks, their performance lags behind task-specific architectures."
+        },
+        {
+          "id": "abstract",
+          "quote": "Additionally, providing provenance for their decisions and updating their world knowledge remain open research problems."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "REALM and ORQA, two recently introduced models that combine masked language models with a differentiable retriever, have shown promising results, but have only explored open-domain extractive question answering."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Here, we bring hybrid parametric and non-parametric memory to the “workhorse of NLP,” i.e. sequence-to-sequence (seq2seq) models."
+        }
+      ]
+    },
+    "method": {
+      "text": "RAG 使用输入序列检索文本文档，并将其作为生成目标序列的额外上下文 [S2.p1]。模型包含检索器 p_η(z|x)（基于 DPR 的双编码器）和生成器 p_θ（BART），将检索文档视为隐变量并端到端训练 [S2.p1][S2.p2][S2.SS2.p1]。作者提出两种边缘化方式：RAG-Sequence 对整条输出使用同一文档，RAG-Token 可为每个 token 使用不同文档 [S2.p2]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "We explore RAG models, which use the input sequence $x$ to retrieve text documents $z$ and use them as additional context when generating the target sequence $y$."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "our models leverage two components: (i) a retriever $p_{\\eta}(z|x)$ with parameters $\\eta$ that returns (top-K truncated) distributions over text passages given a query $x$ and (ii) a generator $p_{\\theta}(y_{i}|x,z,y_{1:i-1})$"
+        },
+        {
+          "id": "S2.p2",
+          "quote": "To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable."
+        },
+        {
+          "id": "S2.p2",
+          "quote": "In one approach, RAG-Sequence, the model uses the same document to predict each target token. The second approach, RAG-Token, can predict each target token based on a different document."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "The retrieval component $p_{\\eta}(z|x)$ is based on DPR. DPR follows a bi-encoder architecture"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验使用 2018 年 12 月的 Wikipedia dump 作为非参数知识源，每篇文章切分为 100 词的不重叠块，共 2100 万文档，并用 FAISS 构建 MIPS 索引 [S3.p1]。训练时检索 top k 文档，k 取 5 或 10，测试时的 k 由开发集确定 [S3.p1]。评估覆盖开放域问答（NQ、TriviaQA、WebQuestions、CuratedTrec）、抽象问答（MSMARCO NLG）、Jeopardy 问题生成和 FEVER 事实验证等任务 [S3.SS1.p1][S3.SS2.p1][S3.SS3.p1][S1.p4]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "For all experiments, we use a single Wikipedia dump for our non-parametric knowledge source."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "Each Wikipedia article is split into disjoint 100-word chunks, to make a total of 21M documents."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We use the document encoder to compute an embedding for each document, and build a single MIPS index using FAISS with a Hierarchical Navigable Small World approximation for fast retrieval."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We consider $k\\in\\{5,10\\}$ for training and set $k$ for test time using dev data."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We consider four popular open-domain QA datasets: Natural Questions (NQ), TriviaQA (TQA). WebQuestions (WQ) and CuratedTrec (CT)."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "To test RAG’s natural language generation (NLG) in a knowledge-intensive setting, we use the MSMARCO NLG task v2.1."
+        },
+        {
+          "id": "S3.SS3.p1",
+          "quote": "To evaluate RAG’s generation abilities in a non-QA setting, we study open-domain question generation."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "For FEVER fact verification, we achieve results within 4.3% of state-of-the-art pipeline models which use strong retrieval supervision."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在四个开放域问答任务上，RAG 均取得新的最优结果（TriviaQA 仅在 T5 可比划分上）[S4.SS1.p1]。RAG 无需昂贵的专门预训练即可获得强结果，且表明重排序器和抽取式阅读器并非最优性能所必需 [S4.SS1.p1]。在 MS-MARCO NLG 上，RAG-Sequence 比 BART 高 2.6 BLEU 和 2.6 Rouge-L [S4.SS2.p1]。在 Jeopardy 问题生成上，RAG-Token 优于 RAG-Sequence，两者均超过 BART 的 Q-BLEU-1 [S4.SS3.p1]。人工评估中，BART 仅在 7.1% 的情况下比 RAG 更符合事实，而 RAG 在 42.7% 的情况下更符合事实 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "On all four open-domain QA tasks, RAG sets a new state of the art (only on the T5-comparable split for TQA)."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "Unlike REALM and T5+SSM, RAG enjoys strong results without expensive, specialized “salient span masking” pre-training."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "RAG-Sequence outperforms BART on Open MS-MARCO NLG by 2.6 Bleu points and 2.6 Rouge-L points."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "RAG-Token performs better than RAG-Sequence on Jeopardy question generation, with both models outperforming BART on Q-BLEU-1."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Evaluators indicated that BART was more factual than RAG in only 7.1% of cases, while RAG was more factual in 42.7% of cases"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者在初步实验中发现，对于故事生成等任务，检索组件会“崩溃”，无论输入如何都检索相同文档；此时生成器学会忽略文档，RAG 表现与 BART 相当 [A8.p1]。作者推测这种崩溃可能源于某些任务对事实知识需求不够明确，或目标序列较长导致检索器梯度信息不足 [A8.p1]。此外，作者指出未来工作可研究两个组件能否从头联合预训练 [S6.p1]。",
+      "evidence": [
+        {
+          "id": "A8.p1",
+          "quote": "In preliminary experiments, we observed that for some tasks such as story generation, the retrieval component would “collapse” and learn to retrieve the same documents regardless of the input."
+        },
+        {
+          "id": "A8.p1",
+          "quote": "In these cases, once retrieval had collapsed, the generator would learn to ignore the documents, and the RAG model would perform equivalently to BART."
+        },
+        {
+          "id": "A8.p1",
+          "quote": "The collapse could be due to a less-explicit requirement for factual knowledge in some tasks, or the longer target sequences, which could result in less informative gradients for the retriever."
+        },
+        {
+          "id": "S6.p1",
+          "quote": "In future work, it may be fruitful to investigate if the two components can be jointly pre-trained from scratch"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6199,
+      "completion_tokens": 2215,
+      "elapsed_s": 8.06
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,213 @@
+{
+  "paper": {
+    "arxiv_id": "2405.04967",
+    "title": "MatterSim: A Deep Learning Atomistic Model Across Elements, Temperatures and Pressures",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 129440,
+    "n_sections": 56,
+    "n_paragraphs": 167
+  },
+  "result": {
+    "summary": "MatterSim 是一个基于大规模第一性原理计算、通过主动学习训练的深度学习原子模型，可在 0–5000 K 和 0–1000 GPa 范围内对周期表元素进行原子尺度模拟 [abstract][S1.p3]。作为零样本机器学习力场，它在能量、力、应力的预测精度上相比此前最优模型提升可达十倍 [abstract][S2.SS2.p1]。模型还能以接近第一性原理的精度计算晶格动力学、力学与热力学性质，例如在 1000 K 以内对 Gibbs 自由能的预测达到 15 meV/atom 的实验分辨率 [abstract][S2.SS2.p5]。此外，MatterSim 可作为持续学习与定制的平台，通过微调适配特定理论水平或直接结构到性质预测，数据需求最多减少 97% [abstract][S3.p2]。",
+    "research_question": {
+      "text": "论文要解决的问题是：材料性质不仅取决于化学组成和近平衡原子结构，还取决于温度和压力等热力学条件，因此需要在远超基态或局域极小值的巨大构型空间上保持高预测精度，而现有数据库和模型难以满足这一要求 [S1.p2]。作者指出，当前数据库存在显著的化学和/或结构偏置，导致材料空间采样不足，模型在有限温度和压力下的泛化能力与预测能力不足 [S2.SS1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "However, the property of a potential candidate material not only depends on its chemical composition and corresponding near-equilibrium atomic structure, but also on thermodynamic conditions including temperature and pressure."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "This results in a requirement of high predictive accuracy over an enormous configuration space well beyond the ground states or local minima of crystal structures typically captured by current databases and models, which fundamentally limits their applicability for materials design."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "We note that data in current databases has significant chemical and/or structural bias, leading to significant under-sampling of materials space."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "Therefore, models trained on such data are deficient in the generalizability and predictive power needed for atomistic simulation of materials under realistic conditions like finite temperatures and pressures."
+        }
+      ]
+    },
+    "method": {
+      "text": "MatterSim 采用主动学习方法探索材料空间，整合深度图神经网络、材料探索器、第一性原理监督器和集成不确定性监测器 [S2.SS1.p1]。第一性原理监督器在 GGA-PBE 水平（对部分材料加 Hubbard U 修正）提供能量、力和应力监督信号，训练后的模型作为第一性原理方法的代理，引导材料探索器采集更多结构并迭代扩充训练数据 [S2.SS1.p1]。模型骨干采用 M3GNet 和 Graphormer 两种架构，其中 M3GNet 数据效率高、推理快，Graphormer 基于 Transformer、可扩展性更强但推理更慢、显存需求更高 [S2.SS1.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "MatterSim employs an active learning approach to explore the extensive materials space, integrating a deep graph neural network, a materials explorer, a first-principles supervisor, and an ensemble uncertainty monitor"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "the first-principles supervisor offers the deep learning model supervision signals relating to energies, forces, and stresses on the given structures at the generalized gradient approximation (GGA) Perdew–Burke–Ernzerhof (PBE) level of theory with Hubbard U correction for select materials"
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "This trained model then functions as an effective surrogate to the first-principles method, guiding the materials explorer to gather more structures"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "In this work, we opt to use two primary architectures, M3GNet and Graphormer as the backbones for MatterSim."
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "M3GNet is an invariant graph neural network model with high data efficiency"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "Graphormer is a transformer-based model with proven learning capacity and scalability."
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "Such a model has better accuracy and better generalizability compared with smaller models at the cost of substantially reduced inference speed and higher GPU memory requirements"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "训练数据集由主动学习流程生成，截至发表时包含约 1700 万个经第一性原理标注的结构，覆盖 0–5000 K 和 0–1000 GPa 的温度压力范围 [S2.SS1.p2]。零样本性能在多个公开数据集以及三个新建数据集（MPF-Alkali-TP、MPF-TP、Random-TP）上评测，后者由第一性原理分子动力学轨迹构建，温度在 0–5000 K 均匀采样、压力在 0–1000 GPa 对数采样 [S6.p2]。对比对象包括 M3GNet、CHGNet、MACE-MP-0 等开源通用机器学习力场 [S6.p3]。此外还在 MatBench Discovery、PhononDB、力学性质、自由能与相图、分子动力学鲁棒性以及 MatBench 回归任务上进行了验证 [S2.SS2.p2][S2.SS2.p3][S2.SS2.p4][S2.SS2.p5][S2.SS2.p6][S2.SS5.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p2",
+          "quote": "As of the date of publication, the training dataset contains $\\sim$ 17M structures labeled with first-principles computations."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "the curated dataset is representative of materials at temperatures and pressures covering 0– $5000\\text{\\,}\\mathrm{K}$ and 0– $1000\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "The MPF-Alkali-TP, MPF-TP, Random-TP benchmark sets are created with increasing complexity to evaluate the models’ performance on materials under finite temperature and pressure conditions with far from equilibrium atomic positions."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "For the temperature, it is uniformly sampled between 0 to 5000K. For the pressure, we used a log scale when carrying out the sampling. The pressure range is from 0 to 1000 GPa."
+        },
+        {
+          "id": "S6.p3",
+          "quote": "the comparison is carried out between MatterSim and a few open-source universal MLFFs, including M3GNet, CHGNet, MACE-MP-0."
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "MatterSim shows a strong capability in predicting stability of new materials, with an F1 score of 0.83 and a mean absolute energy error of the formation energy of $25\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ benchmarked on MatBench Discovery"
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "Fig. 4 (a) shows the benchmark results on the materials from the PhononDB, using maximum phonon frequency as an indicator, and a good agreement is achieved with a mean absolute error (MAE) of $0.87\\text{\\,}\\mathrm{THz}$."
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "Fig. 4 (c) shows the parity plot of the $0\\text{\\,}\\mathrm{K}$ -bulk modulus predicted from MatterSim and their first-principles references. A remarkable agreement is achieved with an MAE of only $2.47\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S2.SS2.p5",
+          "quote": "when compared with experimental measurements on over 200 materials as shown in Fig. S22, it achieves an MAE of $15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$"
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "we randomly selected 118 systems including bulk inorganic materials, metal organic frameworks, two-dimensional materials, interfaces, molecular crystals, polymers and surfaces"
+        },
+        {
+          "id": "S2.SS5.p2",
+          "quote": "MatterSim’s capability to directly predict materials properties from structures is benchmarked on a few regression tasks from MatBench, including prediction of computed band gaps, shear moduli, dielectric constants, max phonon frequency of bulk crystalline materials, and the exfoliation energies of two-dimensional materials."
+        }
+      ]
+    },
+    "findings": {
+      "text": "作为零样本力场，MatterSim 在 MPF-TP 数据集上的能量平均绝对误差为 36 meV/atom，相比此前最优模型精度提升十倍 [S1.p3][S2.SS2.p1]。在 MatBench Discovery 上取得 F1 分数 0.83、形成能平均绝对误差 25 meV/atom 的 SOTA 表现 [S2.SS2.p2]。在 PhononDB 上最大声子频率的 MAE 为 0.87 THz，0 K 体模量的 MAE 为 2.47 GPa [S2.SS2.p3][S2.SS2.p4]。自由能预测在 1000 K 以内与 PBE 级 QHA 计算相比误差低于 10 meV/atom，与 200 多个材料的实验测量相比 MAE 为 15 meV/atom，优于专门在实验数据上训练的模型 [S2.SS2.p5]。在 118 个系统的分子动力学测试中，所有材料家族的成功率超过 90%，压力测试的平均完成率也超过 90% [S2.SS2.p6]。通过主动学习，仅需 15% 的数据即可在 Li2B12H12 上达到从头训练相当的精度 [S2.SS3.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "with a mean absolute error (MAE) of 36 meV/atom (43 meV/atom as chemical accuracy) on MPF-TP"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "marking a ten-fold increase in accuracy compared with previous efforts"
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "MatterSim outperforms force fields trained on open relaxation trajectory databases with a substantial increase in accuracy by an order of magnitude compared to previous best-in-class"
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "MatterSim shows a strong capability in predicting stability of new materials, with an F1 score of 0.83 and a mean absolute energy error of the formation energy of $25\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ benchmarked on MatBench Discovery"
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "a good agreement is achieved with a mean absolute error (MAE) of $0.87\\text{\\,}\\mathrm{THz}$"
+        },
+        {
+          "id": "S2.SS2.p4",
+          "quote": "A remarkable agreement is achieved with an MAE of only $2.47\\text{\\,}\\mathrm{GPa}$."
+        },
+        {
+          "id": "S2.SS2.p5",
+          "quote": "MatterSim achieves a sub- $10\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ error for temperatures up to $1000\\text{\\,}\\mathrm{K}$ when compared with QHA computations at PBE level of theory"
+        },
+        {
+          "id": "S2.SS2.p5",
+          "quote": "it achieves an MAE of $15\\text{\\,}\\mathrm{m}\\mathrm{e}\\mathrm{V}\\mathrm{/}\\mathrm{a}\\mathrm{t}\\mathrm{o}\\mathrm{m}$ (see Section S11.1), lower than dedicated models directly trained on experimental data"
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "MatterSim achieved more than 90% success rate for all the material families tested, exhibiting robustness over wide temperature ranges."
+        },
+        {
+          "id": "S2.SS2.p6",
+          "quote": "the vast majority of systems have completed the entire simulation process and the average finished rate is above 90% as well."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "the model reproduces similar level of accuracy for $\\text{Li}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{2}}}\\text{B}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}\\text{H}{\\vphantom{\\text{X}}}_{\\smash[t]{\\text{12}}}$, while including only 15% of the data if it were trained from scratch."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，MatterSim 的预测能力本质上受训练数据理论水平的限制：模型基于 GGA-PBE 泛函（对部分材料加 Hubbard U 修正），这限制了其在更广泛系统和应用中的精度 [S2.SS4.p1]。此外，对 Gd 和 Eu 等元素存在收敛困难，特别是在非平衡结构中自洽循环无法收敛或能量对近乎相同原子位置的结构变化显著，这些计算被排除在研究之外 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS4.p1",
+          "quote": "The potency of predictions generated by the machine learning emulator is inherently constrained by the theoretical level of the training data."
+        },
+        {
+          "id": "S2.SS4.p1",
+          "quote": "This underlying constraint imposes a limitation on the accuracy of MatterSim when applied to a more expansive range of systems and applications."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We encounter convergence difficulties with elements such as Gd and Eu, particularly in off-equilibrium structures where self-consistent cycles fail to converge, or energies vary significantly for two structures with nearly identical atomic positions."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "Such calculations are consequently excluded from the study."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 15554,
+      "completion_tokens": 3264,
+      "elapsed_s": 11.72
+    }
+  },
+  "verify": {
+    "quote_hits": 37,
+    "quote_total": 37,
+    "quote_rate": 1.0,
+    "inline_hits": 24,
+    "inline_total": 24,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "science",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

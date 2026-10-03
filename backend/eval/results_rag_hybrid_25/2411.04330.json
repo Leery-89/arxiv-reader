@@ -1,0 +1,161 @@
+{
+  "paper": {
+    "arxiv_id": "2411.04330",
+    "title": "Scaling Laws for Precision",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 69719,
+    "n_sections": 43,
+    "n_paragraphs": 114
+  },
+  "result": {
+    "summary": "本文提出了“精度感知”的缩放定律，将训练精度和训练后量化精度纳入损失预测，核心思想是低精度会降低模型的有效参数量 N_eff [S1.p2]。作者在 465 次预训练运行上拟合，覆盖 3 到 16 比特精度，并在最多 1.7B 参数、26B token 的模型上验证预测 [abstract]。研究发现训练后量化的退化随数据量增加，因此对固定模型而言，若之后要量化，额外预训练数据在某一节点后可能反而有害 [S1.p3]；同时，训练更大模型于更低精度可能是计算最优的 [abstract]。作者将训练与推理的缩放定律统一为单一函数形式，并指出 16 比特训练和追求极低（低于 4 比特）预训练精度都可能不是最优的 [S1.p4]。",
+    "research_question": {
+      "text": "论文要回答的问题是：精度、参数量和数据之间存在怎样的权衡，以及这些权衡在预训练和推理时有何不同 [S1.p1]。研究动机在于，精度是影响模型成本和性能的第三个重要因素，而当前的缩放定律并未考虑这一点 [abstract]；深度学习正趋向更低精度，如 Llama-3 系列用 BF16 训练、社区推动 FP8 预训练，下一代硬件将支持 FP4 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "What are the tradeoffs between precision, parameters, and data? How do they compare for pretraining and inference?"
+        },
+        {
+          "id": "abstract",
+          "quote": "Low precision training and inference affect both the quality and cost of language models, but current scaling laws do not account for this."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Deep learning is trending towards lower precision: current frontier models like the Llama-3 series are trained in BF16, and there is widespread effort to move the pretraining paradigm to FP8."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "The next generation of hardware will support FP4, and advances in weight-only quantization have led to training in binary and ternary at scale."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出“精度感知”的缩放定律，假设比特精度和参数量可互换地贡献于模型的“有效参数量” N_eff，量化实现细节仅通过影响该量来与损失缩放交互 [S1.p2]。作者将训练时效应、数据效应和训练后量化退化统一为一个函数形式 L(N,D,P_train,P_post) [S1.p4]。对于预训练，作者将计算成本推广为 C=(6/16)NDP，以反映计算与精度的线性关系 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This functional form that posits bit precision and parameter count interchangeably contribute to a model’s “effective parameter count,” $N_{\\text{eff}}$, and implementation details like which parts of a model are quantized to what precision, interact with loss scaling only through their effect on this quantity."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "we ultimately find a unified scaling law that takes the following form: $L(N,D,P_{\\text{train}},P_{\\text{post}})=\\underbrace{\\underbrace{AN_{\\text{eff}}^{-\\alpha}}_{\\text{Training-time Effects}}+BD^{-\\beta}+E}_{\\text{Usual Chinchilla form}}+\\underbrace{\\delta_{\\text{PTQ}}(N_{\\text{eff}},D,P_{\\text{train}},P_{\\text{post}})}_{\\text{Post-Training Effects}}$"
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We generalize this to $C=\\frac{6}{16}NDP$ to account for the linear relation between compute and precision, which reduces to the Chinchilla cost function for $P=16$."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在 465 次预训练运行上拟合缩放定律，覆盖 3 到 16 比特精度，并将每个模型训练后量化到多种精度 [S1.p4]。实验使用标准因果 Transformer++ 架构，在 Dolma 数据集的 common crawl 划分上训练和验证，序列长度 1024、批量大小 256 [A1.p1]。训练精度扫描覆盖权重、激活和 KV 缓存的 P_w, P_a, P_kv ∈ [3,12]，并包含 BF16 基线 [S4.p1]。验证规模达到最多 1.7B 参数、26B token [abstract]，并在 220M 到 1.6B 参数、FP4 到 FP32 的模型上测试预测 [S4.SS3.SSS2.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "In all, we pretrain a suite of 465 language models in 3 to 16 bit precisions, as well as post-train quantize each to multiple precisions."
+        },
+        {
+          "id": "A1.p1",
+          "quote": "We launch over 20 runs for each $(N,D)$ combination to study scaling in precision, trained and validated on the common crawl split of the Dolma dataset."
+        },
+        {
+          "id": "A1.p1",
+          "quote": "We use a sequence length of 1024 and batch size of 256 throughout"
+        },
+        {
+          "id": "S4.p1",
+          "quote": "We sweep the training precisions of the weights, activations, and KV cache $P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}}\\in[3,12]$ individually, as well as training BF16 baselines."
+        },
+        {
+          "id": "abstract",
+          "quote": "We fit on over 465 pretraining runs and validate our predictions on model sizes up to 1.7B parameters trained on up to 26B tokens."
+        },
+        {
+          "id": "S4.SS3.SSS2.p2",
+          "quote": "We train compute-matched models at various parameter count and precision ranging from FP4 to FP32 and 220M to 1.6B parameters."
+        }
+      ]
+    },
+    "findings": {
+      "text": "训练后量化引入的退化随数据量增加，因此对固定模型而言，若之后要量化，在某一节点后继续用额外数据训练可能反而有害 [S1.p3]。权重比特精度可与参数量权衡，即较小 N 但较大 P_w 的模型能达到与较大 N 但较小 P_w 相同的损失，且精度增益在低精度时大、在约 6-7 比特后饱和 [S4.SS1.p1]。计算最优预训练精度通常与计算预算无关 [S1.p3]，但如果模型大小 N 被约束，计算最优精度随计算量缓慢增长，P*(C) ∝ log C [S4.SS3.SSS3.p1]。统一缩放定律在超过 1000 个数据点上拟合得到 R²=0.90 [S5.p6]，且训练精度更低的模型对训练后量化更鲁棒，即退化更低 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "We find that the degradation increases with data, so that for a fixed model, training on additional data after a certain point can be actively harmful if the model will be quantized after training."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We observe that the bit precision of the weights can be traded off for the number of parameters, i.e., a model with smaller $N$ but larger $P_{\\text{w}}$ can achieve the same loss as a model with larger $N$ but smaller $P_{\\text{w}}$."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "Additionally, we find that the gains from increasing the bit precision of the weights are large at lower precisions but saturate at higher precisions (typically around 6-7 bits per weight)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Our scaling laws for pretraining suggest that the compute-optimal pretraining precision is in general independent of compute budget."
+        },
+        {
+          "id": "S4.SS3.SSS3.p1",
+          "quote": "Surprisingly, our scaling laws predict that models of differing sizes should not necessarily be trained in the same precision, and that compute-optimal precision scales as $P^{*}(C)\\propto\\log C$."
+        },
+        {
+          "id": "S5.p6",
+          "quote": "We measure the fit to the data of such a functional form in Figure 7, and find a strong fit with $R^{2}=0.90$ on over 1000 data points"
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We find two competing effects at play when predicting $\\delta_{\\text{PTQ}}$, but overall, models trained in lower precision are more robust to post-train quantization in the sense of incurring lower degradation."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认分析存在局限：全程使用固定架构来受控地考察精度、参数和 token 的影响，而低精度训练常涉及架构调整，可缩小与普通全精度模型的差距 [S6.p2]。其次，虽然计算成本随精度线性缩放，但由于系统开销，精度减半带来的收益通常不到 2 倍 [S6.p2]。第三，只考虑损失缩放，未进行下游模型评估 [S6.p2]。作者强调所发现的趋势旨在提示而非规定，并希望未来工作能在更大模型规模上更全面地检验这些效应 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "First, we use a fixed architecture throughout to examine the effects of precision, parameters, and tokens in a controlled manner. In contrast, low precision training often involves architectural tweaks that can close much of the gap from a vanilla full precision model."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Second, while compute costs do scale linearly with precision, the gains from halving precision are usually less than 2x due to systems overhead."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Third, we only consider loss scaling without downstream model evaluations."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "We emphasize that the trends we find aim to be suggestive rather than prescriptive, and hope future work can more comprehensively examine these effects at larger model scale."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5815,
+      "completion_tokens": 2339,
+      "elapsed_s": 8.77
+    }
+  },
+  "verify": {
+    "quote_hits": 24,
+    "quote_total": 24,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,153 @@
+{
+  "paper": {
+    "arxiv_id": "1706.03762",
+    "title": "Attention Is All You Need",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 27350,
+    "n_sections": 28,
+    "n_paragraphs": 74
+  },
+  "result": {
+    "summary": "本文提出了 Transformer，这是第一个完全基于注意力机制、摒弃循环与卷积的序列转换模型 [S7.p1]。作者在 WMT 2014 英德与英法翻译任务上验证该模型，报告其在质量上更优、更易并行且训练时间显著更少 [abstract]。模型在英德任务上取得 28.4 BLEU，超过此前最佳结果（含集成模型）2 BLEU 以上；在英法任务上以 8 块 GPU 训练 3.5 天取得 41.8 的单模型 BLEU [abstract]。作者还将 Transformer 成功应用于英语成分句法分析，表明其可泛化到其他任务 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：主流序列转换模型依赖复杂的循环或卷积神经网络，其固有的顺序计算特性阻碍了训练样本内部的并行化，在序列较长时尤为关键 [S1.p2]。作者指出，注意力机制虽已被广泛使用，但几乎总是与循环网络结合使用 [S1.p3]。因此本文提出 Transformer，完全依靠注意力机制来建立输入与输出之间的全局依赖，从而允许显著更多的并行化 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In all but a few cases, however, such attention mechanisms are used in conjunction with a recurrent network."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "The Transformer allows for significantly more parallelization"
+        }
+      ]
+    },
+    "method": {
+      "text": "Transformer 采用堆叠的自注意力层与逐位置全连接层构成编码器和解码器 [S3.p2]。其核心注意力函数将查询与一组键值对映射为输出，输出是值的加权和，权重由查询与对应键的兼容性函数计算 [S3.SS2.p1]。作者提出缩放点积注意力：计算查询与所有键的点积，各除以 √dk 后经 softmax 得到值的权重 [S3.SS2.SSS1.p1]。此外使用多头注意力，将查询、键、值线性投影 h 次后并行执行注意力，再拼接并投影 [S3.SS2.SSS2.p1]；本文采用 h=8 个并行注意力头，每个头 dk=dv=dmodel/h=64 [S3.SS2.SSS2.p5]。",
+      "evidence": [
+        {
+          "id": "S3.p2",
+          "quote": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder"
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "An attention function can be described as mapping a query and a set of key-value pairs to an output"
+        },
+        {
+          "id": "S3.SS2.SSS1.p1",
+          "quote": "We compute the dot products of the query with all keys, divide each by $\\sqrt{d_{k}}$, and apply a softmax function to obtain the weights on the values."
+        },
+        {
+          "id": "S3.SS2.SSS2.p1",
+          "quote": "we found it beneficial to linearly project the queries, keys and values $h$ times with different, learned linear projections"
+        },
+        {
+          "id": "S3.SS2.SSS2.p5",
+          "quote": "In this work we employ $h=8$ parallel attention layers, or heads."
+        },
+        {
+          "id": "S3.SS2.SSS2.p5",
+          "quote": "For each of these we use $d_{k}=d_{v}=d_{\\text{model}}/h=64$."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "训练数据为标准的 WMT 2014 英德数据集，约 450 万句对，使用字节对编码，共享源-目标词表约 37000 个 token；英法使用更大的 WMT 2014 英法数据集，含 3600 万句，词表为 32000 个 word-piece [S5.SS1.p1]。为评估各组件重要性，作者在英德翻译的开发集 newstest2013 上对基础模型做多种变体，使用束搜索但不做检查点平均 [S6.SS2.p1]。在英语成分句法分析上，作者仅在 Section 22 开发集上少量实验选择 dropout、学习率和束大小，其余参数保持英德基础翻译模型不变，推理时束大小为 21、α=0.3 [S6.SS3.p3]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "For English-French, we used the significantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary."
+        },
+        {
+          "id": "S6.SS2.p1",
+          "quote": "we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, newstest2013"
+        },
+        {
+          "id": "S6.SS3.p3",
+          "quote": "We used a beam size of $21$ and $\\alpha=0.3$ for both WSJ only and the semi-supervised setting."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 WMT 2014 英德翻译任务上，模型取得 28.4 BLEU，超过包括集成模型在内的现有最佳结果 2 BLEU 以上 [abstract]。在英法任务上，模型以 8 块 GPU 训练 3.5 天后取得 41.8 的单模型 BLEU，训练成本仅为文献中最佳模型的一小部分 [abstract]。在模型变体中，单头注意力比最佳设置差 0.9 BLEU，头数过多时质量也会下降 [S6.SS2.p2]。在英语成分句法分析上，尽管缺乏任务特定调参，模型表现仍优于此前所有报告模型，仅不及 Recurrent Neural Network Grammar [S6.SS3.p4]。此外，自注意力层以常数个顺序执行操作连接所有位置，而循环层需要 O(n) 个顺序操作 [S4.p4]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU."
+        },
+        {
+          "id": "abstract",
+          "quote": "our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs"
+        },
+        {
+          "id": "S6.SS2.p2",
+          "quote": "While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads."
+        },
+        {
+          "id": "S6.SS3.p4",
+          "quote": "yielding better results than all previously reported models with the exception of the Recurrent Neural Network Grammar"
+        },
+        {
+          "id": "S4.p4",
+          "quote": "a self-attention layer connects all positions with a constant number of sequentially executed operations, whereas a recurrent layer requires $O(n)$ sequential operations"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，将任意两个位置关联所需的操作数在 Transformer 中降为常数，但代价是有效分辨率降低，原因是注意力加权位置被平均，这一影响通过多头注意力来抵消 [S2.p1]。作者还提出，为提升极长序列任务的计算性能，可将自注意力限制为只考虑以输出位置为中心、大小为 r 的邻域，并计划在未来工作中进一步研究该做法 [S4.p4]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions"
+        },
+        {
+          "id": "S4.p4",
+          "quote": "To improve computational performance for tasks involving very long sequences, self-attention could be restricted to considering only a neighborhood of size $r$"
+        },
+        {
+          "id": "S4.p4",
+          "quote": "We plan to investigate this approach further in future work."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4441,
+      "completion_tokens": 1939,
+      "elapsed_s": 7.6
+    }
+  },
+  "verify": {
+    "quote_hits": 22,
+    "quote_total": 22,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

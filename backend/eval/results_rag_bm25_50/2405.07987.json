@@ -1,0 +1,169 @@
+{
+  "paper": {
+    "arxiv_id": "2405.07987",
+    "title": "The Platonic Representation Hypothesis",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 78065,
+    "n_sections": 45,
+    "n_paragraphs": 108
+  },
+  "result": {
+    "summary": "这篇论文提出“柏拉图表示假说”，认为不同深度网络对数据的表示正在趋同，并可能收敛到对现实世界联合分布的共享统计模型 [abstract][S1.p4]。作者综述了文献中跨架构、跨模态以及与人脑对齐的证据，并用78个视觉模型和多种语言模型测量表示对齐，发现对齐随模型能力、规模和任务多样性增加而提高 [S2.SS2.p2][S2.SS3.p4]。论文进一步提出任务通用性、模型容量和简单性偏置三种可能驱动收敛的机制，并给出一个以点互信息为相似度的理想化世界模型 [S3.SS1.p2][S3.SS2.p2][S3.SS3.p2][S4.SS2.p7]。作者还讨论了该假说的局限，包括不同模态可能包含不同信息、并非所有表示目前都在收敛、专用智能可能不收敛以及对齐度量本身存在争议 [S6.SS0.SSS0.Px1.p1][S6.SS0.SSS0.Px2.p1][S6.SS0.SSS0.Px4.p1][S6.SS0.SSS0.Px5.p1]。",
+    "research_question": {
+      "text": "论文要回答的核心问题是：不同AI模型（尤其是深度网络）的表示是否正在收敛，以及这种收敛是否朝向一个共享的、对现实世界统计模型的表示 [abstract][S1.p4]。作者指出，AI系统在架构和能力上正变得越来越同质化，因此需要检验这种趋同是否存在终点和驱动原则 [S1.p1][S1.p4]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We argue that representations in AI models, particularly deep networks, are converging."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "Our central hypothesis, stated above in Figure 1, is that there is indeed an endpoint to this convergence and a principle that drives it"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "AI systems are becoming increasingly homogeneous in both their architectures and their capabilities."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文将表示定义为向量嵌入，并用其诱导的核（相似度结构）来刻画，表示对齐则定义为两个核之间的相似度 [S2.SS0.SSS0.Px1.p1]。作者采用互最近邻等核对齐度量来测量模型间的表示对齐，并综述了模型拼接等已有证据 [S2.SS0.SSS0.Px1.p1][S2.SS1.p3]。此外，论文提出一个理想化世界模型，其中事件序列从未知分布采样，观测是双射确定性函数，并论证某些对比学习算法可能收敛到以点互信息为相似度的嵌入 [S4.SS1.p1][S4.SS2.p7]。",
+      "evidence": [
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "We restrict our attention to representations that are vector embeddings."
+        },
+        {
+          "id": "S2.SS0.SSS0.Px1.p1",
+          "quote": "we define representational alignment as a measure of the similarity of the similarity structures induced by two representations"
+        },
+        {
+          "id": "S2.SS1.p3",
+          "quote": "they measured representational similarity through a technique called model stitching"
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The world consists of a sequence of $T$ discrete events, denoted as $\\mathbf{Z}\\triangleq[z_{1},\\ldots,z_{T}]$, sampled from some unknown distribution $\\mathbb{P}(\\mathbf{Z})$."
+        },
+        {
+          "id": "S4.SS2.p7",
+          "quote": "find an embedding in which similarity equals PMI"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "在视觉-视觉对齐方面，作者评估了78个视觉模型，包括17个ViT、1个随机初始化ResNet-50、11个ResNet-50和49个ResNet-18，在Places-365验证集上计算k=10互最近邻对齐，并在19个VTAB分类任务上做线性探测 [A3.SS1.p1][A3.SS1.p2][A3.SS1.p3]。在跨模态对齐方面，作者在Wikipedia caption数据集（WIT）上测量语言模型与视觉模型的对齐，语言模型性能用OpenWebText上4M token的1-bits-per-byte衡量 [S2.F3]。此外，作者还进行了颜色共现实验，从CIFAR-10像素共现和语言共现中学习颜色表示，并与CIELAB感知空间比较 [A4.SS0.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "A3.SS1.p1",
+          "quote": "We consider 78 vision models in total"
+        },
+        {
+          "id": "A3.SS1.p2",
+          "quote": "we evaluate linear probing performance on all 19 VTAB classification tasks"
+        },
+        {
+          "id": "A3.SS1.p3",
+          "quote": "we use $k=10$ nearest neighbors over $1000$ image representations computed on Places-365’s validation dataset"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We measure alignment using mutual nearest-neighbor on the Wikipedia caption dataset (WIT)."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "The x-axis is the language model performance measured over 4M tokens from the OpenWebText dataset"
+        },
+        {
+          "id": "A4.SS0.SSS0.Px2.p1",
+          "quote": "We collect color cooccurrence statistics from the CIFAR-10 dataset"
+        }
+      ]
+    },
+    "findings": {
+      "text": "论文发现，视觉模型中迁移性能高的模型形成紧密聚类的表示，而弱性能模型的表示更可变 [S2.SS2.p2]。跨模态上，语言模型与视觉模型的对齐随语言建模性能提高而增强，且CLIP模型因显式语言监督对齐更高，但在ImageNet分类微调后对齐下降 [S2.F3]。对齐还能预测下游性能：与DINOv2对齐更好的LLM在Hellaswag和GSM8K上表现更好 [S2.F4]。在颜色案例中，从图像或文本共现统计学习到的表示大致恢复相同的感知颜色表示 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS2.p2",
+          "quote": "models with high transfer performance form a tightly clustered set of representations, while models with weak performance have more variable representations"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "more capable language models align better with more capable vision models"
+        },
+        {
+          "id": "S2.F3",
+          "quote": "We find that CLIP models, which are trained with explicit language supervision, exhibit a higher level of alignment."
+        },
+        {
+          "id": "S2.F3",
+          "quote": "However, this alignment decreases after being fine-tuned on ImageNet classification"
+        },
+        {
+          "id": "S2.F4",
+          "quote": "We observe that models aligned more closely with vision also show better performance on downstream language tasks."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "learning cooccurrence statistics in either domain recovers roughly the same perceptual representation"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确承认，不同模态可能包含不同信息，若输入信号信息不同，两个模型无法收敛到相同表示 [S6.SS0.SSS0.Px1.p1]。目前并非所有表示都在收敛，例如机器人领域尚无标准化的世界状态表示方式 [S6.SS0.SSS0.Px2.p1]。专用智能可能不收敛，因为窄任务之间可能共享很少，且捷径表示可能更高效 [S6.SS0.SSS0.Px4.p1]。对齐度量本身存在争议，作者主要使用互最近邻，但其他度量可能给出不同结果 [S6.SS0.SSS0.Px5.p1]。此外，作者指出对齐分数仅达到0.16（理论最大为1），这是强对齐还是弱对齐仍是一个开放问题 [S6.SS0.SSS0.Px6.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS0.SSS0.Px1.p1",
+          "quote": "Two different models cannot converge to the same representation if they have access to fundamentally different information."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "in robotics there is not yet a standardized approach to representing world states"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px4.p1",
+          "quote": "Our argument only holds for intelligences that are optimized to perform well on many tasks."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px5.p1",
+          "quote": "there is active debate on the merits and deficiencies of all these ways of measuring alignment"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "alignment clearly increases but only reaches a score of $0.16$"
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "We leave this as an open question."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 11842,
+      "completion_tokens": 2065,
+      "elapsed_s": 8.52
+    }
+  },
+  "verify": {
+    "quote_hits": 26,
+    "quote_total": 26,
+    "quote_rate": 1.0,
+    "inline_hits": 23,
+    "inline_total": 23,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

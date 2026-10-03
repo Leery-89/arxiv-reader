@@ -1,0 +1,181 @@
+{
+  "paper": {
+    "arxiv_id": "2501.12948",
+    "title": "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 135548,
+    "n_sections": 82,
+    "n_paragraphs": 234
+  },
+  "result": {
+    "summary": "本文提出通过纯强化学习激励大语言模型推理能力的方法，构建了DeepSeek-R1-Zero和DeepSeek-R1两个模型 [S1.p2][S1.p3]。DeepSeek-R1-Zero直接从DeepSeek-V3-Base出发，跳过监督微调阶段，仅以最终答案正确性作为奖励信号进行RL训练，自然涌现出自我反思、验证等推理行为 [S1.p2]。在AIME 2024上，其pass@1从15.6%提升至77.9%，结合自洽解码可达86.7% [S2.SS3.p2]。为解决可读性和语言混合问题，作者进一步提出多阶段训练的DeepSeek-R1，在推理和通用任务上均取得提升 [S1.p3][S4.p3]。",
+    "research_question": {
+      "text": "论文旨在探索大语言模型能否通过强化学习框架中的自我进化来发展推理能力，同时尽量减少对人类标注的依赖 [S1.p2]。其动机在于，此前推理能力的成功严重依赖大量人工标注的演示，且模型对更复杂问题仍能力不足 [abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "To tackle these issues, we aim to explore the potential of LLMs for developing reasoning abilities through self-evolution in an RL framework, with minimal reliance on human labeling efforts."
+        },
+        {
+          "id": "abstract",
+          "quote": "However, this success is heavily contingent upon extensive human-annotated demonstrations, and models’ capabilities are still insufficient for more complex problems."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文基于DeepSeek-V3-Base，采用Group Relative Policy Optimization（GRPO）作为强化学习框架，奖励信号仅基于最终预测与标准答案的正确性，不对推理过程施加约束 [S1.p2]。作者有意跳过传统的监督微调阶段，假设人类定义的推理模式可能限制模型探索，而无限制的RL训练能更好地激励新推理能力的涌现 [S1.p2]。训练中仅设计简单模板要求模型先产生推理过程再给出最终答案，避免内容偏见 [S2.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "Specifically, we build upon DeepSeek-V3-Base and employ Group Relative Policy Optimization (GRPO) as our RL framework."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The reward signal is solely based on the correctness of final predictions against ground-truth answers, without imposing constraints on the reasoning process itself."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Notably, we bypass the conventional supervised fine-tuning (SFT) phase before RL training."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "This design choice stems from our hypothesis that human-defined reasoning patterns may limit model exploration, whereas unrestricted RL training can better incentivize the emergence of novel reasoning capabilities in LLMs."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We intentionally limit our constraints to this structural format, avoiding any content-specific biases to ensure that we can accurately observe the model’s natural progression during the RL process."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在AIME 2024基准上追踪了DeepSeek-R1-Zero在RL训练过程中的性能变化，并报告了pass@1和自洽解码结果 [S2.SS3.p2]。此外，模型还在编码竞赛以及研究生级别的生物、物理、化学问题上进行了评估 [S2.SS3.p2]。训练数据涵盖数学（26k定量推理题）、编码（17k算法竞赛题和8k bug修复问题）、STEM（22k选择题）、逻辑（15k题）和通用（66k题）等多个领域 [A2.SS3.SSS1.p2]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p2",
+          "quote": "Figure 1 (a) depicts the performance trajectory of DeepSeek-R1-Zero on the AIME 2024 benchmark throughout the RL training process, where the average pass@1 score on AIME 2024 shows a significant increase, jumping from an initial 15.6% to 77.9%."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "In addition, by leveraging the self-consistency decoding, the model’s performance can be further improved, achieving an accuracy of 86.7%."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "Besides the math competitions, as shown in Figure 10, DeepSeek-R1-Zero also achieves remarkable performance in coding competitions and graduate-level biology, physics, and chemistry problems."
+        },
+        {
+          "id": "A2.SS3.SSS1.p2",
+          "quote": "Mathematics dataset consists of 26k quantitative reasoning questions, including math exam questions and competition problems."
+        },
+        {
+          "id": "A2.SS3.SSS1.p2",
+          "quote": "Coding dataset includes 17k algorithm competition questions, along with 8k bug fixing problems."
+        },
+        {
+          "id": "A2.SS3.SSS1.p2",
+          "quote": "STEM dataset comprises 22k choice questions that cover topics such as physics, chemistry, and biology."
+        },
+        {
+          "id": "A2.SS3.SSS1.p2",
+          "quote": "Logic dataset contains 15k questions designed to evaluate a model’s reasoning capabilities across a broad spectrum of logical challenges."
+        },
+        {
+          "id": "A2.SS3.SSS1.p2",
+          "quote": "General dataset consists of 66k questions designed to assess helpfulness, spanning various categories such as creative writing, editing, factual question answering, and role-playing."
+        }
+      ]
+    },
+    "findings": {
+      "text": "DeepSeek-R1-Zero在AIME 2024上的pass@1从15.6%提升至77.9%，自洽解码后达86.7%，显著超越人类参赛者平均表现 [S2.SS3.p2]。模型在训练中自然学会用更多思考时间解决推理任务，响应长度稳步增加 [S2.F1][S2.SS3.p4]。在编码竞赛和研究生级别STEM问题上也表现优异 [S2.SS3.p2]。多阶段训练的DeepSeek-R1在通用指令遵循和用户偏好基准上进一步提升，AlpacaEval 2.0提高25%，ArenaHard提高17% [S4.p3]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p2",
+          "quote": "the average pass@1 score on AIME 2024 shows a significant increase, jumping from an initial 15.6% to 77.9%"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "by leveraging the self-consistency decoding, the model’s performance can be further improved, achieving an accuracy of 86.7%"
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "This performance significantly surpasses the average performance across all human competitors."
+        },
+        {
+          "id": "S2.F1",
+          "quote": "DeepSeek-R1-Zero naturally learns to solve reasoning tasks with more thinking time."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "DeepSeek-R1-Zero exhibits a steady increase in thinking time throughout training, driven solely by intrinsic adaptation rather than external modifications."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "DeepSeek-R1-Zero also achieves remarkable performance in coding competitions and graduate-level biology, physics, and chemistry problems."
+        },
+        {
+          "id": "S4.p3",
+          "quote": "The primary advancements in the final DeepSeek-R1 were in general instruction-following and user-preference benchmarks, with AlpacaEval 2.0 improving by 25% and ArenaHard by 17%."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "DeepSeek-R1的结构化输出能力相比现有模型仍不理想，且无法利用搜索引擎、计算器等工具提升输出性能 [S6.p3]。模型目前主要针对中英文优化，处理其他语言查询时可能出现语言混合问题 [S6.p5]。模型对提示敏感，少样本提示会持续降低其性能 [S6.p6]。纯RL方法本身面临奖励黑客挑战：对于写作等难以构建可靠奖励模型的任务，扩大纯RL方法仍是开放问题 [S6.p9]。此外，SFT数据中多数为单轮交互，可能限制多轮对话能力 [A2.SS3.SSS3.Px3.p1]。",
+      "evidence": [
+        {
+          "id": "S6.p3",
+          "quote": "Currently, the structural output capabilities of DeepSeek-R1 remain suboptimal compared to existing models."
+        },
+        {
+          "id": "S6.p3",
+          "quote": "Moreover, DeepSeek-R1 cannot leverage tools, such as search engines and calculators, to improve the performance of output."
+        },
+        {
+          "id": "S6.p5",
+          "quote": "DeepSeek-R1 is currently optimized for Chinese and English, which may result in language mixing issues when handling queries in other languages."
+        },
+        {
+          "id": "S6.p6",
+          "quote": "When evaluating DeepSeek-R1, we observe that it is sensitive to prompts. Few-shot prompting consistently degrades its performance."
+        },
+        {
+          "id": "S6.p9",
+          "quote": "If the reward signal is assigned by a model instead of predefined rules, it becomes more susceptible to exploitation as training progresses, which means the policy model may find shortcuts to hack the reward model."
+        },
+        {
+          "id": "S6.p9",
+          "quote": "Consequently, for complex tasks that cannot be effectively evaluated by a reliable reward model, scaling up pure RL methods remains an open challenge."
+        },
+        {
+          "id": "A2.SS3.SSS3.Px3.p1",
+          "quote": "It is worth noting that the majority of the data consists of single-turn interactions, which may limit the multi-turn conversational capabilities of DeepSeek-R1."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 8712,
+      "completion_tokens": 2212,
+      "elapsed_s": 8.25
+    }
+  },
+  "verify": {
+    "quote_hits": 29,
+    "quote_total": 29,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

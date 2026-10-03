@@ -1,0 +1,171 @@
+{
+  "paper": {
+    "arxiv_id": "2502.03387",
+    "title": "LIMO: Less is More for Reasoning",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 29931,
+    "n_sections": 29,
+    "n_paragraphs": 54
+  },
+  "result": {
+    "summary": "本文挑战了复杂推理需要海量训练数据的假设，提出 Less-Is-More Reasoning (LIMO) 假说，认为在预训练已编码丰富领域知识的基础模型中，复杂推理可通过少量精心设计的示例被激发 [abstract][S1.p3]。作者通过多层筛选构建了仅 800 条样本的 LIMO 数据集，并用简单 SFT 微调 Qwen2.5-32B-Instruct [S1.p4]。LIMO 在 AIME24 上达到 63.3%、MATH500 上达到 95.6%，超过此前微调模型，且仅使用其 1% 的训练数据 [abstract]。实验还显示 LIMO 在分布外任务上具有较强泛化能力，平均性能 78.1%，优于使用百倍数据的模型 [abstract][S6.SS2.SSS0.Px4.p1]。",
+    "research_question": {
+      "text": "本文要解决的问题是：复杂推理是否真的需要大规模训练数据，还是可以通过少量高质量示例激发基础模型已有的推理能力 [abstract][S1.p2]。作者指出，现代基础模型在预训练中已包含大量数学内容，挑战从知识获取转向知识激发，而推理时计算扩展又提供了必要的认知空间 [S1.p2]。因此，作者提出 LIMO 假说，认为激发复杂推理的门槛取决于模型预训练知识库的完整性和后训练示例作为“认知模板”的有效性 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "We challenge the prevailing assumption that complex reasoning in large language models (LLMs) necessitates massive training data."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Contemporary LLMs may already possess rich mathematical knowledge, transforming the challenge from knowledge acquisition to knowledge elicitation."
+        },
+        {
+          "id": "abstract",
+          "quote": "the threshold for eliciting complex reasoning is not dictated by task complexity but rather by two key factors: (1) the completeness of the model’s pre-trained knowledge base and (2) the effectiveness of post-training examples"
+        }
+      ]
+    },
+    "method": {
+      "text": "作者提出 LIMO 方法，核心思想是通过严格的数据筛选构建一个极小但高质量的数据集，再用简单监督微调激发模型推理能力 [S1.p4]。数据筛选包括粗粒度难度过滤、细粒度难度评估、知识点多样化，以及对推理链的逻辑连贯性、步骤清晰度和答案准确性进行过滤 [S1.p4]。最终从 2125 道题中选出最高分解答并排序，取前 800 条构成 LIMO 数据集 [S3.SS1.SSS2.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "Our LIMO approach begins with a rigorous data curation process designed to identify high-quality samples that maximize reasoning elicitation."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "first conducting coarse difficulty filtering to eliminate trivial problems, then fine-grained difficulty assessment to identify challenging questions, followed by knowledge point diversification to ensure comprehensive coverage."
+        },
+        {
+          "id": "S3.SS1.SSS2.p7",
+          "quote": "From our initial collection of 2125 questions, we selected the highest-scoring solution for each problem, ranked these pairs by quality score, and extracted the top 800 to form the LIMO Dataset."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验以 Qwen2.5-32B-Instruct 为基座模型，使用 LIMO 的 800 条样本进行监督微调，并与 OpenThoughts-114k 和 NuminaMath-100k 等更大规模开源推理数据集在相同骨干上比较 [S6.SS1.p2]。评估覆盖 AIME24、MATH500、AMC23 等域内基准以及分布外任务 [S6.SS2.SSS0.Px1.p1][S6.SS2.p1]。作者还进行了消融分析，包括推理链质量（500 道题、五个质量等级 L1-L5）、问题难度（Simple-500、Complex-500、Advanced-500）、预训练知识（Qwen1.5-32B-Chat 与 Qwen2.5-32B-Instruct）以及样本效率（400 到 2k 样本）[S6.SS3.SSS1.p2][S6.SS3.SSS2.p1][S6.SS3.SSS3.p1][S6.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS1.p2",
+          "quote": "For a fair comparison, all experiments use the same LLM backbone as LIMO, ensuring that performance differences are solely attributable to the training data characteristics."
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "These comparative datasets include OpenThoughts-114k, a synthetic reasoning dataset containing 114k examples covering mathematics, science, coding, and puzzles"
+        },
+        {
+          "id": "S6.SS3.SSS1.p2",
+          "quote": "We collect and categorize these solutions into five distinct quality levels (L1-L5, with L5 being the highest) based on our rule-based scoring system"
+        },
+        {
+          "id": "S6.SS3.SSS2.p1",
+          "quote": "We select three sets of 500 problems with increasing difficulty: Simple-500 (MATH levels 1-2), Complex-500 (MATH levels 3-5), and Advanced-500 (AIME problems)."
+        },
+        {
+          "id": "S6.SS3.SSS3.p1",
+          "quote": "we compare two 32B-parameter models: Qwen1.5-32B-Chat and Qwen2.5-32B-Instruct (LIMO’s base model)."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "Figure 7 and Figure 8 present the performance of models fine-tuned on different dataset sizes."
+        }
+      ]
+    },
+    "findings": {
+      "text": "LIMO 在域内任务上取得最佳结果：AIME24 准确率 63.3%，超过 QwQ-32B-Preview 的 50.0% 和 OpenAI-o1-preview 的 44.6%；MATH500 准确率 95.6%，超过 QwQ-32B-Preview 的 89.8% 和 OpenAI-o1-preview 的 85.5%；AMC23 达到 96.3%，高于 QwQ-32B-Preview 的 83.6% [S6.SS2.SSS0.Px1.p1]。与更大数据集相比，NuminaMath-100k 出现显著退化（32.3% vs. 基座模型 49.9%），OpenThoughts-114k 为 58.3%，而 LIMO 的 800 道题达到 78.1% [S6.SS2.SSS0.Px3.p1]。LIMO 在所有基准上的平均性能为 78.1%，优于 OpenAI-o1-preview、QwQ-32B-Preview 等基线 [S6.SS2.SSS0.Px4.p1]。消融实验显示，仅改变问题选择即可在 AIME2024 上提升 16% 达到 51.5%，且 Advanced-500 微调的模型在 MATH500 上达到 91.2% [S6.SS3.SSS2.p1]；预训练知识影响显著，Qwen2.5 基座在 AIME2024 上比 Qwen1.5 高 54.1 个百分点（63.3% vs. 9.2%），在 MATH500 上高 30.4 个百分点 [S6.SS3.SSS3.p2]；样本效率方面，400 条样本即可将 AIME24 从 16.5 提升到 57.5、MATH500 从 79.4 提升到 94.8，超过 800 条后收益递减 [S6.SS3.SSS5.p2]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "For AIME24, LIMO achieves 63.3% accuracy, outperforming QwQ-32B-Preview (50.0%) and OpenAI-o1-preview (44.6%) by significant margins."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "On MATH500, LIMO achieves a notable 95.6% accuracy, surpassing QwQ-32B-Preview (89.8%) and OpenAI-o1-preview (85.5%)."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px1.p1",
+          "quote": "The performance gap is even more pronounced on AMC23, where LIMO reaches 96.3% accuracy compared to QwQ-32B-Preview’s 83.6%."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "NuminaMath-100k shows significant degradation (32.3% vs. base model’s 49.9%) due to uncurated reasoning chains, while OpenThoughts-114k achieves suboptimal results (58.3%)"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "In contrast, LIMO’s carefully curated 800 problems yield superior performance (78.1%)"
+        },
+        {
+          "id": "S6.SS2.SSS0.Px4.p1",
+          "quote": "LIMO achieves the highest average performance of 78.1% across all benchmarks, substantially outperforming OpenAI-o1-preview, QwQ-32B-Preview, and other baselines."
+        },
+        {
+          "id": "S6.SS3.SSS2.p1",
+          "quote": "Results in Figure 4 show that modifying problem selection alone leads to 16% accuracy improvement on AIME2024, reaching 51.5%."
+        },
+        {
+          "id": "S6.SS3.SSS2.p1",
+          "quote": "Notably, the model fine-tuned on Advanced-500 achieves 91.2% on MATH500 despite no in-domain training data"
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "LIMO (built on Qwen2.5) achieves 63.3% accuracy on AIME2024, a 54.1 percentage point improvement over Qwen1.5’s 9.2%."
+        },
+        {
+          "id": "S6.SS3.SSS3.p2",
+          "quote": "On MATH500, LIMO reaches 95.6% accuracy, surpassing Qwen1.5 by 30.4 percentage points."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "Fine-tuning with just 400 samples yields dramatic improvement over the base model, increasing AIME24 accuracy from 16.5 to 57.5 and MATH500 accuracy from 79.4 to 94.8."
+        },
+        {
+          "id": "S6.SS3.SSS5.p2",
+          "quote": "we observe diminishing returns beyond 800 samples, with only marginal increases between LIMO-800 and LIMO-1k2 (+0.9 on AIME24, -0.2 on MATH500)"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4793,
+      "completion_tokens": 2528,
+      "elapsed_s": 8.49
+    }
+  },
+  "verify": {
+    "quote_hits": 24,
+    "quote_total": 24,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 20,
+    "inline_rate": 0.9,
+    "issues": [
+      {
+        "field": "experiments",
+        "id": "S6.SS2.SSS0.Px1.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      },
+      {
+        "field": "experiments",
+        "id": "S6.SS2.p1",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

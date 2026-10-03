@@ -1,0 +1,169 @@
+{
+  "paper": {
+    "arxiv_id": "1512.03385",
+    "title": "Deep Residual Learning for Image Recognition",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44794,
+    "n_sections": 14,
+    "n_paragraphs": 98
+  },
+  "result": {
+    "summary": "本文提出深度残差学习框架，将堆叠层改为学习相对于输入的残差映射，以缓解深层网络训练困难的问题 [S1.p5]。作者在 ImageNet 上验证了极深残差网络易于优化，并能从深度增加中获得精度提升 [S1.p7]。152 层残差网络是当时 ImageNet 上最深网络，复杂度仍低于 VGG，集成模型在测试集上取得 3.57% top-5 错误率并赢得 ILSVRC 2015 分类任务第一名 [S1.p9]。作者还在 CIFAR-10 上分析了 100 层和 1000 层网络 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：随着网络加深，训练误差反而升高（退化问题），而这一问题并非由梯度消失/爆炸导致 [S1.p2][S1.p5]。作者指出深度对图像分类至关重要，但简单堆叠更多层并不一定更容易学到更好的网络 [S1.p1][S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Recent evidence reveals that network depth is of crucial importance"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Is learning better networks as easy as stacking more layers?"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "An obstacle to answering this question was the notorious problem of vanishing/exploding gradients"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "In this paper, we address the degradation problem by introducing a deep residual learning framework."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出残差学习框架：不要求堆叠层直接拟合目标映射 H(x)，而是让它们拟合残差映射 F(x):=H(x)-x，原始映射变为 F(x)+x [S1.p5]。作者假设优化残差映射比优化原始无参考映射更容易，极端情况下若恒等映射最优，将残差推向零比用非线性层拟合恒等映射更容易 [S1.p5]。在实现上，ImageNet 模型采用批归一化、SGD、mini-batch 256、学习率从 0.1 开始并在误差平台时除以 10 等设置 [S3.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p5",
+          "quote": "we explicitly let these layers fit a residual mapping"
+        },
+        {
+          "id": "S1.p5",
+          "quote": "We hypothesize that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "it would be easier to push the residual to zero than to fit an identity mapping by a stack of nonlinear layers"
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We adopt batch normalization (BN) right after each convolution and before activation"
+        },
+        {
+          "id": "S3.SS4.p1",
+          "quote": "We use SGD with a mini-batch size of 256."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在 ImageNet 2012 分类数据集上评估，该数据集包含 1000 类、128 万训练图像、5 万验证图像和 10 万测试图像，报告 top-1 和 top-5 错误率 [S4.SS1.p1]。作者还使用 CIFAR-10 数据集（5 万训练图像、1 万测试图像、10 类）研究极深网络行为 [S4.SS2.p1]。此外，论文在 PASCAL VOC 2007/2012 和 MS COCO 上采用 Faster R-CNN 进行目标检测评估，比较用 ResNet-101 替换 VGG-16 的改进 [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We evaluate our method on the ImageNet 2012 classification dataset that consists of 1000 classes."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "The models are trained on the 1.28 million training images, and evaluated on the 50k validation images."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "We conducted more studies on the CIFAR-10 dataset, which consists of 50k training images and 10k testing images in 10 classes."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "We adopt Faster R-CNN as the detection method."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "Here we are interested in the improvements of replacing VGG-16 with ResNet-101."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 ImageNet 上，34 层 ResNet 比 18 层 ResNet 好 2.8%，且 34 层 ResNet 比对应的普通网络降低 top-1 错误率 3.5% [S4.SS1.p6][S4.SS1.p7]。50/101/152 层 ResNet 比 34 层更准确，未观察到退化问题，并从深度增加中获得显著精度提升 [S4.SS1.p15]。152 层 ResNet 单模型 top-5 验证错误率为 4.49%，超过此前所有集成结果；六模型集成在测试集上达到 3.57% top-5 错误率，赢得 ILSVRC 2015 第一名 [S4.SS1.p16]。在 CIFAR-10 上，ResNet 同样克服优化困难并在深度增加时获得精度提升 [S4.SS2.p5]。在 COCO 检测上，ResNet-101 相比 VGG-16 在 mAP@[.5,.95] 上提升 6.0%，相对提升 28% [S4.SS3.p1]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.p6",
+          "quote": "the 34-layer ResNet is better than the 18-layer ResNet (by 2.8%)"
+        },
+        {
+          "id": "S4.SS1.p7",
+          "quote": "the 34-layer ResNet reduces the top-1 error by 3.5%"
+        },
+        {
+          "id": "S4.SS1.p15",
+          "quote": "The 50/101/152-layer ResNets are more accurate than the 34-layer ones by considerable margins"
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "Our 152-layer ResNet has a single-model top-5 validation error of 4.49%."
+        },
+        {
+          "id": "S4.SS1.p16",
+          "quote": "This leads to 3.57% top-5 error on the test set"
+        },
+        {
+          "id": "S4.SS2.p5",
+          "quote": "our ResNets manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases"
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "we obtain a 6.0% increase in COCO’s standard metric (mAP@[.5,.95]), which is a 28% relative improvement"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，1202 层网络在 CIFAR-10 上的测试结果比 110 层网络更差，尽管两者训练误差相近，作者认为这是因为过拟合，且该网络对此小数据集可能过大 [S4.SS2.p9]。作者在 CIFAR-10 上未使用 maxout/dropout，仅通过深而窄的架构施加正则化，并指出结合更强正则化可能改善结果，留待未来研究 [S4.SS2.p9]。对于深层普通网络优化困难的原因，作者表示将在未来研究 [S4.SS1.p4]。",
+      "evidence": [
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "We argue that this is because of overfitting."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "The 1202-layer network may be unnecessarily large (19.4M) for this small dataset."
+        },
+        {
+          "id": "S4.SS2.p9",
+          "quote": "But combining with stronger regularization may improve results, which we will study in the future."
+        },
+        {
+          "id": "S4.SS1.p4",
+          "quote": "The reason for such optimization difficulties will be studied in the future."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6822,
+      "completion_tokens": 1935,
+      "elapsed_s": 7.3
+    }
+  },
+  "verify": {
+    "quote_hits": 26,
+    "quote_total": 26,
+    "quote_rate": 1.0,
+    "inline_hits": 19,
+    "inline_total": 19,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

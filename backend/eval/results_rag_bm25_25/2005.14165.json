@@ -1,0 +1,197 @@
+{
+  "paper": {
+    "arxiv_id": "2005.14165",
+    "title": "Language Models are Few-Shot Learners",
+    "source": "html",
+    "truncated_sections": [
+      "Appendix A Details of Common Crawl Filtering",
+      "Appendix B Details of Model Training",
+      "Appendix C Details of Test Set Contamination Studies",
+      "Initial training set filtering",
+      "Overlap methodology",
+      "Overlap results",
+      "Appendix D Total Compute Used to Train Language Models",
+      "Appendix E Human Quality Assessment of Synthetic News Articles",
+      "Appendix F Additional Samples from GPT-3",
+      "Appendix G Details of Task Phrasing and Specifications",
+      "Appendix H Results on All Tasks for All Model Sizes"
+    ],
+    "char_count": 129450,
+    "n_sections": 43,
+    "n_paragraphs": 226
+  },
+  "result": {
+    "summary": "本文训练了一个 1750 亿参数的自回归语言模型 GPT-3，并在不进行任何梯度更新或微调的情况下，以零样本、单样本和少样本方式在大量 NLP 任务上进行评估 [abstract][S1.p9]。作者发现扩大模型规模能大幅提升任务无关的少样本性能，部分任务上接近甚至达到此前最先进微调方法的水平 [abstract]。GPT-3 在翻译、问答、完形填空以及需要即时推理或领域适应的任务上表现较强，但在部分数据集上仍然吃力，并存在与大规模网络语料训练相关的方法学问题 [abstract]。作者还发现 GPT-3 生成的新闻文章样本让人类评估者难以与人类撰写的文章区分 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：现有预训练加微调的范式虽然架构任务无关，但仍需要针对每个任务准备数千到数十万个样本的微调数据集 [S1.p2]。作者希望去除这一限制，测试扩大语言模型规模能否提升任务无关的少样本性能 [S1.p2][S1.p9]。作者指出，此前元学习等方法结果远逊于微调，例如在 Natural Questions 上仅达到 4%，因此需要大幅改进才能成为实用的语言任务求解方法 [S1.p7]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "there is still a need for task-specific datasets and task-specific fine-tuning"
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Removing this limitation would be desirable, for several reasons."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "In this paper, we test this hypothesis by training a 175 billion parameter autoregressive language model, which we call GPT-3, and measuring its in-context learning abilities."
+        },
+        {
+          "id": "S1.p7",
+          "quote": "this approach still achieves results far inferior to fine-tuning – for example achieves only 4% on Natural Questions"
+        },
+        {
+          "id": "S1.p7",
+          "quote": "Meta-learning clearly requires substantial improvement in order to be viable as a practical method of solving language tasks."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文训练了一个 1750 亿参数的自回归语言模型 GPT-3，其参数量是此前任何非稀疏语言模型的 10 倍 [abstract]。评估时 GPT-3 不进行任何梯度更新或微调，任务和少样本示例完全通过文本交互指定 [abstract]。对每个任务，作者在三种条件下评估：少样本（允许尽可能多的示例放入上下文窗口，通常 10 到 100 个）、单样本（仅一个示例）和零样本（不给示例，只给自然语言指令）[S1.p9]。少样本评估时，从该任务的训练集中随机抽取 K 个示例作为条件 [S2.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "we train GPT-3, an autoregressive language model with 175 billion parameters, 10x more than any previous non-sparse language model"
+        },
+        {
+          "id": "abstract",
+          "quote": "GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "we evaluate GPT-3 under 3 conditions: (a) “few-shot learning”, or in-context learning where we allow as many demonstrations as will fit into the model’s context window (typically 10 to 100)"
+        },
+        {
+          "id": "S1.p9",
+          "quote": "(b) “one-shot learning”, where we allow only one demonstration, and (c) “zero-shot” learning, where no demonstrations are allowed and only an instruction in natural language is given to the model."
+        },
+        {
+          "id": "S2.SS4.p1",
+          "quote": "we evaluate each example in the evaluation set by randomly drawing $K$ examples from that task’s training set as conditioning"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在超过两打 NLP 数据集以及若干为测试快速适应能力而设计的新任务上评估 GPT-3，覆盖语言建模、闭卷问答、翻译、Winograd 式任务、常识推理、阅读理解、SuperGLUE 和 NLI 等 [S1.p9][S3.p3]。评估在零样本、单样本和少样本三种设置下进行 [S3.p3]。在 SuperGLUE 上，少样本设置对所有任务使用 32 个从训练集随机抽取的示例 [S3.SS7.p1]。作者还设计了合成任务来探测即时推理能力，包括算术、单词字母重排、SAT 类比以及使用新词造句、纠正英语语法和新闻文章生成等定性任务 [S3.SS9.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p9",
+          "quote": "we evaluate GPT-3 on over two dozen NLP datasets, as well as several novel tasks designed to test rapid adaptation to tasks unlikely to be directly contained in the training set"
+        },
+        {
+          "id": "S3.p3",
+          "quote": "We evaluate all tasks in the few-shot, one-shot, and zero-shot settings."
+        },
+        {
+          "id": "S3.SS7.p1",
+          "quote": "In the few-shot setting, we used 32 examples for all tasks, sampled randomly from the training set."
+        },
+        {
+          "id": "S3.SS9.p1",
+          "quote": "First, we test GPT-3’s ability to perform arithmetic. Second, we create several tasks that involve rearranging or unscrambling the letters in a word"
+        },
+        {
+          "id": "S3.SS9.p1",
+          "quote": "Finally, we test GPT-3 on several qualitative tasks, including using new words in a sentence, correcting English grammar, and news article generation."
+        }
+      ]
+    },
+    "findings": {
+      "text": "GPT-3 在多个任务上取得较强性能：在 PTB 上以 20.50 的困惑度刷新 SOTA，领先 15 个点 [S3.SS1.SSS1.p1]；在 LAMBADA 上少样本能力带来大幅准确率提升，GPT-3 175B 将 SOTA 提升 18% [S3.F2]；在 TriviaQA 上零样本达到 64.3%，已超过微调的 T5-11B 14.2% [S3.SS2.p2]。在 HellaSwag 上，GPT-3 单样本达到 78.1%、少样本达到 79.3%，超过微调的 15 亿参数语言模型的 75.4%，但仍低于微调多任务模型 ALUM 的 85.6% [S3.SS1.SSS3.p1]。在 CoQA 上 GPT-3 175B 少样本达到 85 F1，仅落后人类基线和最先进微调模型几个点 [S3.F7]。同时，作者发现部分任务即使在该规模下少样本表现仍吃力，包括 ANLI、RACE 和 QuAC 等 [S1.p13]。在新闻文章生成上，人类识别模型生成文章的准确率从对照模型的 86% 降至 GPT-3 175B 的 52% [S3.T11]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.SSS1.p1",
+          "quote": "Our largest model sets a new SOTA on PTB by a substantial margin of 15 points, achieving a perplexity of 20.50."
+        },
+        {
+          "id": "S3.F2",
+          "quote": "GPT-3 175B advances the state of the art by 18%"
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "On TriviaQA, we achieve 64.3% in the zero-shot setting, 68.0% in the one-shot setting, and 71.2% in the few-shot setting."
+        },
+        {
+          "id": "S3.SS2.p2",
+          "quote": "The zero-shot result already outperforms the fine-tuned T5-11B by 14.2%"
+        },
+        {
+          "id": "S3.SS1.SSS3.p1",
+          "quote": "GPT-3 achieves 78.1% accuracy in the one-shot setting and 79.3% accuracy in the few-shot setting, outperforming the 75.4% accuracy of a fine-tuned 1.5B parameter language model"
+        },
+        {
+          "id": "S3.SS1.SSS3.p1",
+          "quote": "still a fair amount lower than the overall SOTA of 85.6% achieved by the fine-tuned multi-task model ALUM"
+        },
+        {
+          "id": "S3.F7",
+          "quote": "GPT-3 175B achieves 85 F1 in the few-shot setting, only a few points behind measured human performance and state-of-the-art fine-tuned models."
+        },
+        {
+          "id": "S1.p13",
+          "quote": "This includes natural language inference tasks like the ANLI dataset, and some reading comprehension datasets like RACE or QuAC."
+        },
+        {
+          "id": "S3.T11",
+          "quote": "human accuracy (measured by the ratio of correct assignments to non-neutral assignments) ranges from 86% on the control model to 52% on GPT-3 175B"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出 GPT-3 存在若干结构性局限：实验只包含自回归模型，未包含双向架构或其他训练目标，这可能解释了 GPT-3 在 WIC、ANLI 以及 QuAC、RACE 等任务上少样本表现落后 [S5.p3]。另一个局限是预训练阶段的样本效率较差，GPT-3 在预训练中看到的文本仍远多于人类一生所见 [S5.p5]。少样本学习存在不确定性：不清楚它是在推理时真正“从零”学习新任务，还是仅仅识别出训练中已学过的任务 [S5.p6]。此外，GPT-3 规模的模型推理既昂贵又不方便，可能对实际应用构成挑战 [S5.p7]。作者还指出数据污染分析的一个重要局限：无法确定干净子集与原数据集来自同一分布 [S4.p10]。",
+      "evidence": [
+        {
+          "id": "S5.p3",
+          "quote": "our experiments do not include any bidirectional architectures or other training objectives such as denoising"
+        },
+        {
+          "id": "S5.p3",
+          "quote": "This could be a possible explanation for GPT-3’s lagging few-shot performance on a few of the tasks, such as WIC"
+        },
+        {
+          "id": "S5.p5",
+          "quote": "it still sees much more text during pre-training than a human sees in the their lifetime"
+        },
+        {
+          "id": "S5.p6",
+          "quote": "ambiguity about whether few-shot learning actually learns new tasks “from scratch” at inference time, or if it simply recognizes and identifies tasks that it has learned during training"
+        },
+        {
+          "id": "S5.p7",
+          "quote": "they are both expensive and inconvenient to perform inference on, which may present a challenge for practical applicability of models of this scale in their current form"
+        },
+        {
+          "id": "S4.p10",
+          "quote": "we cannot be sure that the clean subset is drawn from the same distribution as the original dataset"
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 8588,
+      "completion_tokens": 2481,
+      "elapsed_s": 9.16
+    }
+  },
+  "verify": {
+    "quote_hits": 30,
+    "quote_total": 30,
+    "quote_rate": 1.0,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

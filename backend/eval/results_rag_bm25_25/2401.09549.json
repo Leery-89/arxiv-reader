@@ -1,0 +1,184 @@
+{
+  "paper": {
+    "arxiv_id": "2401.09549",
+    "title": "Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 139981,
+    "n_sections": 38,
+    "n_paragraphs": 133
+  },
+  "result": {
+    "summary": "本文在 InAs-Al 异质结中实现了对费米子宇称的单次干涉测量，器件由栅极定义的纳米线与隧穿耦合的量子点构成 [abstract]。量子电容测量显示通量 h/2e 周期的双模信号，在最优通量下 3.7 µs 内信噪比达到 1 [abstract]。时间轨迹给出的两个状态驻留时间超过 1 ms，对应约 2 T 面内磁场下约 3 µm 分离的一对马约拉纳零模的低准粒子中毒率 [abstract]。作者据此得到约 1% 的宇称测量错误概率，并认为这些结果向基于测量操作的拓扑量子比特迈出了重要一步 [abstract][S5.p2]。",
+    "research_question": {
+      "text": "论文要解决的问题是实现对一维拓扑超导体中马约拉纳零模共享费米子宇称的干涉测量，这是测量型拓扑量子计算的基本操作 [abstract][S1.p2]。原文指出，一维拓扑超导体是构建拓扑量子比特的有前景平台，量子信息存储在位于超导线两端的马约拉纳零模的费米子宇称中，投影测量用于处理量子信息和读取量子比特状态 [S1.p2]。作者称本文展示了对一维纳米线中近零能态宇称的干涉测量，从而验证了拓扑量子计算的一个必要要素 [S1.p3]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The fusion of non-Abelian anyons or topological defects is a fundamental operation in measurement-only topological quantum computation."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "One-dimensional topological superconductors (1DTSs) are a promising platform for building topological qubits."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Quantum information is stored in the fermion parity of Majorana zero modes (MZMs) localized at the ends of superconducting wires, and projective measurements of the fermion parity are used to process quantum information and perform qubit state readout."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "In this paper, we demonstrate an interferometric measurement of the parity of a near-zero-energy state in a 1D nanowire, thereby validating a necessary ingredient of topological quantum computation."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出一种拓扑量子比特设计，器件由可调至一维拓扑超导态的纳米线和用于在干涉环路中耦合马约拉纳零模对的量子点组成 [S2.p1]。测量方法基于探测与纳米线耦合的量子点的量子电容 C_Q，从而允许单次确定宇称 [S1.p3]。作者通过将纳米线与量子点隧穿耦合形成干涉仪，并测量量子电容随通量的变化 [abstract]。为与实验对比，作者还模拟了包含完整三量子点系统、与环境非相干耦合以及测量反作用在内的更完整模型 [S3.p6]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "In this work, we introduce a topological qubit design that allows one to perform projective measurements of fermion parity encoded in MZMs."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The first component is a nanowire, sections of which can be tuned into a 1DTS state, leading to topological degeneracy of the many-body ground state."
+        },
+        {
+          "id": "S2.p1",
+          "quote": "The second component consists of quantum dots, which are designed to couple pairs of MZMs in an interferometric loop."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "The measurement technique is based on probing the quantum capacitance $C_{\\mathrm{\\scriptscriptstyle Q}}$ of a quantum dot coupled to the nanowire and allows determination of the parity in a single shot ( Fig. 1), with a probability of assignment errors of $1\\%$ for optimal measurement time."
+        },
+        {
+          "id": "abstract",
+          "quote": "The interferometer is formed by tunnel-coupling the proximitized nanowire to quantum dots."
+        },
+        {
+          "id": "S3.p6",
+          "quote": "For detailed comparison with experiments, we simulate a more complete model of our interferometer, expanded to include the full triple-dot system, incoherent coupling to the environment, and backaction from the measurement."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "实验在 InAs-Al 异质结构器件上进行，作者对左拓扑段及其相关干涉仪实施宇称测量 [S2.p2]。作者连续进行近 1.5×10^4 次谐振器响应测量，每次积分时间 4.5 µs，记录总长 67 ms 的时间轨迹，并降采样至 90 µs 分辨率转换为 C_Q 记录 [S3.p1]。作者以 0.14 mT 步长扫描面外磁场 B_⊥ 以研究干涉环通量依赖，并扫描 V_QD2 寻找点 2 的电荷跃迁，使用 C_Q 分布的峰度 K(C_Q) 检测双模性 [S3.p1]。此外，作者在类似滤波和屏蔽的 Cooper pair box 器件中研究准粒子中毒，测得 B_∥=0 时非平衡准粒子密度约 0.6 µm^-3 [S3.p10]。",
+      "evidence": [
+        {
+          "id": "S2.p2",
+          "quote": "Here, we focus on the left topological section of the device, shown in Fig. 1 c, and implement a parity measurement using its associated interferometer."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "To measure a time record of the fermion parity, we tune up the TQDI and perform a sequence of nearly $1.5\\times 10^{4}$ consecutive measurements of the resonator response, each with an integration time of $4.5\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$, thereby recording a time trace of total length $67\\text{\\,}\\mathrm{ms}$."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "To improve visibility and compare with theoretical predictions we downsample the time trace to a resolution of $90\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s}$ and convert the resonator response into a $C_{\\mathrm{\\scriptscriptstyle Q}}$ record using the procedure discussed in Sec. S4.1."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We sweep the out-of-plane magnetic field $B_{\\perp}$ in steps of $0.14\\text{\\,}\\mathrm{mT}$ to study the dependence on the external flux $\\Phi$ through the interferometer loop and sweep $V_{{\\mathrm{\\scriptscriptstyle QD}2}}$ to find charge transitions in dot 2."
+        },
+        {
+          "id": "S3.p1",
+          "quote": "We use the kurtosis $K(C_{\\mathrm{\\scriptscriptstyle Q}})$ in the distribution of $C_{\\mathrm{\\scriptscriptstyle Q}}$ values to detect bimodality."
+        },
+        {
+          "id": "S3.p10",
+          "quote": "This enables us to extract the density of non-equilibrium quasi-particles in the Al strip, yielding $n_{\\mathrm{qp}}^{\\mathrm{\\scriptscriptstyle CPB}}\\approx$0.6\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m}$^{-3}$ at $B_{\\parallel}=0$."
+        }
+      ]
+    },
+    "findings": {
+      "text": "量子电容测量显示通量 h/2e 周期的双模性，在最优通量下 3.7 µs 内信噪比为 1 [abstract]。从量子电容时间轨迹中提取的两个相关状态的驻留时间在约 2 T 面内磁场下超过 1 ms [abstract]。这些结果与测量由约 3 µm 分离的一对马约拉纳零模编码的费米子宇称一致，并对应低非平衡准粒子中毒率 [abstract]。作者将观测到的通量依赖双模随机电报信号解释为线中费米子态宇称的切换，长切换时间 τ_RTS > 1 ms 表明低准粒子中毒率 [S5.p1]。作者还指出，这些测量本身不能确定所探测的低能态是否为拓扑态，但通过拟合平凡 Andreev 态模型，已严格约束了这类态需具备的性质 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Our quantum capacitance measurements show flux h / 2 ​ e h/2e -periodic bimodality with a signal-to-noise ratio of 1 1 in 3.7 µ ​ s 3.7\\text{\\,}\\mathrm{\\SIUnitSymbolMicro s} at optimal flux values."
+        },
+        {
+          "id": "abstract",
+          "quote": "From the time traces of the quantum capacitance measurements, we extract a dwell time in the two associated states that is longer than 1 ms 1\\text{\\,}\\mathrm{ms} at in-plane magnetic fields of approximately 2 T 2\\text{\\,}\\mathrm{T} ."
+        },
+        {
+          "id": "abstract",
+          "quote": "These results are consistent with a measurement of the fermion parity encoded in a pair of Majorana zero modes that are separated by approximately 3 µ ​ m 3\\text{\\,}\\mathrm{\\SIUnitSymbolMicro m} and subjected to a low rate of poisoning by non-equilibrium quasiparticles."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We interpret this RTS as switches of the parity of a fermionic state in the wire."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "The long switching time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}>$1\\text{\\,}\\mathrm{ms}$ suggests a low quasiparticle poisoning rate, which we find to be within an order of magnitude of the quasiparticle density measured in a Cooper pair box device."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "However, by fitting to a model of trivial Andreev states, we have tightly constrained the properties that such states would have to have in order to be consistent with our data."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确指出，该测量本身不能明确区分拓扑相中的马约拉纳零模与平凡相中精细调节的低能 Andreev 束缚态 [S1.p3]。作者也承认，这些测量本身不能确定干涉测量所探测的低能态是否为拓扑态 [S5.p1]。作者指出，在当前器件中，由于有限尺寸效应导致的介观涨落，预期 E_M 会有显著变化，且当前器件中预期能隙 Δ_T 不大、相干长度与器件长度相比并不显著更小 [S4.p7]。作者表示将在后续论文中讨论器件相图以及所观测通量依赖 RTS 的稳定性，以完全解决该问题 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "By itself, this measurement does not unequivocally distinguish between MZMs in the topological phase and fine-tuned low-energy Andreev bound states in the trivial phase, but it does require the low-energy state to be supported at both ends of the wire and very weakly coupled to other low-energy states."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "These measurements do not, by themselves, determine whether the low-energy states detected by interferometry are topological."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Within the topological phase, we expect a substantial variation in $E_{\\mathrm{\\scriptscriptstyle M}}$ in our current devices, attributable to mesoscopic fluctuations due to finite-size effects."
+        },
+        {
+          "id": "S4.p7",
+          "quote": "Indeed, in the current generation of devices, we anticipate modest energy gaps $\\Delta_{\\mathrm{\\scriptscriptstyle T}}$ and coherence lengths that are not significantly smaller than the device length."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "To fully resolve this issue, we will discuss the device’s phase diagram and the stability of the observed flux-dependent RTS in a separate publication."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 10524,
+      "completion_tokens": 2725,
+      "elapsed_s": 10.49
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 28,
+    "quote_rate": 0.964,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S5.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The long switching time $\\tau_{\\mathrm{\\scriptscriptstyle RTS}}>$1\\text{\\,}\\math"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.25
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

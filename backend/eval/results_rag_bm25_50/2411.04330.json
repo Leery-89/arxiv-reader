@@ -1,0 +1,160 @@
+{
+  "paper": {
+    "arxiv_id": "2411.04330",
+    "title": "Scaling Laws for Precision",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 69719,
+    "n_sections": 43,
+    "n_paragraphs": 114
+  },
+  "result": {
+    "summary": "本文提出了“精度感知”的缩放定律，将训练和推理中的低精度效应纳入损失预测 [abstract]。作者提出低精度训练会降低模型的有效参数量，从而可以预测低精度训练和后训练量化带来的额外损失 [abstract]。对于推理，后训练量化带来的退化随训练数据量增加而增大，最终使额外的预训练数据变得有害 [abstract]。作者在超过 465 次预训练运行上拟合，并在最高 1.7B 参数、26B token 的模型上验证了预测 [abstract]。",
+    "research_question": {
+      "text": "论文要解决的问题是：精度、参数量和数据之间存在怎样的权衡，以及这些权衡在预训练和推理中有何不同 [S1.p1]。原文指出，精度是影响成本和性能的第三个重要因素，但当前的缩放定律并未考虑这一点 [S1.p1][abstract]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "Specifically, we ask: What are the tradeoffs between precision, parameters, and data? How do they compare for pretraining and inference?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "However, the precision in which models are trained and served is an important third factor that contributes to both cost and performance."
+        },
+        {
+          "id": "abstract",
+          "quote": "Low precision training and inference affect both the quality and cost of language models, but current scaling laws do not account for this."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出“精度感知”的缩放定律，其核心思想是假设比特精度和参数量可以互换地贡献于模型的“有效参数量” N_eff，而量化实现细节仅通过影响该量来与损失缩放交互 [S1.p2]。作者将训练和推理的缩放定律统一为单一函数形式，以预测不同精度下训练和推理带来的退化 [abstract][S5.p8]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This functional form that posits bit precision and parameter count interchangeably contribute to a model’s “effective parameter count,” $N_{\\text{eff}}$, and implementation details like which parts of a model are quantized to what precision, interact with loss scaling only through their effect on this quantity."
+        },
+        {
+          "id": "abstract",
+          "quote": "We unify the scaling laws for post and pretraining quantization to arrive at a single functional form that predicts degradation from training and inference in varied precisions."
+        },
+        {
+          "id": "S5.p8",
+          "quote": "Modeling low-precision effects during pretraining as independent and multiplicative noise that accumulates, and including post-training quantization degradation, the predicted loss for a language model with $N$ parameters, trained on $D$ tokens, with training precision $P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}}$ to end-time weight-precision $P_{\\text{post}}$, can be predicted as $L(N,D,P_{\\text{w}},P_{\\text{a}},P_{\\text{kv}},P_{\\text{post}})=AN_{\\text{eff}}^{-\\alpha}+BD^{-\\beta}+E+\\delta_{\\text{PTQ}}$"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在 Dolma V1.7 数据集上训练和评估了一系列 OLMo 风格的模型，使用标准 Transformer++ 实现 [S2.SS3.p1]。实验扫描了 N ∈ [30,60,110,220] 百万参数和 D ∈ [1.5,3,6,13,26] 十亿 token，对每个 (N,D) 组合启动超过 20 次运行，并扫描了 8 个精度值 [S2.SS3.p1]。作者在超过 465 次预训练运行上拟合，并在最高 1.7B 参数、26B token 的模型上验证预测 [abstract]。",
+      "evidence": [
+        {
+          "id": "S2.SS3.p1",
+          "quote": "We train and evaluate a suite of OLMo-style models on the Dolma V1.7 dataset, using a standard Transformer++ implementation"
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "Our experiments consist of a sweep of language model pretraining runs over $N\\in[30,60,110,220]$ million parameters (non-embedding) and $D\\in[1.5,3,6,13,26]$ billion tokens."
+        },
+        {
+          "id": "S2.SS3.p1",
+          "quote": "we train up to a very high $D/N\\approx 10^{3}$ to study data scaling and set off over 20 runs at every $(N,D)$: we sweep 8 values of precision for each of the (weights, activations, attention)."
+        },
+        {
+          "id": "abstract",
+          "quote": "We fit on over 465 pretraining runs and validate our predictions on model sizes up to 1.7B parameters trained on up to 26B tokens."
+        }
+      ]
+    },
+    "findings": {
+      "text": "后训练量化带来的损失退化随数据量增加而增大，对于固定模型，在某个点之后继续用更多数据训练，如果模型之后会被量化，可能反而有害 [S3.p1][S3.F2]。在量化感知训练中，权重的比特精度可以与参数量进行权衡，即较小 N 但较大 P_w 的模型可以达到与较大 N 但较小 P_w 的模型相同的损失，且精度增益在较低精度时较大，在约 6-7 比特后饱和 [S4.SS1.p1]。对于低精度训练，权重、激活和注意力的量化效应是组合且乘性的 [S4.SS2.p1]。计算最优的预训练精度通常与计算预算无关，但如果模型大小 N 被约束，计算最优精度随计算量缓慢增长，P* ∝ log C [S4.SS3.SSS2.p2][S4.SS3.SSS3.p1]。统一缩放定律表明，在较低精度下训练的模型对后训练量化更鲁棒，即退化更低 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S3.p1",
+          "quote": "We quantify the resulting loss degradation $\\delta_{\\text{PTQ}}$, finding that post-train quantization scales poorly in data."
+        },
+        {
+          "id": "S3.F2",
+          "quote": "We can see that degradation grows with data, bottom row is fitted with Equation 2. For $D/N$ sufficiently large (left), loss can increase in data."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "We observe that the bit precision of the weights can be traded off for the number of parameters, i.e., a model with smaller $N$ but larger $P_{\\text{w}}$ can achieve the same loss as a model with larger $N$ but smaller $P_{\\text{w}}$."
+        },
+        {
+          "id": "S4.SS1.p1",
+          "quote": "Additionally, we find that the gains from increasing the bit precision of the weights are large at lower precisions but saturate at higher precisions (typically around 6-7 bits per weight)."
+        },
+        {
+          "id": "S4.SS2.p1",
+          "quote": "The Effects of Quantizing Weights, Activations, and Attention are Compositional and Multiplicative"
+        },
+        {
+          "id": "S4.SS3.SSS2.p2",
+          "quote": "We find that scaling fits on integer type are a strong fit until 4-bit precision, at which points the difference between the two types becomes more apparent."
+        },
+        {
+          "id": "S4.SS3.SSS3.p1",
+          "quote": "Surprisingly, our scaling laws predict that models of differing sizes should not necessarily be trained in the same precision, and that compute-optimal precision scales as $P^{*}(C)\\propto\\log C$."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "We find two competing effects at play when predicting $\\delta_{\\text{PTQ}}$, but overall, models trained in lower precision are more robust to post-train quantization in the sense of incurring lower degradation."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，分析中使用了固定架构来考察精度、参数和 token 的影响，而低精度训练通常涉及架构调整，可以缩小与普通全精度模型的差距 [S6.p2]。其次，虽然计算成本随精度线性缩放，但由于系统开销，减半精度带来的收益通常不到 2 倍 [S6.p2]。第三，只考虑了损失缩放，没有下游模型评估 [S6.p2]。作者强调所发现的趋势旨在提供启示而非规定性结论，并希望未来工作能在更大模型规模上更全面地检验这些效应 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "First, we use a fixed architecture throughout to examine the effects of precision, parameters, and tokens in a controlled manner. In contrast, low precision training often involves architectural tweaks that can close much of the gap from a vanilla full precision model."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Second, while compute costs do scale linearly with precision, the gains from halving precision are usually less than 2x due to systems overhead."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Third, we only consider loss scaling without downstream model evaluations."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "We emphasize that the trends we find aim to be suggestive rather than prescriptive, and hope future work can more comprehensively examine these effects at larger model scale."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 9748,
+      "completion_tokens": 2122,
+      "elapsed_s": 7.8
+    }
+  },
+  "verify": {
+    "quote_hits": 21,
+    "quote_total": 22,
+    "quote_rate": 0.955,
+    "inline_hits": 20,
+    "inline_total": 20,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "findings",
+        "id": "S4.SS2.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "The Effects of Quantizing Weights, Activations, and Attention are Compositional "
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "bm25",
+    "budget": 0.5
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

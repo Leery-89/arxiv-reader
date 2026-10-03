@@ -1,0 +1,161 @@
+{
+  "paper": {
+    "arxiv_id": "2405.07987",
+    "title": "The Platonic Representation Hypothesis",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 78065,
+    "n_sections": 45,
+    "n_paragraphs": 108
+  },
+  "result": {
+    "summary": "这篇论文提出并论证了“柏拉图表示假说”：AI 模型的表示正在收敛，尤其是深度网络在不同架构、目标和数据模态下对数据的表示方式越来越一致 [abstract][S1.p4]。作者综述了文献中的收敛证据，并通过实验展示视觉模型与语言模型随规模增大而测量数据点距离的方式越来越相似 [abstract][S2.SS3.p4]。论文进一步提出这种收敛可能趋向于一个共享的、对现实世界的统计模型，即“柏拉图表示”，并讨论了若干可能的选择压力 [abstract][S1.p5]。最后，作者讨论了这一趋势的意义、局限和反例 [abstract]。",
+    "research_question": {
+      "text": "论文的核心问题是：不同 AI 模型的表示是否正在收敛，以及这种收敛是否趋向于一个共享的、对生成观测数据的底层现实的统计模型 [S1.p4][S4.p2]。作者指出，尽管已有研究观察到不同基础模型可能到达相同表示，但这并不显然，因此需要更广泛地检验模型是否确实在学习一个越来越模态无关的世界表示 [S2.SS1.p2][S2.SS3.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "Our central hypothesis, stated above in Figure 1, is that there is indeed an endpoint to this convergence and a principle that drives it: different models are all trying to arrive at a representation of reality, meaning a representation of the joint distribution over events in the world that generate the data we observe."
+        },
+        {
+          "id": "S4.p2",
+          "quote": "Our central hypothesis, stated in Figure 1, is that the representation we are converging toward is a statistical model of the underlying reality that generates our observations."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "While this trend implies convergence toward a relatively small set of foundation models, it does not imply that different foundation models will arrive at the same representation. Yet that is what has been observed by several recent papers."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "We set out to address these claims in a broader scope to determine whether models are indeed learning an increasingly modality-agnostic representation of the world."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文首先综述了文献中关于表示收敛的证据，包括模型拼接（model stitching）等技术，并指出单个线性投影足以将视觉模型拼接至 LLM 以完成视觉问答和图像描述任务 [S2.SS1.p3][S2.SS3.p2]。作者随后在更广泛的范围内采样了仅训练于视觉或仅训练于语言的多种模型，比较它们随规模增大和能力增强时的表示 [S2.SS3.p4]。此外，论文通过一个颜色案例研究，验证在文本或图像共现统计上学习的表示是否收敛到相似的感知表示 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p3",
+          "quote": "conducted one such study, in which they measured representational similarity through a technique called model stitching."
+        },
+        {
+          "id": "S2.SS3.p2",
+          "quote": "extended model stitching to the cross-modal setting, finding that a single linear projection is sufficient to stitch a vision model to an LLM and achieve good performance on visual question answering and image captioning."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "We sampled a variety of models trained either solely on vision or solely on language, and compared their representations as they became larger and more competent over many tasks."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "We conduct a case study to verify that convergence does happen on real data."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "在视觉-视觉对齐实验中，作者使用了 78 个视觉模型，包括 17 个 ViT 模型、1 个随机初始化的 ResNet-50、11 个在 ImageNet-1k、Places-365 及 9 个合成图像数据集上对比学习的 ResNet-50，以及 49 个在 ImageNet-100、Places-365 和 47 个真实与合成图像数据集上训练的 ResNet-18 [A3.SS1.p1]。表示质量通过在全部 19 个 VTAB 分类任务上的线性探测性能评估，训练和验证数据集被下采样至最多 10,000 个样本 [A3.SS1.p2]。对齐度量使用 Places-365 验证集上 1000 个图像表示的 k=10 最近邻 [A3.SS1.p3]。在颜色案例研究中，作者基于文本共现和图像共现分别学习颜色表示，并比较其与人类感知距离的相似性 [S4.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "A3.SS1.p1",
+          "quote": "We consider 78 vision models in total: • $17$ ViT models ranging from ViT-tiny to ViT-giant, trained on tasks including ImageNet-21k classification, Masked Autoencoders, DINO, and CLIP, including some finetuned on ImageNet-12k. • $1$ randomly initialized ResNet-50. • $11$ ResNet-50 models trained with contrastive learning on ImageNet-1k, Places-365, and $9$ synthetic image datasets used in. • $49$ ResNet-18 models trained with Alignment and Uniformity contrastive loss on ImageNet-100, Places-365, and $47$ realistic and synthetic image datasets from."
+        },
+        {
+          "id": "A3.SS1.p2",
+          "quote": "To test representation quality, we evaluate linear probing performance on all 19 VTAB classification tasks, which is a standard multi-task transfer learning benchmark containing structured, specialized, and natural datasets covering diverse domains. To reduce compute requirements, we subsample training and validation datasets to have at most 10,000 samples."
+        },
+        {
+          "id": "A3.SS1.p3",
+          "quote": "To compute the alignment metric, we use $k=10$ nearest neighbors over $1000$ image representations computed on Places-365’s validation dataset."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "In Figure 8, we also learn representations of color based on $K_{\\mathsf{PMI}}$ from cooccurrences in images. Indeed, learning cooccurrence statistics in either domain recovers roughly the same perceptual representation."
+        }
+      ]
+    },
+    "findings": {
+      "text": "论文发现，解决更多 VTAB 任务的视觉模型彼此之间更加对齐 [S2.F2.fig1]；随着模型规模增大，视觉模型和语言模型测量数据点距离的方式越来越相似 [abstract]。对齐度的提高与常识推理（Hellaswag）和数学问题求解（GSM8K）性能的提升相对应 [S2.SS5.p1]。在颜色案例研究中，基于文本共现或图像共现学习的表示都大致恢复了相同的感知表示 [S4.SS2.SSS0.Px1.p1]。作者还发现，描述越详细（信息量越高）的图像描述，其 LLM 表示与对应图像的视觉表示对齐得越好 [S6.SS0.SSS0.Px1.p3]。",
+      "evidence": [
+        {
+          "id": "S2.F2.fig1",
+          "quote": "Models that solve more VTAB tasks tend to be more aligned with each other."
+        },
+        {
+          "id": "abstract",
+          "quote": "as vision models and language models get larger, they measure distance between datapoints in a more and more alike way."
+        },
+        {
+          "id": "S2.SS5.p1",
+          "quote": "Figure 4 supports this hypothesis by demonstrating improved performance on commonsense reasoning (Hellaswag;) and mathematical problem solving (GSM8K;) as alignment improves."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Indeed, learning cooccurrence statistics in either domain recovers roughly the same perceptual representation."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p3",
+          "quote": "We perform a preliminary test of the effect of information level in Figure 9 (detailed in Appendix E), and find that the more descriptive (higher information) a caption is, the better its LLM representation aligns with the visual representation of the corresponding image."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，不同传感器和视角可能捕获不同信息，这可能限制它们收敛到相同表示的潜力 [S1.p4]。一个直接的反驳是：如果两个模型访问的信息根本不同，它们无法收敛到相同表示；需要发展更精细的假说来处理非双射观测和抽象概念 [S6.SS0.SSS0.Px1.p1][S6.SS0.SSS0.Px1.p3]。论文主要关注视觉和语言两种模态，其他模态尚未见到同等程度的收敛，例如机器人领域尚无标准化的世界状态表示方式，硬件昂贵且缓慢造成训练数据数量和多样性的瓶颈 [S6.SS0.SSS0.Px2.p1]。此外，作者展示的模型表示相似但并非完全相同，例如图 3 中对齐分数仅达到 0.16（理论最大值为 1），这一分数是表明强对齐且剩余差距为噪声，还是表明对齐较差且存在重大差异，作者将其留作开放问题 [S6.SS0.SSS0.Px6.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p4",
+          "quote": "different sensors and views might capture different information, which may limit their potential to converge to identical representations."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p1",
+          "quote": "Two different models cannot converge to the same representation if they have access to fundamentally different information."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px1.p3",
+          "quote": "A more nuanced version of our hypothesis will need to be developed to handle the case of non-bijective observations and abstract concepts."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "While we do expect other modalities will follow similar trends, we have yet to see the same level of convergence across all domains."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px2.p1",
+          "quote": "One limitation lies in the hardware used in robotics, which is often expensive and slow. This creates a bottleneck in the quantity and diversity of training data."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "For example, in Figure 3, alignment clearly increases but only reaches a score of $0.16$, according to our mutual nearest-neighbor metric. The maximum theoretical value for this metric is $1$."
+        },
+        {
+          "id": "S6.SS0.SSS0.Px6.p1",
+          "quote": "We leave this as an open question."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 5688,
+      "completion_tokens": 2429,
+      "elapsed_s": 9.39
+    }
+  },
+  "verify": {
+    "quote_hits": 24,
+    "quote_total": 24,
+    "quote_rate": 1.0,
+    "inline_hits": 22,
+    "inline_total": 22,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

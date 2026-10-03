@@ -1,0 +1,173 @@
+{
+  "paper": {
+    "arxiv_id": "2501.19393",
+    "title": "s1 : Simple test-time scaling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 44775,
+    "n_sections": 55,
+    "n_paragraphs": 75
+  },
+  "result": {
+    "summary": "本文研究如何以最简单的方法实现测试时扩展（test-time scaling）并获得强推理性能 [S1.p1]。作者构建了仅含 1,000 个问题的数据集 s1K，对 Qwen2.5-32B-Instruct 做监督微调，并提出 budget forcing 在解码时控制思考 token 数量 [S1.p2]。s1-32B 在竞赛数学题上超过 o1-preview 最多 27%，并可通过 budget forcing 将 AIME24 从 50% 提升到 57% [abstract]。作者还通过消融说明数据选择中难度、多样性、质量三者结合的重要性，以及 budget forcing 在可控性和扩展斜率上的优势 [S1.p3]。",
+    "research_question": {
+      "text": "论文要解决的问题是：在 o1 未公开方法、众多复现尝试均未公开复现出清晰测试时扩展行为的情况下，实现测试时扩展与强推理性能的最简单方法是什么 [S1.p1]。其动机在于测试时扩展这一新范式已被 o1 验证有效，但复现工作多依赖大规模强化学习或大量数据 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "However, despite the large number of o1 replication attempts, none have openly replicated a clear test-time scaling behavior."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "Thus, we ask: what is the simplest approach to achieve both test-time scaling and strong reasoning performance?"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "The viability of this paradigm was recently validated by OpenAI o1."
+        },
+        {
+          "id": "S1.p1",
+          "quote": "OpenAI describes their approach as using large-scale reinforcement learning (RL) implying the use of sizable amounts of data."
+        }
+      ]
+    },
+    "method": {
+      "text": "作者构建了 s1K，即 1,000 个精心挑选的问题及其推理轨迹和答案，蒸馏自 Gemini Thinking Experimental，并对现成预训练模型做监督微调 [S1.p2]。他们提出 budget forcing：若模型生成的思考 token 超过上限，就追加结束思考的 token 分隔符强制结束思考；若希望花更多测试时计算，则抑制结束思考分隔符并追加“Wait”以鼓励更多探索 [S1.p2]。作者将测试时扩展方法分为顺序式与并行式，并聚焦顺序式，认为后续计算可建立在中间结果之上 [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "We construct s1K, which consists of 1,000 carefully curated questions paired with reasoning traces and answers distilled from Gemini Thinking Experimental."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "If the model generates more thinking tokens than a desired limit, we forcefully end the thinking process by appending an end-of-thinking token delimiter."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "If we want the model to spend more test-time compute on a problem, we suppress the generation of the end-of-thinking token delimiter and instead append “Wait” to the model’s current reasoning trace to encourage more exploration."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We focus on sequential scaling as intuitively we believe it should scale better, since later computations can build on intermediate results, allowing for deeper reasoning and iterative refinement."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "作者在三个推理基准上评估：AIME24（30 题）、MATH500（500 题）和 GPQA Diamond（198 题），使用 lm-evaluation-harness 框架，默认温度 0 并测量准确率 [S4.SS1.SSS0.Px2.p1]。他们将 s1-32B 与 OpenAI o1 系列、DeepSeek r1 系列、QwQ-32B-preview、Sky-T1-32B-Preview、Bespoke-32B 以及 Gemini 2.0 Flash Thinking Experimental 等模型比较 [S4.SS1.SSS0.Px3.p1]。作者还做了数据选择消融（随机选择、最长推理轨迹、最大多样性）和测试时扩展方法消融（budget forcing、token/step/class-conditional control、rejection sampling）[S1.p3][S5.T3]。",
+      "evidence": [
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "We select three representative reasoning benchmarks widely used in the field: AIME24 has 30 problems"
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "MATH500 is a benchmark of competition math problems of varying difficulty."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "GPQA Diamond consists of 198 PhD-level science questions from Biology, Chemistry and Physics."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px2.p1",
+          "quote": "Unless otherwise specified, we evaluate with a temperature of 0 (greedy) and measure accuracy (equivalent to pass@1)."
+        },
+        {
+          "id": "S4.SS1.SSS0.Px3.p1",
+          "quote": "We benchmark s1-32B against: OpenAI o1 series, closed-source models that popularized test-time scaling; DeepSeek r1 series"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance"
+        },
+        {
+          "id": "S5.T3",
+          "quote": "Table 3: Ablations on methods to scale test-time compute on AIME24."
+        }
+      ]
+    },
+    "findings": {
+      "text": "s1-32B 在竞赛数学题上超过 o1-preview 最多 27%（MATH 和 AIME24）[abstract]。通过 budget forcing 扩展测试时计算，AIME24 性能可从 50% 提升到 57% [abstract]。在数据选择上，联合考虑难度、多样性、质量很重要，随机选择、最长推理轨迹或仅最大多样性平均在 AIME24 上差约 30%；在 59K 全量数据池上训练相比 1K 选择没有显著增益 [S1.p3]。在测试时扩展方法中，budget forcing 提供完美控制、良好扩展斜率并取得最佳 AIME24 分数 [S5.SS2.SSS0.Px1.p1]。此外，s1-32B 是最样本高效的开放数据推理模型，仅用 1,000 个样本训练即显著优于基座模型 [S4.SS2.SSS0.Px2.p1]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "our model s1-32B exceeds o1-preview on competition math questions by up to 27% (MATH and AIME24)"
+        },
+        {
+          "id": "abstract",
+          "quote": "from 50% to 57% on AIME24"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "jointly incorporating difficulty, diversity, and quality measures into our selection algorithm is important"
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Random selection, selecting samples with the longest reasoning traces, or only selecting maximally diverse samples all lead to significantly worse performance (around $-$ 30% on AIME24 on average)."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Training on our full data pool of 59K examples, a superset of s1K, does not offer substantial gains over our 1K selection."
+        },
+        {
+          "id": "S5.SS2.SSS0.Px1.p1",
+          "quote": "Overall, we find that budget forcing provides perfect control, good scaling, and leads to our best AIME24 score."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "We find that s1-32B is the most sample-efficient open data reasoning model."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "It performs significantly better than our base model (Qwen2.5-32B-Instruct) despite just training it on an additional 1,000 samples."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出 budget forcing 在进一步扩展时有两个关键限制：它最终会趋于平坦，且受底层语言模型上下文窗口约束 [S6.SS2.SSS0.Px2.p1]。抑制结束思考分隔符过于频繁可能导致模型陷入重复循环而非继续推理 [S4.SS2.SSS0.Px1.p1]。在顺序扩展中，当提示模型最多使用 512 步时，30 道评估题中有 12 道生成的回答超出上下文窗口，导致性能大幅下降 [S6.SS2.SSS0.Px3.p1]。此外，REBASE 需要在每一步为奖励模型额外做一次前向传播，带来计算开销 [S6.SS2.SSS0.Px3.p1]。",
+      "evidence": [
+        {
+          "id": "S6.SS2.SSS0.Px2.p1",
+          "quote": "However, it has two key limitations when scaling further: it eventually flattens out ( Figure 4), and the context window of the underlying language model constrains it."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px1.p1",
+          "quote": "Suppressing the end-of-thinking token delimiter too often can lead the model into repetitive loops instead of continued reasoning."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "For sequential scaling, when prompted to use up to 512 steps, for 12 out of the 30 evaluation questions the model generates a response that exceeds the context window leading to a large performance drop."
+        },
+        {
+          "id": "S6.SS2.SSS0.Px3.p1",
+          "quote": "However, REBASE requires an additional forward pass at each step for the reward model adding some computation overhead."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 6640,
+      "completion_tokens": 2245,
+      "elapsed_s": 8.04
+    }
+  },
+  "verify": {
+    "quote_hits": 27,
+    "quote_total": 27,
+    "quote_rate": 1.0,
+    "inline_hits": 18,
+    "inline_total": 18,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.5
+  },
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

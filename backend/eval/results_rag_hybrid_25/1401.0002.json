@@ -1,0 +1,92 @@
+{
+  "paper": {
+    "arxiv_id": "1401.0002",
+    "title": "Phenotypic class ratios as marker signs of different types of agamospermy",
+    "source": "abstract_only",
+    "truncated_sections": [],
+    "char_count": 690,
+    "n_sections": 0,
+    "n_paragraphs": 0
+  },
+  "result": {
+    "summary": "本文以甜菜为例，提出利用同工酶作为遗传标记、依据后代中三种表型类别的比例来对无融合生殖类型进行遗传分类的方法 [abstract]。该方法基于减数分裂无融合生殖与有丝分裂无融合生殖所产生的后代在表型类别比例上的差异 [abstract]。研究数据表明，在检测的15个后代中，13个被归类为由减数分裂无融合生殖产生，仅2个被归类为由有丝分裂无融合生殖产生，说明减数分裂无融合生殖对甜菜而言更为典型 [abstract]。",
+    "research_question": {
+      "text": "本文旨在建立一种对植物无融合生殖类型进行遗传分类的方法，并以甜菜为例加以说明 [abstract]。原文指出，这种分类之所以可行，是因为同工酶可作为遗传标记，从而能够识别单个杂合二倍体植株后代中的全部三种表型类别 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "This article focuses on the development of the method for the genetic classification of agamospermous reproduction types in plants using sugar beet as an example."
+        },
+        {
+          "id": "abstract",
+          "quote": "The classification feasibility is ensured by the use of isozymes as genetic markers allowing the identification of all three phenotypic classes in the progeny of individual heterozygous diploid plant"
+        }
+      ]
+    },
+    "method": {
+      "text": "该方法以同工酶作为遗传标记，识别单个杂合二倍体植株后代中的全部三种表型类别 [abstract]。其核心思想是依据减数分裂无融合生殖与有丝分裂无融合生殖所获得的后代在表型类别比例上的差异进行分类 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "The classification feasibility is ensured by the use of isozymes as genetic markers allowing the identification of all three phenotypic classes in the progeny of individual heterozygous diploid plant"
+        },
+        {
+          "id": "abstract",
+          "quote": "is based on different phenotypic class ratios in the progenies obtained by meiotic and mitotic agamospermy"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "研究以甜菜为对象，检测了15个后代，并依据表型类别比例对其进行分类 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "13 of 15 explored progenies were classified as those produced by meiotic agamospermy and only 2 as produced by mitotic agamospermy"
+        }
+      ]
+    },
+    "findings": {
+      "text": "在检测的15个后代中，13个被归类为由减数分裂无融合生殖产生，仅2个被归类为由有丝分裂无融合生殖产生 [abstract]。数据表明，减数分裂无融合生殖对甜菜而言更为典型 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "13 of 15 explored progenies were classified as those produced by meiotic agamospermy and only 2 as produced by mitotic agamospermy"
+        },
+        {
+          "id": "abstract",
+          "quote": "for sugar beet meiotic agamospermy is the more typical"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "原文未明确提及",
+      "evidence": []
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 1521,
+      "completion_tokens": 709,
+      "elapsed_s": 3.04
+    }
+  },
+  "verify": {
+    "quote_hits": 7,
+    "quote_total": 7,
+    "quote_rate": 1.0,
+    "inline_hits": 7,
+    "inline_total": 7,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 1,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "abstract_only",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}

@@ -1,0 +1,133 @@
+{
+  "paper": {
+    "arxiv_id": "2407.10760",
+    "title": "Little Red Dots: Rapidly Growing Black Holes Reddened by Extended Dusty Flows",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 52309,
+    "n_sections": 10,
+    "n_paragraphs": 55
+  },
+  "result": {
+    "summary": "本文针对 JWST 发现的 little red dots（LRD）的 V 形光谱特征，提出一个从静止系紫外到红外的 SED 模型：AGN 的典型辐射被嵌入在具有类似猎户座星云消光律的延展尘埃介质中 [S1.p6][S5.p2]。模型用尘埃衰减的 AGN 辐射解释 λ>4000 Å 的红色光学连续谱和 λ<3000 Å 的平坦紫外谱，无需额外恒星辐射或 AGN 散射光 [S5.p2]。在红外波段，延展的尘埃气体分布（γ<1）使较冷尘埃主导辐射，将能量峰从近红外移到中红外，从而产生与 JWST MIRI 观测一致的平坦红外 SED [S5.p2]。作者据此提出 LRD 可能源于星系核早期组装阶段快速生长的黑洞 [S4.SS5.p1]。",
+    "research_question": {
+      "text": "论文要解决的是 LRD 的 V 形光谱特征（红色光学连续谱加紫外过剩）的来源问题，即如何辨别星系与 AGN 的相对贡献 [S5.p1]。作者指出，尽管光谱观测已确认 LRD 中存在宽发射线成分和 AGN，但 JWST/NIRCam 观测到的这一特征仍挑战着人们对 LRD 起源的理解 [S5.p1]。",
+      "evidence": [
+        {
+          "id": "S5.p1",
+          "quote": "the characteristic v-shape spectral feature observed through JWST/NIRCam challenges us to understand the origin of these LRDs and the contribution from AGNs powered by accreting BHs."
+        },
+        {
+          "id": "S5.p1",
+          "quote": "Spectroscopic observations have confirmed the broad components of emission lines and the presence of AGNs within LRDs."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出一个从静止系紫外到红外波段的 LRD 光谱能量分布（SED）模型，假设 AGN 的典型辐射被嵌入在延展尘埃介质中，其消光律类似猎户座星云或某些 AGN 环境 [S1.p6][S5.p2]。紫外-光学谱由尘埃衰减的 AGN 辐射描述，在 λ>4000 Å 呈红色光学连续谱，在 λ<3000 Å 通过灰消光曲线形成平坦紫外谱，无需额外恒星辐射或 AGN 散射光 [S5.p2]。红外部分由径向密度分布为 ρ=ρ0(r/rin)^(-γ) 的延展尘埃气体塑造，通过辐射加热与热发射冷却的平衡确定尘埃温度 [S3.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "We hypothesize that the incident radiation from an AGN, characterized by a typical SED, is embedded in an extended dusty medium with an extinction law similar to those seen in dense regions such as Orion Nebula or certain AGN environments."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "The UV-optical spectrum is described by dust-attenuated AGN emission with $A_{\\rm V}\\simeq 3$ mag, featuring a red optical continuum at $\\lambda>4000~{\\rm\\AA}$ and a flat UV spectral shape established through a gray extinction curve at $\\lambda<3000~{\\rm\\AA}$"
+        },
+        {
+          "id": "S5.p2",
+          "quote": "In this scenario, there is no need for additional stellar emission or AGN scattered light."
+        },
+        {
+          "id": "S3.p3",
+          "quote": "we focus not only on a compact dust structure such as a dust torus, but rather a more extended dust structure described by a radial density profile of $\\rho=\\rho_{0}(r/r_{\\rm in})^{-\\gamma}$"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文通过改变尘埃气体密度和径向分布参数来检验模型 SED 形状：在固定 γ=0 时，比较了升华半径处气体密度 1≤n0/cm^-3≤10^3 范围内的 SED 变化 [S3.p7]。结果显示，当 n0=10^3 cm^-3 时，遮蔽物质外缘位于 rout≳30 rin，尘埃温度从约 1500 K 到约 200 K，再处理红外谱从 λ≃1 μm 开始上升并呈现覆盖 λ≃2-15 μm 的近-中红外峰 [S3.p7]。作者将该模型输出与 JWST MIRI 对 LRD 的光度数据进行比较 [S3.p7]。",
+      "evidence": [
+        {
+          "id": "S3.p7",
+          "quote": "we show the dependence of the SED shape on the gas density ( $1\\leq n_{0}/{\\rm cm}^{-3}\\leq 10^{3}$) at the sublimation radius, while the slope of its radial profile is fixed to $\\gamma=0$."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "When the density is as high as $n_{0}=10^{3}~{\\rm cm}^{-3}$, the outer edge of the obscuring material is located at $r_{\\rm out}\\gtrsim 30~r_{\\rm in}$, where the dust temperature ranges from $T_{\\rm dust}\\simeq 1500~{\\rm K}$ to $\\sim 200~{\\rm K}$."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "the reprocessed IR spectrum begins to rise from $\\lambda\\simeq 1~\\mu{\\rm m}$ and exhibits a near- to mid-infrared bump that covers $\\lambda\\simeq 2-15~\\mu{\\rm m}$."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "this extremely red SED color does not match the JWST MIRI photometric data for LRDs, which suggest a modest red color or even a flat spectral shape."
+        }
+      ]
+    },
+    "findings": {
+      "text": "模型表明，当尘埃气体密度过高（n0≳10^3 cm^-3）时，热尘埃产生的明亮近红外峰会形成从约 6000 Å 到约 2 μm 的极红 SED，这与 JWST MIRI 对 LRD 的观测不符 [S3.p7]。相反，延展的尘埃气体分布（γ<1）使较冷尘埃主导辐射，将能量峰从近红外移到中红外，从而产生与 JWST MIRI 观测一致的平坦红外 SED [S5.p2]。作者据此提出 LRD 源于嵌入在延展尘埃流中的快速生长黑洞 [S4.SS5.p1]。此外，若准确修正尘埃消光，在 AV=3 时 Eddington 比可提高约 2.6 倍，使部分 LRD 的黑洞 Eddington 比接近 1，提示相当一部分 LRD 可能是超 Eddington 吸积体 [S4.SS5.p3]。",
+      "evidence": [
+        {
+          "id": "S3.p7",
+          "quote": "the bright NIR bump makes the SED shape substantially redder from $\\lambda\\simeq 6000~{\\rm\\AA}$ to $\\sim 2~\\mu{\\rm m}$, consistently observed in AGNs with hot dust tori."
+        },
+        {
+          "id": "S3.p7",
+          "quote": "this extremely red SED color does not match the JWST MIRI photometric data for LRDs, which suggest a modest red color or even a flat spectral shape."
+        },
+        {
+          "id": "S5.p2",
+          "quote": "This model, unlike the typical AGN hot torus models, can produce a infrared SED flattening that is consistent with LRD observations through JWST MIRI."
+        },
+        {
+          "id": "S4.SS5.p1",
+          "quote": "we propose that LRDs originate from rapidly growing BH embedded within dusty flows with an extended density distribution."
+        },
+        {
+          "id": "S4.SS5.p3",
+          "quote": "by applying a dust correction, the Eddington ratio increases by a factor of $\\mathscr{L}\\sim 10^{0.14A_{\\rm V}}\\sim 2.6$ for $A_{\\rm V}=3$."
+        },
+        {
+          "id": "S4.SS5.p3",
+          "quote": "With this correction, the Eddington ratios of BHs reported by approach unity, suggesting that a significant fraction of LRDs may be super-Eddington accretors."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，关于延展尘埃介质中多尺度散射导致 AGN 变异性被抑制的情景，其更详细的定量分析将在未来工作中探讨 [S4.SS3.p2]。",
+      "evidence": [
+        {
+          "id": "S4.SS3.p2",
+          "quote": "A more detailed quantitative analysis of this scenario will be explored in future work."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 4650,
+      "completion_tokens": 1981,
+      "elapsed_s": 8.11
+    }
+  },
+  "verify": {
+    "quote_hits": 17,
+    "quote_total": 17,
+    "quote_rate": 1.0,
+    "inline_hits": 14,
+    "inline_total": 14,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "rag": {
+    "method": "hybrid",
+    "budget": 0.25
+  },
+  "category": "physics",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  },
+  "parser_version": 2
+}
