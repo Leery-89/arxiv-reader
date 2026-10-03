@@ -30,7 +30,7 @@
     },
     {
      "id": "S1.p4",
-     "text": "Using GPT-4 Turbo as a base LM, SWE-agent solves $12.47$ % of the $2true294$ SWE-bench test tasks, substantially outperforming the previous best resolve rate of $3.8$ % by a non-interactive, retrieval-augmented system. We perform an ablation study on a subset of $300$ SWE-bench test instances (SWE-bench Lite) to analyze our ACI design choices. The results show that SWE-agent solves $10.7$ percentage points more instances than the baseline agent, which uses only the default Linux shell. Although our ACI was developed for GPT-4 Turbo, we show that it is portable to a different LM; SWE-agent with Claude 3 Opus can solve $10.5$ % of the benchmark tasks.",
+     "text": "Using GPT-4 Turbo as a base LM, SWE-agent solves $12.47$ % of the $2,294$ SWE-bench test tasks, substantially outperforming the previous best resolve rate of $3.8$ % by a non-interactive, retrieval-augmented system. We perform an ablation study on a subset of $300$ SWE-bench test instances (SWE-bench Lite) to analyze our ACI design choices. The results show that SWE-agent solves $10.7$ percentage points more instances than the baseline agent, which uses only the default Linux shell. Although our ACI was developed for GPT-4 Turbo, we show that it is portable to a different LM; SWE-agent with Claude 3 Opus can solve $10.5$ % of the benchmark tasks.",
      "kind": "body"
     },
     {
@@ -136,7 +136,7 @@
    "paragraphs": [
     {
      "id": "S4.p1",
-     "text": "Datasets. We primarily evaluate on the SWE-bench dataset, which includes $2true294$ task instances from $12$ different repositories of popular Python packages. We report our main agent results on the full SWE-bench test set and ablations and analysis on the SWE-bench Lite test set, unless otherwise specified. SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench that focus on evaluating self-contained functional bug fixes. We also test SWE-agent’s basic code editing abilities with HumanEvalFix, a short-form code debugging benchmark.",
+     "text": "Datasets. We primarily evaluate on the SWE-bench dataset, which includes $2,294$ task instances from $12$ different repositories of popular Python packages. We report our main agent results on the full SWE-bench test set and ablations and analysis on the SWE-bench Lite test set, unless otherwise specified. SWE-bench Lite is a canonical subset of $300$ instances from SWE-bench that focus on evaluating self-contained functional bug fixes. We also test SWE-agent’s basic code editing abilities with HumanEvalFix, a short-form code debugging benchmark.",
      "kind": "body"
     },
     {
@@ -178,7 +178,7 @@
    "paragraphs": [
     {
      "id": "S5.p1",
-     "text": "Across all systems, SWE-agent w/ GPT-4 Turbo achieves the best performance all-around, successfully solving $12.47$ % ( $286$ / $2true294$) of the full SWE-bench test set and $18.00$ % ( $54$ / $300$) of the Lite split. As shown in Table 3, compared to RAG on Lite, SWE-agent is $8$ - $13$ x more costly but yields a $6.7$ -fold improved % Resolved rate. An LM-friendly ACI’s value is confirmed by SWE-agent’s $64$ % relative increase compared to Shell-only, both with GPT-4 Turbo.",
+     "text": "Across all systems, SWE-agent w/ GPT-4 Turbo achieves the best performance all-around, successfully solving $12.47$ % ( $286$ / $2,294$) of the full SWE-bench test set and $18.00$ % ( $54$ / $300$) of the Lite split. As shown in Table 3, compared to RAG on Lite, SWE-agent is $8$ - $13$ x more costly but yields a $6.7$ -fold improved % Resolved rate. An LM-friendly ACI’s value is confirmed by SWE-agent’s $64$ % relative increase compared to Shell-only, both with GPT-4 Turbo.",
      "kind": "body"
     },
     {
@@ -247,7 +247,7 @@
     },
     {
      "id": "S5.SS2.p4",
-     "text": "Editing remains challenging for agents. A non-trivial minority of edit actions raise a linting error; out of $2true294$ task instances, $1true185$ ( $51.7$ %) of SWE-agent w/ GPT-4 Turbo trajectories have $1$ + failed edits. While agents generally recover more often than not from failed edits, the odds of recovery decrease as the agent accumulates more failed edits. Recovery refers to a sequence of consecutive failed edits followed immediately by a successful edit. Any attempt at editing has a $90.5$ % chance of eventually being successful. This probability drops off to $57.2$ % after a single failed edit. More editing phenomena are discussed in § B.3.3, and data about agents’ generated fixes are in § B.6.",
+     "text": "Editing remains challenging for agents. A non-trivial minority of edit actions raise a linting error; out of $2,294$ task instances, $1,185$ ( $51.7$ %) of SWE-agent w/ GPT-4 Turbo trajectories have $1$ + failed edits. While agents generally recover more often than not from failed edits, the odds of recovery decrease as the agent accumulates more failed edits. Recovery refers to a sequence of consecutive failed edits followed immediately by a successful edit. Any attempt at editing has a $90.5$ % chance of eventually being successful. This probability drops off to $57.2$ % after a single failed edit. More editing phenomena are discussed in § B.3.3, and data about agents’ generated fixes are in § B.6.",
      "kind": "body"
     },
     {

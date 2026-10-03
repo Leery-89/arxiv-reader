@@ -1,0 +1,194 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21787",
+    "title": "Large Language Monkeys : Scaling Inference Compute with Repeated Sampling",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 49608,
+    "n_sections": 29,
+    "n_paragraphs": 96
+  },
+  "result": {
+    "summary": "本文研究将推理阶段的计算量作为新的扩展维度，通过重复采样（repeated sampling）从语言模型生成大量候选解来提升推理性能 [S1.p3]。作者在五个任务上系统评估了覆盖率（coverage）随采样数的变化，发现覆盖率常可用指数幂律建模，并在有自动验证器的任务中直接转化为性能提升 [S1.p7][S1.p8]。在 SWE-bench Lite 上，DeepSeek-Coder-V2-Instruct 的解决率从单样本的 15.9% 提升到 250 个样本的 56%，超过单样本 SOTA 的 43% [S1.p8]。但在没有自动验证器的数学文字题中，多数投票和奖励模型等常见选择方法在约 100 个样本后趋于饱和，无法充分利用覆盖率提升 [S1.p10]。",
+    "research_question": {
+      "text": "论文旨在探索推理计算量作为扩展轴，系统刻画重复采样在多种任务、模型和采样预算下带来的收益 [S1.p3]。作者指出，尽管训练计算扩展持续提升模型能力，但推理时用户和开发者常限制模型只做一次尝试 [S1.p2]。重复采样的有效性取决于两个关键性质：覆盖率（多少问题能被任一生成样本解决）和精度（能否从样本集合中识别正确样本） [S1.p5][S1.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "In this work, we explore repeated sampling (Figure 1) as a simple approach to scaling inference compute in order to improve reasoning performance."
+        },
+        {
+          "id": "S1.p3",
+          "quote": "Our goal is to systematically characterize these benefits across a range of tasks, models, and sample budgets."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "However, when interacting with LLMs, users and developers often restrict models to making only one attempt when solving a problem."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "1. Coverage: As the number of samples increases, what fraction of problems can we solve using any sample that was generated? 2. Precision: How often can we identify correct samples from our collection of generations?"
+        }
+      ]
+    },
+    "method": {
+      "text": "论文采用重复采样方法：对每个问题以正温度独立采样多个候选解，再用领域特定的验证器（如代码的单元测试、Lean4 证明检查器）从样本中选出最终答案 [S1.F1]。作者用覆盖率（pass@k）衡量生成正确样本的能力，并采用无偏估计公式计算 pass@k [S2.p5][S2.p6]。为刻画覆盖率与采样数的关系，作者将 log(覆盖率) 建模为采样数 k 的幂律函数，并指数化得到 c ≈ exp(a k^b) [S3.SS1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.F1",
+          "quote": "1) We generate many independent candidate solutions for a given problem by sampling from an LLM with a positive temperature. 2) We use a domain-specific verifier (ex. unit tests for code) to select a final answer from the generated samples."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "In coding settings, our definition of coverage is equivalent to the commonly-used pass@k metric, where $k$ denotes the number of samples per problem."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "pass@k $\\displaystyle=\\frac{1}{\\text{\\# of problems}}\\sum_{i=1}^{\\text{\\# of problems}}\\left(1-\\frac{\\binom{N-C_{i}}{k}}{\\binom{N}{k}}\\right)$ (1)"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "We start by adopting the same function class, but now modelling the log of coverage $c$ as a function of the number of samples $k$: $\\displaystyle\\log(c)\\approx ak^{b}$ (2)"
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "In order to directly predict coverage, we exponentiate both sides, ending up with the final model of: $\\displaystyle c\\approx\\exp(ak^{b})$ (3)"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在五个任务上评估：GSM8K、MATH、MiniF2F-MATH、CodeContests 和 SWE-bench Lite [S2.p4]。其中 MiniF2F-MATH、CodeContests 和 SWE-bench Lite 有自动验证器（Lean4 证明检查器、测试用例、单元测试套件） [S2.p5]。作者对 Llama-3-8B-Instruct 和 Llama-3-70B-Instruct 在 CodeContests、MiniF2F、GSM8K、MATH 上每个问题生成 10,000 个独立样本；对 SWE-bench Lite 使用 DeepSeek-Coder-V2-Instruct 和 Moatless Tools 框架，每个问题限制 250 次尝试 [S2.SS1.p1]。此外还扩展评估了 Llama 3、Gemma 和 Pythia 系列多种规模模型，限制在 MATH 和 CodeContests 上 [S2.SS2.p2][S2.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S2.p4",
+          "quote": "1. GSM8K: A dataset of grade-school level math word problems. We evaluate on a random subset of 128 problems from the GSM8K test set."
+        },
+        {
+          "id": "S2.p4",
+          "quote": "5. SWE-bench Lite: A dataset of real world Github issues, where each problem consists of a description and a snapshot of a code repository."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "Among these tasks, MiniF2F-MATH, CodeContests, and SWE-bench Lite have automatic verifiers (in the form of the Lean4 proof checker, test cases, and unit test suites, respectively)."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "We evaluate Llama-3-8B-Instruct and Llama-3-70B-Instruct on CodeContests, MiniF2F, GSM8K, and MATH, generating 10,000 independent samples per problem."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "For SWE-bench Lite, we use DeepSeek-Coder-V2-Instruct, as the required context length of this task exceeds the limits of the Llama-3 models."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "To minimize costs, we restrict the number of attempts per issue to 250, with all attempts made independently of one another."
+        },
+        {
+          "id": "S2.SS2.p2",
+          "quote": "• Llama 3: Llama-3-8B, Llama-3-8B-Instruct, Llama-3-70B-Instruct. • Gemma: Gemma-2B, Gemma-7B. • Pythia: Pythia-70M through Pythia-12B (eight models in total)."
+        },
+        {
+          "id": "S2.SS2.p3",
+          "quote": "We restrict evaluation to the MATH and CodeContests datasets to minimize inference costs, reporting results in Figure 3."
+        }
+      ]
+    },
+    "findings": {
+      "text": "覆盖率随采样数增加而提升，在多个数量级上常呈近似对数线性关系，并可用指数幂律建模 [S1.p7][S3.p2]。在有自动验证器的任务中，覆盖率提升直接转化为性能提升：在 SWE-bench Lite 上，DeepSeek-Coder-V2-Instruct 的解决率从单样本的 15.9% 提升到 250 个样本的 56%，超过单样本 SOTA 的 43% [S1.p8]。较弱模型通过多次采样可超过更强模型的单次尝试表现 [S2.SS1.p2]。在成本方面，固定推理 FLOPs 时最优模型大小因任务而异；在 SWE-bench Lite 上，采样五次较便宜的 DeepSeek 模型比 Claude 或 GPT 单次采样解决更多问题且成本低 3 倍以上 [S1.p9]。但在没有自动验证器的数学文字题中，多数投票和奖励模型在约 100 个样本后趋于饱和，与覆盖率上界的差距随样本数增加而扩大 [S1.p10][S4.SS1.p3]。",
+      "evidence": [
+        {
+          "id": "S1.p7",
+          "quote": "Interestingly, the relationship between $\\log(\\text{coverage})$ and the number of samples often follows an approximate power law (Section 3)."
+        },
+        {
+          "id": "S3.p2",
+          "quote": "1. The relationship between coverage and the number of samples can often be modelled with an exponentiated power law."
+        },
+        {
+          "id": "S1.p8",
+          "quote": "When restricted to a single sample, DeepSeek-Coder-V2-Instruct solves only 15.9% of issues. By simply increasing the number of samples to 250, we increase the fraction of solved issues to 56%, exceeding the state-of-the-art by 13%."
+        },
+        {
+          "id": "S2.SS1.p2",
+          "quote": "However, as the number of samples increases, all three of the weaker models exceed GPT-4o’s single-attempt performance."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "When holding the total number of inference FLOPs constant, we find that on some datasets (e.g. MATH), coverage is maximized with a smaller model and more samples, while on others (e.g CodeContests) it is better to sample fewer times from a larger model."
+        },
+        {
+          "id": "S1.p9",
+          "quote": "When keeping the agent framework (Moatless Tools) constant, sampling five times from the weaker and cheaper DeepSeek model solves more issues than single samples from Claude or GPT while also being over 3x cheaper."
+        },
+        {
+          "id": "S1.p10",
+          "quote": "When solving MATH problems with Llama-3-8B-Instruct, coverage increases from 82.9% with 100 samples to 98.44% with 10,000 samples. However, when using majority voting or reward models to select final answers, the biggest performance increase is only from 40.50% to 41.41% over the same sample range."
+        },
+        {
+          "id": "S4.SS1.p3",
+          "quote": "While success rates initially increase with the number of samples for all three methods, they plateau around 100 samples."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者承认，其实验只探索了最简单的重复采样形式：所有尝试使用完全相同的提示和超参数独立生成 [S5.p2]。作者指出该设置可在多个方向改进，包括通过更高层方法增加解多样性、引入多轮交互利用执行反馈、以及从先前尝试中学习 [S5.p3]。作者还指出，仅用 FLOPs 作为成本度量可能较为粗糙，忽略了系统效率的其他方面 [S2.SS3.p4]。此外，作者发现 SWE-bench Lite 中 11.3% 的问题存在不稳定测试套件，CodeContests 测试用例存在假阴性问题 [S4.SS2.SSS1.p1][S4.SS2.SSS2.p1]。",
+      "evidence": [
+        {
+          "id": "S5.p2",
+          "quote": "In our experiments, we explore only a simple version of repeated sampling where all attempts to a problem are generated independently of one another using the exact same prompt and hyperparameters."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "1. Solution Diversity: We currently rely on a positive sampling temperature as the sole mechanism for creating diversity among samples."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "2. Multi-Turn Interactions: Despite automatic verification tools being available when solving CodeContests and MiniF2F problems, we use only a single-turn setup where models generate a solution without any ability to iterate on it."
+        },
+        {
+          "id": "S5.p3",
+          "quote": "3. Learning From Previous Attempts: Currently, our experiments fully isolate attempts from each other."
+        },
+        {
+          "id": "S2.SS3.p4",
+          "quote": "We note that examining FLOPs alone can be a crude cost metric that ignores other aspects of system efficiency."
+        },
+        {
+          "id": "S4.SS2.SSS1.p1",
+          "quote": "When producing our results on SWE-bench Lite, we identified that 11.3% of problems have flaky test suites that do not produce consistent results when running them on the same candidate solution."
+        },
+        {
+          "id": "S4.SS2.SSS2.p1",
+          "quote": "However, the construction of the CodeContests test suites leads to false negative solutions that are correct but fail the tests."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 13091,
+      "completion_tokens": 2898,
+      "elapsed_s": 10.67
+    }
+  },
+  "verify": {
+    "quote_hits": 32,
+    "quote_total": 32,
+    "quote_rate": 1.0,
+    "inline_hits": 24,
+    "inline_total": 25,
+    "inline_rate": 0.96,
+    "issues": [
+      {
+        "field": "research_question",
+        "id": "S1.p6",
+        "reason": "内嵌 ID 未出现在 evidence 里"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "paper": {
+    "arxiv_id": "2407.21783",
+    "title": "The Llama 3 Herd of Models",
+    "source": "html",
+    "truncated_sections": [
+      "Contributors and Acknowledgements",
+      "Acknowledgements",
+      "9 Related Work"
+    ],
+    "char_count": 239042,
+    "n_sections": 99,
+    "n_paragraphs": 388
+  },
+  "result": {
+    "summary": "本论文介绍了 Llama 3 系列基础模型，包括 8B、70B 和 405B 三个参数规模的多语言语言模型，原生支持多语言、编程、推理和工具使用 [S1.p3]。最大的模型是 405B 参数的稠密 Transformer，上下文窗口最高 128K tokens [S1.p3]。论文进行了广泛的实证评估，发现 Llama 3 在大量任务上达到与 GPT-4 等领先模型相当的质量 [S1.p6]。论文还通过组合式方法将图像、视频和语音能力集成到 Llama 3 中，并观察到该方法在图像、视频和语音识别任务上与最先进水平具有竞争力 [S2.p4][S7.p2][S8.p1]。作者公开释放了 Llama 3 的预训练和后训练版本以及 Llama Guard 3 模型 [S1.p7]。",
+    "research_question": {
+      "text": "论文旨在开发一套高质量的基础模型，原生支持多语言、编程、推理和工具使用 [S1.p3]。作者认为开发高质量基础模型有三个关键杠杆：数据、规模和管理复杂性，并试图在开发过程中优化这三者 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p3",
+          "quote": "The Llama 3 Herd of models natively supports multilinguality, coding, reasoning, and tool usage."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "We believe there are three key levers in the development of high-quality foundation models: data, scale, and managing complexity."
+        }
+      ]
+    },
+    "method": {
+      "text": "Llama 3 采用标准的稠密 Transformer 架构，与 Llama 2 相比仅有少量修改，性能提升主要来自数据质量和多样性以及训练规模的增加 [S3.SS2.p1]。开发分为两个主要阶段：预训练阶段在大规模数据上进行下一词预测，后训练阶段通过监督微调、拒绝采样和直接偏好优化使模型对齐人类反馈 [S1.p2][S1.p5]。多模态能力通过组合式方法添加，包括训练独立的图像和语音编码器，并通过适配器将其集成到预训练语言模型中 [S2.p4][S2.p5]。",
+      "evidence": [
+        {
+          "id": "S3.SS2.p1",
+          "quote": "Llama 3 uses a standard, dense Transformer architecture."
+        },
+        {
+          "id": "S3.SS2.p1",
+          "quote": "our performance gains are primarily driven by improvements in data quality and diversity as well as by increased training scale."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "The development of modern foundation models consists of two main stages: (1) a pre-training stage in which the model is trained at massive scale using straightforward tasks such as next-word prediction or captioning and (2) a post-training stage in which the model is tuned to follow instructions, align with human preferences, and improve specific capabilities (for example, coding and reasoning)."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "we adopt a relatively simple post-training procedure based on supervised finetuning (SFT), rejection sampling (RS), and direct preference optimization (DPO;)"
+        },
+        {
+          "id": "S2.p4",
+          "quote": "We also perform experiments in which we add image, video, and speech capabilities to Llama 3 using a compositional approach."
+        },
+        {
+          "id": "S2.p5",
+          "quote": "We train separate encoders for images and speech."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在大量标准基准上评估了预训练和后训练模型，覆盖常识推理、知识、阅读理解、数学推理、长上下文、代码、对抗评估和聚合评估等类别 [S5.SS1.SSS1.p1]。此外还进行了广泛的人类评估，比较 Llama 3 与竞争模型 [S1.p6]。多模态实验在图像识别、视频识别和语音理解任务上进行了评估 [S7.SS6.p1][S7.SS7.p1][S8.SS4.p1]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.SSS1.p1",
+          "quote": "These evaluations cover eight top-level categories: (1) commonsense reasoning; (2) knowledge; (3) reading comprehension; (4) math, reasoning, and problem solving; (5) long context; (6) code; (7) adversarial evaluations; and (8) aggregate evaluations."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "In addition, we perform extensive human evaluations that compare Llama 3 with competing models."
+        },
+        {
+          "id": "S7.SS6.p1",
+          "quote": "We evaluate the performance of the image understanding capabilities of Llama 3 on a range of tasks spanning natural image understanding, text understanding, charts understanding and multimodal reasoning"
+        },
+        {
+          "id": "S7.SS7.p1",
+          "quote": "We evaluate our video adapter for Llama 3 on three benchmarks"
+        },
+        {
+          "id": "S8.SS4.p1",
+          "quote": "We evaluate the speech understanding capabilities of our speech interface for Llama 3 on three tasks: (1) automatic speech recognition, (2) speech translation, and (3) spoken question answering."
+        }
+      ]
+    },
+    "findings": {
+      "text": "实验评估表明，旗舰模型在多种任务上与 GPT-4 等领先语言模型表现相当，并接近最先进水平 [S1.p6]。较小的模型是同类最佳，优于参数数量相近的替代模型 [S1.p6]。Llama 3 在有用性和无害性之间实现了比前代更好的平衡 [S1.p6]。多模态实验产生的模型能够识别图像和视频内容，并支持通过语音界面交互 [S2.p6]。",
+      "evidence": [
+        {
+          "id": "S1.p6",
+          "quote": "Our experimental evaluation suggests that our flagship model performs on par with leading language models such as GPT-4 across a variety of tasks, and is close to matching the state-of-the-art."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Our smaller models are best-in-class, outperforming alternative models with similar numbers of parameters."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Llama 3 also delivers a much better balance between helpfulness and harmlessness than its predecessor."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "Our multimodal experiments lead to models that can recognize the content of images and videos, and support interaction via a speech interface."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "多模态模型仍在积极开发中，尚未准备好发布 [S1.p8][S2.p6]。作者承认，没有任何测试能保证穷尽所有可能的风险，Llama 3 仍可能生成有害内容，尤其是在英语之外的语言中，或被熟练的对抗性红队人员通过提示工程诱导 [S5.SS4.SSS8.p1]。恶意开发者或对抗性用户可能找到新的越狱方法 [S5.SS4.SSS8.p1]。人类评估可能受标注者个人偏见、背景和偏好的影响，导致结果不一致或不可靠 [S5.SS3.p5]。",
+      "evidence": [
+        {
+          "id": "S1.p8",
+          "quote": "These models are still under active development and not yet ready for release."
+        },
+        {
+          "id": "S2.p6",
+          "quote": "These models are still under development and not yet ready for release."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "no testing can be guaranteed to be exhaustive in identifying every possible risk."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "Llama 3 may still generate harmful content due to training on various datasets, particularly for languages beyond English and when prompt engineered by skilled adversarial red teamers."
+        },
+        {
+          "id": "S5.SS4.SSS8.p1",
+          "quote": "Malicious developers or adversarial users may find new ways to jailbreak our models and use them for various nefarious usecases."
+        },
+        {
+          "id": "S5.SS3.p5",
+          "quote": "human evaluations can still be influenced by personal biases, backgrounds, and preferences of human annotators, which may lead to inconsistent or unreliable results."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 54922,
+      "completion_tokens": 1830,
+      "elapsed_s": 7.77
+    }
+  },
+  "verify": {
+    "quote_hits": 23,
+    "quote_total": 23,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

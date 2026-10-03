@@ -1,0 +1,164 @@
+{
+  "paper": {
+    "arxiv_id": "1706.03762",
+    "title": "Attention Is All You Need",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 27350,
+    "n_sections": 28,
+    "n_paragraphs": 74
+  },
+  "result": {
+    "summary": "本文提出了 Transformer，一种完全基于注意力机制、摒弃循环和卷积的序列转导模型架构 [S1.p4][S7.p1]。作者在 WMT 2014 英德和英法翻译任务上验证该模型，英德任务上 big 模型取得 28.4 BLEU，超过此前最佳结果（含集成模型）2 BLEU 以上 [S6.SS1.p1]；英法任务上 big 模型取得 41.0 BLEU，优于此前所有已发表单模型 [S6.SS1.p2]。作者还将 Transformer 应用于英语成分句法分析，在仅用 WSJ 40K 句训练时也超过了 BerkeleyParser [S6.SS3.p5]。",
+    "research_question": {
+      "text": "论文要解决的问题是：循环模型沿输入输出序列的符号位置逐步计算，这种固有的顺序性阻碍了训练样本内部的并行化，在序列较长时尤为关键 [S1.p2]。作者希望提出一种不依赖循环、完全依靠注意力机制来建立输入输出全局依赖的模型架构 [S1.p4]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples."
+        },
+        {
+          "id": "S1.p4",
+          "quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output."
+        }
+      ]
+    },
+    "method": {
+      "text": "Transformer 沿用编码器-解码器整体结构，编码器和解码器各由 N=6 个相同层堆叠而成 [S3.SS1.SSS0.Px1.p1][S3.SS1.SSS0.Px2.p1]。其核心是缩放点积注意力，即对 query 与所有 key 的点积除以 sqrt(d_k) 后做 softmax 得到权重，再对 value 加权求和 [S3.SS2.SSS1.p1][S3.SS2.SSS1.p3]；模型使用 h=8 个并行注意力头，每个头维度为 64 [S3.SS2.SSS2.p5]。由于模型不含循环和卷积，作者在输入嵌入中加入正弦余弦位置编码以注入位置信息 [S3.SS5.p1][S3.SS5.p3]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.SSS0.Px1.p1",
+          "quote": "The encoder is composed of a stack of $N=6$ identical layers."
+        },
+        {
+          "id": "S3.SS1.SSS0.Px2.p1",
+          "quote": "The decoder is also composed of a stack of $N=6$ identical layers."
+        },
+        {
+          "id": "S3.SS2.SSS1.p1",
+          "quote": "We compute the dot products of the query with all keys, divide each by $\\sqrt{d_{k}}$, and apply a softmax function to obtain the weights on the values."
+        },
+        {
+          "id": "S3.SS2.SSS1.p3",
+          "quote": "$\\mathrm{Attention}(Q,K,V)=\\mathrm{softmax}(\\frac{QK^{T}}{\\sqrt{d_{k}}})V$"
+        },
+        {
+          "id": "S3.SS2.SSS2.p5",
+          "quote": "In this work we employ $h=8$ parallel attention layers, or heads."
+        },
+        {
+          "id": "S3.SS5.p1",
+          "quote": "To this end, we add \"positional encodings\" to the input embeddings at the bottoms of the encoder and decoder stacks."
+        },
+        {
+          "id": "S3.SS5.p3",
+          "quote": "$\\displaystyle PE_{(pos,2i)}=sin(pos/10000^{2i/d_{\\text{model}}})$"
+        }
+      ]
+    },
+    "experiments": {
+      "text": "训练数据为 WMT 2014 英德数据集（约 450 万句对，共享 BPE 词表约 37000 词）和 WMT 2014 英法数据集（3600 万句，32000 word-piece 词表）[S5.SS1.p1]。模型在 8 块 NVIDIA P100 GPU 上训练，base 模型训练 100,000 步约 12 小时，big 模型训练 300,000 步约 3.5 天 [S5.SS2.p1]。此外，作者在 Penn Treebank 的 WSJ 部分（约 40K 训练句）以及约 17M 句的半监督设置下进行了英语成分句法分析实验 [S6.SS3.p2]。",
+      "evidence": [
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "For English-French, we used the significantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "We trained our models on one machine with 8 NVIDIA P100 GPUs."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "We trained the base models for a total of 100,000 steps or 12 hours."
+        },
+        {
+          "id": "S5.SS2.p1",
+          "quote": "The big models were trained for 300,000 steps (3.5 days)."
+        },
+        {
+          "id": "S6.SS3.p2",
+          "quote": "We trained a 4-layer transformer with $d_{model}=1024$ on the Wall Street Journal (WSJ) portion of the Penn Treebank, about 40K training sentences."
+        },
+        {
+          "id": "S6.SS3.p2",
+          "quote": "We also trained it in a semi-supervised setting, using the larger high-confidence and BerkleyParser corpora from with approximately 17M sentences."
+        }
+      ]
+    },
+    "findings": {
+      "text": "在 WMT 2014 英德任务上，big 模型比此前报告的最佳模型（含集成）高出 2.0 BLEU 以上，取得 28.4 的新 state-of-the-art [S6.SS1.p1]；在英法任务上，big 模型取得 41.0 BLEU，优于所有此前已发表的单模型，训练成本不到此前 state-of-the-art 模型的 1/4 [S6.SS1.p2]。在英语成分句法分析上，尽管缺少任务特定调参，模型表现优于此前所有报告模型，仅逊于 Recurrent Neural Network Grammar [S6.SS3.p4]，并且在仅用 WSJ 40K 句训练时也超过了 BerkeleyParser [S6.SS3.p5]。消融实验显示单头注意力比最佳设置差 0.9 BLEU，头数过多质量也会下降 [S6.SS2.p2]，减小注意力 key 维度 d_k 会损害模型质量 [S6.SS2.p3]。",
+      "evidence": [
+        {
+          "id": "S6.SS1.p1",
+          "quote": "outperforms the best previously reported models (including ensembles) by more than $2.0$ BLEU, establishing a new state-of-the-art BLEU score of $28.4$."
+        },
+        {
+          "id": "S6.SS1.p2",
+          "quote": "our big model achieves a BLEU score of $41.0$, outperforming all of the previously published single models, at less than $1/4$ the training cost of the previous state-of-the-art model."
+        },
+        {
+          "id": "S6.SS3.p4",
+          "quote": "yielding better results than all previously reported models with the exception of the Recurrent Neural Network Grammar."
+        },
+        {
+          "id": "S6.SS3.p5",
+          "quote": "the Transformer outperforms the BerkeleyParser even when training only on the WSJ training set of 40K sentences."
+        },
+        {
+          "id": "S6.SS2.p2",
+          "quote": "While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads."
+        },
+        {
+          "id": "S6.SS2.p3",
+          "quote": "we observe that reducing the attention key size $d_{k}$ hurts model quality."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，将注意力加权位置进行平均会降低有效分辨率，他们用多头注意力来抵消这一影响 [S2.p1]。对于涉及很长序列的任务，作者提出可将自注意力限制在大小为 r 的邻域内，但这会把最大路径长度增加到 O(n/r)，并计划在未来工作中进一步研究该做法 [S4.p4]。作者还表示计划将 Transformer 扩展到文本以外的输入输出模态，并研究局部受限注意力机制以高效处理图像、音频和视频等大输入输出 [S7.p3]。",
+      "evidence": [
+        {
+          "id": "S2.p1",
+          "quote": "albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention"
+        },
+        {
+          "id": "S4.p4",
+          "quote": "self-attention could be restricted to considering only a neighborhood of size $r$ in the input sequence centered around the respective output position."
+        },
+        {
+          "id": "S4.p4",
+          "quote": "This would increase the maximum path length to $O(n/r)$. We plan to investigate this approach further in future work."
+        },
+        {
+          "id": "S7.p3",
+          "quote": "We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efficiently handle large inputs and outputs such as images, audio and video."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 7871,
+      "completion_tokens": 2208,
+      "elapsed_s": 8.58
+    }
+  },
+  "verify": {
+    "quote_hits": 26,
+    "quote_total": 26,
+    "quote_rate": 1.0,
+    "inline_hits": 21,
+    "inline_total": 21,
+    "inline_rate": 1.0,
+    "issues": []
+  },
+  "not_mentioned_fields": 0,
+  "category": "standard",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

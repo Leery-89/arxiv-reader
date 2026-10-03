@@ -1,0 +1,255 @@
+{
+  "paper": {
+    "arxiv_id": "2405.21060",
+    "title": "Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 134188,
+    "n_sections": 128,
+    "n_paragraphs": 306
+  },
+  "result": {
+    "summary": "本文提出结构化状态空间对偶（SSD）框架，通过半可分矩阵这一桥梁，在理论上建立了结构化状态空间模型（SSM）与注意力变体之间的紧密联系 [S1.SS0.SSS0.Px1.p1]。作者证明SSM等价于半可分矩阵 [S3.SS3.p3]，并将线性注意力推广为结构化掩码注意力（SMA） [S4.SS3.p2]，进而指出标量恒等结构的SSM与1-半可分SMA互为对偶，同时具有线性与二次两种形式 [S5.SS3.p1]。基于该框架，作者设计了新的SSD算法，通过块分解半可分矩阵，在保持线性复杂度的同时利用矩阵乘法单元 [S6.p4]，并据此构建了Mamba-2架构 [S1.SS0.SSS0.Px3.p3]。实验表明，SSD算法比Mamba的优化选择性扫描实现快2-8倍 [S1.SS0.SSS0.Px2.p1]，Mamba-2在语言建模上具有竞争力 [S1.SS0.SSS0.Px3.p3]。",
+    "research_question": {
+      "text": "论文旨在建立结构化SSM与注意力变体之间的丰富理论联系，从而将原本为Transformer开发的算法与系统优化迁移到SSM上 [S1.p2]。作者指出，SSM的发展与社区改进Transformer的努力（如理论理解和硬件优化）显得脱节，导致SSM比Transformer更难理解和实验，且从算法和系统角度高效训练SSM仍具挑战 [S1.p1]。",
+      "evidence": [
+        {
+          "id": "S1.p2",
+          "quote": "Our main goal is to develop a rich body of theoretical connections between structured SSMs and variants of attention."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "This will allow us to transfer algorithmic and systems optimizations originally developed for Transformers to SSMs"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "the development of SSMs have appeared disjoint from the community’s collective effort to improve Transformers"
+        },
+        {
+          "id": "S1.p1",
+          "quote": "it remains challenging to train SSMs as efficiently as Transformers from both an algorithmic and systems perspective."
+        }
+      ]
+    },
+    "method": {
+      "text": "论文提出结构化状态空间对偶（SSD）框架，通过半可分矩阵这一抽象建立SSM与注意力变体的联系 [S1.SS0.SSS0.Px1.p1]。作者证明SSM等价于半可分矩阵 [S3.SS3.p3]，并将线性注意力推广为结构化掩码注意力（SMA），即用任意具有快速矩阵乘法的结构化矩阵作为掩码 [S4.SS3.p2]。进一步，作者证明标量恒等结构的SSM与1-半可分SMA互为对偶，具有相同的线性与二次形式 [S5.SS3.p1]。基于此，作者提出SSD算法，对半可分矩阵进行块分解，对角块用二次注意力模式计算，非对角块利用低秩结构归约为更小的递归 [S6.p4]。",
+      "evidence": [
+        {
+          "id": "S1.SS0.SSS0.Px1.p1",
+          "quote": "Our framework connecting structured SSMs and variants of attention, which we call structured state space duality (SSD), is made through the abstractions of structured matrices"
+        },
+        {
+          "id": "S3.SS3.p3",
+          "quote": "the sequence transformation operator SSM (Definition 2.2) coincides with the matrix construction operator SSS (Definition 3.2)"
+        },
+        {
+          "id": "S4.SS3.p2",
+          "quote": "All that is necessary for linear attention to be fast is for L to be a structured matrix"
+        },
+        {
+          "id": "S5.SS3.p1",
+          "quote": "state space models with scalar-identity structure on the A matrices, and structured masked attention with 1-semiseparable structure on its L mask – are duals of each other with the exact same linear and quadratic forms."
+        },
+        {
+          "id": "S6.p4",
+          "quote": "we perform a block decomposition of the matrix. The diagonal blocks can be computed using the dual attention mode"
+        },
+        {
+          "id": "S6.p4",
+          "quote": "the off-diagonal blocks can be factored by the rank-structure of semiseparable matrices and reduced to a smaller recurrence."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "论文在合成多查询关联回忆（MQAR）任务上评估Mamba-2，使用比先前更难的任务设置、更长序列和更小模型 [S9.SS1.p2]。在语言建模方面，作者在Pile数据集上训练125M到2.7B参数的模型，遵循GPT3规格和Chinchilla协议 [S9.SS2.p1]，并与Mamba、Transformer++及Pythia等开源模型比较 [S9.SS2.SSS1.p1]。此外，作者对SSD算法与Mamba扫描实现及FlashAttention-2进行速度基准测试 [S9.SS3.p1]，并消融了块设计、多头结构和核近似等架构选择 [S9.SS4.SSS1.p1][S9.SS4.SSS2.p1][S9.SS4.SSS3.p1]。",
+      "evidence": [
+        {
+          "id": "S9.SS1.p2",
+          "quote": "We compare on a challenging version of the MQAR setup from, using a harder task, longer sequences, and smaller models."
+        },
+        {
+          "id": "S9.SS2.p1",
+          "quote": "The model sizes (depth and width) follow GPT3 specifications, from 125m to 2.7B. We use the Pile dataset"
+        },
+        {
+          "id": "S9.SS2.SSS1.p1",
+          "quote": "we compare against both Mamba and its Transformer++ recipe"
+        },
+        {
+          "id": "S9.SS3.p1",
+          "quote": "We benchmark the speed of the SSD algorithm against Mamba’s scan implementation and FlashAttention-2"
+        },
+        {
+          "id": "S9.SS4.SSS1.p1",
+          "quote": "Table 4 ablates these architecture changes to the block"
+        },
+        {
+          "id": "S9.SS4.SSS2.p1",
+          "quote": "Table 5 ablates choices of the multi-head structure for the Mamba-2 architecture."
+        },
+        {
+          "id": "S9.SS4.SSS3.p1",
+          "quote": "We ablate several variants of these suggested by previous works in Figure 12."
+        }
+      ]
+    },
+    "findings": {
+      "text": "SSD算法比Mamba的融合选择性扫描快2-8倍，并在序列长度2K及以上快于FlashAttention-2 [S9.SS3.p1]。在MQAR任务上，Mamba-1表现挣扎，而Mamba-2在所有设置下表现良好，即使在控制状态大小时也显著优于Mamba-1 [S9.SS1.p3]。在语言建模上，Mamba-2在困惑度和实际墙钟时间上帕累托优于Mamba和Transformer++ [S1.SS0.SSS0.Px3.p3]，例如2.7B参数、300B token训练的Mamba-2优于Mamba-2.8B、Pythia-2.8B甚至Pythia-6.9B [S1.SS0.SSS0.Px3.p3]。消融实验表明，并行投影和额外归一化层略微提升性能 [S9.SS4.SSS1.p2]，多值注意力（MVA）头模式表现最佳 [S9.SS4.SSS2.p2]，而核近似方法未超过简单逐点非线性激活 [S9.SS4.SSS3.p4]。",
+      "evidence": [
+        {
+          "id": "S9.SS3.p1",
+          "quote": "it is 2-8 × faster than Mamba’s fused associative scan"
+        },
+        {
+          "id": "S9.SS3.p1",
+          "quote": "SSD is faster than FlashAttention-2 starting at sequence length 2K"
+        },
+        {
+          "id": "S9.SS1.p3",
+          "quote": "While Mamba-1 struggles on this task, Mamba-2 performs well across all settings."
+        },
+        {
+          "id": "S9.SS1.p3",
+          "quote": "it is significantly better than Mamba-1 even when the state sizes are controlled (N=16)"
+        },
+        {
+          "id": "S1.SS0.SSS0.Px3.p3",
+          "quote": "finding that it Pareto dominates Mamba and Transformer++ in both perplexity and wall-clock time."
+        },
+        {
+          "id": "S1.SS0.SSS0.Px3.p3",
+          "quote": "Mamba-2 with 2.7B parameters trained on 300B tokens on the Pile outperforms Mamba-2.8B, Pythia-2.8B and even Pythia-6.9B"
+        },
+        {
+          "id": "S9.SS4.SSS1.p2",
+          "quote": "parallel projections to create (A,B,C,X) saves parameters and performs slightly better than Mamba’s sequential projections"
+        },
+        {
+          "id": "S9.SS4.SSS1.p2",
+          "quote": "the extra normalization layer also slightly improves performance."
+        },
+        {
+          "id": "S9.SS4.SSS2.p2",
+          "quote": "we find a large difference between multi-value and multi-query or multi-key head patterns"
+        },
+        {
+          "id": "S9.SS4.SSS3.p4",
+          "quote": "the kernel approximation methods we tried did not seem to improve over simple pointwise non-linear activation functions"
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者指出，SSD相比先前结构化SSM的主要限制在于状态转移矩阵A_t的表达能力，SSD仅使用标量恒等结构，比对角结构更受限，是以表达能力换取硬件效率 [S10.SS1.SSS0.Px3.p1]。作者假设可能可以改进结构化矩阵算法以推广到一般对角SSM情形 [S10.SS1.SSS0.Px3.p2]。此外，作者强调SSD并不推广标准softmax注意力或任何没有有限特征映射的注意力核变换 [S10.SS3.p8]。在MQAR任务上，作者表示不确定架构中哪个方面是Mamba-2优于Mamba-1的主要因素，这仍是未来工作的问题 [S9.SS1.p3]。",
+      "evidence": [
+        {
+          "id": "S10.SS1.SSS0.Px3.p1",
+          "quote": "the main restriction of SSD is on the expressivity of the state transitions A_t"
+        },
+        {
+          "id": "S10.SS1.SSS0.Px3.p1",
+          "quote": "SSD differs only in a slightly more restrictive form of diagonal A_t, and trades off this expressivity for improved hardware efficiency"
+        },
+        {
+          "id": "S10.SS1.SSS0.Px3.p2",
+          "quote": "We hypothesize that it may be possible to refine our structured matrix algorithms to improve to the general diagonal SSM case as well."
+        },
+        {
+          "id": "S10.SS3.p8",
+          "quote": "SSD does not generalize standard softmax attention, or any other transformation on the attention kernel matrix that does not have a finite feature map ψ."
+        },
+        {
+          "id": "S9.SS1.p3",
+          "quote": "We are not sure which aspect of the architecture is the predominant factor, which remains a question to explore in future work."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 37777,
+      "completion_tokens": 2544,
+      "elapsed_s": 10.25
+    }
+  },
+  "verify": {
+    "quote_hits": 21,
+    "quote_total": 32,
+    "quote_rate": 0.656,
+    "inline_hits": 25,
+    "inline_total": 25,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S3.SS3.p3",
+        "reason": "quote 不在该段落里",
+        "quote": "the sequence transformation operator SSM (Definition 2.2) coincides with the mat"
+      },
+      {
+        "field": "method",
+        "id": "S4.SS3.p2",
+        "reason": "quote 不在该段落里",
+        "quote": "All that is necessary for linear attention to be fast is for L to be a structure"
+      },
+      {
+        "field": "method",
+        "id": "S5.SS3.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "state space models with scalar-identity structure on the A matrices, and structu"
+      },
+      {
+        "field": "experiments",
+        "id": "S9.SS4.SSS2.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "Table 5 ablates choices of the multi-head structure for the Mamba-2 architecture"
+      },
+      {
+        "field": "findings",
+        "id": "S9.SS3.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "it is 2-8 × faster than Mamba’s fused associative scan"
+      },
+      {
+        "field": "findings",
+        "id": "S9.SS3.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "SSD is faster than FlashAttention-2 starting at sequence length 2K"
+      },
+      {
+        "field": "findings",
+        "id": "S9.SS1.p3",
+        "reason": "quote 不在该段落里",
+        "quote": "it is significantly better than Mamba-1 even when the state sizes are controlled"
+      },
+      {
+        "field": "findings",
+        "id": "S9.SS4.SSS1.p2",
+        "reason": "quote 不在该段落里",
+        "quote": "parallel projections to create (A,B,C,X) saves parameters and performs slightly "
+      },
+      {
+        "field": "limitations",
+        "id": "S10.SS1.SSS0.Px3.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "the main restriction of SSD is on the expressivity of the state transitions A_t"
+      },
+      {
+        "field": "limitations",
+        "id": "S10.SS1.SSS0.Px3.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "SSD differs only in a slightly more restrictive form of diagonal A_t, and trades"
+      },
+      {
+        "field": "limitations",
+        "id": "S10.SS3.p8",
+        "reason": "quote 不在该段落里",
+        "quote": "SSD does not generalize standard softmax attention, or any other transformation "
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "odd",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}

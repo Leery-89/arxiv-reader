@@ -1,0 +1,211 @@
+{
+  "paper": {
+    "arxiv_id": "2412.19437",
+    "title": "DeepSeek-V3 Technical Report",
+    "source": "html",
+    "truncated_sections": [],
+    "char_count": 97112,
+    "n_sections": 89,
+    "n_paragraphs": 160
+  },
+  "result": {
+    "summary": "本文介绍了 DeepSeek-V3，一个总参数 671B、每 token 激活 37B 的 MoE 语言模型，采用 MLA 与 DeepSeekMoE 架构，并引入无辅助损失的负载均衡策略和多 token 预测训练目标 [abstract][S1.p2]。模型在 14.8T token 上预训练，随后进行 SFT 与 RL 后训练，并蒸馏 DeepSeek-R1 的推理能力 [abstract][S1.p4]。综合评测显示其性能超过其他开源模型，并可与领先闭源模型相比 [abstract][S1.p5]。其完整训练仅需 2.788M H800 GPU 小时，且训练过程稳定，未出现不可恢复的 loss spike 或回滚 [abstract]。",
+    "research_question": {
+      "text": "论文旨在进一步推动开源模型能力边界，通过扩大模型规模并引入 DeepSeek-V3 来缩小与闭源模型的差距 [S1.p1]。同时，作者希望在保持强模型性能的同时实现经济成本，因此继续采用 MLA 和 DeepSeekMoE，并额外引入无辅助损失负载均衡与多 token 预测目标 [S1.p2]。",
+      "evidence": [
+        {
+          "id": "S1.p1",
+          "quote": "To further push the boundaries of open-source model capabilities, we scale up our models and introduce DeepSeek-V3, a large Mixture-of-Experts (MoE) model with 671B parameters, of which 37B are activated for each token."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "With a forward-looking perspective, we consistently strive for strong model performance and economical costs."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Firstly, DeepSeek-V3 pioneers an auxiliary-loss-free strategy for load balancing, with the aim of minimizing the adverse impact on model performance that arises from the effort to encourage load balancing."
+        },
+        {
+          "id": "S1.p2",
+          "quote": "Secondly, DeepSeek-V3 employs a multi-token prediction training objective, which we have observed to enhance the overall performance on evaluation benchmarks."
+        }
+      ]
+    },
+    "method": {
+      "text": "DeepSeek-V3 的基本架构仍处于 Transformer 框架内，采用 MLA 进行高效推理、DeepSeekMoE 进行经济训练，并额外引入无辅助损失负载均衡策略 [S2.SS1.p1]。MLA 的核心是对注意力 key 和 value 进行低秩联合压缩，以减少推理时的 KV cache [S2.SS1.SSS1.p1]。DeepSeekMoE 使用更细粒度专家并隔离部分共享专家，DeepSeek-V3 使用 sigmoid 计算亲和度并对选中的亲和度分数归一化 [S2.SS1.SSS2.Px1.p1]。此外，模型设置多 token 预测目标，使用 D 个顺序模块预测额外 token，并保持每个预测深度的完整因果链 [S2.SS2.p1][S2.SS2.SSS0.Px1.p1]。",
+      "evidence": [
+        {
+          "id": "S2.SS1.p1",
+          "quote": "The basic architecture of DeepSeek-V3 is still within the Transformer framework."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "For efficient inference and economical training, DeepSeek-V3 also adopts MLA and DeepSeekMoE, which have been thoroughly validated by DeepSeek-V2."
+        },
+        {
+          "id": "S2.SS1.p1",
+          "quote": "Compared with DeepSeek-V2, an exception is that we additionally introduce an auxiliary-loss-free load balancing strategy for DeepSeekMoE to mitigate the performance degradation induced by the effort to ensure load balance."
+        },
+        {
+          "id": "S2.SS1.SSS1.p1",
+          "quote": "The core of MLA is the low-rank joint compression for attention keys and values to reduce Key-Value (KV) cache during inference"
+        },
+        {
+          "id": "S2.SS1.SSS2.Px1.p1",
+          "quote": "Compared with traditional MoE architectures like GShard, DeepSeekMoE uses finer-grained experts and isolates some experts as shared ones."
+        },
+        {
+          "id": "S2.SS1.SSS2.Px1.p1",
+          "quote": "Slightly different from DeepSeek-V2, DeepSeek-V3 uses the sigmoid function to compute the affinity scores, and applies a normalization among all selected affinity scores to produce the gating values."
+        },
+        {
+          "id": "S2.SS2.p1",
+          "quote": "Inspired by, we investigate and set a Multi-Token Prediction (MTP) objective for DeepSeek-V3, which extends the prediction scope to multiple future tokens at each position."
+        },
+        {
+          "id": "S2.SS2.SSS0.Px1.p1",
+          "quote": "To be specific, our MTP implementation uses $D$ sequential modules to predict $D$ additional tokens."
+        },
+        {
+          "id": "S2.SS2.SSS0.Px1.p1",
+          "quote": "Different from, which parallelly predicts $D$ additional tokens using independent output heads, we sequentially predict additional tokens and keep the complete causal chain at each prediction depth."
+        }
+      ]
+    },
+    "experiments": {
+      "text": "DeepSeek-V3 在配备 2048 块 NVIDIA H800 GPU 的集群上训练，节点内通过 NVLink/NVSwitch 连接，跨节点使用 InfiniBand 互连 [S3.SS1.p1]。预训练使用 14.8T 高质量多样 token，最大序列长度 4K，随后通过两阶段 YaRN 将上下文从 4K 扩展到 32K 再到 128K [S4.SS2.SSS0.Px2.p1][S4.SS3.p1]。评测覆盖多学科选择题、语言理解与推理、闭卷问答、阅读理解、数学、代码等基准，并采用困惑度、生成式或语言建模评估 [S4.SS4.SSS1.p2][S4.SS4.SSS1.p3][S4.SS4.SSS1.p4][S4.SS4.SSS1.p5][S4.SS4.SSS1.p9][S4.SS4.SSS1.p10][S4.SS4.SSS1.p12]。后训练阶段使用 1.5M 指令微调实例，并采用 GRPO 进行强化学习 [S5.SS1.p1][S5.SS2.SSS2.p1]。",
+      "evidence": [
+        {
+          "id": "S3.SS1.p1",
+          "quote": "DeepSeek-V3 is trained on a cluster equipped with 2048 NVIDIA H800 GPUs."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "Each node in the H800 cluster contains 8 GPUs connected by NVLink and NVSwitch within nodes."
+        },
+        {
+          "id": "S3.SS1.p1",
+          "quote": "Across different nodes, InfiniBand (IB) interconnects are utilized to facilitate communications."
+        },
+        {
+          "id": "S4.SS2.SSS0.Px2.p1",
+          "quote": "We set the maximum sequence length to 4K during pre-training, and pre-train DeepSeek-V3 on 14.8T tokens."
+        },
+        {
+          "id": "S4.SS3.p1",
+          "quote": "After the pre-training stage, we apply YaRN for context extension and perform two additional training phases, each comprising 1000 steps, to progressively expand the context window from 4K to 32K and then to 128K."
+        },
+        {
+          "id": "S4.SS4.SSS1.p2",
+          "quote": "Multi-subject multiple-choice datasets include MMLU, MMLU-Redux, MMLU-Pro, MMMLU, C-Eval, and CMMLU."
+        },
+        {
+          "id": "S4.SS4.SSS1.p3",
+          "quote": "Language understanding and reasoning datasets include HellaSwag, PIQA, ARC, and BigBench Hard (BBH)."
+        },
+        {
+          "id": "S4.SS4.SSS1.p4",
+          "quote": "Closed-book question answering datasets include TriviaQA and NaturalQuestions."
+        },
+        {
+          "id": "S4.SS4.SSS1.p5",
+          "quote": "Reading comprehension datasets include RACE, DROP, C3, and CMRC."
+        },
+        {
+          "id": "S4.SS4.SSS1.p9",
+          "quote": "Math datasets include GSM8K, MATH, MGSM, and CMath."
+        },
+        {
+          "id": "S4.SS4.SSS1.p10",
+          "quote": "Code datasets include HumanEval, LiveCodeBench-Base (0801-1101), MBPP, and CRUXEval."
+        },
+        {
+          "id": "S4.SS4.SSS1.p12",
+          "quote": "Following our previous work, we adopt perplexity-based evaluation for datasets including HellaSwag, PIQA, WinoGrande, RACE-Middle, RACE-High, MMLU, MMLU-Redux, MMLU-Pro, MMMLU, ARC-Easy, ARC-Challenge, C-Eval, CMMLU, C3, and CCPM, and adopt generation-based evaluation for TriviaQA, NaturalQuestions, DROP, MATH, GSM8K, MGSM, HumanEval, MBPP, LiveCodeBench-Base, CRUXEval, BBH, AGIEval, CLUEWSC, CMRC, and CMath."
+        },
+        {
+          "id": "S5.SS1.p1",
+          "quote": "We curate our instruction-tuning datasets to include 1.5M instances spanning multiple domains, with each domain employing distinct data creation methods tailored to its specific requirements."
+        },
+        {
+          "id": "S5.SS2.SSS2.p1",
+          "quote": "Similar to DeepSeek-V2, we adopt Group Relative Policy Optimization (GRPO), which foregoes the critic model that is typically with the same size as the policy model, and estimates the baseline from group scores instead."
+        }
+      ]
+    },
+    "findings": {
+      "text": "综合评测显示 DeepSeek-V3 优于其他开源模型，并达到与领先闭源模型相当的性能 [abstract]。其基础模型在多数基准上取得最佳表现，尤其在数学和代码任务上 [S4.T3]。聊天版本在标准与开放式基准上超过其他开源模型，并与 GPT-4o 和 Claude-3.5-Sonnet 等领先闭源模型性能相当 [S1.p5]。训练成本方面，完整训练仅需 2.788M H800 GPU 小时，假设 H800 租金为每 GPU 小时 2 美元，总训练成本为 5.576M 美元 [S1.p6]。训练过程稳定，未经历不可恢复的 loss spike 或回滚 [abstract]。",
+      "evidence": [
+        {
+          "id": "abstract",
+          "quote": "Comprehensive evaluations reveal that DeepSeek-V3 outperforms other open-source models and achieves performance comparable to leading closed-source models."
+        },
+        {
+          "id": "S4.T3",
+          "quote": "DeepSeek-V3-Base achieves the best performance on most benchmarks, especially on math and code tasks."
+        },
+        {
+          "id": "S1.p5",
+          "quote": "Its chat version also outperforms other open-source models and achieves performance comparable to leading closed-source models, including GPT-4o and Claude-3.5-Sonnet, on a series of standard and open-ended benchmarks."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "DeepSeek-V3 costs only 2.788M GPU hours for its full training."
+        },
+        {
+          "id": "S1.p6",
+          "quote": "Assuming the rental price of the H800 GPU is $2 per GPU hour, our total training costs amount to only $5.576M."
+        },
+        {
+          "id": "abstract",
+          "quote": "Throughout the entire training process, we did not experience any irrecoverable loss spikes or perform any rollbacks."
+        }
+      ]
+    },
+    "limitations": {
+      "text": "作者明确承认 DeepSeek-V3 在部署方面存在局限：为确保高效推理，推荐部署单元相对较大，可能给小团队带来负担 [S6.p2]。其次，尽管部署策略已实现超过 DeepSeek-V2 两倍的端到端生成速度，仍有进一步提升的潜力 [S6.p2]。作者表示这些局限有望随更先进硬件的发展自然解决 [S6.p2]。",
+      "evidence": [
+        {
+          "id": "S6.p2",
+          "quote": "Firstly, to ensure efficient inference, the recommended deployment unit for DeepSeek-V3 is relatively large, which might pose a burden for small-sized teams."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Secondly, although our deployment strategy for DeepSeek-V3 has achieved an end-to-end generation speed of more than two times that of DeepSeek-V2, there still remains potential for further enhancement."
+        },
+        {
+          "id": "S6.p2",
+          "quote": "Fortunately, these limitations are expected to be naturally addressed with the development of more advanced hardware."
+        }
+      ]
+    },
+    "_meta": {
+      "model": "deepseek-chat",
+      "prompt_tokens": 24946,
+      "completion_tokens": 2895,
+      "elapsed_s": 10.64
+    }
+  },
+  "verify": {
+    "quote_hits": 35,
+    "quote_total": 36,
+    "quote_rate": 0.972,
+    "inline_hits": 27,
+    "inline_total": 27,
+    "inline_rate": 1.0,
+    "issues": [
+      {
+        "field": "method",
+        "id": "S2.SS2.SSS0.Px1.p1",
+        "reason": "quote 不在该段落里",
+        "quote": "Different from, which parallelly predicts $D$ additional tokens using independen"
+      }
+    ]
+  },
+  "not_mentioned_fields": 0,
+  "category": "long",
+  "prompt": {
+    "name": "v3",
+    "hash": "1b5f82fa"
+  }
+}
