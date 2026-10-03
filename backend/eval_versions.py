@@ -41,8 +41,12 @@ def results_dir(tag: str) -> Path:
     return d
 
 
-def build_units(tag: str):
-    """返回 (units, claim_stats, machine)。"""
+def build_units(tag: str, merge_ids: bool = False):
+    """返回 (units, claim_stats, machine)。
+
+    merge_ids（D20）：引了多个 ID 的论断不再按 ID 拆开判，而是把所有 quote 合成一个单元，
+    整体判整句。按 ID 拆开时，每条 quote 只撑住综合论断的一部分，几乎必然判 P——
+    v3 里多 ID 论断只有 7% 判 Y，单 ID 是 87%。拆开判等于惩罚"综合多段"。"""
     rdir = results_dir(tag)
     units, stats, machine = [], Counter(), Counter()
     infer_by = Counter()
@@ -77,6 +81,12 @@ def build_units(tag: str):
                 continue
             stats["带引用论断"] += 1
             key = f"{pid}|{c.field}|{c.idx}"
+            if merge_ids and len(c.ids) > 1:
+                qs = [f"[{eid}] {q}" for eid in c.ids for q in c.quotes.get(eid, []) if q.strip()]
+                units.append({"paper_id": pid, "category": cat, "field": c.field, "idx": c.idx,
+                              "claim_key": key, "evidence_id": "+".join(c.ids), "quote": "\n".join(qs),
+                              "claim": c.raw, "label": "", "notes": "", "no_quote": "" if qs else "1"})
+                continue
             for eid in c.ids:
                 qs = [q for q in c.quotes.get(eid, []) if q.strip()]
                 units.append({"paper_id": pid, "category": cat, "field": c.field, "idx": c.idx,
@@ -85,11 +95,12 @@ def build_units(tag: str):
     return units, stats, machine, infer_by
 
 
-def judge_units(tag: str, units: list[dict], models: list[str], force: bool, workers: int) -> list[str]:
+def judge_units(tag: str, units: list[dict], models: list[str], force: bool, workers: int,
+                suffix: str = "") -> list[str]:
     """返回每个单元的最终标签（与 units 同序）。"""
     judge.RESULTS_DIR = results_dir(tag)          # 兄弟 quote 从这个版本的结果里取
     judge._results_cache.clear()
-    path = EVAL_DIR / f"units_{tag}.csv"
+    path = EVAL_DIR / f"units_{tag}{suffix}.csv"
     with path.open("w", newline="", encoding="utf-8-sig") as f:
         w = csv.DictWriter(f, fieldnames=UNIT_COLS)
         w.writeheader()
@@ -117,14 +128,18 @@ def judge_units(tag: str, units: list[dict], models: list[str], force: bool, wor
 
 
 def claim_level(units, labels):
+    """返回 [(类别, 论断标签, 是否多 ID)]。"""
     by = defaultdict(list)
+    multi = defaultdict(bool)
     for u, l in zip(units, labels):
+        multi[u["claim_key"]] |= "+" in u["evidence_id"]
         if l:
             by[u["claim_key"]].append((u["category"], l))
     out = []
     for key, ls in by.items():
         labs = {l for _, l in ls}
-        out.append((ls[0][0], "Y" if labs == {"Y"} else "N" if labs == {"N"} else "P"))
+        out.append((ls[0][0], "Y" if labs == {"Y"} else "N" if labs == {"N"} else "P",
+                    multi[key] or len(ls) > 1))
     return out
 
 
@@ -140,6 +155,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="只数判断单元，不调模型")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--merge-ids", action="store_true",
+                    help="多 ID 论断合成一个单元整体判（D20）；结果存 units_<tag>_m*.csv，不覆盖按 ID 判的")
     args = ap.parse_args()
 
     report = {}
@@ -147,18 +164,19 @@ def main():
         if not results_dir(tag).exists():
             print(f"[{tag}] 没有结果目录 {results_dir(tag).name}/，先跑 PROMPT={tag} python eval_run.py --tag {tag}")
             continue
-        units, stats, machine, infer_by = build_units(tag)
+        sfx = "_m" if args.merge_ids else ""
+        units, stats, machine, infer_by = build_units(tag, args.merge_ids)
         nq = sum(1 for u in units if u["no_quote"])
         print(f"[{tag}] 带引用论断 {stats['带引用论断']} 句 → 判断单元 {len(units)} 个"
               f"（其中引了 ID 却无 quote {nq} 个，直接记 N）；推断 {stats['推断']} 句")
         if args.dry_run:
             print(f"      每个评审员约 {len(units) - nq} 次调用（缓存命中的不再计费）")
             continue
-        labels = judge_units(tag, units, args.judges, args.force, args.workers)
+        labels = judge_units(tag, units, args.judges, args.force, args.workers, sfx)
         cl = claim_level(units, labels)
 
         # 每个单元的最终结果落盘，方便抽查
-        with (EVAL_DIR / f"units_{tag}_judged.csv").open("w", newline="", encoding="utf-8-sig") as f:
+        with (EVAL_DIR / f"units_{tag}{sfx}_judged.csv").open("w", newline="", encoding="utf-8-sig") as f:
             w = csv.DictWriter(f, fieldnames=UNIT_COLS + ["final"])
             w.writeheader()
             for u, l in zip(units, labels):
@@ -166,9 +184,11 @@ def main():
 
         report[tag] = {"stats": stats, "machine": machine, "infer_by": infer_by,
                        "id": Counter(l for l in labels if l),
-                       "claim": Counter(l for _, l in cl),
-                       "claim_by_cat": {cat: Counter(l for c, l in cl if c == cat)
-                                        for cat in sorted({c for c, _ in cl})}}
+                       "claim": Counter(l for _, l, _ in cl),
+                       "single": Counter(l for _, l, m in cl if not m),
+                       "multi": Counter(l for _, l, m in cl if m),
+                       "claim_by_cat": {cat: Counter(l for c, l, _ in cl if c == cat)
+                                        for cat in sorted({c for c, _, _ in cl})}}
 
     if not report:
         return
@@ -183,6 +203,9 @@ def main():
     row("论断级 Y 完全支撑", lambda r: pct(r["claim"], "Y"))
     row("论断级 P 部分支撑", lambda r: pct(r["claim"], "P"))
     row("论断级 N 不支撑", lambda r: pct(r["claim"], "N"))
+    row("多 ID 论断占比", lambda r: f"{sum(r['multi'].values()) / max(1, sum(r['claim'].values())) * 100:5.1f}%")
+    row("  单 ID 论断 Y", lambda r: pct(r["single"], "Y"))
+    row("  多 ID 论断 Y", lambda r: pct(r["multi"], "Y"))
     row("ID 级 Y", lambda r: pct(r["id"], "Y"))
     row("ID 级 N", lambda r: pct(r["id"], "N"))
     row("推断句数", lambda r: str(r["stats"]["推断"]))

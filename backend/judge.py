@@ -179,9 +179,13 @@ def judge_one(client: OpenAI, model: str, r: dict) -> dict:
             f"字段: {r['field']}\n\n"
             f"claim:\n{r['claim']}\n\n"
             f"quote:\n{r['quote']}")
-    sib = siblings(r)
-    if sib:
-        user += "\n\n同一 ID 下的其他 quote（与上面这条合起来判）：\n" + "\n".join(f"- {q}" for q in sib)
+    if "+" in r["evidence_id"]:
+        # 多 ID 合并判（D20）：quote 里是论断引用的全部段落，整体对整句 claim 负责
+        user += "\n\n（上面是这句 claim 引用的全部段落的 quote，合在一起判断它们整体对整句 claim 的支撑；细则 1 不适用。）"
+    else:
+        sib = siblings(r)
+        if sib:
+            user += "\n\n同一 ID 下的其他 quote（与上面这条合起来判）：\n" + "\n".join(f"- {q}" for q in sib)
     msgs = [{"role": "system", "content": JUDGE_PROMPT},
             {"role": "user", "content": user}]
     resp = _create(client, model, msgs)
