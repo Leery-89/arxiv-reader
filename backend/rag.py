@@ -6,7 +6,10 @@ D5 选了长上下文：整篇论文送进模型。这里做对照组——只�
     块：     D4 的原生段落就是块（[S3.p1] 一段一块），摘要也是一块。不另切，溯源 ID 不变。
     检索：   两种，都是每个字段一条英文查询 + 论文标题：
              bm25  纯 Python，不调 API、可复现（关键词检索的基线）
-             dense OpenAI 向量检索（语义检索）；向量缓存到 eval/emb_cache.jsonl，重跑不花钱
+             dense   OpenAI 向量检索（语义检索），查询用同一套关键词串
+             dense_q 向量检索，查询换成自然语言问句（向量模型更擅长这种）
+             hybrid  BM25 + dense_q 用倒数排名融合（RRF）合并
+             向量缓存到 eval/emb_cache.jsonl，重跑不花钱
     选块：   五个字段轮流各取下一个最相关的块，直到字数用完预算（占全文的比例）。
              轮流取保证每个字段都分到证据，不会被"结果"类段落占满。
     输出：   一个只含选中段落的 Paper，章节和顺序保持原文，再交给 paper_to_text；
@@ -35,6 +38,16 @@ FIELD_QUERIES = {
     "experiments": "experiment dataset benchmark setup evaluate evaluation baseline training implementation",
     "findings": "result outperform improve achieve performance accuracy show demonstrate gain",
     "limitations": "limitation future work however fail cannot restrict drawback assume leave",
+}
+
+# 向量检索用的自然语言问句（dense_q / hybrid）。关键词串是给 BM25 写的，
+# 向量模型更擅长"问题 ↔ 答案"式的语义匹配，所以单独写一套。
+FIELD_QUESTIONS = {
+    "research_question": "What problem does this paper address, and why is it important?",
+    "method": "What method or approach do the authors propose, and how does it work?",
+    "experiments": "What datasets, benchmarks and experimental setup are used to evaluate the method?",
+    "findings": "What are the main results, and how do they compare with the baselines?",
+    "limitations": "What limitations, failure cases or future work do the authors acknowledge?",
 }
 
 _STOP = set("""a an the of to in on for and or with by from as at is are was were be been this that these
@@ -84,6 +97,7 @@ def chunks(paper: Paper) -> list[tuple[str, str]]:
     return out
 
 
+METHODS = ("bm25", "dense", "dense_q", "hybrid")
 EMBED_MODEL = os.getenv("RAG_EMBED_MODEL", "text-embedding-3-small")
 EMB_CACHE = Path(__file__).parent / "eval" / "emb_cache.jsonl"
 _emb: dict[str, list[float]] | None = None
@@ -128,11 +142,24 @@ def _field_scores(paper: Paper, cs: list[tuple[str, str]], method: str) -> dict[
         bm = BM25([tokenize(t) for _, t in cs])
         title = tokenize(paper.title)
         return {f: bm.scores(tokenize(q) + title) for f, q in FIELD_QUERIES.items()}
-    if method == "dense":
+    if method in ("dense", "dense_q"):
+        queries = FIELD_QUERIES if method == "dense" else FIELD_QUESTIONS
         vecs = embed([t for _, t in cs])
-        qvecs = embed([f"{paper.title}. {q}" for q in FIELD_QUERIES.values()])
-        return {f: [_cos(qv, v) for v in vecs] for f, qv in zip(FIELD_QUERIES, qvecs)}
-    raise ValueError(f"未知的检索方式：{method}（bm25 / dense）")
+        qvecs = embed([f"{paper.title}. {q}" for q in queries.values()])
+        return {f: [_cos(qv, v) for v in vecs] for f, qv in zip(queries, qvecs)}
+    if method == "hybrid":
+        # 倒数排名融合（RRF）：两路各自排名，分数 = Σ 1/(60 + 名次)。
+        # 不用把 BM25 分数和余弦相似度换算到同一尺度，是混合检索最常用的做法。
+        a, b = _field_scores(paper, cs, "bm25"), _field_scores(paper, cs, "dense_q")
+        out = {}
+        for f in FIELD_QUERIES:
+            fused = [0.0] * len(cs)
+            for sc in (a[f], b[f]):
+                for rank, i in enumerate(sorted(range(len(cs)), key=lambda i: -sc[i])):
+                    fused[i] += 1 / (60 + rank)
+            out[f] = fused
+        return out
+    raise ValueError(f"未知的检索方式：{method}（{' / '.join(METHODS)}）")
 
 
 def retrieve(paper: Paper, budget: float, method: str = "bm25") -> set[str]:
@@ -178,16 +205,16 @@ def rag_text(paper: Paper, budget: float, method: str = "bm25") -> str:
 
 
 def from_env() -> tuple[str, float] | None:
-    """RAG=bm25 / dense 时返回 (检索方式, 预算比例)，否则 None（= 长上下文）。"""
+    """RAG=bm25 / dense / dense_q / hybrid 时返回 (检索方式, 预算比例)，否则 None（= 长上下文）。"""
     method = os.getenv("RAG", "").strip().lower()
     if not method:
         return None
-    if method not in ("bm25", "dense"):
-        raise ValueError(f"RAG={method} 不认识，只能是 bm25 或 dense")
+    if method not in METHODS:
+        raise ValueError(f"RAG={method} 不认识，只能是 {' / '.join(METHODS)}")
     return method, float(os.getenv("RAG_BUDGET", "0.25"))
 
 
-def recall_report(budgets=(0.1, 0.25, 0.5), methods=("bm25", "dense")):
+def recall_report(budgets=(0.1, 0.25, 0.5), methods=METHODS):
     """检索召回：长上下文 v3 引用过的段落，有多少能被检索到。
     这是检索端的上限指标——检索不到的段落，RAG 的生成端无论如何引不到。
     （长上下文引的段落不是唯一正确答案，所以这是近似指标。）"""
@@ -231,7 +258,7 @@ if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--recall", action="store_true")
-    ap.add_argument("--methods", nargs="+", default=["bm25", "dense"])
+    ap.add_argument("--methods", nargs="+", default=list(METHODS))
     args = ap.parse_args()
     if args.recall:
         recall_report(methods=tuple(args.methods))
