@@ -37,6 +37,60 @@ def test_citations_removed():
     assert pt('as shown <cite>[20]</cite>.') == "as shown."
 
 
+# LaTeXML 的表格结构（照 arxiv.org/html/1706.03762 的 Table 2 简化）
+TABLE_HTML = """
+<article><h1 class="ltx_title_document">T</h1>
+<section class="ltx_section" id="S6"><h2>6 Results</h2>
+<div class="ltx_para" id="S6.p1"><p>See the table.</p></div>
+<figure class="ltx_table" id="S6.T2">
+  <figcaption>Table 2: BLEU scores.</figcaption>
+  <table class="ltx_tabular"><tbody>
+    <tr class="ltx_tr"><th class="ltx_th">Model</th><th class="ltx_th">EN-DE</th></tr>
+    <tr class="ltx_tr"><td class="ltx_td">Transformer (big)</td><td class="ltx_td"><math alttext="28.4">x</math></td></tr>
+    <tr class="ltx_tr"><td class="ltx_td">nested <table><tr><td>inner</td></tr></table></td><td class="ltx_td">1.0</td></tr>
+  </tbody></table>
+</figure>
+</section></article>"""
+
+
+def test_table_rows_kept_with_caption():
+    from fetcher import parse_html
+    paras = {p.id: p for s in parse_html(TABLE_HTML, "x").sections for p in s.paragraphs}
+    t = paras["S6.T2"]
+    assert t.kind == "caption"
+    lines = t.text.split("\n")
+    assert lines[0] == "Table 2: BLEU scores."
+    assert lines[1] == "| Model | EN-DE |"
+    assert lines[2] == "| Transformer (big) | $28.4$ |"
+    assert lines[3] == "| nested inner | 1.0 |"          # 嵌套表格随外层单元格取文字，不另起行
+    assert len(lines) == 4
+
+
+def test_big_table_truncated():
+    import fetcher
+    rows = "".join(f"<tr><td>row{i}</td><td>{i}</td></tr>" for i in range(100))
+    html = f'<figure class="ltx_table"><table>{rows}</table></figure>'
+    text = fetcher.table_text(BeautifulSoup(html, "html.parser").figure)
+    assert text.count("\n") == fetcher.TABLE_MAX_ROWS            # 40 行 + 一行截断说明
+    assert text.endswith("（表格共 100 行，只保留前 40 行）")
+
+
+def test_table_spans_aligned():
+    """colspan/rowspan 展开后每行列数对齐；整列空的分隔列删掉；双重转义的 &amp;amp; 解开（D22 修正）"""
+    import fetcher
+    html = """<figure class="ltx_table"><table>
+      <tr><th rowspan="2">Model</th><th colspan="2">BLEU</th><td></td><th colspan="2">Cost</th></tr>
+      <tr><th>EN-DE</th><th>EN-FR</th><td></td><th>EN-DE</th><th>EN-FR</th></tr>
+      <tr><td>A &amp;amp; B</td><td>28.4</td><td>41.8</td><td></td><td>1</td><td>2</td></tr>
+    </table></figure>"""
+    lines = fetcher.table_text(BeautifulSoup(html, "html.parser").figure).split("\n")
+    assert lines == [
+        "| Model | BLEU |  | Cost |  |",
+        "|  | EN-DE | EN-FR | EN-DE | EN-FR |",
+        "| A & B | 28.4 | 41.8 | 1 | 2 |",
+    ]
+
+
 if __name__ == "__main__":
     tests = [(n, f) for n, f in sorted(globals().items()) if n.startswith("test_")]
     failed = 0

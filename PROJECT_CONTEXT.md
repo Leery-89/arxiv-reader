@@ -84,6 +84,7 @@ AI+科学类变化最大：Y 55% → 75%、N 15% → 0（每 ID 平均引 1.47 �
 - [x] 评测口径：新增 `--merge-ids` 合并判多 ID 论断；D19 主数字更新为 v2 63.4% → v3 81.4%（GPT 39.6% → 54.5%）
 - [x] 侧栏 KaTeX 公式渲染（插件 0.3.2），评测集引文公式 523/531 能渲染
 - [x] **D21 · PDF 后备**：没有 HTML 的论文从 PDF 解析正文（`pdf.py`，PyMuPDF 规则）。31 篇对照 HTML：正文召回 83.6%、数字召回 98.0%；无 HTML 的 5 篇全部捞回正文。线上 Railway 设 `PDF_FALLBACK=1` 打开；`PARSER_VERSION=3`；插件 0.3.3（PDF 来源跳到页）
+- [x] **D22 · HTML 表格进输入**：`| a | b |` 行文本接在图注后，ID 用表格锚点；`PARSER_VERSION=4`。PDF 的 `find_tables()` 把图当表格，不用
 - [ ] 公式 / 表格：本地用 Docling 或 MinerU 跑 `pdf_bench.py` 对比，再决定是否把公式区、表格区交给视觉模型
 - [ ] `eval_versions.py` 两个评审员时退化成第一个评审员，改成分开报或要求奇数个
 

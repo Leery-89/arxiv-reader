@@ -15,6 +15,7 @@
 每写完一个函数就单独测一下，别攒到最后一起调。
 """
 
+from html import unescape
 import os
 import re
 import requests
@@ -123,9 +124,93 @@ def para_text(div) -> str:
         c.decompose()
 
     text = div.get_text(" ", strip=True)
+    text = unescape(text)          # LaTeXML 偶尔双重转义（"&amp;amp;"），get_text 只解一层
     text = re.sub(r"\s+([.,;:)])", r"\1", text) 
     text = re.sub(r"\s+", " ", text)
     return text
+
+
+TABLE_MAX_ROWS = 40
+TABLE_MAX_CHARS = 4000
+
+
+def _span(td, attr: str) -> int:
+    try:
+        return max(1, min(int(td.get(attr, 1)), 50))
+    except ValueError:
+        return 1
+
+
+def table_grid(tab) -> list[list[str]]:
+    """把 colspan/rowspan 展开成规整的网格，每行列数对齐（D22 修正）。
+
+    合并单元格的文字只放在左上角那一格，其余位置留空。不展开的话，
+    Table 2 第二行表头 "EN-DE | EN-FR" 会因为 Model 跨两行而整体左移一列，
+    下面的数字就对不上列名了。
+    """
+    grid: list[list[str]] = []
+    pending: dict[int, int] = {}            # 列号 → 还要被上方 rowspan 占住几行
+    for tr in tab.find_all("tr"):
+        if tr.find_parent("table") is not tab:
+            continue
+        row: list[str] = []
+        col = 0
+
+        def skip_occupied():
+            nonlocal col
+            while pending.get(col, 0) > 0:
+                row.append("")
+                pending[col] -= 1
+                col += 1
+
+        for td in tr.find_all(["td", "th"], recursive=False):
+            skip_occupied()
+            cs, rs = _span(td, "colspan"), _span(td, "rowspan")
+            text = para_text(td)
+            for k in range(cs):
+                row.append(text if k == 0 else "")
+                if rs > 1:
+                    pending[col] = rs - 1
+                col += 1
+        for c in range(col, max((c for c, n in pending.items() if n > 0), default=-1) + 1):    # 行尾还被上方占住的列
+            row.append("")
+            if pending.get(c, 0) > 0:
+                pending[c] -= 1
+        grid.append(row)
+    return grid
+
+
+def table_text(fig) -> str:
+    """表格 → "| a | b |" 一行一行（D22）。之前只取图注，表里的数字（BLEU、准确率）模型看不到，
+    harness 首轮就撞上过：SWE-agent 的数字在表格里，模型写了，输入里却没有（D17）。
+
+    - 只取最外层的 ltx_tabular（单元格里还可以嵌表格，嵌套的随外层单元格一起取文字）
+    - 单元格文字走 para_text，公式同样保留 LaTeX
+    - 太大的表（附录里的逐任务结果）截断，避免一张表吃掉预算
+    """
+    rows = []
+    for tab in fig.find_all("table"):
+        if tab.find_parent("table") is not None:
+            continue
+        grid = table_grid(tab)
+        # LaTeX 里用来隔开列组的空列（如 Table 2 的 BLEU 和 Training Cost 之间）整列都空，删掉
+        width = max((len(r) for r in grid), default=0)
+        keep = [j for j in range(width) if any(j < len(r) and r[j] for r in grid)]
+        for r in grid:
+            cells = [r[j] if j < len(r) else "" for j in keep]
+            if any(cells):
+                rows.append("| " + " | ".join(cells) + " |")
+    if not rows:
+        return ""
+    out, n = [], 0
+    for r in rows[:TABLE_MAX_ROWS]:
+        if n + len(r) > TABLE_MAX_CHARS:
+            break
+        out.append(r)
+        n += len(r)
+    if len(out) < len(rows):
+        out.append(f"（表格共 {len(rows)} 行，只保留前 {len(out)} 行）")
+    return "\n".join(out)
 
 
 def parse_html(html: str, arxiv_id: str) -> Paper:
@@ -196,10 +281,13 @@ def parse_html(html: str, arxiv_id: str) -> Paper:
 
             elif "ltx_figure" in classes or "ltx_table" in classes:
                 cap = child.find("figcaption")
-                if cap:
+                cap_text = para_text(cap) if cap else ""
+                tab = table_text(child)        # 图里也可能放表格（figure 环境套 tabular）
+                text = "\n".join(t for t in (cap_text, tab) if t)
+                if text:
                     paragraphs.append(Paragraph(
                         id=child.get("id", ""),
-                        text=para_text(cap),
+                        text=text,
                         kind="caption",
                     ))
 
