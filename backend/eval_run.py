@@ -39,6 +39,7 @@ SUMMARY_CSV = EVAL_DIR / "summary.csv"
 ANNOTATE_CSV = EVAL_DIR / "annotate.csv"
 
 NOT_MENTIONED = "原文未明确提及"
+PROMPTS_KNOWN = {"v2", "v3"}
 SAMPLES_PER_PAPER = 5
 random.seed(42)          # 抽样固定，重跑抽到同样的条目
 
@@ -134,7 +135,19 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="已有结果也重跑")
     ap.add_argument("--only", help="只跑这个类别")
+    ap.add_argument("--tag", help="版本标签，结果存到 eval/results_<tag>/（D19）。不给 = v2 的原始目录")
     args = ap.parse_args()
+
+    global RESULTS_DIR, SUMMARY_CSV, ANNOTATE_CSV
+    from prompts import ACTIVE_PROMPT
+    if args.tag:
+        # 防呆：--tag v3 却忘了 PROMPT=v3，会把 v2 的输出存进 v3 的目录
+        if args.tag in PROMPTS_KNOWN and args.tag != ACTIVE_PROMPT:
+            sys.exit(f"--tag {args.tag} 但当前 prompt 是 {ACTIVE_PROMPT}。请这样跑：PROMPT={args.tag} python eval_run.py --tag {args.tag}")
+        RESULTS_DIR = EVAL_DIR / f"results_{args.tag}"
+        SUMMARY_CSV = EVAL_DIR / f"summary_{args.tag}.csv"
+        ANNOTATE_CSV = EVAL_DIR / f"annotate_{args.tag}.csv"
+    print(f"prompt {ACTIVE_PROMPT} → {RESULTS_DIR.name}/")
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     papers = load_papers(PAPERS_FILE)
@@ -155,6 +168,9 @@ def main():
             try:
                 rec = run_one(pid)
                 rec["category"] = cat
+                from prompts import ACTIVE_PROMPT
+                from cache import prompt_version
+                rec["prompt"] = {"name": ACTIVE_PROMPT, "hash": prompt_version()}
                 out.write_text(json.dumps(rec, ensure_ascii=False, indent=2), encoding="utf-8")
                 v = rec["verify"]
                 print(f" {time.time() - t0:5.1f}s  {rec['paper']['source']:13} "

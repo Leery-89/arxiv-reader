@@ -463,3 +463,612 @@
 {"key": "b066d20ab0311b84", "model": "deepseek-chat", "label": "Y", "reason": "quote 直接说明较长周期下相关性不同且可能与较老恒星活动性下降有关，与 claim 的实质内容一致。", "tokens": 764}
 {"key": "daaa823e5036dfb3", "model": "deepseek-chat", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：倾角与 spot 位置的内在简并、模型依赖先验、spot 分布对结果影响很大。", "tokens": 811}
 {"key": "55fd72c083007b95", "model": "deepseek-chat", "label": "P", "reason": "quote 只支撑了用 Butterpy 模拟光变曲线做监督训练这一项，注入真实 Kepler 噪声、50000 样本及 81%/9%/10% 划分均不在 quote 中。", "tokens": 808}
+{"key": "916b60f30e37ae61", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出，分辨率调整与 patch 提取是手动注入图像二维结构归纳偏置的仅有环节，支持该 ID 对应的论断。", "tokens": 888}
+{"key": "9f6eeefe1fce28c3", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确描述在规模递增的 ImageNet、ImageNet-21k 和 JFT-300M 数据集上预训练 ViT，支持本 ID 对应的预训练数据规模实验。", "tokens": 874}
+{"key": "5d458b7198271316", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持计划在未来工作中进一步研究该方法，但未说明自注意力的邻域限制、邻域大小 r 或最大路径长度 O(n/r)。", "tokens": 836}
+{"key": "c4222ce082cd9ecd", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持固有顺序性阻碍训练样本内并行化且在长序列时尤为关键，但未说明循环模型沿输入输出序列的符号位置分解计算。", "tokens": 891}
+{"key": "9cc21ba66256233b", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用直接说明使用不同频率的正弦和余弦函数，支撑此 ID 对应的正弦余弦位置编码部分；其余内容由另一个 ID 负责。", "tokens": 893}
+{"key": "58395ad08c623f87", "model": "gpt-6.1-sol", "label": "N", "reason": "quote 仅说明模型设计尽量遵循原始 Transformer，未说明刻意保持设计简单或仅保留最少的图像特有归纳偏置。", "tokens": 941}
+{"key": "49baaca4fc6ca9d3", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持需要注入序列中词元的位置信息，但未说明这是由于模型不含循环和卷积，也未说明信息加入输入嵌入中。", "tokens": 906}
+{"key": "7e640165ff9af1f2", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持编码器由 N=6 个相同层堆叠且每层有两个子层，但未说明子层是多头自注意力和逐位置前馈网络，也未提及残差连接与层归一化。", "tokens": 947}
+{"key": "b2be33594f93d2e1", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持沿用 BERT 式可学习 token 并将其置于 patch 序列之前，但未说明其作为图像表示，也未提及预训练和微调时在其输出上接分类头。", "tokens": 856}
+{"key": "5e615cda012af3c2", "model": "gpt-6.1-sol", "label": "P", "reason": "两条引文支持中等规模数据集上无强正则时比同规模 ResNet 低几个百分点，以及缺少平移等变性和局部性归纳偏置，但未明确支持两者的因果关系或数据不足时泛化不佳的结论。", "tokens": 945}
+{"key": "c925b2fe454e3a88", "model": "gpt-6.1-sol", "label": "P", "reason": "两条 quote 支撑知识访问与精确操作受限、知识密集型任务表现落后，以及决策来源和知识更新仍是开放问题，但未提及预训练语言模型在参数中存储事实知识。", "tokens": 909}
+{"key": "44a889451d5f3ba9", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来明确支持 REALM、ORQA 仅探索开放域抽取式问答，以及本文将参数与非参数混合记忆引入序列到序列模型。", "tokens": 924}
+{"key": "9a1b7a6b0a6662e5", "model": "gpt-6.1-sol", "label": "P", "reason": "两条引用支持152层ResNet单模型4.49%的top-5验证误差和测试集3.57%的top-5误差，但未提及六模型集成或赢得ILSVRC 2015第一名。", "tokens": 913}
+{"key": "47493d8f4c8bb71f", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确指出使用 BART-large，完整支持对应 ID 所负责的生成器模型名称。", "tokens": 848}
+{"key": "f3c93c9bb6aebcb1", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持检索器 p_η(z|x) 基于 DPR，但未说明其采用双编码器结构。", "tokens": 899}
+{"key": "4d47be563f1a060a", "model": "gpt-6.1-sol", "label": "P", "reason": "两条引用支持知识访问与精确操作受限、知识密集型任务表现落后，以及决策来源和世界知识更新仍是难题，但未说明事实知识存储在模型参数中。", "tokens": 940}
+{"key": "35d07df595378625", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持1202层网络测试结果差于110层网络及其对小数据集可能不必要地大，但未给出训练误差低于0.1%或作者将差异归因于过拟合。", "tokens": 937}
+{"key": "5f7d50f39069621c", "model": "gpt-6.1-sol", "label": "P", "reason": "两条引用支持深度增加时精度饱和、出现退化且并非过拟合所致，但未说明精度会“迅速”退化。", "tokens": 902}
+{"key": "89d20c5baa3dbb3e", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持恒等映射足以解决退化问题且经济的实验结论，但未提及输入输出维度不一致时用线性投影 Ws 匹配维度。", "tokens": 850}
+{"key": "9b3025d3a6a8ff9b", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条引用共同明确支持 DeepSeek-R1 的结构化输出能力仍不理想，以及无法利用搜索引擎、计算器等工具改善输出表现。", "tokens": 868}
+{"key": "b94f296fc318a889", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote明确说明模型目前针对中文和英文优化，且处理其他语言的查询时可能出现语言混杂，与claim完全一致。", "tokens": 814}
+{"key": "f6808df2036da0bd", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来明确支持 AIME 2024 平均 pass@1 从 15.6% 提升至 77.9%，以及使用自一致性解码后达到 86.7%。", "tokens": 921}
+{"key": "17144d9acd1eac51", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用直接支持 ResNet 克服优化困难并随深度增加获得精度提升；110 层网络的误差数值由另一引用负责。", "tokens": 912}
+{"key": "c3a02761d7b1dc7a", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出 budget forcing 提供完美控制、良好扩展表现，并带来最佳 AIME24 分数，支持 claim 的全部实质内容。", "tokens": 843}
+{"key": "f502f4962c79ce26", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确说明不对推理任务使用神经奖励模型，完整支撑本 ID 对应的“不使用神经奖励模型”部分。", "tokens": 850}
+{"key": "01318cf05e4ed025", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确列出进一步扩展的两个关键限制：最终趋于平坦，以及受底层语言模型上下文窗口约束，与 claim 一致。", "tokens": 862}
+{"key": "3e1b4f01117ce8d2", "model": "gpt-6.1-sol", "label": "P", "reason": "这些引用支持三个基准的名称及 AIME24 的30题和 GPQA Diamond 的198题，但未提供 MATH500 的500题、使用 lm-evaluation-harness 或温度设为0的信息。", "tokens": 930}
+{"key": "d1b045e7558e12cb", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 DeepSeek-R1 在数学任务上与 OpenAI-o1-1217 相当，但未提及编程算法表现或 AlpacaEval 2.0、ArenaHard 上的提升幅度。", "tokens": 949}
+{"key": "323f5aebb7642f42", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持众多 o1 复现尝试未公开复现清晰的测试时扩展行为，以及寻找兼具测试时扩展与强推理性能的最简单方法，但未说明 OpenAI o1 未公开方法。", "tokens": 911}
+{"key": "32a5fcd11e873252", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确列出评估套件包含 AIME24、MATH500 和 AMC23，支持 claim 的全部实质内容。", "tokens": 844}
+{"key": "9974dcccc3d9149e", "model": "gpt-6.1-sol", "label": "Y", "reason": "该 ID 对应的抑制思考结束符、追加“Wait”以延长思考并控制思考 token 数的内容，均由本条及同 ID 的另一条引用支持。", "tokens": 957}
+{"key": "76f70ec328b10bb0", "model": "gpt-6.1-sol", "label": "P", "reason": "这些引文支持粗粒度难度过滤、细粒度难度评估、知识点多样化及800条训练样本，但未提及根据逻辑连贯性、步骤清晰度和解答准确性筛选推理链。", "tokens": 970}
+{"key": "b645a48cd1518f7c", "model": "gpt-6.1-sol", "label": "Y", "reason": "合并同一 ID 下的引用后，OlympiadBench、CHMath、Gaokao、Kaoyan、GradeSchool 及多学科基准 Minerva、GPQA 均有明确支持。", "tokens": 998}
+{"key": "cfc3ef61d2ce7930", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 明确列出了 ACI 的四类主要组件，但未提及 agent 每步生成 thought 和 command 并接收执行反馈的流程。", "tokens": 834}
+{"key": "3ae38a1658ed4984", "model": "gpt-6.1-sol", "label": "P", "reason": "合并引用支持三项准确率、域内最佳结果及多数基线比较，但未明确支持 AMC23 上也超过 OpenAI-o1-preview。", "tokens": 1154}
+{"key": "38a91961b1eee410", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 说明约52%的未解决实例属于“实现不正确”或“实现过于具体”两类，不能支持将大多数失败单独归因于实现不正确。", "tokens": 883}
+{"key": "ce10a7f185e05a02", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持主要在 SWE-bench 上评估及其规模、来源，也支持 SWE-bench Lite 包含 300 个实例，但未说明消融和分析在 Lite 上进行。", "tokens": 947}
+{"key": "f5421a250d583661", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持 LM agent 在该环境中难以可靠执行操作，但未说明接口为人类设计，也未提及 Linux shell、小段文件编辑或无效编辑缺乏反馈。", "tokens": 905}
+{"key": "620df4d14d8da952", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持在每对观测 token 之间引入辅助理由变量，但未说明其目标是生成有助于预测后续文本的中间思考。", "tokens": 859}
+{"key": "4f7545e45064b5a7", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 完整支持 [abstract] 对应的假说内容：预训练已全面编码领域知识的基础模型，可通过少量但精心设计的认知过程示范涌现复杂推理；阈值条件由另一引用负责。", "tokens": 996}
+{"key": "6705841c559b7c75", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来明确支持使用无上下文示例的零样本提示“Let’s think step by step.”，并在 128 个 GSM8K 测试样本上评估；链式思考是对该提示的描述。", "tokens": 896}
+{"key": "cf5027abd29620a1", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明所有实验都以基础版 Mistral 7B 为起点，完整支持 claim。", "tokens": 799}
+{"key": "291ca92ba10d39ee", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明 C4 评估采用 16 个 thought token、4 个 true token ahead，且其余设置相同，完整支持 claim。", "tokens": 837}
+{"key": "66feb0890882367c", "model": "gpt-6.1-sol", "label": "N", "reason": "quote 仅说明 LM agent 是具有自身需求和能力的新用户类别，未说明接口设计问题或提升复杂数字任务表现的目标。", "tokens": 877}
+{"key": "f1619503387e8cd2", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出链式思考指标 cot-maj@8 的8样本多数投票准确率从40.6%提升到47.7%，完整支持 claim。", "tokens": 853}
+{"key": "b3ec3b72f7d0fc88", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持用户和开发者通常只让模型对问题尝试一次，但未提及训练计算扩展持续提升模型能力。", "tokens": 834}
+{"key": "135482428bf11446", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持在没有自动验证工具时需要改进样本验证方法，但未提及常见方法在约100个样本后饱和，也未明确说明改进是为了将重复采样扩展到更多任务。", "tokens": 863}
+{"key": "e0074326d5f72ee5", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用直接说明在 MATH 和 CodeContests 数据集上评估，支持此 ID 对应的评估数据集部分。", "tokens": 864}
+{"key": "c8a9c5fb37ca3bcf", "model": "gpt-6.1-sol", "label": "N", "reason": "quote 仅笼统说明设计了额外任务来探测上下文学习能力，未提及 claim 列出的任何具体评估任务。", "tokens": 871}
+{"key": "a54b77d2aa7efcfa", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 CodeContests 测试套件会将正确解误判为失败，但未说明这些验证器缺陷对重复采样应用的影响。", "tokens": 950}
+{"key": "a13eb0901fc3a371", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持文本合成及若干 NLP 任务存在明显弱点，以及比较类任务上单样本或少样本表现仅略好于随机，但未提及长段落失去连贯性或自相矛盾。", "tokens": 906}
+{"key": "b50d7eb9bca57266", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持人类学习多数语言任务不需要大型监督数据集，但未说明仅凭自然语言指令或极少示例即可学习，也未提及作者希望 NLP 系统具备相同的灵活性和通用性。", "tokens": 894}
+{"key": "f69888b1e742b3eb", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持在超过两打 NLP 数据集及若干测试快速适应的新任务上评估 GPT-3，但未提及每个任务均在零样本、单样本和少样本三种条件下评估。", "tokens": 868}
+{"key": "ee77e83bd176799f", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持单样本解决率为 15.9%、250 个样本时为 56%，且超过 SOTA 13 个百分点，但未说明任务具有自动验证器，也未建立覆盖率提升直接转化为性能提升的关系。", "tokens": 972}
+{"key": "b9179acd2cd8a82f", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持模型可能利用训练数据中的伪相关，但未说明这发生于狭窄任务分布上的微调，也未支持分布外泛化较差的结论。", "tokens": 900}
+{"key": "d4ca2a82c3b8c970", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出人类评估可能受标注者个人偏见、背景和偏好影响，并可能导致结果不一致或不可靠，完整支持 claim。", "tokens": 841}
+{"key": "a4f9e7c6c18f82af", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明这些模型仍在开发中且尚未准备好发布，完整支持对应论断。", "tokens": 801}
+{"key": "39456aadad296bad", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持在多类图像理解任务上评估，但未提及该引用对应的 MMMU、VQAv2、ChartQA、DocVQA 等具体基准。", "tokens": 922}
+{"key": "168262c348079852", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明这些模型仍在积极开发中且尚未准备好发布，完整支撑该引用对应的内容。", "tokens": 806}
+{"key": "08b6ae6f245b8f5e", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确包含探索细粒度感知能力、为 LVLM 建立坚实基础及打造面向真实应用的智能体放大器三个目标，Qwen2.5-VL 只是对“we”的指代具体化。", "tokens": 869}
+{"key": "8dafba59732e576a", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确支持其对应的“文档理解与 OCR”评估任务，其他任务由其余引用负责。", "tokens": 875}
+{"key": "1ed0e8caa4774062", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确列出了 claim 中的全部对比模型及 Qwen2-VL 的不同规模，未提及的多基准评估属于框架性表述，不影响支撑。", "tokens": 896}
+{"key": "1783def48d537352", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 明确支持 Qwen2.5-VL 整体架构由三个组件组成，但未说明这三个组件分别是大语言模型、视觉编码器和基于 MLP 的视觉-语言融合模块。", "tokens": 864}
+{"key": "446e1c74382cc679", "model": "gpt-6.1-sol", "label": "P", "reason": "两条引用支持中间推理可能忽略或误解视觉信息，以及最优模态对齐仍需改进，但未提及模型依赖文本和视觉两种模态，也未说明已采取过滤策略。", "tokens": 970}
+{"key": "31efa01df3808485", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持通过后训练增加视频个性化和编辑能力，但未说明参考图像条件、多阶段训练或无监督视频编辑数据缺失的情况。", "tokens": 856}
+{"key": "d9265b4d6298de49", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支撑有两个基础模型及 Movie Gen Video 的30B参数和联合文本到图像、文本到视频生成能力，但未提供 Movie Gen Audio 的名称、13B参数或视频和文本到音频生成能力。", "tokens": 870}
+{"key": "279c431e7db5f1e7", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用直接支持其对应的“使用约15T多语言tokens预训练”部分，其余训练阶段和405B模型信息由另一引用负责。", "tokens": 991}
+{"key": "5d5ff3080428d188", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确给出了预训练数据包含约1亿视频-文本对和约10亿图像-文本对，后续训练内容由另一引用负责。", "tokens": 874}
+{"key": "14c6c97c0303212c", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 Movie Gen Video 在整体质量上显著优于 Runway Gen3 和 LumaLabs，但未提及对 OpenAI Sora 的中等净胜或与 Kling1.5 持平。", "tokens": 875}
+{"key": "148ecd5826586af1", "model": "gpt-6.1-sol", "label": "P", "reason": "引文支持推荐部署单元较大且可能给小型团队带来负担，但未说明这是为了保证高效推理。", "tokens": 918}
+{"key": "175196164f2bb687", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出该方法在身份保持、视频质量和文本对齐三个维度均大幅优于基线，claim 对方法和基线的具体命名属于指代展开。", "tokens": 841}
+{"key": "9910425b0daa2f8b", "model": "gpt-6.1-sol", "label": "P", "reason": "两条 quote 支持 FP8 混合精度训练框架及 DualPipe 实现高效流水线并行，但未提及计算与通信重叠。", "tokens": 854}
+{"key": "fe8f2f930ce6e062", "model": "gpt-6.1-sol", "label": "P", "reason": "两条 quote 支持 FP8 混合精度训练和 DualPipe 的高效流水线并行，但未提及计算与通信重叠。", "tokens": 851}
+{"key": "c944b33d8999d755", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确提到 TIMIT 基准及其核心测试集上的帧分类错误率，支持该引用对应的 TIMIT 语音识别评估部分。", "tokens": 930}
+{"key": "8fe764e4f9a2719f", "model": "gpt-6.1-sol", "label": "Y", "reason": "同一 ID 下的其他 quote 明确指出 DeepSeek-V3 推荐的部署单元较大，可能给小型团队带来负担，完整支撑了该部署局限的实质内容。", "tokens": 895}
+{"key": "58458a790386751b", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持使用 dropout 将测试错误率降至 29.62%，但未给出原始错误率 31.05%。", "tokens": 836}
+{"key": "8b0d7c26417d8ec6", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持使用单独的验证集评估并选择网络架构，但未提及语音和两个物体识别数据集，也未说明用选出的架构在真实测试集上评估 dropout。", "tokens": 876}
+{"key": "e3dfd1047a1a28a5", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持对 HellaSwag、PIQA、WinoGrande 采用困惑度评估，但未支持 claim 所述的生成式或语言建模等其他评估方式。", "tokens": 955}
+{"key": "948f074e5a13a229", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 dropout 将错误率降至创纪录的 42.4%，但未给出原始错误率 48.6%。", "tokens": 906}
+{"key": "6c8072f4b544c92e", "model": "gpt-6.1-sol", "label": "P", "reason": "quote明确支持论证仅适用于被优化以完成许多任务的智能，但未说明专用智能可能不会趋同。", "tokens": 871}
+{"key": "e0a1fdca42a148da", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明对 SSD 算法进行速度基准测试，并与 Mamba 的扫描实现和 FlashAttention-2 对比，完整支持 claim。", "tokens": 830}
+{"key": "1ca575d9484ad4c9", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确说明表4对块的架构变化进行了消融，支持此ID对应的“块设计”消融内容，其余设计选择由其他ID负责。", "tokens": 891}
+{"key": "ed05ff58004fdc48", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持作者不确定架构中哪个方面是主要因素、该问题留待未来探索，但未明确说明这一局限是在 MQAR 任务上。", "tokens": 930}
+{"key": "c2c9f4644f36f64a", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用直接支持其对应的内容，即将多头注意力中的“头”类比引入 SSM；其余设计内容由另一引用负责。", "tokens": 920}
+{"key": "c4eac1110dda919c", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 50,000 张训练图像和 10,000 张测试图像的数量，但未说明任务是物体识别。", "tokens": 1069}
+{"key": "b93d8222a52d72db", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持矩阵分块、对角块采用对偶注意力模式及非对角块利用秩结构归约为较小循环，但未说明二次计算模式或结合线性 SSM 循环与二次对偶形式的优势。", "tokens": 984}
+{"key": "89d3dbbb964ab147", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用完整支持其对应片段，即作者考察的语言模型家族包括BLOOM、OpenLLaMA和LLaMA；其他实验细节由另外的引用负责。", "tokens": 880}
+{"key": "0b055d71a079bb72", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持研究者偏见和社区偏好影响模型发展，但未提及“硬件彩票”，也未说明这些因素可能人为促成趋同。", "tokens": 901}
+{"key": "d4c8ed8f19d110b4", "model": "gpt-6.1-sol", "label": "Y", "reason": "同一 ID 下的其他 quote 明确说明全程使用固定架构考察精度、参数和 token 的影响，以及低精度训练常通过架构调整缩小与全精度模型的差距，完整支持该论断。", "tokens": 989}
+{"key": "520820956bb90d2d", "model": "gpt-6.1-sol", "label": "P", "reason": "两条引用支持联合优化时最优精度与计算预算无关，以及固定 N 时最优精度随计算量对数增长，但未给出约为 7–8 比特的数值。", "tokens": 930}
+{"key": "079acd07a0ad597d", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持权重、激活和 KV 缓存量化效应可建模为独立且可乘，但未说明这些效应共同决定有效参数量。", "tokens": 867}
+{"key": "ebb8c54dbcf2ec3d", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持对齐分数仅为0.16、理论上限为1及存在未解决的问题，但未说明该问题具体是差距源于噪声还是重大差异。", "tokens": 985}
+{"key": "4b2c8bc22ad30238", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明在 Dolma V1.7 数据集上训练和评估一系列 OLMo 风格模型，并使用标准 Transformer++ 实现，完整支撑 claim。", "tokens": 925}
+{"key": "ac374b65f307fd50", "model": "gpt-6.1-sol", "label": "Y", "reason": "公式明确将后训练量化退化建模为 D 和 N 的幂律因子之比，并乘以随量化精度 P_post 指数衰减的项。", "tokens": 921}
+{"key": "b748af760079963a", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持测试集上的 QA 准确率为零且对所有微调参数均如此，但未说明仅预训练传记再微调 QA、模型规模远大于个体数或个体被暴露上千次。", "tokens": 889}
+{"key": "62ac37fb256fe8fb", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确提出语言模型如何在训练中记忆知识、并在推理时提取知识来回答问题，与 claim 的核心问题一致。", "tokens": 830}
+{"key": "c739a6b5d7a9b97f", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote明确指出，随着对齐程度提高，Hellaswag常识推理和GSM8K数学解题性能改善，支持该引用负责的对齐与下游性能相关这一结论。", "tokens": 950}
+{"key": "901c989d419de937", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出记忆全部训练句子并不保证模型能在推理时提取或操作句子中的事实知识，与 claim 完全一致。", "tokens": 833}
+{"key": "b54e7b3d1054dd94", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明 AntiFold 利用 ESM-IF1 在超过 1200 万个结构上的预训练，并在已解析和预测的抗体结构上进一步微调，支撑该论断。", "tokens": 871}
+{"key": "34683438d9da84be", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持混合训练在 bioS single 和 bioR single 上的 OOD 准确率分别为 86.6% 和 77.7%，但未说明模型能有效提取知识。", "tokens": 928}
+{"key": "e091d7e80b733e77", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确支持对应片段：合成数据集名为 bioS，包含 100,000 个体；其余细节由其他引用负责。", "tokens": 893}
+{"key": "1150ae611d3f7e40", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确列出了 span masking、随机残基额外掩码、以 3:1 权重偏向 CDR 残基的掩码、逐层学习率衰减和纳入 OAS 预测结构，涵盖 claim 的全部实质策略。", "tokens": 937}
+{"key": "a789a10b3fe8625d", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来支持实验结构测试集上 AntiFold 相对原始 ESM-IF1 的 CDRH3 显著提升，以及相对 AbMPNN 在 CDRH3、其余 CDR 和多数 FR 区域的全部恢复率比较。", "tokens": 1020}
+{"key": "5c188cfeb5c7c648", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来明确支持实验结构测试集上与 ESM-IF1 的显著差异，以及与 AbMPNN 在 CDRH3、其余 CDR 和多数 FR 区域的全部恢复率比较。", "tokens": 1012}
+{"key": "44fbb7824126bb03", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持逆折叠模型在不改变抗体骨架的条件下设计新序列，以及优化个别性质而不扰动其他性质，但未明确支持维持稳定性与抗原结合模式这些具体性质的突变选择动机。", "tokens": 918}
+{"key": "6a15088a6b8eec5f", "model": "gpt-6.1-sol", "label": "Y", "reason": "同一 ID 下的其他引文明确支持预训练 BindGPT 在无氢和显式氢设置下持续优于 XYZ-TF，以及其是首个能在如此大规模下显式建模氢原子的模型。", "tokens": 994}
+{"key": "eee7602a194eb7b5", "model": "gpt-6.1-sol", "label": "P", "reason": "这些引用支持有效性、SA/QED/Lipinski、生成1K个有效3D分子的时间及构象生成的RMSD-coverage，但未提及分布度量和独立的RMSD指标。", "tokens": 1009}
+{"key": "cd80e944f1984b5a", "model": "gpt-6.1-sol", "label": "P", "reason": "引用明确支持208M个构象、12M个分子和3.2M个蛋白质口袋空间结构，但未说明该数据集由Uni-Mol提出或用于预训练。", "tokens": 1027}
+{"key": "ff5e62a5496a0c62", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持模型在300M参数之前扩展良好、到该规模时困惑度出现过拟合，并说明108M模型在当前预训练数据下表现最佳，但未说明因此后续实验采用100M模型。", "tokens": 919}
+{"key": "e3533b4727ef7758", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来明确支持该方法在各项任务上匹配或超越基线，且不具有关于生成域的归纳偏置；任务对象的指代具体化不扣分。", "tokens": 930}
+{"key": "89b9ed3dd6441299", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持所有受测材料类别的成功率超过 90%，但未提及 118 个系统或分子动力学模拟。", "tokens": 850}
+{"key": "3748934d077d5e23", "model": "gpt-6.1-sol", "label": "P", "reason": "引用明确支持模型在长程相互作用主导的聚合物和非均相体系中表现不佳，但未说明其目前采用半局域原子相互作用描述。", "tokens": 970}
+{"key": "ceb31ab1d770ef93", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持准确且高效地预测任意材料在实际合成与工作条件下的性质，但未明确将这些条件限定为有限温度和压力。", "tokens": 931}
+{"key": "4a39c14ad6aa5d92", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明 MatterSim 采用主动学习探索广阔材料空间，并整合了 claim 所列的四个组件，完整支持该论断。", "tokens": 935}
+{"key": "4b30d40c91c64717", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 仅表示可能需要进一步微调数据，claim 将这一可能性表述为确定需要，强化了原文语气。", "tokens": 832}
+{"key": "3d37498ed6f961ef", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用对应声子最大频率预测部分，明确给出了 MAE 为 0.87 THz；体模量结果由另一引用负责。", "tokens": 872}
+{"key": "2c7ab9b71d90d956", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确说明预训练使用作者整理的材料最低能量构型数据集，且不区分交换关联泛函、DFT 软件实现或校正，与 claim 一致。", "tokens": 878}
+{"key": "f1ec8bc62b4f2328", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 Orb 在 MOF-5 上的多个温度下产生稳定 MD 轨迹，但未提及最高温度为 800 K，也未提及复现苯撑环不能完全旋转的实验动力学行为。", "tokens": 875}
+{"key": "84c326625af8528d", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确包含 Orb 的 GNS 骨干、平滑图注意力机制，以及基于注意力权重和距离截断函数更新节点间消息的全部内容。", "tokens": 861}
+{"key": "0cfdf0b90d48b54c", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持距离-29重复码、1000个纠错周期、2×10^7次采样、共2×10^10个周期及5.5小时执行时间，但未提及72量子比特处理器。", "tokens": 922}
+{"key": "3a996f9d7847ba06", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持使用 FIRE 优化器弛豫 500 步或直到最大力低于 0.05 eV/Å，但未说明该评估属于 Matbench-Discovery 基准。", "tokens": 981}
+{"key": "5ba54bc29b17e028", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条 quote 合起来明确支持神经网络解码器、结合匹配合成的集成匹配解码器，以及用处理器数据微调神经网络和用强化学习优化匹配图权重。", "tokens": 902}
+{"key": "194369bdf846fb4c", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确给出 Λ=2.14±0.02 和 ε₇=(1.43±0.03)×10^-3，与 claim 中距离-7的逻辑错误率及错误抑制因子对应，数值完全一致。", "tokens": 884}
+{"key": "f3d45b79998678ac", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 完整给出了距离-7逻辑量子比特寿命、组成物理量子比特寿命的中位数与最佳值，以及2.4±0.3倍的超越关系。", "tokens": 914}
+{"key": "e278720162d4a241", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条quote共同支持该ID对应的“差异原因尚不明确，可能只是样本方差波动”，其余数据与显著性内容由另一ID负责。", "tokens": 886}
+{"key": "0352377aabe7c5a0", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote明确提醒谨慎解释结果，并说明部分受偏好的(w0,wa)模型可能映射为在任何红移下都不违反零能量条件的精质模型，支持claim的全部实质内容。", "tokens": 914}
+{"key": "0754c3aa62f7555c", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确给出了DESI BAO结合BBN和θ*得到H0=(68.52±0.62) km/s/Mpc，SH0ES的3.7σ张力由另一引用负责。", "tokens": 915}
+{"key": "c26cd4d2f63bafee", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持尚未明确展示低于阈值性能这一研究问题，但未提及表面码，也未说明逻辑错误率随码距增加而指数下降。", "tokens": 891}
+{"key": "e30b28912f5b8191", "model": "gpt-6.1-sol", "label": "Y", "reason": "该ID对应的原因部分由两条引用共同支持：差异原因尚不明确，且可能只是一次不走运的样本方差波动。", "tokens": 883}
+{"key": "3a554ec7933b95d0", "model": "gpt-6.1-sol", "label": "P", "reason": "两句引用支持观测与AGN加热热尘埃再发射所预期的极红光学至近红外SED相矛盾，并引发对尘埃遮蔽AGN情景的质疑，但未说明MIRI、多数LRD在F1800W未被探测或观测SED趋于平坦。", "tokens": 973}
+{"key": "4cf0ffd58c7c6827", "model": "gpt-6.1-sol", "label": "Y", "reason": "quote 明确指出，MC事件产生器结合矩阵元与部分子簇射算法的程序，需要在未来LHC更高精度的量子信息研究中特别关注，与claim一致。", "tokens": 869}
+{"key": "5c21ae04641bde9a", "model": "gpt-6.1-sol", "label": "P", "reason": "quote支持“尚无明确答案、只能给出推测”，但未说明该问题涉及LRD在z>4时以统一A_V=3 mag出现。", "tokens": 901}
+{"key": "4b38774e75af7d80", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持SED模板去除了宿主星系和尘埃贡献，但未说明它是低红移类星体复合模板或被用作入射辐射。", "tokens": 999}
+{"key": "12954fae678cfcfe", "model": "gpt-6.1-sol", "label": "P", "reason": "引文支持使用 cobaya 并纳入 SN Ia 似然，但未说明 Metropolis-Hastings MCMC 采样、CAMB 或 BBN、CMB 数据的联合使用。", "tokens": 988}
+{"key": "9c36ac2b43da56ea", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确说明叠加了z~5.5和z=7.5的LRD样本堆叠测光SED数据，支持[S2.p5]对应的对比内容；巡天成像深度属于另一引用负责的部分。", "tokens": 934}
+{"key": "7eb1ad2d0ab75507", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持两个验证区的测量与不同 MC 设置的预言在不确定度内一致，但未明确说明这是对测量方法的一致性检验。", "tokens": 937}
+{"key": "37242536a519c08e", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持信号区为340 < m_{t\\bar{t}} < 380 GeV及各区域纯度超过90%，但未给出两个验证区及其质量范围。", "tokens": 929}
+{"key": "631da2a9d9aa296d", "model": "gpt-6.1-sol", "label": "P", "reason": "引文支持以D作为纠缠标记并通过D<−1/3判定纠缠，但未给出D=−3⟨cosφ⟩及带电轻子在各自母顶夸克静止系中的夹角测量方式。", "tokens": 998}
+{"key": "aa22d72e939c6e3f", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确说明利用顶夸克与反顶夸克的自旋关联探测量子纠缠，完整支持分配给[S1.p2]的内容；观测量及其测量方式由另一引用负责。", "tokens": 925}
+{"key": "6f0519b5382ca925", "model": "gpt-6.1-sol", "label": "P", "reason": "quote提到了n0=10和100 cm^-3的低密度情形，但仅说明光学至2–3 μm的SED与观测一致，未支持γ<1、能量峰移向中远红外或符合MIRI和ALMA约束。", "tokens": 1118}
+{"key": "566aa70b71df842c", "model": "gpt-6.1-sol", "label": "P", "reason": "两条 quote 支持有限尺寸效应导致 E_M 显著变化，以及相干长度并非远小于器件长度，但拓扑能隙仅被描述为较小，并未与器件长度作比较。", "tokens": 971}
+{"key": "bd172becdbc1ba61", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持 τ_RTS 减半，但只说明偏压从 0 增至 90 μV，未说明这是由准粒子注入导致的。", "tokens": 922}
+{"key": "278f8c847ce5d3cc", "model": "gpt-6.1-sol", "label": "P", "reason": "两条 quote 支持简单加热可能不准确、可用自由能计算或相共存方法测试 MACE 势以及熔点研究属于未来工作，但未提及周期性边界条件和小系统尺寸对熔点的影响。", "tokens": 983}
+{"key": "aecbee12979b7277", "model": "gpt-6.1-sol", "label": "Y", "reason": "三条 quote 合起来明确支持 MACE 基于 MPNN 架构、使用高阶多体 ACE 展开并训练于 MPtrj 数据集的全部实质内容。", "tokens": 893}
+{"key": "2178dacf54273f4a", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 给出了 Cooper 对盒的准粒子密度约为 0.6 µm⁻³，但未说明这是独立测量，也未表述与另一密度在数量级内一致。", "tokens": 966}
+{"key": "9241fe156ac570c4", "model": "gpt-6.1-sol", "label": "N", "reason": "quote 仅说明测量-only 拓扑量子计算协议将操作简化为融合，未说明论文旨在实现费米宇称单次测量或确定一对 Majorana 零能模的共享宇称。", "tokens": 903}
+{"key": "dd8468365cdc74c7", "model": "gpt-6.1-sol", "label": "P", "reason": "两条 quote 合起来支持评估 MACE 势计算熔融 LiF 粘度的准确性，但未明确其为 MACE-MP-0，也未提及与 Buckingham 和 BHM 势对比。", "tokens": 912}
+{"key": "fff831b0bce580b2", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用明确指出液态理论理解不足，以及经典原子模型难以生成可靠的热物理数据，完整支撑了 claim 中对应 S1.p2 的内容。", "tokens": 908}
+{"key": "c446cc15d9706004", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持 Li 和 F 的 MACE 速度自相关函数具有更深的极小值及更显著的类固态运动成分，但极小值幅度近似相等不能证明两条函数曲线形状相似。", "tokens": 935}
+{"key": "8777e41d6ae1a5c6", "model": "gpt-6.1-sol", "label": "Y", "reason": "两条引用共同明确支持倾角与 spot 位置的内在简并、模型依赖先验以及 spot 分布对结果影响很大这三项实质内容。", "tokens": 891}
+{"key": "a804678d7d5c5813", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用对应量子动力学模拟部分，明确说明通过包含驱动功率、电荷噪声和温度的模拟复现结果。", "tokens": 1005}
+{"key": "f391f40c0da2329d", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支撑长周期样本的相关性不同及其可能与较老恒星活动性下降有关，但未给出“大于25天”的阈值，也未明确相关性涉及模拟误差与观测误差。", "tokens": 888}
+{"key": "bbeffd2f1f27756f", "model": "gpt-6.1-sol", "label": "P", "reason": "quote 支持模型通常给出“平均”预测及哪种结果更好尚不明确，但未说明这一情况发生在周期剧烈变化的光变曲线中。", "tokens": 882}
+{"key": "68411a55fbb4f0a9", "model": "gpt-6.1-sol", "label": "P", "reason": "引用支持总数据集含50000个模拟样本及81%/9%/10%的划分比例，但50000是划分前的总样本数，并非训练集样本数。", "tokens": 1018}
+{"key": "c8a2ea40a3d4b9f0", "model": "gpt-6.1-sol", "label": "Y", "reason": "该引用支持其对应的论断部分，即使用 Butterpy 生成模拟光变曲线用于监督训练；噪声、样本数量和数据划分由其他引用负责。", "tokens": 905}
+{"key": "7ed5e124e9570641", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“固有的顺序性阻碍训练样本内并行化、序列较长时更关键”，但“循环模型沿输入输出序列符号位置分解计算”这一内容不在 quote 中，只由“this”隐含指代。", "tokens": 1242}
+{"key": "f28818c5c1eabe5b", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑\"计划在未来工作中进一步研究该方法\"这一项；邻域大小 r 和最大路径长度增至 O(n/r) 的具体内容不在这句话中。", "tokens": 1220}
+{"key": "f556c4c63e163b3b", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“需要注入 token 位置信息”这一动机；claim 中的“不含循环和卷积”、“加入输入嵌入”、“正弦余弦位置编码”这些具体内容都不在 quote 里（可能由 S3.SS5.p2 负责，但本条 quote 没有）。", "tokens": 1258}
+{"key": "1993bbefe8265fff", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑「二维结构只在分辨率调整和 patch 提取这两处被手动注入」。claim 里的「刻意保持设计简单」「只保留最少的图像特有归纳偏置」不在 quote 中，而且 claim 把这两处具体说成「切 patch 和微调时调整位置嵌入」，比 quote 多了内容。", "tokens": 1326}
+{"key": "2956e5392279cd86", "model": "claude-sonnet-5-5", "label": "Y", "reason": "该 quote 说明在 ImageNet、ImageNet-21k、JFT-300M 这样规模递增的数据集上预训练 ViT，正对应 claim 中由 S4.SS3.p2 负责的“预训练数据规模实验”。", "tokens": 1477}
+{"key": "1c8d9410c83974a5", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只说明模型设计尽量照搬原始 Transformer，与\"刻意保持设计简单\"大致相符；但\"只保留最少的图像特有归纳偏置\"以及二维结构在切 patch、调整位置嵌入时被手动注入，这些内容都不在这句话里。", "tokens": 1501}
+{"key": "59789903d0ac81bb", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支持编码器由 N=6 个相同层堆叠、每层两个子层；子层具体是多头自注意力和前馈网络、残差连接与层归一化都不在 quote 中。", "tokens": 1548}
+{"key": "cae347e096d3d7a7", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑\"类似 BERT 的 [class] token、在 patch 嵌入序列前加可学习嵌入\"；claim 中\"作为图像表示\"以及\"预训练和微调时在其输出上接分类头\"不在 quote 里。", "tokens": 1243}
+{"key": "15c5f68c32907e12", "model": "claude-sonnet-5-5", "label": "Y", "reason": "这条 quote 负责的是“使用正弦余弦位置编码”这一部分，原文的 “we use sine and cosine functions of different frequencies” 直接支撑；无循环和卷积的动机由 [S3.SS5.p1] 负责。", "tokens": 1491}
+{"key": "c66e2c5470bbedb5", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了「ImageNet 上无强正则时比同规模 ResNet 低几个百分点」以及「Transformer 缺少平移等变性和局部性」。但「因为……数据不足时泛化不佳」这一因果解释在 quote 中没有明说，是 claim 自己加的。", "tokens": 1387}
+{"key": "76629c7871d5eeef", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来覆盖了难以访问和操作知识、落后于任务专用架构，以及难以提供决策来源和更新知识。但 claim 中“预训练模型在参数中存储事实知识”这一点，两条 quote 都没有出现。", "tokens": 1343}
+{"key": "6c49d2d9aab2b36c", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来覆盖了访问和操作知识受限、在知识密集型任务上落后于专用架构、难以提供决策来源和更新世界知识；但 claim 中“预训练语言模型在参数中存储事实知识”这一前提不在这两句里，所以只能算部分支撑。", "tokens": 1358}
+{"key": "bde8be569b67a1c5", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部内容：REALM 和 ORQA 只探索了开放域抽取式问答，本文把混合参数/非参数记忆引入 seq2seq 模型。", "tokens": 1346}
+{"key": "326dd89671c1354f", "model": "claude-sonnet-5-5", "label": "P", "reason": "该 quote 只支持生成器是 BART-large（400M 参数的预训练 seq2seq transformer）这一项；检索器 p_η(z|x) 基于 DPR 双编码器，以及生成器的条件形式，都不在 quote 里。", "tokens": 1264}
+{"key": "0ec4541c6203d165", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 说明检索器 p_η(z|x) 基于 DPR，对应 S2.SS2.p1 负责的检索器部分；“双编码器”只是对 DPR 的注解，生成器部分由其他 ID 负责。", "tokens": 1409}
+{"key": "eb2105e401c2f7fb", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部内容：网络能开始收敛后出现退化问题、深度增加时精度饱和，以及退化并非由过拟合引起。其中“迅速退化”只是对 saturated 后 degrade 的细化说明，没有添加新的可独立验证的事实。", "tokens": 1343}
+{"key": "2224f2ecb4c0557f", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑「恒等映射足以解决退化问题且经济」这一部分；claim 中「维度不一致时用线性投影 Ws 匹配维度」的内容不在 quote 里。", "tokens": 1315}
+{"key": "c377faa3e4ec9131", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了 4.49% 的单模型验证误差和 3.57% 的测试集 top-5 误差。但“六模型集成”和“赢得 ILSVRC 2015 第一名”这两项实质内容不在 quote 里。", "tokens": 1436}
+{"key": "e259d4b74f92455f", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“1202 层测试结果比 110 层差”和“对小数据集可能过大”两点，但“训练误差低于 0.1%”这个数字，以及作者把原因归为过拟合，都不在这几条 quote 里。", "tokens": 1542}
+{"key": "fa293aa35fd01374", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说明模型目前针对中英文优化，处理其他语言查询时可能出现语言混杂问题，与 claim 的全部实质内容一致。", "tokens": 1193}
+{"key": "c47a68eefcc422c8", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接说明 ResNet 克服了优化困难并在深度增加时精度提升，这正是本条负责的部分；6.43% 的数字属于另一条引用。", "tokens": 1405}
+{"key": "bd193d2f9d50d849", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来涵盖了 claim 的全部内容：结构化输出能力不如现有模型，以及无法利用搜索引擎、计算器等工具。", "tokens": 1272}
+{"key": "52f3d1a2d7ec3320", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：AIME 2024 平均 pass@1 从 15.6% 升到 77.9%，以及自一致性解码下达到 86.7%。主语 DeepSeek-R1-Zero 属于解指代，不扣分。", "tokens": 1352}
+{"key": "a93d5d18836a8041", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑数学任务上与 OpenAI-o1-1217 相当这一项；编程算法任务表现突出以及 AlpacaEval 2.0 和 ArenaHard 分别提升 25%、17% 均不在 quote 中。", "tokens": 1316}
+{"key": "3a52f2e91f9067a2", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接写明 budget forcing 提供 perfect control、good scaling，并带来最佳 AIME24 分数，与 claim 的三项内容一一对应；\"良好扩展斜率\"只是对 good scaling 的轻微具体化。", "tokens": 1246}
+{"key": "43984aebf62c2592", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说明进一步扩展时有两个限制：最终趋于平坦，以及受底层语言模型上下文窗口约束，与 claim 完全一致。", "tokens": 1244}
+{"key": "9a7d47584ddbdcf9", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了“最简单方法”这一研究问题，以及“众多复现尝试均未公开复现出清晰测试时扩展行为”；但 claim 里“OpenAI o1 未公开方法”这一点没有出现在 quote 中。", "tokens": 1338}
+{"key": "0c684dfbc8ba99c2", "model": "claude-sonnet-5-5", "label": "P", "reason": "合并后的引用支撑了三个基准、AIME24 为 30 题和 GPQA Diamond 为 198 题；但 MATH500 的 500 题数量不在引用中（只说是竞赛数学题），lm-evaluation-harness 和温度为 0 也完全没有出现。", "tokens": 1379}
+{"key": "c12ca3bc60ee61a3", "model": "claude-sonnet-5-5", "label": "Y", "reason": "该 quote 对应 claim 中 [S2.SS2.p4] 负责的“不使用神经奖励模型”这部分，原文明确说对推理任务不使用基于结果或过程的神经奖励模型。规则化准确性奖励和格式奖励由 [S2.SS2.p1] 负责，不在此判断范围内。", "tokens": 1451}
+{"key": "0f06aa79e6c380bf", "model": "claude-sonnet-5-5", "label": "Y", "reason": "三条 quote 合起来覆盖了 claim 的全部内容：OlympiadBench，CHMath、Gaokao、Kaoyan、GradeSchool（中文考试类基准），以及多学科的 Minerva 和 GPQA。claim 中的“中文多语言基准”只是对 quote 的概括，没有新增事实。", "tokens": 1495}
+{"key": "e1cf6fdbd74cb2bd", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只列出了 ACI 的四个组件，支撑了 claim 的第一部分；但“每一步生成 thought 和 command 并接收执行反馈”不在 quote 中。", "tokens": 1226}
+{"key": "ed9be6b371a08d9a", "model": "claude-sonnet-5-5", "label": "Y", "reason": "合并各 quote：AIME24 63.3%、MATH500 95.6%、AMC23 96.3% 的数字均出现，并显示超过 QwQ 和 o1-preview；AMC23 对 o1-preview 的比较由“所有基准最佳”一句涵盖。", "tokens": 1761}
+{"key": "0c4581cd1140bfc3", "model": "claude-sonnet-5-5", "label": "P", "reason": "合并后的 quote 覆盖了粗粒度难度过滤、细粒度难度评估、知识点多样化和 800 条样本，但 claim 中按逻辑连贯性、步骤清晰度、解答准确性筛选推理链这一项没有出现在任何 quote 里。", "tokens": 1588}
+{"key": "0b28f80b1b2dadf9", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确列出主评估集包含 AIME24、MATH500 和 AMC23，claim 的三个基准名称全部对应；「域内」只是对主评估集的归类说法，没有引入新的数字或结论。", "tokens": 1492}
+{"key": "2bf67c099db6d3e9", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 覆盖了抑制结束符并追加“Wait”以延长思考，以及强制最大/最小思考 token 数；但“通过强制插入思考结束符来提前终止”这一具体机制未在 quote 中出现。", "tokens": 1759}
+{"key": "828d79ac3b476da6", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只说明 LM agent 是有自身需求和能力的新型终端用户，这支撑了“为 LM agent 设计接口”的前提；但“提升软件工程等复杂数字任务表现”的目标和“设计接口”这一研究问题都不在 quote 中。", "tokens": 1240}
+{"key": "49b76a8e25ba7121", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来涵盖了 claim 的全部实质内容：零样本提示 “Let’s think step by step.” 和 128 个 GSM8K 测试样本。", "tokens": 1265}
+{"key": "dbf9d2b3b4eab709", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只说约一半（52.0%）的未解决实例属于“不正确实现”或“过度特定实现”，而 claim 写成“大多数失败源于不正确的实现”，既夸大了比例，又丢掉了“过度特定”这一类。", "tokens": 1455}
+{"key": "508136f2d4d52bc7", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了\"LM agent 在该环境中难以可靠行动\"以及\"这些缺陷妨碍了性能、因此需要 ACI\"。但 claim 里的其他实质内容都不在 quote 中：接口（如 Linux shell）是为人类用户设计的，具体困难是无法可靠编辑小段文件、无效编辑时没有反馈。", "tokens": 1360}
+{"key": "785b9e698c848057", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了 SWE-bench 有 2294 个实例、来自 12 个 Python 包仓库，另一条 quote 支撑了 Lite 是 300 个实例的子集；但“消融和分析在 Lite 上进行”这一点没有任何 quote 说到。", "tokens": 1511}
+{"key": "f8f8033bd306b58c", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说明 C4 评估使用 16 个 thought token、4 个 true token ahead，其余设置相同，与 claim 完全一致。", "tokens": 1207}
+{"key": "7f241f5aa6ff2b43", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“在每对观测 token 之间引入辅助的 rationale 变量”，但“生成能帮助预测后续文本的中间思考”这一目标不在 quote 中。", "tokens": 1216}
+{"key": "3d290c58b6322913", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接给出 8 样本多数投票准确率（cot-maj@8）从 40.6% 提升到 47.7%，与 claim 的数字和结论一致；“链式思考实验”由 cot-maj@8 体现，省略“Quiet-STaR”不影响。", "tokens": 1249}
+{"key": "831a11a04054f83a", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说所有实验都从 Mistral 7B 的基础版本出发，与 claim 一致，没有多出需要验证的新事实。", "tokens": 1159}
+{"key": "e44e1ce3d0a15caa", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“预训练已编码领域知识的模型中，少量精心设计的认知过程示范可使复杂推理涌现”这一部分，但“激发阈值取决于预训练知识库完整性和后训练样本作为认知模板的有效性”这一实质内容不在 quote 里。", "tokens": 1805}
+{"key": "110068ae862b63a6", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“没有自动验证工具时需要改进样本验证方法”这一点；claim 中“常见验证方法在约 100 个样本后饱和”以及“才能将重复采样扩展到更多任务”这两项内容，quote 里都没有。", "tokens": 1257}
+{"key": "4ea0ef540bb8f807", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“用户和开发者常限制模型只尝试一次”，而“训练计算扩展持续提升模型能力”这一部分不在 quote 中。", "tokens": 1375}
+{"key": "0a24f96819e59cd6", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“人类学习多数语言任务不需要大型监督数据集”；claim 中的“自然语言指令或极少示例”以及“作者希望 NLP 系统具备灵活性和通用性”这两项实质内容不在 quote 里。", "tokens": 1228}
+{"key": "6dfd0d0124242030", "model": "claude-sonnet-5-5", "label": "N", "reason": "quote 只说在 3.9 节设计了一些额外任务来探测上下文学习能力，属于框架句；没有列出 claim 中的任何具体任务类别（语言建模、问答、翻译、算术、单词打乱、SAT 类比等）。", "tokens": 1270}
+{"key": "29bddf6488e72b37", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说明 CodeContests 测试套件会产生假阴性（正确解答未通过测试），与 claim 中该 ID 负责的部分一致；其余内容属于总结性表述。", "tokens": 1539}
+{"key": "4c1d1a5d00ced36b", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了“文本合成和若干 NLP 任务有明显弱点”以及“比较类任务上单样本/少样本仅略好于随机”，但“长段落中失去连贯性、自相矛盾”这一具体弱点不在任何 quote 里。", "tokens": 1329}
+{"key": "40f40eb4b58aface", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“可能利用伪相关”这一点，且说的是模型表达力越强这种可能性越大；“狭窄任务分布”和“分布外泛化差”不在 quote 里。", "tokens": 1511}
+{"key": "0dd0111661d0dad2", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说明仅在 MATH 和 CodeContests 上评估，这正是 claim 中由 p3 负责的部分；模型列表应由 p2 负责。", "tokens": 1550}
+{"key": "cf4c430afd994ada", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了「超过两打 NLP 数据集」和「若干为测试快速适应设计的新任务」，但没有提到每个任务都在零样本、单样本、少样本三种条件下评估，这部分是 claim 中的实质内容，不在 quote 里。", "tokens": 1270}
+{"key": "62caaead8b348b62", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 几乎逐字包含 claim 的全部内容：人类评估受标注者个人偏见、背景和偏好影响，可能导致结果不一致或不可靠。", "tokens": 1221}
+{"key": "9c31ed949d51ff5a", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了 15.9% 提升到 56%（250 个样本）以及超过 SOTA，但 43% 这个数字、SWE-bench Lite 这个名称和“单样本 SOTA”的说法都不在 quote 里，只能靠“13%”推算，所以只部分支撑。", "tokens": 1635}
+{"key": "92b5d48971a01bd2", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支持图像理解在自然图像、文本、图表理解和多模态推理等任务上做了评估，但 claim 中的具体基准（MMMU、VQAv2、ChartQA、DocVQA）以及视频、语音部分都不在 quote 中（后两项由其他 ID 负责）。", "tokens": 1351}
+{"key": "94b363a286324b97", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 原话就是\"这些模型仍在开发中，尚未准备好发布\"，与 claim 的实质内容完全一致；\"多模态\"只是对\"these models\"的指代解析，不扣分。", "tokens": 1183}
+{"key": "4298173c4b2527ce", "model": "claude-sonnet-5-5", "label": "Y", "reason": "claim 的全部实质内容（模型仍在积极开发中、尚未准备好发布）都在 quote 中；claim 里的“多模态”只是对“这些模型”的具体化，不算新增事实。", "tokens": 1181}
+{"key": "e65a85efdbeadea2", "model": "claude-sonnet-5-5", "label": "N", "reason": "quote 只说架构由三个组件构成，没有列出任何一个组件（LLM、视觉编码器、MLP 融合模块），属于框架句，claim 的具体内容均不在其中。", "tokens": 1214}
+{"key": "7dce675de1db63e6", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 列出了 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 和不同规模 Qwen2-VL 的比较，与 claim 的实质内容一致；“多种基准上评估”只是框架性表述，不影响判断。", "tokens": 1317}
+{"key": "45bb6ec3a84a9ae5", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 几乎逐字包含 claim 的全部内容：探索细粒度感知能力、为 LVLM 建立稳固基础、打造面向真实应用的智能体放大器；\"Qwen2.5-VL\"只是对 \"we\" 的解指代。", "tokens": 1270}
+{"key": "b6dea370b8b8f273", "model": "claude-sonnet-5-5", "label": "Y", "reason": "claim 中由 S3.SS3.SSS2.p1 负责的是“文档理解与 OCR”这一项（排在第二位），quote 明确说评估覆盖 OCR、图表和文档理解基准，实质内容全部具备。", "tokens": 1307}
+{"key": "2914614580d42fdc", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑了个性化和编辑能力是通过后训练加到基础模型上这一点；claim 里的“参考图像条件”、“多阶段训练”和“无监督视频编辑数据”都不在 quote 中。", "tokens": 1226}
+{"key": "c511539345d411d8", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了「中间推理步骤可能忽略或误解视觉线索」和「最优模态对齐仍是持续挑战、需要进一步改进」。但 claim 中「视觉语言模型依赖文本和视觉两种模态」以及「尽管采取了过滤策略」这两项内容不在 quote 里，所以只能算部分支撑。", "tokens": 1444}
+{"key": "f0cd667589a9b48b", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑 Movie Gen Video（30B、联合文本到图像和文本到视频生成）；claim 中 13B 的 Movie Gen Audio 及其用途不在 quote 中。", "tokens": 1266}
+{"key": "2e084c8aa12935a8", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑「整体质量上显著优于 Runway Gen3 和 LumaLabs」这一部分；claim 中对 Sora 的「中等净胜」和与 Kling1.5「持平」在 quote 中没有出现。", "tokens": 1289}
+{"key": "1d5e68828c4f5545", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“约15T多语言tokens”这一项，三阶段划分、405B参数、15.6T tokens等其他实质内容不在其中。", "tokens": 1579}
+{"key": "572aa604653542b7", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 说明该方法在身份保持、视频质量、文本对齐所有维度上大幅优于基线；claim 把 \"the baseline\" 具体写成 ID-Animator，属于解指代，没有新增事实。", "tokens": 1222}
+{"key": "539d522d24bc1829", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了 FP8 混合精度训练和 DualPipe 用于高效流水线并行，但 claim 中“计算-通信重叠”这一实质内容不在 quote 里。", "tokens": 1252}
+{"key": "9edc55b18a985f8b", "model": "claude-sonnet-5-5", "label": "Y", "reason": "同一 ID 下的另一条 quote 明确写出推荐部署单元相对较大、可能给小团队带来负担，并说明这些局限有望随硬件发展缓解，合起来覆盖 claim 的全部实质内容。\"为保证高效推理\"只是对部署单元的注解，不算新事实。", "tokens": 1339}
+{"key": "782d5434e97c276a", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 给出了约 1 亿视频-文本对和约 10 亿图像-文本对的预训练数据规模，与 claim 中由该 ID 负责的部分完全一致；多阶段训练和 SFT 由另一个 ID 负责。", "tokens": 1476}
+{"key": "48f3127f4f451ee2", "model": "claude-sonnet-5-5", "label": "P", "reason": "同 ID 的其他 quote 给出了“推荐部署单元相对较大，可能给小型团队带来负担”，覆盖了 claim 的主要内容。但“为保证高效推理”这一原因没有被任何 quote 直接支撑，所以只能判 P。", "tokens": 1323}
+{"key": "d022b33c5919313b", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑了“采用困惑度评估”这一项（HellaSwag、PIQA、WinoGrande），claim 中的生成式、语言建模等其他评估方式不在 quote 里。", "tokens": 1451}
+{"key": "b5672dc6e77b892b", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了 FP8 混合精度训练框架和 DualPipe 用于高效流水线并行，但 claim 中 DualPipe 还实现了“计算-通信重叠”，这一点 quote 里没有。", "tokens": 1479}
+{"key": "fca95b63c5da58ee", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只给出降至 29.62% 以及使用 50% dropout，但 31.05% 的基线数字和 Reuters 数据集均不在 quote 中，所以 claim 的部分实质内容没有被支撑。", "tokens": 1186}
+{"key": "c05618a18d4bb4cf", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只给出 ImageNet 上 dropout 将错误率降至创纪录的 42.4%，但 claim 中的起点 48.6% 不在 quote 里（\"this\" 未给出具体数字）；CIFAR-10 部分由 p10 负责，不计入。", "tokens": 1259}
+{"key": "f129e1e2f260b64e", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑了\"用单独保留的验证集评估大量架构来做决定\"这一部分；claim 中的适用范围（语音和两个物体识别数据集）以及\"用选出的架构在真实测试集上评估 dropout\"都不在 quote 里。", "tokens": 1458}
+{"key": "17ee9f14fa12d6c2", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“不确定架构的哪个方面是主要因素、留待未来工作”，但没有提到 MQAR 任务；claim 把它限定在 MQAR 上，这一点 quote 中没有。", "tokens": 1222}
+{"key": "5c7b5de82bfd826e", "model": "claude-sonnet-5-5", "label": "Y", "reason": "claim 中由 [p8][p9] 负责的部分是在 TIMIT 上评估，quote 说明了 TIMIT 基准核心测试集上的帧分类错误率，足以支撑；'语音识别'只是把任务说得更笼统。", "tokens": 1629}
+{"key": "e010bee1f39f73d1", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了分块分解、对角块用对偶注意力模式、非对角块利用低秩结构归约为较小循环；但“提出 SSD 算法”以及“结合线性 SSM 循环与二次对偶形式的优势”这一结论不在 quote 中。", "tokens": 1363}
+{"key": "83e56f6fd8a0eec5", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接说明将 SSD 算法的速度与 Mamba 的扫描实现和 FlashAttention-2 做了基准对比，与 claim 内容完全一致。", "tokens": 1222}
+{"key": "20c41d395773da08", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了 50,000 训练/10,000 测试图像的数字，但没有出现 CIFAR-10 的名称和物体识别任务，这些只能靠指代推断。", "tokens": 1565}
+{"key": "e25d34a9f6b2d681", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只说明表4对块（block）的架构改动做了消融，支撑了“块设计”这一项；头结构和注意力核近似不在此句中，由其他 ID 负责，且此句也没有具体内容。", "tokens": 1245}
+{"key": "9655cc4a19dfb089", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑了「论证只适用于被优化以完成许多任务的智能」这一部分；但「专用智能可能不会趋同」是 claim 额外的推断，quote 并未说出。", "tokens": 1274}
+{"key": "f0a64bdf9173caf3", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“把多头注意力中头的类比引入 SSM”这一项；Mamba-2 的命名、核心层是 Mamba 选择性 SSM 的改进、分组值注意力这些内容都不在 quote 里。", "tokens": 1536}
+{"key": "12d43f654b800bb3", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支持语言模型家族为 BLOOM、OpenLLaMA、LLaMA，但 claim 中的 ViT 视觉模型、WIT 数据集、1024 个样本和 k=10 都不在 quote 里。", "tokens": 1281}
+{"key": "344be0f5f83504b0", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支持研究者偏见/集体偏好塑造模型发展，未提及“硬件彩票”，也未明说其促成趋同。", "tokens": 1468}
+{"key": "0aa33c315a672e06", "model": "claude-sonnet-5-5", "label": "Y", "reason": "同 ID 的其他 quote 已涵盖 claim 全部内容：固定架构以受控考察精度、参数、token 的影响，以及低精度训练常做架构调整、可缩小与全精度模型的差距；本条 quote 讲的是另一条局限，但不影响整体支撑。", "tokens": 1458}
+{"key": "1bc74d47446a607d", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了\"联合优化时最优精度与计算量无关\"以及\"N 固定时 P* 随 log C 增长\"，但 claim 中\"约为 7-8 比特\"这个具体数值不在任何一条 quote 里。", "tokens": 1350}
+{"key": "58c2e3a0dd64f7fe", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接说明在 Dolma V1.7 上训练并评估了一系列 OLMo 风格模型，使用标准 Transformer++ 实现，claim 的全部实质内容都在其中；其他 quote 的参数规模和 token 数不影响判断。", "tokens": 1366}
+{"key": "4acadcbc0baf7ac1", "model": "claude-sonnet-5-5", "label": "Y", "reason": "公式中 D^γD/N^γN 为幂律项，e^{-P_post/γ_post} 为随后训练量化精度的指数衰减，与 claim 描述的形状一致。", "tokens": 1302}
+{"key": "b082109487b532cc", "model": "claude-sonnet-5-5", "label": "P", "reason": "(JSON 损坏，仅取 label)", "tokens": 1643}
+{"key": "48b1a39617c4028b", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“对齐越好，Hellaswag 和 GSM8K 表现越好”，但没有提到 DINOv2，claim 里“与 DINOv2 对齐”这一具体对象不在 quote 中。", "tokens": 1565}
+{"key": "493526cfddb5a855", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了权重、激活、KV 缓存的效应可建模为独立且可乘，但没有说这些效应作用于\"有效参数量\"，这是 claim 额外加入的具体内容。", "tokens": 1481}
+{"key": "a82a6f8320b163a4", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接给出混合训练下 bioS single 的 OOD 准确率 86.6% 和 bioR single 的 77.7%，与 claim 的数字完全一致；“有效提取知识”只是对这些数字的概括，没有增加新的可验证事实。", "tokens": 1252}
+{"key": "43806e2665c62597", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接提出了同一核心问题：语言模型训练中如何记忆知识、推理时如何提取以回答问题；claim 省略了“逻辑推理”部分，不影响判断。", "tokens": 1210}
+{"key": "eb69abb4ecb6a2b9", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了「对未见个体（P_test）的 QA 准确率为零」以及「所有微调参数下都如此」，但 claim 中「模型规模远大于个体数」「个体被暴露上千次」「仅预训练传记再微调」等条件不在 quote 中。", "tokens": 1293}
+{"key": "e037e7ae3bfbd4b0", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说明记忆训练数据中的所有句子并不能保证模型在推理时提取或操作其中的事实知识，与 claim 内容完全一致。", "tokens": 1207}
+{"key": "0157f4f4b120740e", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑了 bioS 是合成数据集、含 10 万个体这一项，每人六句、每句约 50 个模板、bioR 由 Llama 生成等内容都不在该 quote 中；这些可能由其他 ID 负责，但本条只覆盖了一部分。", "tokens": 1269}
+{"key": "0de37c5da6541b83", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确说 AntiFold 利用 ESM-IF1 在超过 1200 万个结构上的预训练，并在已解析和预测的抗体结构上继续微调，claim 的内容全部覆盖。", "tokens": 1260}
+{"key": "4f8bf1ceb4a0753b", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 列出了 span masking、随机残基额外掩码、以 3:1 权重偏向 CDR 残基、逐层学习率衰减以及纳入 OAS 预测结构，与 claim 的全部策略一一对应，没有新增事实。", "tokens": 1334}
+{"key": "39c532678ffd5f7a", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部内容：相对 ESM-IF1，CDRH3 为 60% vs 43%；相对 AbMPNN，CDRH3 为 60% vs 56%、其余 CDR 为 75-84% vs 63-76%、多数 FR 为 87-94% vs 85-89%。第一条还给出了 p<0.005，支撑\"显著\"。", "tokens": 1514}
+{"key": "5afe30aec5d9b120", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来涵盖了 claim 的全部实质内容：相对 ESM-IF1 的 CDRH3 恢复率（60% vs 43%，有显著性），以及相对 AbMPNN 的 CDRH3、其余 CDR 和多数 FR 区域的数值对比。", "tokens": 1477}
+{"key": "72b413281064361b", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了「逆折叠模型可在不改变骨架结构的前提下设计新序列」，以及骨架约束设计有助于优化单项性质而不破坏其他性质。但 claim 中「抗体优化需要选择能维持结构和结构介导性质（如稳定性与抗原结合模式）的突变」这一动机，尤其是稳定性与抗原结合模式的具体例子，quote 里没有出现。", "tokens": 1400}
+{"key": "ebadcde3f6d82790", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来，一条说明方法在各任务上匹配或超越基线，另一条说明方法没有生成域的归纳偏置；claim 中的“多个 3D 分子生成任务”只是对“each of them”的解指代，没有添加新的实质内容。", "tokens": 1295}
+{"key": "e8cb8400e6429039", "model": "claude-sonnet-5-5", "label": "Y", "reason": "同一 ID 下的其他 quote 已完整支撑 claim：预训练 BindGPT 在不使用和使用显式氢原子时都持续优于 XYZ-TF，且 BindGPT 是首个能在如此大规模下显式建模氢原子的模型。本条 quote 讲 MolDiff 的成药性，虽与 claim 无关，但不影响整体判断。", "tokens": 1519}
+{"key": "6d7a301827f467bd", "model": "claude-sonnet-5-5", "label": "P", "reason": "三条 quote 合起来覆盖了有效性、SA/QED/Lipinski、生成 1K 个有效分子的时间和 RMSD-coverage，但 claim 中的“分布度量”和“RMSD”两项在这些 quote 里没有出现。", "tokens": 1640}
+{"key": "c58f241c04f7b071", "model": "claude-sonnet-5-5", "label": "P", "reason": "其他 quote 给出了 208M 构象、12M 分子、3.2M 口袋结构这些数字，但没有任何一句说明该数据集由 Uni-Mol 提出，也没有说明它用于预训练。本条 quote 讲的是 CrossDocked，与 claim 无关。", "tokens": 1496}
+{"key": "a3d10ef34aceef6a", "model": "claude-sonnet-5-5", "label": "Y", "reason": "第一条 quote 给出 300M 参数前扩展良好、到 300M 时困惑度过拟合；另一条 quote 说明在当前预训练数据下 108M 模型表现最好，对应 claim 中采用约 100M 模型的结论，合起来覆盖 claim 的实质内容。", "tokens": 1346}
+{"key": "4b2ab96d7aeb7c72", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 原句就包含 claim 的全部实质内容：主动学习探索广阔材料空间，以及整合深度图神经网络、材料探索器、第一性原理监督器和集成不确定性监测器。", "tokens": 1378}
+{"key": "79b79dace41b4157", "model": "claude-sonnet-5-5", "label": "P", "reason": "其他 quote 支撑了“长程相互作用主导的场景（聚合物、多相体系）表现不佳”，但“采用半局域原子相互作用描述”这一说法在所有 quote 中都没有出现；本条 quote 讲的是只用均质体相数据训练，与 claim 无关。", "tokens": 1428}
+{"key": "3ecf1631b2c9c4df", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了“所有测试的材料类别成功率超过 90%”，但 claim 中的“118 个系统”和“分子动力学模拟”这两项具体内容不在 quote 里。", "tokens": 1359}
+{"key": "a6d489a38e4e6bfb", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 已包含准确高效预测任意材料在实际合成与工作条件下的性质这一核心内容；claim 括号里的“有限温度和压力”只是对“实际条件”的具体化，不算新增事实。", "tokens": 1483}
+{"key": "f2a04d8f2800b8a8", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接表明可能需要进一步的微调数据才能获得定量正确的吸附热，与 claim 的实质内容一致；\"吸附评估\"属于语境，\"may be required\"与\"需要\"差别很小。", "tokens": 1232}
+{"key": "838aab5db8920907", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了作者整理最低能量构型数据集且不区分泛函、软件实现或校正，但 claim 称其为“基态材料”，quote 只说“materials”的最低能量构型，属于轻微添加。", "tokens": 1256}
+{"key": "b30213eb60716e35", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支持 Orb 在 MOF-5 上跨多个温度产生稳定 MD 轨迹；claim 中的“高达 800 K”和“复现苯撑环不能完全旋转”这两项实质内容都不在 quote 里。", "tokens": 1273}
+{"key": "81fe683854dcdd08", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 逐项给出了 GNS 骨干、平滑图注意力机制，以及节点间消息基于注意力权重和距离截断函数更新，claim 的内容全部在 quote 中。", "tokens": 1260}
+{"key": "211a5745fa4ad6df", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 给出 MAE 为 0.87 THz，与 claim 中声子最大频率部分的数字一致，对象由指代可补全。", "tokens": 1479}
+{"key": "b541e34a20fb98d4", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：神经网络解码器、集成的关联最小权重完美匹配解码器（含匹配合成）、用处理器数据微调神经网络、用强化学习优化匹配图权重。", "tokens": 1321}
+{"key": "65d779dbf52d4318", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 直接给出 Λ=2.14±0.02 和 ε_7=(1.43±0.03)×10^-3，与 claim 的数值完全一致；ε_7 指距离-7的每周期逻辑错误率属解指代，不扣分。", "tokens": 1263}
+{"key": "9ab395666cf29ebd", "model": "claude-sonnet-5-5", "label": "Y", "reason": "claim 中的距离-7逻辑量子比特寿命、物理量子比特的中位数与最佳寿命，以及 2.4±0.3 倍的比值，都与 quote 完全一致，没有新增事实。", "tokens": 1302}
+{"key": "c8ea0341a8f48baa", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来覆盖了距离-29重复码、1000个周期、2×10^7次采样、2×10^10个总周期和5.5小时，但没有提到\"72量子比特处理器\"，这是 claim 里多出的一个具体事实。", "tokens": 1469}
+{"key": "065ce40db421b80c", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只说明此前没有量子处理器明确展示过低于阈值的性能，支撑了“低于阈值运行”这一问题背景；claim 中的“表面码”“随码距增加指数抑制逻辑错误率”以及“实现并验证”的目标，quote 都没有提到。", "tokens": 1264}
+{"key": "562135d7a99c40cd", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑 cobaya 中加入了 SN Ia（PantheonPlus、Union3、DESY5）似然及 DESI BAO 似然；Metropolis-Hastings MCMC、CAMB、BBN 与 CMB 均不在 quote 中。", "tokens": 1307}
+{"key": "7f66d81649cfd764", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确提醒不要过度解读该结果，因为至少部分偏好的 (w0,wa) 模型可映射到在任何红移都不违反零能量条件的精质模型，与 claim 的全部内容一致。", "tokens": 1319}
+{"key": "fe4b3f0cc83a8073", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 完整给出了 FIRE 优化器、500 步、最大力低于 0.05 eV/Å 这些弛豫设置；Matbench-Discovery 只是对该设置所属基准的归属。", "tokens": 1759}
+{"key": "943058ededbf9a4e", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 给出了 BBN+θ* 下的 H0=(68.52±0.62)，但 claim 中与 SH0ES 存在 3.7σ 张力的部分不在这句 quote 里；quote 里的组合还写着 DESI BAO，claim 没提到。", "tokens": 1337}
+{"key": "223a5e7b8d06746d", "model": "claude-sonnet-5-5", "label": "Y", "reason": "p5 的两条 quote 合起来支撑了“原因不明、可能只是样本方差波动”这部分。约3σ和红移区间由 p4 负责，不影响本条判断。", "tokens": 1496}
+{"key": "180aeae98be43568", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑 SED 模板在 z≈5 生成且不含宿主星系和尘埃贡献这一点；灰化消光曲线、A_V=3 mag、红光学连续谱和平坦紫外形状等其他实质内容都不在 quote 中。", "tokens": 1346}
+{"key": "c5e282fe03f712d7", "model": "claude-sonnet-5-5", "label": "N", "reason": "quote 只说 n0=10 和 100 cm^-3 时光学到 2–3 μm 的 SED 形状与观测的 LRD 光谱相符，没有涉及高密度或 γ=1–2 时近红外过亮、γ<1 时能量峰移向中远红外、MIRI 或 ALMA 约束，claim 的这些实质内容都不在其中。", "tokens": 1379}
+{"key": "0861bd8124802af4", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 几乎逐字包含 claim 的全部内容：MC 事件产生器中将矩阵元与部分子簇射结合的程序，在未来 LHC 更高精度的量子信息研究中需要特别关注。", "tokens": 1268}
+{"key": "9b3030d0a7ec8461", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 说明在两个验证区（无纠缠信号），测量与不同 MC 设置的预言在不确定度内一致，claim 的实质内容全部包含；“作为一致性检验”只是框架性说法。", "tokens": 1241}
+{"key": "98d64e0762379e71", "model": "claude-sonnet-5-5", "label": "Y", "reason": "S3.SS3.p5 负责的是“原因不明、可能是样本方差波动”这一部分，两条 quote 合起来正好覆盖；0.6<z<0.8 和约3σ 的差异应由 p4 负责，不影响本条判断。", "tokens": 1567}
+{"key": "8efada4db94c429f", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“利用顶夸克对自旋关联探测量子纠缠”这一总体思路，而 D = −3·⟨cos φ⟩、带电轻子夹角、母顶夸克静止系等具体内容均不在 quote 中。", "tokens": 1274}
+{"key": "ed1c820e89db01f3", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 已包含 S2.p5 对应的部分：叠加 z~5.5 和 z=7.5 的 LRD 堆叠测光 SED 数据作为参考；巡天深度部分由另一个 ID 负责。", "tokens": 1532}
+{"key": "bba4f26028f7f1ac", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了\"观测与热尘埃再发射的极红 SED 预期矛盾\"以及\"因此不利于尘埃遮蔽 AGN 情景\"，但 MIRI、多数 LRD 在 F1800W 未被探测、SED 从光学到近红外趋平这些具体观测内容都不在 quote 中。", "tokens": 1663}
+{"key": "cc2dafe46597308d", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑“目前没有明确答案、只能给出推测”这部分；claim 里的具体问题内容（LRD、z>4、统一 A_V=3 mag）不在 quote 中，quote 只写了“this question”。", "tokens": 1557}
+{"key": "9bec693a9ccef5f3", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了信号区 340<m_tt<380 GeV 的定义，以及各区域顶夸克对纯度超过90%；但 claim 中另设的两个验证区 380–500 GeV 和 >500 GeV 的具体划分在 quote 中没有出现。", "tokens": 1362}
+{"key": "9a5c5c0207499e93", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑\"用量子动力学模拟复现实验结果\"，并提到射频驱动功率、电荷噪声和温度；但 claim 中的\"MZM、量子点\"有效模型并未出现在 quote 里，且\"建立有效模型\"也是新增内容。", "tokens": 1256}
+{"key": "779b7ea1af335cfc", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑 D 是纠缠标记（D=tr[C]/3，D<-1/3 即证明纠缠），但 claim 中 D = −3·⟨cos φ⟩ 的具体形式和带电轻子在母顶夸克静止系中夹角的测量方式都不在 quote 里。", "tokens": 1698}
+{"key": "9f281de5d61381ef", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了 E_M 的显著变化（有限尺寸效应）以及相干长度不显著小于器件长度；但 claim 说的是“拓扑能隙并非远小于器件长度”，而 quote 说的是能隙较小（modest），并没有提到能隙与器件长度的比较，这部分有错位；另外 quote 把变化归因于介观涨落，claim 只说有限尺寸效应。", "tokens": 1446}
+{"key": "ddf83aa38ec6ab64", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只说明 measurement-only 拓扑量子计算协议把操作简化为仅融合；claim 中的“费米宇称单次测量”“确定一对 Majorana 零能模共享的费米宇称”以及论文目标，这句都没有给出。", "tokens": 1252}
+{"key": "34c6f6e0e09310d6", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只给出 Cooper 对盒（CPB）测得的 n_qp≈0.6 µm⁻³（B=0），支撑 claim 的最后一部分；指数分布、τ_RTS≈2 ms、约 1 µm⁻³ 以及“数量级内一致”的比较都不在 quote 中。", "tokens": 1371}
+{"key": "eb35694e0bfcb2b0", "model": "claude-sonnet-5-5", "label": "Y", "reason": "三条 quote 合起来覆盖了 claim 的全部实质内容：MPNN 架构、高阶多体 ACE 展开、在 MPtrj 数据集上训练。", "tokens": 1295}
+{"key": "b977f41f8a3b9c5c", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来涵盖了 claim 的全部实质内容：MACE 的 VAF 中 Li 和 F 都有更深的极小值且幅度大致相等（即形状相似），而且更深的极小值意味着液体运动中的类固态成分更显著。", "tokens": 1326}
+{"key": "d5d9fbc6cc0456e1", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来支撑了\"用 MACE 势计算粘度并与实验数据比较\"，但 claim 中的 MACE-MP-0 具体版本、熔融 LiF 以及与经典 Buckingham 和 BHM 势的对比均未出现；quote 的比较对象是实验数据而非这两种经典势。", "tokens": 1371}
+{"key": "3f2d0fd71a7de563", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑“模型通常给出‘平均’预测”和“哪种结果更好尚不明确”，但“周期发生剧烈变化的光变曲线”这一条件不在 quote 里，“作者承认”的局限性质也只是推断。", "tokens": 1251}
+{"key": "4a8c611141377012", "model": "claude-sonnet-5-5", "label": "P", "reason": "两条 quote 合起来撑住了渐进加热可能不准、可改用自由能和相共存方法、MACE 熔点测试留待未来工作这几项。但 claim 里“周期性边界条件、小系统尺寸等因素会影响熔点”这一原因，在 quote 中没有出现。", "tokens": 1657}
+{"key": "11e12d50fa4080d1", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑了\"较长周期下相关性不同，可能与较老恒星活动性下降有关\"，但 claim 中的具体阈值\"25 天\"以及\"模拟误差与观测误差\"的相关性对象并不在 quote 中。", "tokens": 1245}
+{"key": "a4178e6a453815bd", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 支撑 τ_RTS 随偏压升高降到一半，但“准粒子注入”这一机制不在 quote 中，其余两部分（断开后 RTS 消失、无 h/e 周期性）由其他 ID 负责。", "tokens": 1672}
+{"key": "0bff0259518141be", "model": "claude-sonnet-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖 claim 的全部实质内容：倾角与 spot 位置的内在简并，以及模型依赖先验、spot 分布对结果影响很大。", "tokens": 1286}
+{"key": "6907d1e09cb227e0", "model": "claude-sonnet-5-5", "label": "Y", "reason": "S4.SS2.p1 对应的部分是 50000 个模拟样本和 81%/9%/10% 的划分，两条 quote 合起来都有。Butterpy 和 Kepler 噪声由其他 ID 负责。", "tokens": 1496}
+{"key": "a16eb7067ca22d13", "model": "claude-sonnet-5-5", "label": "Y", "reason": "quote 明确给出对液态理论理解不足、经典原子模型无法生成可靠热物理数据，与 claim 中归给 S1.p2 的部分一致；应用领域由 S1.p1 负责。", "tokens": 1615}
+{"key": "65265cac1200c595", "model": "claude-sonnet-5-5", "label": "P", "reason": "quote 只支撑了使用 Butterpy 生成模拟光变曲线进行监督训练这一项，而注入真实 Kepler 噪声、50000 样本和 81%/9%/10% 划分均不在 quote 中。", "tokens": 1278}
+{"key": "51caef0fde68444b", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支撑了作者计划在未来工作中进一步研究该方法这一项；把自注意力限制在大小为 r 的邻域、最大路径长度增至 O(n/r) 等实质内容都不在 quote 中。", "tokens": 1297}
+{"key": "272dec7c5899db29", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了编码器由 N=6 个相同层堆叠、每层有两个子层；但子层的具体构成（多头自注意力、逐位置前馈网络）以及残差连接加层归一化都不在 quote 中。", "tokens": 1430}
+{"key": "e90f66d0a9c67a03", "model": "claude-opus-5-5", "label": "Y", "reason": "本条 quote 对应 claim 中的“预训练数据规模实验”，原文写明在 ImageNet、ImageNet-21k 和 JFT-300M 这几个规模递增的数据集上预训练 ViT，足以支撑这一部分。", "tokens": 1343}
+{"key": "2ae3932a3374b6b7", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持了需要注入 token 位置信息这一点，但 claim 中“由于模型不含循环和卷积”的因果前提和“加入输入嵌入”的做法都不在 quote 中。", "tokens": 1430}
+{"key": "355b6126f873a5c1", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 负责 claim 中“二维结构仅在切 patch 和调整位置嵌入时手动注入”这一部分。quote 明确说分辨率调整和 patch 提取是手动注入 2D 结构归纳偏置的唯二环节，能撑住这部分；claim 把分辨率调整写成微调时调整位置嵌入，属于具体化注解，不扣分。", "tokens": 1483}
+{"key": "db1c40110c27f59b", "model": "claude-opus-5-5", "label": "Y", "reason": "claim 中由该 ID 负责的部分是“使用正弦余弦位置编码”，quote 明确说采用不同频率的 sine 和 cosine 函数，这部分得到支撑；“无循环卷积”和“加入输入嵌入”应由 S3.SS5.p1 负责。", "tokens": 1406}
+{"key": "33d40add5dbf90cd", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了“固有的顺序性阻碍训练样本内的并行化、在长序列时尤为关键”，但“循环模型沿输入输出序列的符号位置分解计算”这一具体机制不在 quote 中。", "tokens": 1516}
+{"key": "c124b64083276499", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持了仿照 BERT 的 [class] token 预置可学习嵌入这一点，但没有提到它的输出被用作图像表示，也没有提到预训练和微调时在其上接分类头。", "tokens": 1299}
+{"key": "9679f5db09eba0ce", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来，支撑了中等规模数据集上无强正则时比同规模 ResNet 低几个百分点，也支撑了缺少平移等变性和局部性等归纳偏置；claim 中的因果连接和'泛化不佳'属于对原文论述的合理概括，未添加可独立验证的新事实。", "tokens": 1392}
+{"key": "5679ae3529761aed", "model": "claude-opus-5-5", "label": "P", "reason": "该 quote 只说明模型设计尽量贴近原始 Transformer，能部分对应 claim 中「刻意保持设计」的意图，但没有提到「简单」或「最少的图像特有归纳偏置」，后者应由其他引用支撑。", "tokens": 1609}
+{"key": "7771927c8d2efbff", "model": "claude-opus-5-5", "label": "Y", "reason": "第一条 quote 说明 REALM 与 ORQA 结合了语言模型与检索器，且只探索了开放域抽取式问答；同 ID 的另一条 quote 说明本文要把混合参数与非参数记忆引入 seq2seq 模型，两条合起来覆盖了 claim 的全部实质内容。", "tokens": 1471}
+{"key": "e309899331ae528d", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来能支撑 152 层单模型 4.49% 验证误差和 3.57% 测试 top-5 误差，但\"六模型集成\"和\"赢得 ILSVRC 2015 第一名\"都不在 quote 中。", "tokens": 1393}
+{"key": "11522f8afeaf9646", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了难以访问和精确操作知识、在知识密集型任务上落后于任务专用架构、难以提供决策来源和更新世界知识这几项核心问题；'在参数中存储事实知识'只是让步式的背景铺垫，不影响判断。", "tokens": 1695}
+{"key": "2af9b5eea3d61fff", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了难以访问和精确操作知识、在知识密集型任务上落后于任务专用架构、难以提供决策来源和更新世界知识这几点；但“预训练语言模型在参数中存储事实知识”这一前提不在 quote 中。", "tokens": 1650}
+{"key": "55ec3f6f030fab62", "model": "claude-opus-5-5", "label": "P", "reason": "合起来的 quote 支撑了 1202 层网络测试结果差于 110 层、训练误差相近，以及该网络对此小数据集可能不必要地大；但「训练误差低于 0.1%」这个数字和「过拟合」这一归因都不在 quote 中。", "tokens": 1461}
+{"key": "6b7c4a9d9026415c", "model": "claude-opus-5-5", "label": "Y", "reason": "多 ID 拆分下，本条对应「生成器为 BART-large」部分，quote 明确写出使用 BART-large 这一 seq2seq 模型，足以支撑；检索器与公式记号由其他 ID 负责。", "tokens": 1416}
+{"key": "b2791df234cfb9dc", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了检索器 p_η(z|x) 基于 DPR 这一点，但 claim 里的“双编码器”结构是 quote 没有提到的新细节。", "tokens": 1594}
+{"key": "74964d5e76dd9fe6", "model": "claude-opus-5-5", "label": "Y", "reason": "S4.SS2.p5 负责的是“ResNet 克服优化困难并在深度增加时获得精度提升”，quote 原文完整给出了这一点；6.43% 误差归 S4.SS2.p6 负责，CIFAR-10 属于框架语境，不扣分。", "tokens": 1377}
+{"key": "d9069d5b20231999", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支撑了恒等映射足以解决退化问题且更经济这一部分，没有提到维度不一致时用线性投影 Ws 匹配维度。", "tokens": 1271}
+{"key": "773850bc7e856025", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确说明模型针对中英文优化，处理其他语言的查询时可能出现语言混杂，claim 的两项实质内容都在 quote 里。", "tokens": 1229}
+{"key": "c500af9300339de5", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来，AIME 2024 上 pass@1 从 15.6% 升到 77.9%、自一致性解码下达到 86.7% 这两项数字都有原文对应。claim 把主语写成 DeepSeek-R1-Zero 属于解指代，不扣分。", "tokens": 1351}
+{"key": "95d20a3909659250", "model": "claude-opus-5-5", "label": "Y", "reason": "两句 quote 合起来，分别支撑了结构化输出能力欠佳，以及无法利用搜索引擎、计算器等工具这两项内容，claim 的实质内容都有出处。", "tokens": 1368}
+{"key": "d44e90ec3d56c304", "model": "claude-opus-5-5", "label": "Y", "reason": "该引用负责的是「不使用神经奖励模型」这一部分，quote 明确说明在推理任务上不使用基于结果或基于过程的神经奖励模型，完全支撑。准确性奖励和格式奖励由另一个 ID 负责。", "tokens": 1328}
+{"key": "f38019e9343f9355", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来撑住了收敛后出现退化问题、精度饱和、且退化并非由过拟合引起；但 claim 中的“迅速退化”在 quote 里没有出现，第一句在“accuracy gets saturated”处就截断了。", "tokens": 1728}
+{"key": "5e3b5f9c4fed3285", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写明 budget forcing 提供完美控制、良好扩展并取得最佳 AIME24 分数；claim 的「扩展斜率」只是对「scaling」的具体化，属注解，三项实质内容都能对上。", "tokens": 1314}
+{"key": "db0829e1c1bc4c44", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写明进一步扩展时有两个关键限制：最终趋于平坦，且受底层语言模型上下文窗口约束，与 claim 完全对应；claim 中的 budget forcing 只是把指代词 it 解成具体名称。", "tokens": 1274}
+{"key": "c44223fec88bd12c", "model": "claude-opus-5-5", "label": "P", "reason": "合并同 ID 的几条 quote 后，三个基准都能对上：AIME24 有 30 题，GPQA Diamond 有 198 题，MATH500 也被提及。但 claim 中的 lm-evaluation-harness 和温度设为 0 这两项实质内容在这些 quote 里都没有出现。", "tokens": 1458}
+{"key": "79674ef7fa49d20a", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支撑 DeepSeek-R1 在数学任务上与 OpenAI-o1-1217 相当；编程算法表现突出以及 AlpacaEval 2.0、ArenaHard 分别提升 25% 和 17% 都不在 quote 中，而两个 ID 并列在句末，无法确定这些内容是否全由另一条引用负责。", "tokens": 1556}
+{"key": "5550a831f3af3e93", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了研究问题（以最简单方法同时实现测试时扩展和强推理性能）以及“众多复现尝试未公开复现出清晰测试时扩展行为”这一背景，但“OpenAI o1 未公开方法”是 quote 中没有的新事实。", "tokens": 1540}
+{"key": "52e005cbe3fe03cf", "model": "claude-opus-5-5", "label": "Y", "reason": "同一 ID 下的几条 quote 合起来，覆盖了域内全部基准最佳，以及 AIME24 63.3%、MATH500 95.6%、AMC23 96.3% 三个数字和对比结论。AMC23 上相对 o1-preview 的优势虽未单独给数，但已由“across all benchmarks 最佳”一句蕴含。", "tokens": 1668}
+{"key": "e866a7c29ed2073a", "model": "claude-opus-5-5", "label": "Y", "reason": "同一 ID 下的三条 quote 合起来，覆盖了 claim 列出的全部基准：OlympiadBench、多语言基准 CHMath/Gaokao/Kaoyan/GradeSchool，以及多学科基准 Minerva 和 GPQA；\"分布外评估\"只是框架性表述，不扣分。", "tokens": 1615}
+{"key": "473ca03018dbcc35", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了 ACI 的四个主要组件，但 claim 中“每一步 agent 生成 thought 和 command 并接收执行反馈”这一交互流程不在 quote 中。", "tokens": 1273}
+{"key": "928377783fc386a1", "model": "claude-opus-5-5", "label": "P", "reason": "同 ID 的几条 quote 合起来，撑住了粗粒度难度过滤、细粒度难度评估、知识点多样化和最终 800 条样本；但 claim 里按逻辑连贯性、步骤清晰度和解答准确性筛选推理链这一项，quote 中没有出现。", "tokens": 1543}
+{"key": "f2bc9f6c64ab4233", "model": "claude-opus-5-5", "label": "P", "reason": "quote 列出了 AIME24、MATH500 和 AMC23 三个基准，但只称其为\"primary evaluation suite\"，没有说明它们属于\"域内\"评估，这一定性在 quote 中找不到依据。", "tokens": 1539}
+{"key": "70ac76e4e7b3c0d5", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来写明了强制设定思考 token 的最大/最小数量，以及抑制思考结束符并追加 “Wait” 来延长思考，覆盖了该 ID 负责的方法内容；插入结束符以提前终止的具体做法可由另一条引用 S1.p2 承担。", "tokens": 1688}
+{"key": "46d7cc63bb6fe423", "model": "claude-opus-5-5", "label": "P", "reason": "这几条 quote 撑住了 SWE-bench 的 2294 个实例、12 个 Python 仓库，以及 SWE-bench Lite 为 300 个实例的子集，但没有说消融和分析是在 Lite 上进行的。", "tokens": 1494}
+{"key": "add642988091d8ed", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只说约一半（52.0%）的未解决实例属于“不正确实现”或“过度特定实现”两类合计；claim 写成“大多数失败源于不正确的实现”，既夸大了比例，又把两类合并成了一类。", "tokens": 1338}
+{"key": "b550330f6b96f0c7", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 完整支撑 claim 中由 [abstract] 负责的假说核心内容：预训练已全面编码领域知识的基础模型中，复杂推理可通过少量精心设计的认知过程示范涌现；“激发阈值取决于知识库完整性和认知模板有效性”应归 [S3.p1] 负责，不影响本条判断。", "tokens": 1721}
+{"key": "ba7f9a850bcd37db", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来给出了零样本提示“Let’s think step by step.”和在 128 个 GSM8K 测试样本上评估这两项实质内容；“链式思考实验”只是对该提示的概括性称呼，不算新事实。", "tokens": 1383}
+{"key": "719043c152f3f097", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来只说明 LM agent 在该环境中难以可靠行动、这些缺陷拖累了性能；claim 中的“Linux shell 为人类设计”以及“无法可靠编辑小段文件、无效编辑无反馈”这两个具体例子都不在 quote 里。", "tokens": 1463}
+{"key": "53cba25e70abb26e", "model": "claude-opus-5-5", "label": "P", "reason": "quote 把 LM agent 定位为有自身需求和能力的新型终端用户，支撑了接口应适配 LM agent 这一点；但没有提到设计接口，也没有提到提升软件工程等任务上的表现。", "tokens": 1410}
+{"key": "d25b9fdcee644753", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写明 C4 评估用了 16 个 thought token、4 个 true token ahead，其余设置相同，claim 的实质内容在 quote 中都能找到。", "tokens": 1217}
+{"key": "da15c7cdb0771a06", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写明所有实验都从 Mistral 7B 的 base 版本开始，claim 说的就是这一点，完全覆盖。", "tokens": 1158}
+{"key": "20de30e6d3f5c00c", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了在每对观测 token 之间引入辅助理由变量这一点，但 claim 中“目标是生成有助于预测后续文本的中间思考”这一目的，quote 里没有说。", "tokens": 1343}
+{"key": "34fccabee8daa7e9", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确给出 cot-maj@8（链式思考下 8 样本多数投票）准确率从 40.6% 提升到 47.7%，claim 的实质内容全部被覆盖，claim 只是省略了 Quiet-STaR 这一条件。", "tokens": 1342}
+{"key": "9219ae46fd434a7e", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 负责 claim 中关于 CodeContests 的部分，原文明确说其测试集会产生假阴性解；SWE-bench Lite 的 11.3% 不稳定测试由另一 ID 负责。", "tokens": 1364}
+{"key": "d7df0f3d2d59dbd5", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了推理时用户和开发者通常只让模型尝试一次这一点，但“训练计算扩展持续提升模型能力”这一前提不在 quote 中。", "tokens": 1311}
+{"key": "f4bec8e333dd30a9", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了人类学习多数语言任务不需要大规模监督数据这一点；但 claim 说人类只需自然语言指令或极少示例，以及作者希望 NLP 系统具备同样的灵活性和通用性，这两点 quote 都没有提到。", "tokens": 1332}
+{"key": "70823bb3e878b195", "model": "claude-opus-5-5", "label": "Y", "reason": "claim 引了两个 ID，本条 quote 负责其中“在 MATH 和 CodeContests 上评估”这部分，quote 明确说评估限定在这两个数据集上，足以支撑；模型列表部分应由 S2.SS2.p2 负责。", "tokens": 1487}
+{"key": "df0a15c25b514010", "model": "claude-opus-5-5", "label": "N", "reason": "quote 只是笼统地说在 3.9 节设计了一些额外任务来考察上下文学习能力，属于框架句；claim 中列出的语言建模、问答、翻译、算术、SAT 类比等具体任务，quote 一项都没有提到。", "tokens": 1413}
+{"key": "b7c1354db78067ce", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持 DeepSeek-Coder-V2-Instruct 从单样本 15.9% 提升到 250 样本 56%、超过 SOTA 13 个百分点（即 43%）；但 claim 中「有自动验证器的任务里，覆盖率提升直接转化为性能提升」这一一般性结论，以及 SOTA 是「单样本」这一限定，quote 中都没有。", "tokens": 1613}
+{"key": "6222a203dbaceaa4", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了训练数据中可能利用伪相关这一点，但没有提到微调在狭窄任务分布上进行，也没有提到分布外泛化较差，这两项实质内容不在 quote 里。", "tokens": 1379}
+{"key": "9e78d53efcb1887a", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持在二十多个 NLP 数据集和若干测试快速适应的新任务上评估 GPT-3，但没有提到每个任务都在零样本、单样本和少样本三种条件下评估。", "tokens": 1300}
+{"key": "c907de4bda06e591", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了“文本合成和若干 NLP 任务有明显弱点”以及“比较类任务单样本/少样本仅略好于随机”，但 claim 中“长段落失去连贯性、自相矛盾”这一具体例子不在 quote 中。", "tokens": 1424}
+{"key": "430e6a7ddd74c97b", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持在缺乏自动验证工具时需要改进样本验证方法这一点，但没有提到常见验证方法在约 100 个样本后饱和这一具体事实。", "tokens": 1320}
+{"key": "c34516c10ab580e9", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确说人类评估会受标注者个人偏见、背景和偏好影响，并可能导致结果不一致或不可靠，与 claim 完全对应。", "tokens": 1218}
+{"key": "4dbcb649df79aea6", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确说明这些模型仍在积极开发中、尚未准备好发布，claim 只是把 \"These models\" 具体化为多模态模型，属于解指代，未新增事实。", "tokens": 1246}
+{"key": "28dc7fd11f6ad8aa", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持在图像理解任务（含图表理解、多模态推理）上做了评估，但 claim 中的具体基准名 MMMU、VQAv2、ChartQA、DocVQA 不在 quote 中。", "tokens": 1465}
+{"key": "5d5be0d8700c5c36", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 直接说明这些模型仍在开发中、尚未准备好发布，claim 中的“多模态”是对“these models”的解指代，“积极”只是语气上的轻微修饰，未添加新事实。", "tokens": 1284}
+{"key": "bea19738fcc37ca2", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写的就是“致力于探索细粒度感知能力”“为 LVLM 建立坚实基础”和“打造面向真实应用的智能体放大器”，claim 中这三项实质内容全部有对应；把 we 写成 Qwen2.5-VL 属于解指代，不扣分。", "tokens": 1283}
+{"key": "a8cc2fecb36066b3", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只说明 Qwen2.5-VL 整体架构由三部分组成，但没有列出大语言模型、视觉编码器和基于 MLP 的视觉-语言融合模块这三个具体组件。", "tokens": 1288}
+{"key": "3982e8d70d3a94b3", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 列出了与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 及不同规模 Qwen2-VL 的比较，与 claim 一致；“it”可解为 Qwen2.5-VL，“多种基准”属于框架性表述，不扣分。", "tokens": 1396}
+{"key": "30ce1e6ee97deb75", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 对应 claim 中的「文档理解与 OCR」部分，原文明确写了在 OCR、图表和文档理解基准上做了评估，这部分完全撑住。", "tokens": 1354}
+{"key": "e6ca60708498b2ea", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支撑了显著优于 Runway Gen3 和 LumaLabs 这一部分；claim 中对 Sora 中等净胜、与 Kling1.5 持平的内容不在 quote 里。", "tokens": 1308}
+{"key": "dc3b3a2ada077a00", "model": "claude-opus-5-5", "label": "P", "reason": "The quote supports pre-training on about 15T multilingual tokens, but not the 405B flagship model trained on 15.6T tokens, which likely also falls to this ID; the three-stage split belongs to the other citation.", "tokens": 1645}
+{"key": "d19accd833c35cdc", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持了两个基础模型和 30B 的 Movie Gen Video 用于联合文本到图像与文本到视频生成；但 13B 参数的 Movie Gen Audio 及其视频/文本到音频功能，quote 中没有出现。", "tokens": 1323}
+{"key": "565da5172af4dfc6", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支持个性化与编辑能力都是通过后训练加入的，claim 中的参考图像条件、多阶段训练、无监督视频编辑数据等实质内容均未出现。", "tokens": 1306}
+{"key": "ab1541c7593f5306", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确说本方法在身份保持、视频质量和文本对齐三个维度上都大幅优于基线；claim 把 \"the baseline\" 写成 ID-Animator 属于解指代，不降档。", "tokens": 1291}
+{"key": "00946e1b1b724784", "model": "claude-opus-5-5", "label": "Y", "reason": "本条只是笼统地说仍有改进空间，但同 ID 的另一条 quote 写明推荐部署单元较大、可能给小型团队带来负担，合起来覆盖了 claim 的实质内容；claim 里的'为保证高效推理'属于框架性表述，不扣分。", "tokens": 1331}
+{"key": "32ebe1b3497778da", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来覆盖了核心内容：中间推理步骤可能忽略或误解视觉线索，以及实现最优模态对齐仍是需要进一步改进的持续挑战；“拒绝采样”“过滤策略”只是背景性的框架语，不另算实质内容。", "tokens": 1700}
+{"key": "1e8087e404152932", "model": "claude-opus-5-5", "label": "P", "reason": "该 quote 负责评估方式部分，只支撑了对部分数据集采用困惑度评估；claim 中的生成式和语言建模评估方式在 quote 里没有出现。", "tokens": 1328}
+{"key": "49cc1fede132ae35", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了 FP8 混合精度训练和 DualPipe 用于高效流水线并行，但 claim 中 DualPipe 实现计算-通信重叠这一内容在 quote 中没有出现。", "tokens": 1374}
+{"key": "9bd516986c83cd77", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了约 1 亿视频-文本对和约 10 亿图像-文本对的预训练数据规模，但 claim 中“多阶段训练”很可能也归这一段落负责，而 quote 未提及。", "tokens": 1617}
+{"key": "eba9d269c3644551", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支持了 FP8 混合精度训练框架和用于高效流水线并行的 DualPipe 算法，但 claim 中“计算-通信重叠”这一实质内容不在 quote 里。", "tokens": 1375}
+{"key": "0a0a3fb12358907d", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 提到在 TIMIT 基准核心测试集上报告帧分类错误率，足以支撑 claim 中由 p9 负责的「在 TIMIT 语音识别上评估」这一部分。", "tokens": 1426}
+{"key": "5e2ce84ef61f8c56", "model": "claude-opus-5-5", "label": "P", "reason": "引文支持了用单独验证集评估多种架构来做选择，但 claim 中的“语音和两个物体识别数据集”这一适用范围，以及“再用选出的架构在真实测试集上评估 dropout”都不在引文里。", "tokens": 1354}
+{"key": "a7bad14567388f37", "model": "claude-opus-5-5", "label": "P", "reason": "同 ID 的 quote 合起来支持“推荐部署单元相对较大、可能给小型团队带来负担”，但 claim 中“为保证高效推理”这一目的或因果说明在引文中没有出现。", "tokens": 1563}
+{"key": "66fe6a90da380de0", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 给出了 50,000 张训练图像和 10,000 张测试图像，与 claim 中 CIFAR-10 部分的数字一致；把「these images」写成 CIFAR-10 属于解指代，不扣分。", "tokens": 1507}
+{"key": "7dd1332f3b78d48a", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了使用 dropout 后错误率降至 29.62%，但原始错误率 31.05% 和 Reuters 数据集这两项都不在 quote 中。", "tokens": 1282}
+{"key": "5a584d5bbd58f706", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了 dropout 将错误率降至创纪录的 42.4%，但起始值 48.6% 只以 \"this\" 指代，quote 中没有出现这个数字，ImageNet 也未点名。", "tokens": 1358}
+{"key": "7262515000913d42", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确说明对 SSD 算法做了速度基准测试，比较对象是 Mamba 的扫描实现和 FlashAttention-2，claim 的实质内容全部都在 quote 里。", "tokens": 1232}
+{"key": "9b1e2ab8acc2452d", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支撑了「把多头注意力中头的类比引入 SSM」这一项；Mamba-2 架构、核心层是 Mamba 选择性 SSM 的改进、分组值注意力等内容都不在这句里。", "tokens": 1526}
+{"key": "5923c97a8d560441", "model": "claude-opus-5-5", "label": "Y", "reason": "该引用对应 claim 中的「块设计」消融，quote 明确说 Table 4 对块的架构改动做了消融，足以支撑这一部分。", "tokens": 1312}
+{"key": "39c1d3d2b1fe7f47", "model": "claude-opus-5-5", "label": "P", "reason": "quote 撑住了“不确定架构的哪个方面是主要因素、留待未来工作”这一核心内容，但 claim 新增的“在 MQAR 任务上”这一具体任务名在 quote 中没有出现。", "tokens": 1471}
+{"key": "f9914f7103ef39e9", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了研究者偏见和社区集体偏好塑造了模型发展方向，但没有提到“硬件彩票”，也没说这会人为促成趋同。", "tokens": 1369}
+{"key": "ec1a046a34d26f8b", "model": "claude-opus-5-5", "label": "Y", "reason": "同一 ID 下的其他 quote 写明全程使用固定架构，并指出低精度训练常做架构调整、可缩小与全精度模型的差距，claim 的实质内容全部有原文对应；本条 quote 讲的是另一条局限，属于省略内容，不影响整体判断。", "tokens": 1459}
+{"key": "f90862af497fd5e7", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来撑住了分块分解、对角块用对偶注意力模式计算、非对角块利用低秩结构归约为较小循环这三点；但「SSD 算法」这个名称和「结合线性 SSM 循环与二次对偶形式优势」这一结论，quote 中都没有。", "tokens": 1585}
+{"key": "aa62269c3a957534", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 撑住了联合优化时计算最优精度与计算量无关，以及 N 固定时 P*(C)∝log C；但 claim 中「约为 7-8 比特」这一具体数值不在 quote 里。", "tokens": 1410}
+{"key": "479f65d7153ffcc8", "model": "claude-opus-5-5", "label": "Y", "reason": "该 ID 对应 claim 中列举的语言模型部分，quote 明确列出了 BLOOM、OpenLLaMA 和 LLaMA；ViT、WIT 数据集、1024 个样本和 k=10 由其他 ID 负责。", "tokens": 1394}
+{"key": "9b3a82a57c79a586", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了“论证只适用于被优化以完成许多任务的智能”；但“专用智能可能不会趋同”这一结论 quote 没有明说，是额外推出的内容。", "tokens": 1552}
+{"key": "6ed20453fe4b52af", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来给出了对齐分数仅为 0.16、理论最大值为 1，以及作者将其留作开放问题，claim 中由该 ID 负责的实质内容都有出处；“噪声还是重大差异”只是对开放问题内容的具体化，不算新增事实。", "tokens": 1524}
+{"key": "b3104361bf283fc9", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 与 claim 几乎逐字对应，OLMo 风格模型系列、Dolma V1.7 数据集和标准 Transformer++ 实现三项都在 quote 中。", "tokens": 1339}
+{"key": "5f5deb76aab9b54b", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 直接说明随着对齐提升，模型在 Hellaswag 和 GSM8K 上的表现提高，覆盖了 claim 的核心关联；DINOv2 这一具体对象可由同时引用的 S2.F4 负责。", "tokens": 1573}
+{"key": "cd163b3be1dd3927", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 的内容与 claim 一一对应：仅记忆训练句子并不保证推理时能提取或操作事实知识。", "tokens": 1194}
+{"key": "0b012e34d4c168bb", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只支撑了在各种微调参数下对测试个体 QA 准确率为零这一点；claim 中“模型规模远大于个体数”“个体被暴露上千次”是 quote 里没有的新事实。", "tokens": 1333}
+{"key": "9751347f087d8f6f", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 直接提出了核心问题：语言模型在训练中如何记忆知识、推理时如何提取知识来回答问题，与 claim 完全一致；开头的「因此」只是承接语，不算新事实。", "tokens": 1313}
+{"key": "429c424020695e67", "model": "claude-opus-5-5", "label": "Y", "reason": "公式 δ_PTQ = C_T·(D^γD/N^γN)·e^{-P_post/γ_post} 体现了 claim 的两项内容：一是对 D 和 N 的幂律依赖（以 D/N 形式出现，两者指数各不相同），二是随后训练精度 P_post 指数衰减。", "tokens": 1530}
+{"key": "9806e59192b01057", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了权重、激活和 KV 缓存量化效应在训练中可建模为独立且可乘，但没有提到这些效应共同决定有效参数量。", "tokens": 1298}
+{"key": "cd9c128e2c9c0be3", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持 bioS single 86.6% 和 bioR single 77.7% 两个 OOD 准确率数字，但“混合训练能使模型有效提取知识”这一结论 quote 中没有明说。", "tokens": 1491}
+{"key": "0eb7d169ad1178c3", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写明 AntiFold 借助 ESM-IF1 在超过 1200 万个结构上的预训练，再在已解析和预测的抗体结构上微调，claim 的实质内容全部覆盖；claim 中的「逆折叠架构」只是对 ESM-IF1 的注解，不扣分。", "tokens": 1381}
+{"key": "ebce69cc527717fe", "model": "claude-opus-5-5", "label": "Y", "reason": "把同一 ID 下的两条 quote 合起来看，claim 的内容都有出处：一条给出相对 ESM-IF1 的 CDRH3 恢复率（60% vs 43%，显著），另一条给出相对 AbMPNN 在 CDRH3、其余 CDR 和多数 FR 区域上的各项数字。", "tokens": 1488}
+{"key": "0961d129e14b6f0a", "model": "claude-opus-5-5", "label": "Y", "reason": "(JSON 损坏，仅取 label)", "tokens": 1363}
+{"key": "c65ad5309f09f906", "model": "claude-opus-5-5", "label": "P", "reason": "The quote supports bioS being a synthetic dataset of 100,000 individuals, but it does not mention six sentences per biography, the roughly 50 templates per sentence, or bioR.", "tokens": 1494}
+{"key": "43b2bd84366e783a", "model": "claude-opus-5-5", "label": "Y", "reason": "同 ID 的其他 quote 明确写了预训练 BindGPT 在不使用和显式使用氢原子时都持续优于 XYZ-TF，以及它是首个能在如此大规模下显式建模氢原子的模型，合起来完整支撑 claim。", "tokens": 1479}
+{"key": "6a9966146801d537", "model": "claude-opus-5-5", "label": "P", "reason": "同 ID 的三条 quote 合起来撑住了有效性、SA/QED/Lipinski、生成 1K 个有效 3D 分子的时间和 RMSD-coverage，但 claim 中的分布度量和 RMSD 这两项在 quote 里找不到。", "tokens": 1553}
+{"key": "b5d0a102fd54e301", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来分别给出了“匹配或超越基线”和“不依赖生成域归纳偏置”这两项内容；claim 中“多个 3D 分子生成任务”只是对“each of them”的指代还原，不算新增事实。", "tokens": 1426}
+{"key": "97fa6f95549cfcc0", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持所有材料类别成功率超过 90%，但 claim 中的“118 个系统”和“分子动力学模拟”在 quote 中都没有出现，属于新增的实质事实。", "tokens": 1297}
+{"key": "65827e58e92d1715", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文写明 MatterSim 用主动学习探索广阔材料空间，并整合了深度图神经网络、材料探索器、第一性原理监督器和集成不确定性监测器，claim 的全部实质内容都能在其中找到。", "tokens": 1391}
+{"key": "06fb44bc59851736", "model": "claude-opus-5-5", "label": "Y", "reason": "第一条 quote 支撑了模型在 300M 参数前扩展良好、到该规模困惑度过拟合；第二条说明当前 108M（约 100M）模型在现有预训练数据下性能最佳，合起来覆盖了 claim 的全部实质内容。", "tokens": 1557}
+{"key": "73858d06a0344264", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 原文说明核心在于准确、高效地预测任意材料在实际合成与工作条件下的性质；claim 中的「有限温度和压力」只是对「工作条件」的具体化注解，不算新事实。", "tokens": 1443}
+{"key": "3a210b158e049105", "model": "claude-opus-5-5", "label": "P", "reason": "同 ID 引文支撑了 208M 构象、12M 分子和 3.2M 口袋结构这些数字，但没有一句提到该数据集由 Uni-Mol 提出，也没有说明它用于预训练。", "tokens": 1782}
+{"key": "878315b394e463f3", "model": "claude-opus-5-5", "label": "P", "reason": "同 ID 的其他 quote 支撑了“在长程相互作用主导的聚合物和多相体系中表现不佳”这一点，但“目前采用半局域原子相互作用描述”这一实质内容不在任何 quote 中。", "tokens": 1570}
+{"key": "a7934995d10ffa64", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 对应 claim 中声子最大频率部分，给出了 MAE 0.87 THz；预测对象由上下文指代，按解指代不扣分，体模量部分由另一 ID 负责。", "tokens": 1410}
+{"key": "79aadd58a6293f57", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 写明预训练使用作者整理的材料最低能量构型数据集，不区分交换关联泛函、DFT 软件实现或校正，与 claim 完全一致；claim 中\"基态\"只是对\"最低能量构型\"的注解，不算新事实。", "tokens": 1275}
+{"key": "f5d40676491ca703", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑 Orb 在 MOF-5 上于多个温度下产生稳定 MD 轨迹这一点，但 claim 中的“高达 800 K”和“复现苯撑环不能完全旋转的实验动力学行为”在 quote 中均未出现。", "tokens": 1338}
+{"key": "e29d2a256af53776", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 直接说明可能需要更多微调数据才能得到定量正确的吸附热；claim 用「作者认为」表达了这种推测语气，核心内容一致，「吸附评估」属于框架性描述。", "tokens": 1441}
+{"key": "f9dc112f92f16ae1", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了距离-29、1000周期、2×10^7次采样、共2×10^10周期和5.5小时，但未提及“72量子比特处理器”这一具体数字。", "tokens": 1375}
+{"key": "d0fcbe3a109ed73c", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确写出 Orb 的骨干是加入平滑图注意力的 GNS，节点间消息同时基于注意力权重和距离截断函数更新，claim 的实质内容全部都在 quote 中。", "tokens": 1268}
+{"key": "15d04396a436da7e", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来涵盖了 claim 的全部实质内容：神经网络解码器、带匹配合成的集成匹配解码器、用处理器数据微调神经网络，以及用强化学习优化匹配图权重。", "tokens": 1314}
+{"key": "2a01e52283b284d8", "model": "claude-opus-5-5", "label": "Y", "reason": "Quote 原文给出 291±6 µs 的逻辑量子比特寿命，以及中位数 85±7 µs、最佳 119±13 µs 两个物理比特寿命，还写明超出倍数为 2.4±0.3，claim 中这些数字全部有据。", "tokens": 1323}
+{"key": "e58614b79f4b1170", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持了用 FIRE 优化器弛豫 500 步或最大力低于 0.05 eV/Å 这一细节，但没有提到这是 Matbench-Discovery 基准，基准名称在 quote 中无从得出。", "tokens": 1603}
+{"key": "349a47de1b6e6c25", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 给出了 Λ=2.14±0.02 和 ε7=(1.43±0.03)×10^-3，与 claim 中的数值一致；claim 把 ε7 写成距离-7 表面码的每周期逻辑错误率，属于对符号的解释，没有添加新事实。", "tokens": 1366}
+{"key": "778374dfdf337886", "model": "claude-opus-5-5", "label": "Y", "reason": "S3.SS3.p5 负责的部分是“原因尚不明确，可能是样本方差波动”，本条与同 ID 的另一条 quote 合起来完整覆盖了这两点；红移区间和约 3σ 差异由 [S3.SS3.p4] 负责。", "tokens": 1371}
+{"key": "5f5a5b5208e126cf", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 明确告诫不要过度解读该结果，并说明至少部分偏好的 (w0,wa) 模型可映射到在任何红移都不违反零能量条件的精质模型，与 claim 的实质内容完全一致。", "tokens": 1323}
+{"key": "52b368999e9374e2", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只说明尚无量子处理器明确展示低于阈值的性能，撑住了“低于阈值运行”这一研究空白；但 claim 中的“表面码”以及“逻辑错误率随码距指数抑制”都不在 quote 里。", "tokens": 1346}
+{"key": "bad8c10bcd872add", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 给出了 DESI BAO+BBN+θ* 组合下 H0=(68.52±0.62) km/s/Mpc，完整支撑了 claim 中对应的这部分；3.7σ 张力应由另一条引用 S6.p2 负责。", "tokens": 1405}
+{"key": "cc9541388f398329", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了“去除宿主星系和尘埃贡献”的SED模板这一点，但没有提到 claim 中“低红移类星体复合”模板这一实质内容。", "tokens": 1468}
+{"key": "78ae728077d7ee98", "model": "claude-opus-5-5", "label": "Y", "reason": "S3.SS3.p5 负责的是\"原因尚不明确、可能是样本方差波动\"，两条 quote 合起来完整覆盖；红移区间和约3σ差异属于另一引用 S3.SS3.p4 负责的部分。", "tokens": 1376}
+{"key": "cbc9cde80bfd6f9c", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了使用 cobaya 以及纳入 SN Ia 似然，但没有提到 Metropolis-Hastings MCMC 采样、CAMB 代码，也没有提到 BBN 和 CMB 数据集。", "tokens": 1484}
+{"key": "53366d0651af78af", "model": "claude-opus-5-5", "label": "P", "reason": "quote只支持n0=10和100 cm^-3时光学到2–3 μm的SED与LRD观测谱相符；claim中γ<1、能量峰移向中远红外以及与MIRI和ALMA约束一致等内容，这句quote都没有提到。", "tokens": 1496}
+{"key": "b88fa2bcbccecc62", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 与 claim 内容一一对应：蒙特卡洛事件产生器将矩阵元与部分子簇射算法结合的程序，在未来 LHC 更高精度的量子信息研究中需要特别关注。", "tokens": 1269}
+{"key": "e5920a3f18adf7b9", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 对应 claim 中「与 z~5.5 和 z=7.5 的 LRD 堆叠测光 SED 数据对比」这一部分，内容完整支撑；各巡天的 5σ 成像深度属于 [S2.p9] 负责的部分，不在本条判断范围内。", "tokens": 1375}
+{"key": "1b5cbd73f44b3379", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了“与热尘埃再发射导致极红 SED 的预期矛盾”以及“引发对尘埃遮蔽 AGN 情景的质疑”，但 claim 中“MIRI 观测显示多数 LRD 在 F1800W 未被探测、SED 趋于平坦”这项具体观测内容不在 quote 中。", "tokens": 1538}
+{"key": "4776949dd9e311f3", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 说明两个验证区的测量在不确定度内与不同 MC 设置的预言一致，与 claim 的实质内容相符；\"一致性检验\"只是对\"validation region\"一词的解释，没有新增事实。", "tokens": 1350}
+{"key": "86ce89be377c2a1b", "model": "claude-opus-5-5", "label": "Y", "reason": "quote 直接说明此问题目前没有明确答案，只能给出一些推测；claim 把 \"this question\" 具体写成 LRD 为何在 z>4 以统一 A_V=3 mag 出现，属于解指代，不扣分。", "tokens": 1387}
+{"key": "21362fe478849f77", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 对应 claim 的前半部分：用顶夸克-反顶夸克对的自旋关联探测量子纠缠，原文明确写出；D = −3·⟨cos φ⟩ 等测量细节归 [S1.p9] 负责。", "tokens": 1360}
+{"key": "f3c890134614847b", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支持信号区 340–380 GeV 和各区域纯度超过 90%，但没有提到 380–500 GeV 与 >500 GeV 这两个验证区。", "tokens": 1379}
+{"key": "cdc472a1eff8daac", "model": "claude-opus-5-5", "label": "P", "reason": "这两句 quote 支撑了以单一观测量 D 作为纠缠标记（D=tr[C]/3，D<-1/3 即判定纠缠）；但 claim 中的 D = −3·⟨cos φ⟩，以及由带电轻子在母顶夸克静止系中的夹角来推断 D，都不在 quote 中。", "tokens": 1645}
+{"key": "12f0a5713daf3a95", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 负责 claim 中\"Cooper 对盒独立测量 0.6 µm⁻³\"这一部分，原文写明 CPB 测得 n_qp≈0.6 µm⁻³，对应内容完整。", "tokens": 1342}
+{"key": "ef48b5c2b335c6c8", "model": "claude-opus-5-5", "label": "Y", "reason": "同一 ID 下的三条 quote 合起来，分别支撑了 MPNN 架构、高阶多体 ACE 展开和 MPtrj 训练数据集这三项内容，claim 的实质内容全部有据。", "tokens": 1311}
+{"key": "3dc56ac85914aac7", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 支撑了用量子动力学模拟复现实验结果、并纳入噪声（电荷噪声、温度）这一部分。包含 MZM 和量子点的有效模型应由 [S3.p6] 负责。", "tokens": 1500}
+{"key": "b29a523239f20aad", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了加热法不够准确、可改用自由能计算或相共存模拟来测试 MACE 熔点表现、并留作未来工作这几点，但 claim 中“周期性边界条件、小系统尺寸等因素影响熔点”这一原因在 quote 中没有出现。", "tokens": 1539}
+{"key": "54cfd04f6c567c3d", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来支撑了 claim 的全部实质内容：当前器件中 E_M 因有限尺寸效应出现显著变化，以及相干长度并不远小于器件长度；claim 把能隙也并入长度比较只是措辞粗糙，没有添加新事实。", "tokens": 1730}
+{"key": "a088c54962cfb1b4", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑 τ_RTS 随偏压从 0 增至 90 μV 降为一半，但没有提到这一变化是“准粒子注入”所致，这一机制解读不在 quote 中。", "tokens": 1568}
+{"key": "f936dc7acb5b2b07", "model": "claude-opus-5-5", "label": "P", "reason": "quote 只说明测量-only 拓扑量子计算方案把操作简化为 fusion，支撑了 claim 中“测量-only 方案”这一背景；但该方案需要费米宇称单次测量、即确定一对 Majorana 零能模共享的宇称，quote 均未提及。", "tokens": 1459}
+{"key": "0eb6d57df4376c74", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了用 MACE 势计算熔融 LiF 粘度并评估其准确性（与实验数据对比），但 claim 中与经典 Buckingham 和 BHM 势对比这一实质内容在 quote 中没有出现。", "tokens": 1468}
+{"key": "e44393c2311103e3", "model": "claude-opus-5-5", "label": "Y", "reason": "S4.SS2.p1 负责的是数据集规模和划分比例：本条给出 50000 个模拟样本，同 ID 的另一条给出 81%/9%/10% 的划分，合起来完整覆盖这部分。Butterpy 和 Kepler 噪声由其他 ID 负责，不影响本条判断。", "tokens": 1379}
+{"key": "2a101f94b006879a", "model": "claude-opus-5-5", "label": "P", "reason": "两条 quote 合起来支撑了 MACE 中 Li 和 F 的 VAF 极小值更深、液态中类固态成分更显著；但原文只说两者极小值深度近似相等，claim 改写成「两者形状相似」，这一点没有被支撑。", "tokens": 1566}
+{"key": "7d5374acbcf03008", "model": "claude-opus-5-5", "label": "Y", "reason": "这条 quote 对应 claim 中 S1.p2 负责的部分：它明确写了对液态的理论理解不足，以及经典原子模型难以生成可靠的热物理数据；应用领域部分由 S1.p1 负责，不影响本条判断。", "tokens": 1538}
+{"key": "a2228e00b680d889", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支撑了模型通常给出“平均”预测、以及哪种结果更好尚不明确这两点，但 claim 中“周期发生剧烈变化的光变曲线”这一适用情形未出现在 quote 中。", "tokens": 1358}
+{"key": "ccf936de3340c9e7", "model": "claude-opus-5-5", "label": "P", "reason": "quote 支持长周期样本相关性不同、可能与老年恒星活动性下降有关，但 claim 中的“大于 25 天”阈值和“模拟误差与观测误差”的相关对象在 quote 中都没有出现。", "tokens": 1316}
+{"key": "d7485659fbe3bce4", "model": "claude-opus-5-5", "label": "Y", "reason": "两条 quote 合起来，覆盖了倾角与 spot 位置之间的内在简并、模型依赖先验，以及 spot 分布对结果影响很大，claim 的全部实质内容都有支撑。", "tokens": 1295}
+{"key": "7e9a82018961dbb9", "model": "claude-opus-5-5", "label": "Y", "reason": "该 quote 对应 claim 中“使用 Butterpy 生成的模拟光变曲线进行监督训练”这一部分，原文明确写出用 Butterpy 模拟光变曲线构建监督训练数据集；Kepler 噪声和数据划分由其他 ID 负责。", "tokens": 1411}
+{"key": "e18777e48b9bafad", "model": "claude-fable-5-1", "label": "Y", "reason": "(JSON 损坏，仅取 label)", "tokens": 1270}
+{"key": "e00249ee77373a9c", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只撑住了'计划在未来工作中进一步研究该方法'这一项，而邻域大小 r、最大路径长度增至 O(n/r) 等实质内容均不在 quote 中。", "tokens": 1222}
+{"key": "224d386ecd18339e", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了顺序性阻碍训练样本内并行化且在长序列时尤为关键，但「沿输入输出序列的符号位置分解计算」这一实质内容不在 quote 中。", "tokens": 1437}
+{"key": "d266df53ef029ce5", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只支撑“刻意保持设计简单/尽量贴近原始 Transformer”这一部分，claim 中“最少的图像特有归纳偏置”及二维结构注入的具体环节不在此 quote 中（由其他 ID 负责），本条对其负责部分有支撑但不完整。", "tokens": 1279}
+{"key": "18bbae22d706f82c", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只支撑了「使用正弦余弦函数」这一项，而「因模型不含循环和卷积」「加入输入嵌入」「用于利用序列顺序信息」等实质内容不在本句中（由另一 ID 负责的部分不影响，但本 ID 负责的位置编码描述中仍有「加入输入嵌入」这一事实未被覆盖）。", "tokens": 1277}
+{"key": "9467de6f449cf37f", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了沿用 BERT 式可学习 [class] token 这一点，但「作为图像表示」以及「在预训练和微调时在其输出上接分类头」这些实质内容不在 quote 里。", "tokens": 1227}
+{"key": "7401efe5e280f4be", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了编码器由 N=6 个相同层堆叠、每层有子层这一部分，但子层具体为多头自注意力和逐位置前馈网络、以及残差连接加层归一化等实质内容未在 quote 中出现。", "tokens": 1520}
+{"key": "f785c16c7bf459e9", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了需要注入位置信息以利用序列顺序这一点，但 claim 中“模型不含循环和卷积”的因果前提以及“加入输入嵌入”在 quote 中均未出现。", "tokens": 1529}
+{"key": "798c8a68ac71e6c0", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：中等规模数据集无强正则时精度比同规模 ResNet 低几个百分点，以及缺少平移等变性和局部性等归纳偏置；'数据不足时泛化不佳'只是对前述内容的注解性概括，未引入可独立验证的新事实。", "tokens": 1398}
+{"key": "8263ae0be56e5bd0", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了 REALM/ORQA 仅探索开放域抽取式问答，以及本文将混合参数与非参数记忆引入 seq2seq 模型的全部实质内容。", "tokens": 1344}
+{"key": "6874dd613978f2f4", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责的部分是“二维结构归纳偏置仅在切 patch 和调整分辨率/位置嵌入时手动注入”，quote 明确说明 patch extraction 和 this resolution adjustment 是唯二手动注入 2D 结构偏置之处，claim 把“this resolution adjustment”解为微调时调整位置嵌入属于解指代，未添加新事实。", "tokens": 1835}
+{"key": "28a612f27e84a562", "model": "claude-fable-5-1", "label": "Y", "reason": "该 ID 对应的片段是生成器为 BART-large，quote 直接给出 BART-large，支撑完整。", "tokens": 1220}
+{"key": "1dc8e40b8aee513c", "model": "claude-fable-5-1", "label": "Y", "reason": "该 ID 负责的片段是检索器 p_η(z|x) 基于 DPR，quote 完整支撑；“双编码器”是对 DPR 的注解，不算新事实。", "tokens": 1242}
+{"key": "48d1b347fef27b4f", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了难以访问和精确操作知识、在知识密集型任务上落后于任务专用架构、难以提供决策来源和更新世界知识这三项实质内容；'预训练语言模型在参数中存储事实知识'仅为背景框架性表述，不影响判断。", "tokens": 1359}
+{"key": "0b82c8ccf14b9eee", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了退化问题的出现条件、精度饱和（退化）以及非过拟合引起，claim 中'迅速退化'仅是细微补充，实质内容均有支撑。", "tokens": 1307}
+{"key": "b57f1307a078e25c", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了 4.49% 单模型验证误差和 3.57% 测试集误差，但“六模型集成”和“赢得 ILSVRC 2015 第一名”这两项实质内容均未出现在引用中。", "tokens": 1416}
+{"key": "4e228d1a035dcb90", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了访问/操作知识受限、落后于任务专用架构、以及来源与知识更新是开放问题这三项，但 claim 中“在参数中存储事实知识”这一实质表述未出现在引文中。", "tokens": 1758}
+{"key": "44435f197ad53b05", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了'实验表明恒等映射足以解决退化问题且更经济'这部分，但 claim 中'输入输出维度不一致时可用线性投影 Ws 匹配维度'这一实质内容不在 quote 里。", "tokens": 1239}
+{"key": "52c2aca4cdeb3c57", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了结构化输出欠佳与无法使用搜索引擎、计算器等工具这两项实质内容。", "tokens": 1264}
+{"key": "bd676cfabf965687", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 直接说明模型针对中英文优化、处理其他语言可能出现语言混杂，claim 全部实质内容均在 quote 中。", "tokens": 1188}
+{"key": "baf05a50a853e6e1", "model": "claude-fable-5-1", "label": "Y", "reason": "本条负责的部分是\"ResNet 克服优化困难并在深度增加时获得精度提升\"，quote 完整覆盖；6.43% 误差由另一 ID 负责，不影响判断。", "tokens": 1245}
+{"key": "0573dddcda8d5de6", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了1202层测试结果差于110层、以及该网络对小数据集可能不必要地大这两点，但 claim 中“训练误差低于 0.1%”的具体数字和“作者认为这是由于过拟合”的因果归因均不在所引 quote 中。", "tokens": 1587}
+{"key": "db1b4d3c79c18b64", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 直接陈述 budget forcing 提供完美控制、良好扩展并取得最佳 AIME24 分数，claim 中“扩展斜率”只是对 scaling 的注解，实质内容全部覆盖。", "tokens": 1238}
+{"key": "9292c7d7e8d3a443", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了 15.6%→77.9% 的提升以及自一致性解码达 86.7%，claim 的全部实质内容均有支撑。", "tokens": 1310}
+{"key": "4e5349b973b7ef6b", "model": "claude-fable-5-1", "label": "Y", "reason": "claim 有两个 ID，本条 quote 负责的是「不使用神经奖励模型」这一部分，quote 明确说明不采用神经奖励模型（无论结果型还是过程型），完全撑住该片段；准确性/格式奖励由 S2.SS2.p1 负责，不影响判断。", "tokens": 1254}
+{"key": "fa31ac741326e78c", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责的片段是\"在数学任务上与 OpenAI-o1-1217 相当\"，quote 原文完整给出，其余编程与 AlpacaEval/ArenaHard 部分由另一 ID 承担。", "tokens": 1313}
+{"key": "009a7061f0fec5ae", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确给出两个限制：最终趋于平坦、受底层模型上下文窗口约束，与 claim 完全一致（“it”指代 budget forcing 属解指代不扣分）。", "tokens": 1255}
+{"key": "82be66f88bc1562c", "model": "claude-fable-5-1", "label": "Y", "reason": "合并同 ID 的三条 quote 后，OlympiadBench、CHMath/Gaokao/Kaoyan/GradeSchool 多语言基准、以及多学科基准 Minerva 和 GPQA 均有原文对应，'分布外评估'属框架性表述不扣分。", "tokens": 1480}
+{"key": "25662429b42c4a1d", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来撑住了「众多复现尝试未公开复现清晰测试时扩展行为」和「寻找同时实现测试时扩展与强推理性能的最简单方法」，但「OpenAI o1 未公开方法」这一可独立验证的事实未在 quote 中出现。", "tokens": 1576}
+{"key": "5f23460006f231a0", "model": "claude-fable-5-1", "label": "P", "reason": "合并三条 quote 可支撑三个基准名称、AIME24 30 题和 GPQA Diamond 198 题，但 claim 中的 lm-evaluation-harness 工具和温度设为 0 这两项实质内容均不在 quote 中，MATH500 的 500 题数也未明确给出。", "tokens": 1481}
+{"key": "741f27d19d838f03", "model": "claude-fable-5-1", "label": "P", "reason": "合并的 quote 支撑了粗/细粒度难度过滤、知识点多样化及 800 条样本，但 claim 中关于按逻辑连贯性、步骤清晰度和解答准确性筛选推理链的内容未在任何 quote 中出现。", "tokens": 1579}
+{"key": "2a0585faa66bf449", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了 ACI 四个主要组件的列举，但 claim 中“每一步 agent 生成一个 thought 和一个 command，然后接收执行反馈”这一交互流程的实质内容不在 quote 中。", "tokens": 1242}
+{"key": "03e851638cb46e66", "model": "claude-fable-5-1", "label": "Y", "reason": "合并同 ID 引文后，域内最佳、AIME24 63.3%、MATH500 95.6%、AMC23 96.3% 及对两基线的超越均有覆盖（AMC23 对 o1-preview 的超越由“所有基准均最佳”推出），无新增事实。", "tokens": 1779}
+{"key": "ef02d6ec29078102", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑失败源于实现问题这一部分，但 claim 把「约一半（52.0%）」说成「大多数」，程度被夸大。", "tokens": 1219}
+{"key": "5ea1530fb6ff7f77", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确列出主要评估套件包含 AIME24、MATH500 和 AMC23，与 claim 的实质内容一致；'域内'只是对'primary evaluation suite'的注解性表述，不构成新事实。", "tokens": 1266}
+{"key": "a9d934ca50de7924", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“LM agent 是一类新用户、有自身需求和能力”这一界面设计动机的部分，但“设计接口”目标、“提升表现”“软件工程等复杂数字任务”均不在 quote 中。", "tokens": 1226}
+{"key": "94c8725ae92080fe", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整支撑 claim 中“预训练已全面编码领域知识的基础模型中，复杂推理可通过少量但精确编排的认知过程示范涌现”这一部分，关于激发阈值两因素的内容由另一引用 [S3.p1] 负责，不影响本条判断。", "tokens": 1722}
+{"key": "59c764540b4e4e5d", "model": "claude-fable-5-1", "label": "P", "reason": "quote 撑住了抑制结束符并追加“Wait”延长思考以及强制最大/最小思考 token 数的部分，但“budget forcing”这一名称和“强制插入思考结束符提前终止”的具体机制未在 quote 中出现。", "tokens": 1875}
+{"key": "3079a7e2cc11d66a", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“在每对观测 token 之间引入辅助理由变量”，但“目标是生成能帮助预测后续文本的中间思考”这一目的/结论不在 quote 中。", "tokens": 1219}
+{"key": "c84b0c3a378aaba9", "model": "claude-fable-5-1", "label": "P", "reason": "quote 合起来撑住了 SWE-bench 的 2294 实例、12 个 Python 包以及 SWE-bench Lite 为 300 实例子集，但\"消融和分析在 SWE-bench Lite 上进行\"这一实质内容在 quote 中没有出现。", "tokens": 1621}
+{"key": "9bffaf0ac4895bc0", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了零样本提示“Let’s think step by step.”和 128 个 GSM8K 测试样本两项实质内容，“链式思考实验”属于对该提示的注解/框架，不构成新事实。", "tokens": 1285}
+{"key": "58c3b23b26fc3746", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确写出 C4 评估使用 16 个 thought token、4 个 true token ahead 且其余设置相同，claim 的全部实质内容均被覆盖。", "tokens": 1216}
+{"key": "938235d464f6e79b", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来只支撑了“LM agent 在该环境中难以可靠行动”这一点，而 claim 中“接口为人类设计”“Linux shell”以及“无法可靠编辑小段文件、无效编辑无反馈”等具体实例均未在 quote 中出现。", "tokens": 1510}
+{"key": "e2b8ce4dd72e0054", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确给出 8 样本多数投票准确率从 40.6% 提升到 47.7%，与 claim 的实质内容完全一致。", "tokens": 1205}
+{"key": "03fc8085ccee5920", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说明所有实验以 Mistral 7B 基础版为起点，完全支撑 claim。", "tokens": 1146}
+{"key": "1a07bf55564adab8", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责 claim 中 CodeContests 存在假阴性测试用例的部分，quote 明确指出 CodeContests 测试套件构造导致正确解被判错的假阴性，完全支撑对应片段；SWE-bench Lite 部分由另一 ID 负责。", "tokens": 1306}
+{"key": "e7473b02edd22533", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责 claim 中“在 MATH 和 CodeContests 上评估”这部分，quote 明确说明评估限制在这两个数据集，模型范围由另一 ID 负责。", "tokens": 1250}
+{"key": "11dcb159a6aa629d", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“推理时用户和开发者通常只让模型尝试一次”这部分，但“训练计算扩展持续提升模型能力”这一实质内容不在 quote 中。", "tokens": 1217}
+{"key": "4adfbbb69f0c67dc", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支持了“无自动验证器时需改进样本验证方法”这一点，但“常见验证方法在约 100 个样本后饱和”这一具体数字结论不在 quote 中。", "tokens": 1363}
+{"key": "11e88a91dab2c542", "model": "claude-fable-5-1", "label": "N", "reason": "quote 只是框架句（我们发明了一些额外任务来探测上下文学习能力），claim 中列举的所有具体任务名称一项都不在 quote 里。", "tokens": 1241}
+{"key": "4224b43f5db8ec4b", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只支撑“人类无需大规模监督数据即可学习语言任务”这一点，claim 中“仅需自然语言指令或极少示例”的具体方式以及“作者希望 NLP 系统具备同样灵活性和通用性”的目标均未在 quote 中出现。", "tokens": 1398}
+{"key": "bd4b0d822d09aea9", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了「超过两打 NLP 数据集以及若干测试快速适应的新任务」，但 claim 中「每个任务都在零样本、单样本和少样本三种条件下评估」这一实质内容不在 quote 里。", "tokens": 1259}
+{"key": "d5f46d25ec2d906a", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整涵盖 claim 的全部实质内容：人类评估受标注者个人偏见、背景、偏好影响，可能导致结果不一致或不可靠。", "tokens": 1221}
+{"key": "658fe1433b57bc70", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 直接说明这些模型仍在开发中且尚未准备好发布，claim 中「多模态模型」是对 these models 的解指代，无新增事实。", "tokens": 1165}
+{"key": "8ca759389b690cd7", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 直接说明这些模型仍在积极开发、尚未准备好发布，claim 中 S1.p8 负责的部分完全被覆盖，'多模态模型'只是对 'These models' 的指代解释。", "tokens": 1185}
+{"key": "54ea5af354c50c24", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了“在文本合成和若干 NLP 任务上有明显弱点”以及“比较类任务单样本/少样本仅略好于随机”，但“长段落中失去连贯性、自相矛盾”这两个具体例子不在 quote 中。", "tokens": 1463}
+{"key": "11c0599223033490", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只撑住了「可能利用伪相关」这一点，而 claim 中 S1.p4 对应部分还包含「微调在狭窄任务分布上」和「泛化到分布外较差」，quote 并未提及，且 quote 强调的是与模型表达能力相关而非窄分布微调。", "tokens": 1567}
+{"key": "c6015dd07ac22650", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了 15.9%→56%、250 个样本及超过 SOTA 13%（可推出 43%）等数字，但 claim 中的数据集名称 SWE-bench Lite 以及“具有自动验证器的任务中覆盖率直接转化为性能”的结论性表述均不在 quote 里。", "tokens": 1800}
+{"key": "0dce02036d6533d3", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整覆盖了探索细粒度感知、为 LVLM 建立坚实基础、打造面向真实应用的智能体放大器三项内容，主语 Qwen2.5-VL 属于解指代。", "tokens": 1252}
+{"key": "52190d6cc448248d", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 列出了与 Claude-3.5-Sonnet-0620、GPT-4o-0513、InternVL2.5 及不同规模 Qwen2-VL 的比较，claim 的实质内容全部覆盖，'多种基准'属框架性表述不扣分。", "tokens": 1315}
+{"key": "b18b04adaef4f175", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责的片段「使用约 15T 多语言 tokens」在 quote 中完整给出；三阶段与 405B/15.6T 由另一引用 [S3.SS4.p1] 负责，不影响判断。", "tokens": 1388}
+{"key": "af38250e9ff3d1c7", "model": "claude-fable-5-1", "label": "P", "reason": "quote 证实了对图像理解能力在自然图像、文本、图表理解和多模态推理任务上进行评估，但 claim 中列举的具体基准名（MMMU、VQAv2、ChartQA、DocVQA）均未在 quote 中出现，其他 ID 部分不在本条评判范围。", "tokens": 1553}
+{"key": "68abcee0c63e8c2a", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只支撑了 30B 的 Movie Gen Video 用于联合文本到图像和文本到视频生成，而 13B 参数的 Movie Gen Audio 及其用途不在 quote 中。", "tokens": 1270}
+{"key": "6ba8e36bda2070c8", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只说明个性化和编辑能力通过后训练加入，撑住了'后训练'这一项；但'参考图像条件生成'、'多阶段训练'、'无监督视频编辑数据'等实质内容均不在 quote 中。", "tokens": 1232}
+{"key": "1edc53710e200d27", "model": "claude-fable-5-1", "label": "Y", "reason": "该 ID 对应 claim 中「文档理解与 OCR」这一部分，quote 明确说明在 OCR、图表与文档理解基准上进行了评估，完全覆盖对应片段。", "tokens": 1294}
+{"key": "c45f2ac775855c0d", "model": "claude-fable-5-1", "label": "N", "reason": "quote 只是框架句，说明有三个组件，但三个组件的具体名称（大语言模型、视觉编码器、MLP 融合模块）一项都没有出现。", "tokens": 1206}
+{"key": "8ac1d73ed325ce70", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只支撑了显著优于 Runway Gen3 和 LumaLabs 这一部分，对 OpenAI Sora 中等净胜和与 Kling1.5 持平均未在 quote 中出现。", "tokens": 1282}
+{"key": "56d46845c7649bf5", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说明在身份保持、视频质量、文本对齐三个维度上大幅优于 baseline，claim 将 baseline 解指代为 ID-Animator、our method 解为个性化模型，未添加新事实。", "tokens": 1223}
+{"key": "b332b99c47f9eafa", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只撑住了“采用困惑度评估”这一项，claim 中同属该 ID 负责的“生成式或语言建模等不同评估方式”在 quote 里没有体现。", "tokens": 1398}
+{"key": "acf824a1c7e3a964", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整支撑了本 ID 负责的部分——预训练数据规模为约1亿视频-文本对和约10亿图像-文本对；多阶段训练和SFT部分由另一 ID 负责，不影响判断。", "tokens": 1289}
+{"key": "e8c9b8df2e5696fc", "model": "claude-fable-5-1", "label": "P", "reason": "合并同 ID 的 quote 后，部署单元较大且可能给小型团队带来负担这一核心内容得到支撑，但“为保证高效推理”这一因果前提未在任何 quote 中出现，属于额外事实。", "tokens": 1309}
+{"key": "72d56fcb490d3124", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了“中间推理步骤可能忽略或误解视觉线索”和“最优模态对齐仍是持续挑战、需进一步改进”，但 claim 中“视觉语言模型依赖文本和视觉两种模态”及“尽管采取了过滤策略”这一前提/让步事实在 quote 中没有出现。", "tokens": 1863}
+{"key": "e59cb9d934861505", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了 FP8 混合精度训练框架和 DualPipe 实现高效流水线并行，但 claim 中 DualPipe 实现“计算-通信重叠”这一实质内容未在 quote 中出现。", "tokens": 1388}
+{"key": "1db9c8fbaa20e3d1", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了 FP8 混合精度训练框架和 DualPipe 高效流水线并行，但 claim 中的「计算-通信重叠」这一实质内容在 quote 中没有出现。", "tokens": 1372}
+{"key": "bab356ba37128a97", "model": "claude-fable-5-1", "label": "Y", "reason": "合并同 ID 的其他 quote 后，\"推荐部署单元相对较大、可能给小型团队带来负担\"直接出现在引文中；\"为保证高效推理\"属于对部署局限的合理注解，不构成新事实。", "tokens": 1314}
+{"key": "c5f44d3a54412572", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只给出降至 29.62% 这一数字，起始错误率 31.05% 与 Reuters 数据集名均不在 quote 中。", "tokens": 1160}
+{"key": "1e8994a2948bee35", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了 dropout 将错误率降至 42.4% 的记录这一点，但 claim 中对应 p11 部分的起始值 48.6% 以及 ImageNet 数据集名未在 quote 中出现，属于缺失的实质内容。", "tokens": 1253}
+{"key": "6c9d1640457d63d1", "model": "claude-fable-5-1", "label": "P", "reason": "(JSON 损坏，仅取 label)", "tokens": 1219}
+{"key": "72f4f188263f5fe0", "model": "claude-fable-5-1", "label": "Y", "reason": "claim中[p9]负责的部分仅为'在TIMIT上评估'，quote明确提到在TIMIT基准核心测试集上报告帧分类错误率，'语音识别'属于对TIMIT的解指代，无新事实。", "tokens": 1499}
+{"key": "265891f9d228f98c", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 给出了 50,000 训练图像和 10,000 测试图像这两项实质数字，与 claim 中 [p10] 负责的部分一致；'These images' 解指代为 CIFAR-10 属于指代解析，不算新增事实。", "tokens": 1648}
+{"key": "f1bb67d59f120bad", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了用单独验证集评估多种架构以做选择这一点，但 claim 中的数据集范围（语音和两个物体识别数据集）以及随后在真实测试集上评估 dropout 的内容均不在 quote 里。", "tokens": 1423}
+{"key": "9ec680673a44d644", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 对应 claim 中“块设计”消融部分，明确说明 Table 4 对块的架构改动进行了消融，其余部分由其他 ID 负责。", "tokens": 1430}
+{"key": "2378646b5e39d155", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说明对 SSD 算法与 Mamba 扫描实现和 FlashAttention-2 进行速度基准测试，claim 内容全部覆盖。", "tokens": 1221}
+{"key": "68724062889336e0", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了分块分解、对角块用对偶注意力模式、非对角块利用半可分矩阵秩结构归约为更小循环这些核心内容，但 claim 中“SSD 算法”的命名以及“结合线性 SSM 循环和二次对偶形式的优势”这一结论性表述在 quote 中没有出现。", "tokens": 1730}
+{"key": "95f67144d1efd19b", "model": "claude-fable-5-1", "label": "P", "reason": "quote 撑住了“论证只适用于被优化以完成许多任务的智能”，但“专用智能可能不会趋同”这一推论性结论未在 quote 中出现，属于额外实质内容。", "tokens": 1277}
+{"key": "32314b3fa6e6c365", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了研究者偏见塑造模型发展方向这一点，但未提及“硬件彩票”，也未明确说这些因素“人为促成趋同”，缺少该片段中的其他实质内容。", "tokens": 1327}
+{"key": "f3ea25b0dfd0bffc", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责 claim 中“引入多头注意力中头的类比”这一片段，quote 明确说将 MHA 中 heads 的类比引入 SSM，与之完全对应；Mamba-2 架构及分组值注意力等由另一 ID 负责，不影响判断。", "tokens": 1758}
+{"key": "096159aaa2576293", "model": "claude-fable-5-1", "label": "P", "reason": "quote支撑了对齐提升与Hellaswag、GSM8K性能提升相关这一核心内容，但claim中“与DINOv2对齐”这一具体对象在quote中未出现。", "tokens": 1256}
+{"key": "8e62d1ece32f08d6", "model": "claude-fable-5-1", "label": "Y", "reason": "多ID拆分下，本quote负责的部分是语言模型家族为BLOOM、OpenLLaMA、LLaMA，quote完整给出这三个名字；ViT、WIT样本数、k值由其他ID负责，不影响判断。", "tokens": 1285}
+{"key": "a6fe449926fd3d3f", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 给出对齐分数0.16与理论上限1，另一条quote说明问题悬而未决，claim 中该 ID 负责的部分（0.16、上限1、未解决）均被覆盖，'噪声还是重大差异'只是对开放问题的具体化注解。", "tokens": 1378}
+{"key": "4eee87d866de2457", "model": "claude-fable-5-1", "label": "Y", "reason": "合并同 ID 的其他 quote 后，固定架构考察精度、参数、token 的影响以及低精度训练常涉及架构调整可缩小与全精度模型差距这两项实质内容均有原文支撑，claim 中的内容全部覆盖。", "tokens": 1447}
+{"key": "79c888a9f1ac9054", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了权重、激活、KV 缓存的精度效应独立且可乘这一核心内容，但 claim 中“共同决定有效参数量”这一实质结论在 quote 中未出现。", "tokens": 1224}
+{"key": "d465ff1ea3d0b6ee", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 给出了 bioS single 86.6% 和 bioR single 77.7% 的混合训练 OOD 准确率，claim 的数字与条件完全对应，'有效提取知识'只是对高准确率的解读性注解。", "tokens": 1241}
+{"key": "fa1961b378fa960d", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 直接陈述了在 Dolma V1.7 上训练评估 OLMo 风格模型并使用标准 Transformer++ 实现，claim 的全部实质内容都在其中。", "tokens": 1341}
+{"key": "3931e5a3eed5aedd", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只支撑 bioS 有 10 万个体这一项，claim 中 [S2.p2] 对应的片段还包括每人六句、约 50 个模板随机选择等实质内容，quote 未覆盖。", "tokens": 1247}
+{"key": "08599180704a1e49", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 直接陈述记忆训练数据句子不保证模型能在推理时提取或操作事实知识，claim 内容完全对应。", "tokens": 1198}
+{"key": "1694addf40e916e8", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确提出核心问题为语言模型如何在训练中记忆知识并在推理时提取以回答问题，claim 内容全部被覆盖，省略逻辑推理部分不扣分。", "tokens": 1213}
+{"key": "242f64e66ae3c2bf", "model": "claude-fable-5-1", "label": "Y", "reason": "(JSON 损坏，仅取 label)", "tokens": 1500}
+{"key": "a964631b9abd58f7", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了在测试集（未见个体）上 QA 准确率为零且遍历所有微调参数均如此，但 claim 中“模型规模远大于个体数”“个体被暴露上千次”以及先预训练传记再微调 QA 的设定等实质内容不在 quote 里。", "tokens": 1443}
+{"key": "455ddbeb61672cd7", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来撑住了'联合优化时与计算无关'和'N 固定时随 log C 增长'，但 claim 中'约为 7-8 比特'这一具体数值在 quote 中未出现。", "tokens": 1467}
+{"key": "15b4ca9d7fc6bc96", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“所有材料类别成功率超过 90%”，但 claim 中“118 个系统”的具体数字是 quote 未提及的新事实，需降档。", "tokens": 1206}
+{"key": "a894f72d78f2939d", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“准确且高效地预测任意材料在实际合成与工作条件下的性质”，但 claim 中“有限温度和压力”是 quote 没有的具体新事实。", "tokens": 1228}
+{"key": "68dcd4151e0e3fd9", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 逐项对应 claim 中的主动学习方法、广阔材料空间及四个组件（深度图神经网络、材料探索器、第一性原理监督器、集成不确定性监测器），实质内容全部覆盖。", "tokens": 1385}
+{"key": "b88e22819a56dd0b", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说需要进一步微调数据才能获得定量正确的吸附热，claim 中'在吸附评估中'只是框架性注解，实质内容全部被 quote 覆盖。", "tokens": 1220}
+{"key": "b01f29ce6266ca5e", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说明预训练使用作者整理的材料最低能量构型数据集，且不区分交换关联泛函、DFT 软件实现或校正，claim 的全部实质内容均在其中（'基态'仅是对最低能量构型的注解）。", "tokens": 1269}
+{"key": "85deaa0109dd2a10", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责声子最大频率 MAE 0.87 THz 部分，quote 中 'a good agreement' 的 MAE 0.87 THz 与之对应（解指代不扣分），体模量部分由另一 ID 负责。", "tokens": 1251}
+{"key": "c5e90f5fe6d9dd2a", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支持 Orb 在 MOF-5 上多温度下产生稳定 MD 轨迹，但 claim 中的 800 K 具体数字和复现苯撑环不能完全旋转的实验动力学行为均不在 quote 中。", "tokens": 1273}
+{"key": "c73145c4cf9dc5be", "model": "claude-fable-5-1", "label": "Y", "reason": "第一条 quote 直接给出“300M 之前扩展良好、到该规模困惑度过拟合”，第二条 quote 说明当前采用的 108M 模型在该预训练数据下表现最佳，合起来支撑了采用约 100M 模型及其因果关系。", "tokens": 1613}
+{"key": "4da2afb4eec21e75", "model": "claude-fable-5-1", "label": "P", "reason": "合并同ID引用后，“在长程相互作用主导的场景（如聚合物和多相体系）中表现不佳”被完整支撑，但claim中“目前采用半局域原子相互作用描述”这一原因性事实未出现在任何quote中，属于新增事实。", "tokens": 1628}
+{"key": "09e07048e6a723c2", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 给出了 Λ=2.14±0.02 和 ε₇=(1.43±0.03)×10⁻³，claim 中距离-7 每周期逻辑错误率与错误抑制因子数值均一致，ε₇ 解读为距离-7 属解指代不扣分。", "tokens": 1276}
+{"key": "f40ec2e5def73ff3", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整覆盖了 claim 的三项实质内容：骨干为 GNS、加入平滑图注意力、消息基于注意力权重与距离截断函数更新。", "tokens": 1254}
+{"key": "66f99403a61bc784", "model": "claude-fable-5-1", "label": "P", "reason": "(JSON 损坏，仅取 label)", "tokens": 1314}
+{"key": "a4d8bb2b72293eb5", "model": "claude-fable-5-1", "label": "Y", "reason": "两条quote合起来覆盖了claim的全部实质内容：神经网络解码器、集成匹配合成解码器、用处理器数据微调神经网络、用强化学习优化匹配图权重。", "tokens": 1303}
+{"key": "9526a9822cb4178a", "model": "claude-fable-5-1", "label": "P", "reason": "quote 完整支撑了 FIRE 优化器、500 步、0.05 eV/Å 的弛豫设置，但 claim 中“Matbench-Discovery 基准”这一名称在 quote 中未出现，属于未被支撑的实质内容。", "tokens": 1656}
+{"key": "cbd6fc59dfadf496", "model": "claude-fable-5-1", "label": "Y", "reason": "该ID负责的部分是'原因尚不明确，可能是样本方差波动'，两条quote合起来正好覆盖'原因不清楚'和'可能是样本方差波动'，3σ差异与红移区间由另一ID负责。", "tokens": 1467}
+{"key": "1de3a6f382ae7e86", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整包含 claim 中所有数字（291±6 µs、中位数85±7、最佳119±13、2.4±0.3倍）与结论，claim 是对 quote 的直接翻译。", "tokens": 1297}
+{"key": "723f8275becc6359", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说需谨慎解释，因为部分偏好的(w0,wa)模型可映射到不违反零能量条件的精质模型，claim 内容全部覆盖，'w0waCDM' 是对 (w0,wa) 模型的合理指代。", "tokens": 1333}
+{"key": "e7393e42786e499f", "model": "claude-fable-5-1", "label": "P", "reason": "quote 只点明“尚无处理器确定性地展示低于阈值的性能”这一研究缺口，支撑了 claim 中“实现低于阈值运行”的目标，但表面码、逻辑错误率随码距指数抑制等实质内容均不在 quote 中。", "tokens": 1478}
+{"key": "51df575bfaa86848", "model": "claude-fable-5-1", "label": "Y", "reason": "该quote对应claim中BBN+θ*组合下H0=(68.52±0.62)的部分，数值与组合条件完全匹配；3.7σ张力由另一ID[S6.p2]负责。", "tokens": 1314}
+{"key": "b7c8e7fa7205894c", "model": "claude-fable-5-1", "label": "Y", "reason": "该 ID 负责的部分是“原因尚不明确，可能是样本方差波动”，两条 quote 合起来完全覆盖这两点；红移区间与3σ差异由另一 ID 负责。", "tokens": 1280}
+{"key": "1efa9459abb13af5", "model": "claude-fable-5-1", "label": "Y", "reason": "claim 中对应 S2.p5 的部分是与 z~5.5 和 z=7.5 的 LRD 堆叠测光数据对比，quote 完整覆盖；巡天成像深度部分由 S2.p9 负责。", "tokens": 1280}
+{"key": "502a56679171dd6a", "model": "claude-fable-5-1", "label": "P", "reason": "quote支持n0=10–100 cm^-3时SED形状与LRD观测谱一致（光学至2–3μm），但claim中γ<1条件、能量峰移向中远红外、与MIRI/ALMA约束一致等实质内容均不在quote中。", "tokens": 1652}
+{"key": "e5f344314138ef7d", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 完整陈述了蒙特卡洛事件产生器中矩阵元与部分子簇射结合程序在未来LHC高精度量子信息研究中需特别关注，与 claim 内容一一对应。", "tokens": 1266}
+{"key": "c224b2cf9226bea3", "model": "claude-fable-5-1", "label": "P", "reason": "两条quote合起来支撑了“与热尘埃再发射导致极红SED的预期相矛盾”以及“引发对尘埃遮蔽AGN情景的质疑”，但claim中MIRI观测、多数LRD在F1800W未被探测、SED从光学到近红外趋于平坦等具体事实均不在quote中。", "tokens": 1649}
+{"key": "89b40334e8060e2f", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了使用 cobaya 及联合 SN Ia 似然这部分内容，但 claim 中的 Metropolis-Hastings MCMC、CAMB、BBN 和 CMB 等实质内容均不在此 quote 中（可能由另一引用承担），本条只能部分支撑。", "tokens": 1907}
+{"key": "d7382eeb7ec72d6e", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了两个验证区中测量与不同 MC 设置的预言在不确定度内一致，但 claim 中“作为对测量方法的一致性检验”这一目的/解释在 quote 中没有出现，属于新增内容。", "tokens": 1250}
+{"key": "6556b9935ba8e83b", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“尚无明确答案、只能推测”这一核心，但“this question”的具体内容（LRD 在 z>4 以统一 A_V=3 mag 出现）包含可独立验证的数字和对象，quote 中未体现。", "tokens": 1657}
+{"key": "63fdaa85a8792a47", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 对应 claim 中「利用顶夸克-反顶夸克对的自旋关联来探测量子纠缠」这一部分，内容完全在 quote 里；D 观测量的定义由 S1.p9 负责，不影响本条判断。", "tokens": 1276}
+{"key": "6c1f64c1d3b7e104", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确说明所用 SED 模板排除了宿主星系和尘埃贡献，对应 claim 中由 S2.p4 负责的\"去除宿主星系和尘埃贡献的SED模板\"部分；模板来源、消光曲线和 A_V 等由其他 ID 负责。", "tokens": 1871}
+{"key": "275e1f2c39a167cd", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了信号区 340–380 GeV 的定义和各区纯度>90%，但两个验证区的具体范围（380–500 GeV 和 >500 GeV）这一实质内容未出现在 quote 中。", "tokens": 1345}
+{"key": "3cc1ef3ce7accd4f", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 对应 claim 中 Cooper 对盒独立测量 0.6 µm⁻³ 这一部分，数值和对象（CPB）均与 quote 一致；其余部分由其他 ID 负责。", "tokens": 1338}
+{"key": "e59252516e420b79", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支持用单一观测量 D 作为纠缠标记（D=tr[C]/3，D<−1/3 判定纠缠），但 claim 中 D = −3·⟨cos φ⟩ 的具体形式以及由带电轻子在母顶夸克静止系中夹角推断这些实质内容未在该 ID 的引文中出现。", "tokens": 1832}
+{"key": "ab2deec358c915b6", "model": "claude-fable-5-1", "label": "Y", "reason": "三条 quote 合起来覆盖 MPNN 架构、高阶多体 ACE 展开、训练于 MPtrj 数据集全部实质内容。", "tokens": 1289}
+{"key": "64845e3f52e5a85e", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了“简单加热确定熔点可能不普遍准确”、“可用自由能计算、相共存等方法”、“可用于测试 MACE 势但属未来工作”，但 claim 中“周期性边界条件、小系统尺寸等因素影响熔点”这一因果解释在 quote 中并未出现，属于额外新事实。", "tokens": 1616}
+{"key": "e942a13a51ced504", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了 claim 的全部实质内容：有限尺寸效应导致 E_M 显著变化，以及当前器件能隙有限、相干长度并非远小于器件长度；claim 对能隙与长度比较的措辞略有混淆但未引入新事实。", "tokens": 1873}
+{"key": "7524f8b21e77790c", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了 τ_RTS 随偏压增加减半这一事实，但 claim 将其归因于“准粒子注入”，该因果机制在 quote 中并未出现，属于新增的实质内容。", "tokens": 1659}
+{"key": "8685e08a3376fae1", "model": "claude-fable-5-1", "label": "Y", "reason": "该 quote 负责的部分——用包含电荷噪声、温度等环境因素的量子动力学模拟复现实验结果——完全由 quote 支撑；MZM 与量子点等有效模型构成由另一引用 [S3.p6] 负责，不影响本条判断。", "tokens": 1797}
+{"key": "7587680b2978cba3", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支撑了“模型通常给出平均预测”和“哪种结果更好尚不明确”，但“在周期发生剧烈变化的光变曲线中”这一具体情境在 quote 中没有出现，属于未被覆盖的实质内容。", "tokens": 1254}
+{"key": "f85e1e46fada3ab1", "model": "claude-fable-5-1", "label": "Y", "reason": "该 ID 负责的部分是训练集 50000 个模拟样本及 81%/9%/10% 的划分，两条 quote 合起来完整覆盖这些数字，Butterpy 和 Kepler 噪声由其他 ID 负责。", "tokens": 1352}
+{"key": "8f1d9deefccbc945", "model": "claude-fable-5-1", "label": "Y", "reason": "quote 明确指出对液态的理论理解不足及经典原子模型难以生成可靠热物理数据，完全覆盖 claim 中归于 S1.p2 的部分；应用领域部分由 S1.p1 负责。", "tokens": 1456}
+{"key": "ee525273f43d46e9", "model": "claude-fable-5-1", "label": "P", "reason": "两条 quote 合起来支撑了评估 MACE 势计算熔融 LiF 粘度准确性这一核心内容，但 claim 中「与经典 Buckingham 和 BHM 势进行对比」在 quote 中完全没有出现，属于未被支撑的新事实。", "tokens": 1576}
+{"key": "5343a1c41e20c9cb", "model": "claude-fable-5-1", "label": "P", "reason": "两条quote支撑了Li和F在MACE中VAF极小值更深、且其大小近似相等并暗示更显著的类固态运动成分，但claim中“两者形状相似”超出了quote所述的“极小值大小近似相等”，属于略微说强。", "tokens": 1763}
+{"key": "ccb3fc16cf2207b5", "model": "claude-fable-5-1", "label": "Y", "reason": "两条 quote 合起来覆盖了倾角与 spot 位置的内在简并、模型依赖先验、spot 分布影响大三项实质内容。", "tokens": 1275}
+{"key": "fa01954383735abf", "model": "claude-fable-5-1", "label": "P", "reason": "quote 支持“较长周期相关性不同、可能与老恒星活动性下降有关”，但 claim 中“大于 25 天”这一具体数值在 quote 中没有，属于新增可验证事实。", "tokens": 1421}
+{"key": "3164626a0ac8da09", "model": "claude-fable-5-1", "label": "P", "reason": "quote 证实了测量-only 拓扑量子计算方案的存在及其将操作简化为单一（融合）操作，但“费米宇称单次测量”“一对 Majorana 零能模共享的费米宇称”以及“论文旨在实现”这些实质内容均不在 quote 中。", "tokens": 1990}
+{"key": "3c097c81905fa486", "model": "claude-fable-5-1", "label": "Y", "reason": "该 ID 负责的部分是“使用 Butterpy 生成的模拟光变曲线进行监督训练”，quote 完整覆盖此内容；噪声注入、样本数和划分比例由其他 ID 负责。", "tokens": 1278}

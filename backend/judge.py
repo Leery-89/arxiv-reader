@@ -42,6 +42,8 @@ JUDGE_MODEL = os.getenv("JUDGE_MODEL", "deepseek-chat")
 PROVIDERS = {
     "deepseek": ("DEEPSEEK_API_KEY", os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")),
     "qwen": ("DASHSCOPE_API_KEY", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+    "openai": ("OPENAI_API_KEY", "https://api.openai.com/v1"),
+    "anthropic": ("ANTHROPIC_API_KEY", "https://api.anthropic.com/v1/"),   # Anthropic 的 OpenAI 兼容接口
 }
 
 
@@ -50,7 +52,11 @@ def provider_of(model: str) -> str:
         return "deepseek"
     if model.startswith("qwen"):
         return "qwen"
-    sys.exit(f"不认识的评审模型：{model}（支持 deepseek-* / qwen-*）")
+    if model.startswith("claude"):
+        return "anthropic"
+    if model.startswith(("gpt", "o1", "o3", "o4", "chatgpt")):
+        return "openai"
+    sys.exit(f"不认识的评审模型：{model}（支持 deepseek-* / qwen-* / gpt-* / o* / claude-*）")
 
 
 def make_client(model: str) -> OpenAI:
@@ -58,7 +64,8 @@ def make_client(model: str) -> OpenAI:
     key = os.getenv(key_env)
     if not key:
         sys.exit(f"{model} 需要在 .env 里设置 {key_env}")
-    return OpenAI(api_key=key, base_url=base)
+    headers = {"anthropic-version": "2023-06-01"} if provider_of(model) == "anthropic" else None
+    return OpenAI(api_key=key, base_url=base, default_headers=headers)
 
 EVAL_DIR = Path(__file__).parent / "eval"
 CACHE_FILE = EVAL_DIR / "judge_cache.jsonl"
@@ -138,6 +145,35 @@ def _extract_json(text: str) -> dict:
     return json.loads(m.group(0))
 
 
+# 不同厂商、不同模型接受的参数不一样：
+#   推理模型不接受 temperature=0；Claude 要求 max_tokens；有的不支持 JSON 模式。
+# 按顺序试，哪组能用就记住，之后同一模型直接用那组（不再浪费失败的调用）。
+_PARAM_SETS = [
+    {"temperature": 0, "max_tokens": 400, "response_format": {"type": "json_object"}},
+    {"temperature": 0, "max_tokens": 400},
+    {"max_completion_tokens": 4000},          # OpenAI 推理模型：不收 temperature / max_tokens
+    {},
+]
+_WORKING_PARAMS: dict[str, dict] = {}
+
+
+def _create(client: OpenAI, model: str, msgs: list):
+    if model in _WORKING_PARAMS:
+        return client.chat.completions.create(model=model, messages=msgs, **_WORKING_PARAMS[model])
+    last = None
+    for params in _PARAM_SETS:
+        try:
+            resp = client.chat.completions.create(model=model, messages=msgs, **params)
+            _WORKING_PARAMS[model] = params
+            return resp
+        except Exception as e:
+            # 只有"参数不被接受"（400）才换下一组；模型不存在（404）、key 错（401）等直接抛出
+            if getattr(e, "status_code", None) != 400:
+                raise
+            last = e
+    raise last
+
+
 def judge_one(client: OpenAI, model: str, r: dict) -> dict:
     user = (f"evidence_id: {r['evidence_id']}\n"
             f"字段: {r['field']}\n\n"
@@ -148,14 +184,7 @@ def judge_one(client: OpenAI, model: str, r: dict) -> dict:
         user += "\n\n同一 ID 下的其他 quote（与上面这条合起来判）：\n" + "\n".join(f"- {q}" for q in sib)
     msgs = [{"role": "system", "content": JUDGE_PROMPT},
             {"role": "user", "content": user}]
-    try:
-        resp = client.chat.completions.create(
-            model=model, messages=msgs, temperature=0,
-            response_format={"type": "json_object"},
-        )
-    except Exception:
-        # 部分模型（推理模型等）不支持 JSON 模式：去掉这个参数，自己解析
-        resp = client.chat.completions.create(model=model, messages=msgs, temperature=0)
+    resp = _create(client, model, msgs)
     text = resp.choices[0].message.content
     try:
         d = _extract_json(text)
@@ -238,12 +267,20 @@ def run_judge(model: str, path: Path, force: bool, workers: int) -> list[dict]:
         tokens = 0
         with CACHE_FILE.open("a", encoding="utf-8") as cf, ThreadPoolExecutor(workers) as pool:
             futs = {pool.submit(judge_one_retry, client, model, r): r for r in todo}
+            fails_in_a_row = 0
             for i, fut in enumerate(as_completed(futs), 1):
                 r = futs[fut]
                 try:
                     d = fut.result()
+                    fails_in_a_row = 0
                 except Exception as e:
-                    print(f"  失败 {r['paper_id']} {r['evidence_id']}: {e}")
+                    fails_in_a_row += 1
+                    print(f"  失败 {r['paper_id']} {r['evidence_id']}: {str(e)[:160]}")
+                    if fails_in_a_row >= 10:
+                        print(f"  连续失败 10 次，停止 {model}（多半是模型名或 key 的问题，看上面的报错）")
+                        for f in futs:
+                            f.cancel()
+                        break
                     continue
                 tokens += d["tokens"]
                 rec = {"key": row_key(r, model), "model": model, **d}
