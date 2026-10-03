@@ -26,6 +26,7 @@ import time
 import traceback
 from pathlib import Path
 
+import rag
 from fetcher import fetch_paper
 from llm import analyze
 from serialize import paper_to_text
@@ -65,7 +66,9 @@ def load_papers(path: Path) -> list[tuple[str, str]]:
 def run_one(arxiv_id: str) -> dict:
     paper = fetch_paper(arxiv_id)
     save_snapshot(paper)            # harness 离线检查要用段落全文（D17）
-    text = paper_to_text(paper)
+    # RAG 对比（D20）：只换喂给模型的文本；快照、校验、评审仍对照全文
+    rag_cfg = rag.from_env()
+    text = rag.rag_text(paper, rag_cfg[1], rag_cfg[0]) if rag_cfg else paper_to_text(paper)
     result = analyze(text)
     verify = check(paper, result)
 
@@ -85,6 +88,7 @@ def run_one(arxiv_id: str) -> dict:
         "result": result,
         "verify": verify,
         "not_mentioned_fields": not_mentioned,
+        "rag": {"method": rag_cfg[0], "budget": rag_cfg[1]} if rag_cfg else None,
     }
 
 

@@ -54,6 +54,10 @@ def build_units(tag: str):
         if paper is None:
             stats["无快照跳过"] += 1
             continue
+        meta = rec["result"].get("_meta", {})
+        machine["papers"] += 1
+        machine["prompt_tokens"] += meta.get("prompt_tokens", 0)
+        machine["elapsed_ms"] += int(meta.get("elapsed_s", 0) * 1000)
         machine["quote_hits"] += rec["verify"]["quote_hits"]
         machine["quote_total"] += rec["verify"]["quote_total"]
         rep = run_harness(paper, rec["result"], HarnessConfig())
@@ -182,6 +186,9 @@ def main():
     row("ID 级 Y", lambda r: pct(r["id"], "Y"))
     row("ID 级 N", lambda r: pct(r["id"], "N"))
     row("推断句数", lambda r: str(r["stats"]["推断"]))
+    row("\"原文未明确提及\"句数", lambda r: str(r["stats"]["未提及"]))
+    row("平均输入 token / 篇", lambda r: f"{r['machine']['prompt_tokens'] / max(1, r['machine']['papers']):.0f}")
+    row("平均耗时 / 篇（秒）", lambda r: f"{r['machine']['elapsed_ms'] / 1000 / max(1, r['machine']['papers']):.1f}")
     row("quote 命中率", lambda r: f"{r['machine']['quote_hits'] / max(1, r['machine']['quote_total']) * 100:5.1f}%")
     row("数字检查拦截率", lambda r: f"{r['machine']['flagged'] / max(1, r['machine']['cited']) * 100:5.1f}%")
 
