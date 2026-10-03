@@ -62,11 +62,15 @@ evaluation chain (details in [DECISIONS.md](./DECISIONS.md) D14–D19):
 
 | Claim fully supported by its quotes | v2 | v3 |
 |---|---|---|
-| Main judge (`deepseek-chat`) | 52.0 % | **67.5 %** |
-| Stricter cross-vendor judge (`gpt-6.1-sol`, lower bound) | 41.0 % | **54.5 %** |
+| Main judge (`deepseek-chat`) | 63.4 % | **81.4 %** |
+| Stricter cross-vendor judge (`gpt-6.1-sol`, lower bound) | 39.6 % | **54.5 %** |
+| Same, stricter per-ID scoring (`deepseek-chat`) | 52.0 % | 67.5 % |
 | Quote exact-match rate | 98.0 % | 96.4–98.7 % (two runs) |
 
-Both judges agree on the size of the gain. **Which rules matter** — a
+A claim citing several paragraphs is judged on all its quotes together; the
+stricter per-ID scoring (every cited paragraph must fully support the claim on
+its own) penalises synthesis sentences and is kept as a second view. Both
+judges and both scorings agree on the size of the gain (+15 to +18 points). **Which rules matter** — a
 leave-one-out ablation (drop one v3 rule at a time, plus an unchanged re-run to
 measure noise: 1.4 points between two identical runs):
 
@@ -82,6 +86,25 @@ The three citation rules each carry ~6 points; the two wording rules show no
 measurable effect on support rate (they target overstatement, which the judge
 is less sensitive to). Per-category numbers swing by up to 15 points between
 identical runs (~100 claims each), so only totals are reported.
+
+5. **RAG vs full text** (D20). Same prompt, but the model sees only the
+   paragraphs retrieved per field (BM25 / embeddings / hybrid) instead of the
+   whole paper:
+
+| | Full text | RAG, 50 % of paper | RAG, 25 % of paper |
+|---|---|---|---|
+| Claims fully supported (`deepseek-chat`) | 81.4 % | 76.9 % | 85.4 % |
+| Input tokens / paper | 17.7 k | 9.3 k | 5.4 k |
+| Coverage, pairwise wins (full text : RAG)* | — | 16 : 4 | 26 : 4 |
+| Key points missed / paper (full text / RAG) | — | 2.2 / 3.4 | 2.0 / 5.3 |
+
+\* Judge compares the two summaries against the full paper, asked in both
+orders; a control run of full text vs. itself gives 8 : 7.
+
+RAG claims are just as well supported, but RAG leaves out much more: support
+rate alone rewards writing less. A single paper fits in the context window and
+a summary has to cover all of it, so the reader keeps sending the full text;
+retrieval is kept for follow-up questions.
 
 ## How it's built
 
